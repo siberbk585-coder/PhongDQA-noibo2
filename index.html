@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cổng Tác Vụ DQA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-blue': '#5aa9ff',
+            'sidebar': '#0f172a',
+            'sidebar-hover': '#1e293b',
+            'muted': '#f8fafc'
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .spinner{border:2px solid #e5e7eb;border-top:2px solid #3b82f6;border-radius:50%;width:16px;height:16px;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    .header-container{background:linear-gradient(135deg,#2563eb 0%,#60a5fa 100%);position:relative;overflow:hidden}
+    .header-container::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");opacity:.4}
+    .modal{position:fixed;inset:0;background:rgba(15,23,42,0.35);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
+    .modal.open{display:flex}
+    .section-title{display:flex;align-items:center;gap:8px}
+    .section-title .badge{background:rgba(90,169,255,.15);color:#1e40af;border:1px solid rgba(90,169,255,.35);padding:2px 8px;border-radius:9999px;font-size:12px;font-weight:600}
+    .submit-btn{background:linear-gradient(135deg,#3b82f6 0%,#60a5fa 100%);box-shadow:0 4px 6px rgba(37,99,235,.1),0 1px 3px rgba(37,99,235,.08);transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease,filter .2s ease;border-radius:9999px;position:relative}
+    .submit-btn:hover{transform:translateY(-1px);box-shadow:0 7px 14px rgba(37,99,235,.12),0 3px 6px rgba(37,99,235,.08);filter:brightness(1.03)}
+    .submit-btn:active{transform:translateY(0);opacity:.95}
+    .modal.open{display:flex}
+    .toast{position:fixed;right:16px;bottom:16px;background:#0b1324;color:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);opacity:0;transform:translateY(10px);transition:.2s}
+    .toast.show{opacity:1;transform:translateY(0)}
+    /* Sidebar effects for groups */
+    .group-btn{ position:relative; font-weight:600; color:#e5f0ff; background:rgba(90,169,255,.12); border:1px solid rgba(90,169,255,.35); border-radius:8px; }
+    .group-btn:hover{ background:rgba(90,169,255,.18); color:#ffffff; }
+    .group-btn.active{ background:linear-gradient(135deg,#2563eb 0%,#5aa9ff 100%); color:#ffffff; box-shadow:0 4px 10px rgba(37,99,235,.25); border-color:rgba(255,255,255,.35); }
+    .group-btn::after{ content:"▾"; position:absolute; right:10px; opacity:.9; transition: transform .2s ease; }
+    .group-btn.active::after{ transform: rotate(180deg); }
+    .group-items{ transition: all .2s ease; }
+    .group-items .nav-btn{ background: transparent; }
+    .group-items .nav-btn:hover{ background: rgba(255,255,255,0.06); }
+    /* Sidebar collapse/expand on hover */
+    #sidebar-nav {
+      transition: width 0.3s ease-in-out;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+    #sidebar-nav.collapsible:not(:hover) {
+      width: 4rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    #sidebar-nav.collapsible:hover {
+      width: 16rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    #sidebar-nav.collapsible:not(:hover) h1 {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      border: none;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    #sidebar-nav.collapsible:hover h1 {
+      opacity: 1;
+      height: auto;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(147, 197, 253, 0.5);
+      transition: opacity 0.3s ease-in-out 0.1s, height 0.3s ease-in-out 0.1s;
+    }
+    #sidebar-nav.collapsible:not(:hover) .group-btn,
+    #sidebar-nav.collapsible:not(:hover) .nav-btn {
+      font-size: 0.65rem;
+      text-align: center;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #sidebar-nav.collapsible:hover .group-btn,
+    #sidebar-nav.collapsible:hover .nav-btn {
+      font-size: inherit;
+      text-align: left;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    #sidebar-nav.collapsible:not(:hover) .group-items:not(.hidden) {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.2s ease-in-out, max-height 0.2s ease-in-out;
+    }
+    #sidebar-nav.collapsible:hover .group-items:not(.hidden) {
+      opacity: 1;
+      max-height: 1000px;
+      transition: opacity 0.3s ease-in-out 0.15s, max-height 0.3s ease-in-out 0.15s;
+    }
+  </style>
+</head>
+<body class="bg-muted min-h-screen flex text-gray-800" style="font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'">
+  <!-- Sidebar -->
+  <aside id="sidebar-nav" class="w-64 min-h-screen bg-sidebar text-white flex flex-col py-8 px-4 shadow-lg transition-all duration-300 ease-in-out overflow-hidden sticky top-0 self-start">
+    <h1 class="text-xl font-bold tracking-wide pb-6 border-b border-blue-200 mb-4 whitespace-nowrap">Cổng Tác Vụ DQA</h1>
+    <nav class="flex flex-col gap-2 mt-2">
+      <button class="nav-btn w-full py-2 px-4 rounded transition hover:bg-sidebar-hover text-left text-base bg-sidebar-hover" data-target="form1">Form 1 - So sánh CE</button>
+      <button class="nav-btn w-full py-2 px-4 rounded transition hover:bg-sidebar-hover text-left text-base" data-target="form2">Form 2 - Rà soát CE</button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 py-10 flex flex-col items-center min-h-screen overflow-y-auto">
+    <div class="header-container relative w-full max-w-6xl rounded-xl overflow-hidden mb-8 px-4">
+      <div class="relative z-10 p-8 md:p-10">
+        <div class="flex items-center space-x-2 mb-3">
+          <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold text-white" style="background-color: rgba(255,255,255,0.15); backdrop-filter: blur(5px);">Phòng DQA</div>
+        </div>
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 tracking-tight">Cổng tác vụ DQA - Nội bộ</h2>
+        <p class="text-blue-100 text-sm md:text-base">Vui lòng không chia sẻ link cổng tác vụ với người ngoài bộ phận.</p>
+      </div>
+    </div>
+
+    <!-- Form 1 - So sánh CE -->
+    <section id="form1" class="w-full max-w-7xl bg-white p-6 rounded-lg shadow-md">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-blue-800">Form 1 - So sánh CE</h2>
+      </div>
+
+      <!-- A. Upload file -->
+      <div id="section-upload" class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">A. Upload file</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- CE gốc -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <label class="block text-sm font-medium text-gray-700 mb-2">1. CE gốc</label>
+            <div class="flex flex-col gap-2">
+              <input type="file" id="f1-ce-original" accept=".xlsx,.xls,.csv" class="hidden">
+              <button id="f1-ce-original-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE gốc</button>
+              <div class="flex items-center gap-2">
+                <span id="f1-ce-original-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                <button id="f1-ce-original-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CE sau rà soát -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <label class="block text-sm font-medium text-gray-700 mb-2">2. CE sau rà soát</label>
+            <div class="flex flex-col gap-2">
+              <input type="file" id="f1-ce-review" accept=".xlsx,.xls,.csv" class="hidden">
+              <button id="f1-ce-review-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE sau rà soát</button>
+              <div class="flex items-center gap-2">
+                <span id="f1-ce-review-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                <button id="f1-ce-review-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nút gửi -->
+      <div class="flex justify-center mb-6">
+        <button id="f1-submit-btn" class="px-8 py-3 rounded-lg text-white font-semibold bg-primary-blue hover:brightness-105 submit-btn">
+          Gửi lên server
+        </button>
+      </div>
+
+      <!-- B. Kết quả trả về -->
+      <div id="f1-result" class="hidden">
+        <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">B. Kết quả trả về</h3>
+        
+        <div class="border border-gray-200 rounded-lg bg-gray-50 p-4">
+          <div id="f1-json-vn" class="mb-4 hidden"></div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-sm font-medium text-gray-700">JSON Response:</label>
+            <button id="f1-copy-json" class="px-3 py-1 text-xs rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Copy JSON</button>
+          </div>
+          <pre id="f1-json-result" class="bg-white border border-gray-300 rounded p-4 overflow-auto max-h-[60vh] text-sm font-mono text-gray-800 whitespace-pre-wrap">Chưa có kết quả</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form 2 - Rà soát CE -->
+    <section id="form2" class="w-full max-w-none bg-white p-6 rounded-lg shadow-md hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-blue-800">Form 2 - Rà soát CE</h2>
+      </div>
+
+      <!-- Nút tải dữ liệu và Khai báo -->
+      <div class="flex items-center justify-between mb-4 gap-3">
+        <div class="flex items-center gap-3">
+          <button id="f2-load-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Tải dữ liệu
+          </button>
+          <button id="f2-declaration-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Khai báo
+          </button>
+        </div>
+        <div id="f2-loading" class="hidden flex items-center gap-2 text-blue-600">
+          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Đang tải...</span>
+        </div>
+      </div>
+
+      <!-- Bộ lọc -->
+      <div class="mt-4 mb-4 flex flex-col md:flex-row gap-4 items-end">
+        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Lọc theo PIC cụm</label>
+            <select id="f2-filter-pic" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Tất cả</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Lọc theo Dự án</label>
+            <select id="f2-filter-project" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Tất cả</option>
+            </select>
+          </div>
+        </div>
+        <button id="f2-reset-filter" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition whitespace-nowrap">
+          Xóa bộ lọc
+        </button>
+        <button id="f2-export-excel" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 whitespace-nowrap">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Xuất Excel
+        </button>
+      </div>
+
+      <!-- Bảng rà soát CE -->
+      <div class="mt-4 border border-gray-200 rounded-lg shadow-md overflow-x-auto">
+        <table class="min-w-[2000px] w-full text-sm border-collapse">
+          <thead class="bg-gradient-to-r from-blue-100 to-blue-50 sticky top-0">
+            <tr class="text-left text-gray-700">
+              <th class="px-3 py-3 min-w-[140px] border border-gray-300">PIC cụm</th>
+              <th class="px-3 py-3 min-w-[180px] border border-gray-300">Dự án</th>
+              <th class="px-3 py-3 min-w-[140px] border border-gray-300">Ngày giao</th>
+              <th class="px-3 py-3 min-w-[140px] border border-gray-300">Mã SAP</th>
+              <th class="px-3 py-3 min-w-[200px] border border-gray-300">Cụm linh kiện</th>
+              <th class="px-3 py-3 min-w-[280px] border border-gray-300">Tên linh kiện</th>
+              <th class="px-3 py-3 min-w-[160px] border border-gray-300">Rà soát TCKT&CE</th>
+              <th class="px-3 py-3 min-w-[180px] border border-gray-300">Ngày cập nhật gần nhất</th>
+              <th class="px-3 py-3 min-w-[180px] bg-blue-100 text-blue-800 border border-gray-300">Tỷ lệ hoàn thiện bổ sung</th>
+            </tr>
+          </thead>
+          <tbody id="f2-table-body" class="divide-y divide-gray-200">
+            <tr><td class="px-3 py-4 text-center text-gray-500" colspan="9">Chưa có dữ liệu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal cho Khai báo (So sánh CE) -->
+  <div id="f2-declaration-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-green-100">
+        <h3 class="text-xl font-semibold text-gray-800">Khai báo - So sánh CE</h3>
+        <button id="f2-modal-close" class="text-gray-500 hover:text-gray-700 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div id="f2-modal-body" class="p-6 overflow-y-auto flex-1">
+        <!-- Upload file -->
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">Upload file</h4>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- CE gốc -->
+            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <label class="block text-sm font-medium text-gray-700 mb-2">1. CE gốc</label>
+              <div class="flex flex-col gap-2">
+                <input type="file" id="f2-ce-original" accept=".xlsx,.xls,.csv" class="hidden">
+                <button id="f2-ce-original-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE gốc</button>
+                <div class="flex items-center gap-2">
+                  <span id="f2-ce-original-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                  <button id="f2-ce-original-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- CE sau rà soát -->
+            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <label class="block text-sm font-medium text-gray-700 mb-2">2. CE sau rà soát</label>
+              <div class="flex flex-col gap-2">
+                <input type="file" id="f2-ce-review" accept=".xlsx,.xls,.csv" class="hidden">
+                <button id="f2-ce-review-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE sau rà soát</button>
+                <div class="flex items-center gap-2">
+                  <span id="f2-ce-review-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                  <button id="f2-ce-review-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kết quả (nếu có) -->
+        <div id="f2-declaration-result" class="hidden">
+          <h4 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">Kết quả</h4>
+          <div class="border border-gray-200 rounded-lg bg-gray-50 p-4">
+            <div id="f2-declaration-result-content" class="text-sm"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+        <button id="f2-modal-close-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+          Đóng
+        </button>
+        <button id="f2-declaration-submit-btn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
+          Gửi lên server
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== FORM 1 - SO SÁNH CE =====
+    
+    // Danh sách tên người kiểm tra (từ Form 1 gốc)
+    const FORM1_NAMES = [
+      "Bùi Đặng Quốc Huy","Đào Tuấn Kỳ","Đỗ Quang Long","Hà Mỹ Linh","Lại Quốc Lộc",
+      "Lê Ngọc Ánh","Lê Thị Thanh Nhàn","Lê Thị Thảo","Lê Văn Sơn","Nguyễn Hữu Thịnh","Nguyễn Thị Hiền",
+      "Phạm Thành Trung Kiên","Phạm Thị Minh","Thái Thị Giang","Trần Hiếu Nghĩa","Vũ Thị Hằng","Vũ Thị Thanh Hiền"
+    ];
+
+    // Hàm điền danh sách vào select
+    function fillSelect(selectElement, names) {
+      if (!selectElement || !Array.isArray(names)) return;
+      names.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        selectElement.appendChild(option);
+      });
+    }
+
+    // Biến lưu trữ file
+    let F1_CE_ORIGINAL_FILE = null;
+    let F1_CE_REVIEW_FILE = null;
+
+    // Thiết lập ngày kiểm tra mặc định (GMT +7) - chỉ chạy nếu có trường ngày
+    function setDefaultCheckDate() {
+      const el = document.getElementById('f1-check-date');
+      if (!el) return;
+      const now = new Date();
+      const utcTime = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+      const gmt7Time = new Date(utcTime + (7 * 60 * 60 * 1000));
+      const year = gmt7Time.getFullYear();
+      const month = String(gmt7Time.getMonth() + 1).padStart(2, '0');
+      const day = String(gmt7Time.getDate()).padStart(2, '0');
+      const hours = String(gmt7Time.getHours()).padStart(2, '0');
+      const minutes = String(gmt7Time.getMinutes()).padStart(2, '0');
+      el.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    // Khởi tạo ngày mặc định và sidebar navigation khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+      setDefaultCheckDate();
+      
+      // Khởi tạo sidebar navigation
+      initSidebarNavigation();
+    });
+
+    // Khởi tạo sidebar navigation
+    function initSidebarNavigation() {
+      // Bật tính năng collapse sidebar
+      const sidebarNav = document.getElementById('sidebar-nav');
+      if (sidebarNav) {
+        sidebarNav.classList.add('collapsible');
+      }
+      
+      // Xử lý click vào các nút navigation để chuyển đổi giữa các form
+      const navButtons = document.querySelectorAll('.nav-btn[data-target]');
+      navButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetForm = this.getAttribute('data-target');
+          
+          // Remove active class từ tất cả nav buttons
+          navButtons.forEach(btn => btn.classList.remove('bg-sidebar-hover'));
+          
+          // Add active class cho button được click
+          this.classList.add('bg-sidebar-hover');
+          
+          // Ẩn tất cả các form
+          document.querySelectorAll('section[id^="form"]').forEach(form => {
+            form.classList.add('hidden');
+          });
+          
+          // Hiển thị form được chọn
+          const targetElement = document.getElementById(targetForm);
+          if (targetElement) {
+            targetElement.classList.remove('hidden');
+          }
+          
+          console.log('[Navigation] Switched to:', targetForm);
+        });
+      });
+      
+      console.log('[Navigation] Sidebar initialized with', navButtons.length, 'forms');
+      
+      // Hiển thị Form 1 mặc định
+      const form1 = document.getElementById('form1');
+      if (form1) {
+        form1.classList.remove('hidden');
+      }
+    }
+
+    // Xử lý upload file CE gốc
+    document.getElementById('f1-ce-original-btn').addEventListener('click', function() {
+      document.getElementById('f1-ce-original').click();
+    });
+
+    document.getElementById('f1-ce-original').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        F1_CE_ORIGINAL_FILE = file;
+        document.getElementById('f1-ce-original-name').textContent = file.name;
+        document.getElementById('f1-ce-original-name').className = 'text-sm text-green-600 flex-1 font-medium';
+        document.getElementById('f1-ce-original-remove').classList.remove('hidden');
+        showToast('Đã chọn file CE gốc: ' + file.name);
+      }
+    });
+
+    // Xóa file CE gốc
+    document.getElementById('f1-ce-original-remove').addEventListener('click', function() {
+      document.getElementById('f1-ce-original').value = '';
+      F1_CE_ORIGINAL_FILE = null;
+      document.getElementById('f1-ce-original-name').textContent = 'Chưa chọn file';
+      document.getElementById('f1-ce-original-name').className = 'text-sm text-gray-500 flex-1';
+      this.classList.add('hidden');
+    });
+
+    // Xử lý upload file CE sau rà soát
+    document.getElementById('f1-ce-review-btn').addEventListener('click', function() {
+      document.getElementById('f1-ce-review').click();
+    });
+
+    document.getElementById('f1-ce-review').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        F1_CE_REVIEW_FILE = file;
+        document.getElementById('f1-ce-review-name').textContent = file.name;
+        document.getElementById('f1-ce-review-name').className = 'text-sm text-green-600 flex-1 font-medium';
+        document.getElementById('f1-ce-review-remove').classList.remove('hidden');
+        showToast('Đã chọn file CE sau rà soát: ' + file.name);
+      }
+    });
+
+    // Xóa file CE sau rà soát
+    document.getElementById('f1-ce-review-remove').addEventListener('click', function() {
+      document.getElementById('f1-ce-review').value = '';
+      F1_CE_REVIEW_FILE = null;
+      document.getElementById('f1-ce-review-name').textContent = 'Chưa chọn file';
+      document.getElementById('f1-ce-review-name').className = 'text-sm text-gray-500 flex-1';
+      this.classList.add('hidden');
+    });
+
+    // Gửi dữ liệu lên server
+    document.getElementById('f1-submit-btn').addEventListener('click', async function() {
+      // Kiểm tra dữ liệu bắt buộc
+      if (!F1_CE_ORIGINAL_FILE) {
+        showToast('Vui lòng chọn file CE gốc', 'error');
+        return;
+      }
+
+      if (!F1_CE_REVIEW_FILE) {
+        showToast('Vui lòng chọn file CE sau rà soát', 'error');
+        return;
+      }
+
+      // Chuẩn bị FormData để gửi
+      const formData = new FormData();
+      formData.append('ce_original', F1_CE_ORIGINAL_FILE);
+      formData.append('ce_review', F1_CE_REVIEW_FILE);
+
+      // Log dữ liệu gửi đi (không log file)
+      console.log('[Form 1] Sending data:', {
+        ce_original_file: F1_CE_ORIGINAL_FILE?.name || 'N/A',
+        ce_review_file: F1_CE_REVIEW_FILE?.name || 'N/A',
+        ce_original_size: F1_CE_ORIGINAL_FILE?.size || 0,
+        ce_review_size: F1_CE_REVIEW_FILE?.size || 0
+      });
+
+      // Disable button và hiển thị loading
+      const submitBtn = this;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Đang gửi...';
+
+      try {
+        // Gửi dữ liệu lên webhook
+        const serverUrl = 'https://iatzhxxuk.tino.page/webhook/a3903199-3907-4ac6-b217-6c5f49607de6';
+        
+        console.log('[Form 1] Sending to:', serverUrl);
+        
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          body: formData,
+          // Không set Content-Type header, browser sẽ tự set với boundary cho FormData
+        });
+
+        console.log('[Form 1] Response status:', response.status, response.statusText);
+        console.log('[Form 1] Response headers:', Object.fromEntries(response.headers.entries()));
+
+        // Đọc response text trước (có thể là JSON hoặc text)
+        let responseText = '';
+        try {
+          responseText = await response.text();
+          console.log('[Form 1] Response text:', responseText);
+        } catch (textError) {
+          console.error('[Form 1] Error reading response text:', textError);
+          responseText = '';
+        }
+
+        // Parse JSON nếu có thể
+        let result = null;
+        if (responseText) {
+          try {
+            result = JSON.parse(responseText);
+            console.log('[Form 1] Parsed JSON:', result);
+          } catch (parseError) {
+            // Nếu không parse được JSON, giữ nguyên text
+            console.log('[Form 1] Response is not JSON, keeping as text');
+            result = {
+              success: response.ok,
+              status: response.status,
+              statusText: response.statusText,
+              body: responseText,
+              message: responseText || 'Không có nội dung response'
+            };
+          }
+        } else {
+          result = {
+            success: response.ok,
+            status: response.status,
+            statusText: response.statusText,
+            message: response.ok ? 'Gửi thành công (không có response body)' : `HTTP ${response.status}: ${response.statusText}`
+          };
+        }
+
+        // Hiển thị kết quả
+        displayJsonResult(result);
+        
+        if (response.ok) {
+          showToast('Đã gửi dữ liệu thành công');
+        } else {
+          showToast(`Gửi không thành công: HTTP ${response.status}`, 'error');
+        }
+      } catch (error) {
+        console.error('[Form 1] Error submitting:', error);
+        console.error('[Form 1] Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+        
+        showToast('Lỗi khi gửi dữ liệu: ' + error.message, 'error');
+        
+        // Hiển thị lỗi dưới dạng JSON
+        displayJsonResult({
+          error: true,
+          name: error.name || 'Unknown Error',
+          message: error.message || 'Có lỗi xảy ra',
+          timestamp: new Date().toISOString(),
+          details: error.stack || 'Không có chi tiết'
+        });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Gửi lên server';
+      }
+    });
+
+    // Hiển thị kết quả JSON
+    function displayJsonResult(data) {
+      const jsonResult = document.getElementById('f1-json-result');
+      const vnContainer = document.getElementById('f1-json-vn');
+      const jsonLabelDiv = jsonResult?.previousElementSibling; // div chứa label "JSON Response:"
+      const formattedJson = JSON.stringify(data, null, 2);
+      jsonResult.textContent = formattedJson;
+
+      // Thử render bản Việt hóa nếu đúng cấu trúc
+      try {
+        const arr = Array.isArray(data) ? data : (typeof data === 'string' ? JSON.parse(data) : [data]);
+        const first = Array.isArray(arr) ? arr[0] : null;
+        const results = first && Array.isArray(first.results) ? first.results : null;
+        const summary = first && first.summary ? first.summary : null;
+        // Hỗ trợ 3 dạng: { rates:[...] } | [{...ratesItem}, ...] | { results:[...], summary:{} }
+        let rates = first && Array.isArray(first.rates) ? first.rates : null;
+        if (!rates && Array.isArray(arr) && arr.length && typeof arr[0] === 'object') {
+          const looksLikeRate = (o)=> o && ('code' in o) && ('rate' in o || 'rate_percent' in o || 'added_count' in o || 'unchanged_count' in o);
+          if (looksLikeRate(arr[0])) { rates = arr; }
+        }
+
+        if (rates) {
+          // Dạng mới: rates
+          let html = '';
+
+          // Tính toán tổng
+          const totalCodes = rates.length;
+          const totalAdded = rates.reduce((s, r) => s + Number(r.added_count || 0), 0);
+          const totalRemoved = rates.reduce((s, r) => s + Number(r.removed_count || 0), 0);
+          const totalChanged = rates.reduce((s, r) => s + Number(r.changed_count || 0), 0);
+          const totalUnchanged = rates.reduce((s, r) => s + Number(r.unchanged_count || 0), 0);
+          const totalNumerator = rates.reduce((s, r) => s + Number(r.numerator_changes || 0), 0);
+          const totalBase = rates.reduce((s, r) => s + Number(r.base_old_items || 0), 0);
+          const totalRate = totalBase > 0 ? (totalNumerator / totalBase) : 0;
+
+          // Bảng tóm tắt
+          html += `
+            <div class="overflow-auto mb-4">
+              <table class="min-w-[720px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-gray-50 text-gray-700">
+                  <tr>
+                    <th class="px-3 py-2 border">Tổng số mã</th>
+                    <th class="px-3 py-2 border">Tổng thay đổi (tử số)</th>
+                    <th class="px-3 py-2 border">Tổng mục cũ (mẫu số)</th>
+                    <th class="px-3 py-2 border">Tỷ lệ tổng thể</th>
+                    <th class="px-3 py-2 border">Thêm mới</th>
+                    <th class="px-3 py-2 border">Bị xóa</th>
+                    <th class="px-3 py-2 border">Thay đổi</th>
+                    <th class="px-3 py-2 border">Không đổi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-center">
+                    <td class="px-3 py-2 border font-semibold text-blue-700">${totalCodes}</td>
+                    <td class="px-3 py-2 border font-semibold text-indigo-700">${totalNumerator}</td>
+                    <td class="px-3 py-2 border font-semibold text-sky-700">${totalBase}</td>
+                    <td class="px-3 py-2 border font-semibold text-purple-700">${(totalRate * 100).toFixed(1)}%</td>
+                    <td class="px-3 py-2 border font-semibold text-green-700">${totalAdded}</td>
+                    <td class="px-3 py-2 border font-semibold text-red-700">${totalRemoved}</td>
+                    <td class="px-3 py-2 border font-semibold text-yellow-700">${totalChanged}</td>
+                    <td class="px-3 py-2 border font-semibold text-gray-700">${totalUnchanged}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>`;
+
+          // Dạng ô (cards) cho từng mã
+          html += `
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
+              ${rates.map((r)=>`
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+                  <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-white flex items-center justify-between">
+                    <div>
+                      <div class="text-sm text-gray-500">Mã: <span class="font-medium text-gray-700">${escapeHtml(r.code||'')}</span></div>
+                      <div class="text-base font-semibold text-blue-800">${escapeHtml(r.name||'')}</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-[11px] text-gray-500">Tỷ lệ thay đổi</div>
+                      <div class="text-2xl font-extrabold text-blue-700">${escapeHtml(r.rate_percent || ((Number(r.rate||0)*100).toFixed(1)+'%'))}</div>
+                    </div>
+                  </div>
+                  <div class="p-4 space-y-3">
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                      <div class="bg-green-50 border border-green-200 rounded-md px-2 py-2">
+                        <div class="text-[11px] text-green-700">+ Thêm</div>
+                        <div class="text-lg font-bold text-green-700">${Number(r.added_count||0)}</div>
+                      </div>
+                      <div class="bg-red-50 border border-red-200 rounded-md px-2 py-2">
+                        <div class="text-[11px] text-red-700">- Xóa</div>
+                        <div class="text-lg font-bold text-red-700">${Number(r.removed_count||0)}</div>
+                      </div>
+                      <div class="bg-yellow-50 border border-yellow-200 rounded-md px-2 py-2">
+                        <div class="text-[11px] text-yellow-700">Δ Đổi</div>
+                        <div class="text-lg font-bold text-yellow-700">${Number(r.changed_count||0)}</div>
+                      </div>
+                      <div class="bg-gray-50 border border-gray-200 rounded-md px-2 py-2">
+                        <div class="text-[11px] text-gray-700">= Không đổi</div>
+                        <div class="text-lg font-bold text-gray-700">${Number(r.unchanged_count||0)}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>`;
+
+          // Bảng chi tiết theo mã
+          html += `
+            <div class="overflow-auto">
+              <table class="min-w-[860px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-gray-50 text-gray-700">
+                  <tr>
+                    <th class="px-3 py-2 border text-center">#</th>
+                    <th class="px-3 py-2 border">Mã</th>
+                    <th class="px-3 py-2 border">Tên</th>
+                    <th class="px-3 py-2 border text-center">Tỷ lệ</th>
+                    <th class="px-3 py-2 border text-center">Tử số</th>
+                    <th class="px-3 py-2 border text-center">Mẫu số</th>
+                    <th class="px-3 py-2 border text-center">+ Thêm</th>
+                    <th class="px-3 py-2 border text-center">- Xóa</th>
+                    <th class="px-3 py-2 border text-center">Δ Đổi</th>
+                    <th class="px-3 py-2 border text-center">= Không đổi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rates.map((r, i) => `
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-3 py-2 border text-center">${i+1}</td>
+                      <td class="px-3 py-2 border font-medium">${escapeHtml(r.code||'')}</td>
+                      <td class="px-3 py-2 border">${escapeHtml(r.name||'')}</td>
+                      <td class="px-3 py-2 border text-center">${escapeHtml(r.rate_percent || ((Number(r.rate||0)*100).toFixed(1)+'%'))}</td>
+                      <td class="px-3 py-2 border text-center">${Number(r.numerator_changes||0)}</td>
+                      <td class="px-3 py-2 border text-center">${Number(r.base_old_items||0)}</td>
+                      <td class="px-3 py-2 border text-center text-green-700 font-medium">${Number(r.added_count||0)}</td>
+                      <td class="px-3 py-2 border text-center text-red-700 font-medium">${Number(r.removed_count||0)}</td>
+                      <td class="px-3 py-2 border text-center text-yellow-700 font-medium">${Number(r.changed_count||0)}</td>
+                      <td class="px-3 py-2 border text-center text-gray-700 font-medium">${Number(r.unchanged_count||0)}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>`;
+
+          vnContainer.innerHTML = html;
+          vnContainer.classList.remove('hidden');
+          // Ẩn phần JSON thô
+          if (jsonLabelDiv) jsonLabelDiv.style.display = 'none';
+          if (jsonResult) jsonResult.style.display = 'none';
+        } else if (results) {
+          let html = '';
+
+          // Tóm tắt
+          if (summary) {
+            html += `
+              <div class="overflow-auto mb-4">
+                <table class="min-w-[560px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+                  <thead class="bg-gray-50 text-gray-700">
+                    <tr>
+                      <th class="px-3 py-2 border">Tổng số mã</th>
+                      <th class="px-3 py-2 border">Thêm mới</th>
+                      <th class="px-3 py-2 border">Bị xóa</th>
+                      <th class="px-3 py-2 border">Thay đổi</th>
+                      <th class="px-3 py-2 border">Không đổi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center">
+                      <td class="px-3 py-2 border font-semibold text-blue-700">${summary.total_codes ?? 0}</td>
+                      <td class="px-3 py-2 border font-semibold text-green-700">${summary.total_added ?? 0}</td>
+                      <td class="px-3 py-2 border font-semibold text-red-700">${summary.total_removed ?? 0}</td>
+                      <td class="px-3 py-2 border font-semibold text-yellow-700">${summary.total_changed ?? 0}</td>
+                      <td class="px-3 py-2 border font-semibold text-gray-700">${summary.total_unchanged ?? 0}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>`;
+          }
+
+          // Chi tiết theo mã
+          html += '<div class="space-y-4">';
+          results.forEach((r, idx) => {
+            const added = Array.isArray(r.added) ? r.added : [];
+            const removed = Array.isArray(r.removed) ? r.removed : [];
+            const changed = Array.isArray(r.changed) ? r.changed : [];
+            html += `
+              <div class="border border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-white rounded-t-lg">
+                  <div class="font-semibold text-blue-800">${idx+1}. ${r.code || ''} — ${r.name || ''}</div>
+                  <div class="flex gap-2 text-xs">
+                    <span class="px-2 py-1 rounded bg-green-100 text-green-700">+${r.added_count ?? added.length}</span>
+                    <span class="px-2 py-1 rounded bg-red-100 text-red-700">-${r.removed_count ?? removed.length}</span>
+                    <span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700">Δ${r.changed_count ?? changed.length}</span>
+                    <span class="px-2 py-1 rounded bg-gray-100 text-gray-700">=${r.unchanged_count ?? 0}</span>
+                  </div>
+                </div>
+                <div class="p-4 space-y-4">
+                  ${added.length ? renderGroup('Thêm mới', added, 'green') : ''}
+                  ${removed.length ? renderGroup('Bị xóa', removed, 'red') : ''}
+                  ${changed.length ? renderGroup('Thay đổi', changed, 'yellow') : ''}
+                  ${!added.length && !removed.length && !changed.length ? '<div class="text-sm text-gray-500">Không có thay đổi.</div>' : ''}
+                </div>
+              </div>`;
+          });
+          html += '</div>';
+
+          vnContainer.innerHTML = html;
+          vnContainer.classList.remove('hidden');
+          // Ẩn phần JSON thô
+          if (jsonLabelDiv) jsonLabelDiv.style.display = 'none';
+          if (jsonResult) jsonResult.style.display = 'none';
+        } else {
+          vnContainer.classList.add('hidden');
+          // Hiện lại phần JSON thô nếu không parse được
+          if (jsonLabelDiv) jsonLabelDiv.style.display = '';
+          if (jsonResult) jsonResult.style.display = '';
+        }
+      } catch (e) {
+        console.warn('VN render failed:', e);
+        vnContainer?.classList.add('hidden');
+        // Hiện lại phần JSON thô khi có lỗi
+        if (jsonLabelDiv) jsonLabelDiv.style.display = '';
+        if (jsonResult) jsonResult.style.display = '';
+      }
+
+      // Hiển thị phần kết quả
+      document.getElementById('f1-result').classList.remove('hidden');
+      document.getElementById('f1-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Không sử dụng đồ thị
+
+    function renderGroup(title, items, tone) {
+      const toneMap = {
+        green: { head:'bg-green-50 text-green-800 border-green-200', dot:'bg-green-400' },
+        red: { head:'bg-red-50 text-red-800 border-red-200', dot:'bg-red-400' },
+        yellow: { head:'bg-yellow-50 text-yellow-800 border-yellow-200', dot:'bg-yellow-400' }
+      }[tone] || { head:'bg-gray-50 text-gray-800 border-gray-200', dot:'bg-gray-400' };
+      let rows = '';
+      items.forEach((it, i) => {
+        rows += `
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-2 border text-center">${i+1}</td>
+            <td class="px-3 py-2 border">${escapeHtml(it.index ?? '')}</td>
+            <td class="px-3 py-2 border">${escapeHtml(it.standard ?? '')}</td>
+            <td class="px-3 py-2 border">${escapeHtml(it.tool ?? '')}</td>
+            <td class="px-3 py-2 border">${escapeHtml(it.type ?? '')}</td>
+            <td class="px-3 py-2 border text-center">${escapeHtml(it.document ?? '')}</td>
+          </tr>`;
+      });
+      return `
+        <div class="border ${toneMap.head.split(' ').includes('border') ? toneMap.head.split(' ').find(c=>c.startsWith('border-')) : 'border-gray-200'} rounded-lg overflow-hidden">
+          <div class="px-3 py-2 ${toneMap.head} font-medium">${title}</div>
+          <div class="overflow-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-white">
+                <tr class="text-left">
+                  <th class="px-3 py-2 border text-center">#</th>
+                  <th class="px-3 py-2 border">Chỉ tiêu</th>
+                  <th class="px-3 py-2 border">Tiêu chuẩn</th>
+                  <th class="px-3 py-2 border">Dụng cụ</th>
+                  <th class="px-3 py-2 border">Loại</th>
+                  <th class="px-3 py-2 border text-center">Tài liệu</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows || '<tr><td colspan="6" class="px-3 py-3 text-center text-gray-500">Không có mục</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Copy JSON
+    document.getElementById('f1-copy-json').addEventListener('click', function() {
+      const jsonText = document.getElementById('f1-json-result').textContent;
+      if (jsonText && jsonText !== 'Chưa có kết quả') {
+        navigator.clipboard.writeText(jsonText).then(() => {
+          showToast('Đã copy JSON vào clipboard');
+        }).catch(err => {
+          console.error('Error copying to clipboard:', err);
+          showToast('Lỗi khi copy JSON', 'error');
+        });
+      } else {
+        showToast('Không có dữ liệu để copy', 'error');
+      }
+    });
+
+    // Hàm hiển thị toast
+    function showToast(message, type = 'success') {
+      // Tạo toast element nếu chưa có
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+
+      toast.textContent = message;
+      toast.className = `toast ${type === 'error' ? 'bg-red-600' : 'bg-green-600'}`;
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // ===== FORM 2 - RÀ SOÁT CE =====
+    
+    // Hàm tính màu từ tỷ lệ (0% = đỏ, 100% = xanh lá)
+    function getCompletionColor(percentage) {
+      // Chuyển đổi phần trăm thành số (loại bỏ % nếu có)
+      let percent = parseFloat(String(percentage).replace('%', ''));
+      if (isNaN(percent)) percent = 0;
+      percent = Math.max(0, Math.min(100, percent)); // Giới hạn từ 0-100
+      
+      // Tính màu RGB gradient từ đỏ -> vàng -> xanh lá
+      let r, g, b;
+      
+      if (percent < 50) {
+        // 0-50%: Đỏ (239, 68, 68) -> Vàng (234, 179, 8)
+        const ratio = percent / 50;
+        r = Math.round(239 - (239 - 234) * ratio);
+        g = Math.round(68 + (179 - 68) * ratio);
+        b = Math.round(68 - (68 - 8) * ratio);
+      } else {
+        // 50-100%: Vàng (234, 179, 8) -> Xanh lá (34, 197, 94)
+        const ratio = (percent - 50) / 50;
+        r = Math.round(234 - (234 - 34) * ratio);
+        g = Math.round(179 + (197 - 179) * ratio);
+        b = Math.round(8 + (94 - 8) * ratio);
+      }
+      
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Biến lưu dữ liệu gốc để filter
+    let F2_ORIGINAL_DATA = [];
+
+    // Hàm populate filter dropdowns
+    function populateF2Filters(data) {
+      if (!data || !Array.isArray(data)) return;
+      
+      const picFilter = document.getElementById('f2-filter-pic');
+      const projectFilter = document.getElementById('f2-filter-project');
+      
+      if (!picFilter || !projectFilter) return;
+      
+      // Lưu giá trị đã chọn
+      const selectedPic = picFilter.value;
+      const selectedProject = projectFilter.value;
+      
+      // Clear existing options (giữ lại option "Tất cả")
+      picFilter.innerHTML = '<option value="">Tất cả</option>';
+      projectFilter.innerHTML = '<option value="">Tất cả</option>';
+      
+      // Lấy danh sách unique PIC cụm và Dự án
+      const picSet = new Set();
+      const projectSet = new Set();
+      
+      data.forEach(row => {
+        const pic = row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '';
+        const project = row.project || row['Dự án'] || row.du_an || '';
+        
+        if (pic) picSet.add(pic);
+        if (project) projectSet.add(project);
+      });
+      
+      // Populate PIC filter
+      const sortedPics = Array.from(picSet).sort();
+      sortedPics.forEach(pic => {
+        const option = document.createElement('option');
+        option.value = pic;
+        option.textContent = pic;
+        if (pic === selectedPic) option.selected = true;
+        picFilter.appendChild(option);
+      });
+      
+      // Populate Project filter
+      const sortedProjects = Array.from(projectSet).sort();
+      sortedProjects.forEach(project => {
+        const option = document.createElement('option');
+        option.value = project;
+        option.textContent = project;
+        if (project === selectedProject) option.selected = true;
+        projectFilter.appendChild(option);
+      });
+    }
+
+    // Hàm filter dữ liệu
+    function filterF2Data(data) {
+      if (!data || !Array.isArray(data)) return [];
+      
+      const picFilter = document.getElementById('f2-filter-pic');
+      const projectFilter = document.getElementById('f2-filter-project');
+      
+      const selectedPic = picFilter ? picFilter.value : '';
+      const selectedProject = projectFilter ? projectFilter.value : '';
+      
+      return data.filter(row => {
+        const pic = row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '';
+        const project = row.project || row['Dự án'] || row.du_an || '';
+        
+        const picMatch = !selectedPic || pic === selectedPic;
+        const projectMatch = !selectedProject || project === selectedProject;
+        
+        return picMatch && projectMatch;
+      });
+    }
+
+    // Hàm xuất dữ liệu ra Excel
+    function exportF2ToExcel() {
+      // Lấy dữ liệu đã filter
+      const filteredData = filterF2Data(F2_ORIGINAL_DATA);
+      
+      if (!filteredData || filteredData.length === 0) {
+        showToast('Không có dữ liệu để xuất', 'error');
+        return;
+      }
+
+      try {
+        // Chuẩn bị dữ liệu cho Excel
+        const excelData = filteredData.map((row, index) => {
+          // Lấy giá trị tỷ lệ hoàn thiện bổ sung
+          const completionRate = row.completion_rate || row.completion || 
+                                 row['Tỷ lệ hoàn thiện bổ sung'] || row['Tỷ lệ hoàn thiện'] ||
+                                 row.completion_rate_supplement || row.completion_supplement ||
+                                 row.rate || row.percent || row.percentage || 
+                                 row.ty_le_hoan_thien_bo_sung || row.ty_le_hoan_thien || '0%';
+
+          return {
+            'STT': index + 1,
+            'PIC cụm': row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '',
+            'Dự án': row.project || row['Dự án'] || row.du_an || '',
+            'Ngày giao': row.delivery_date || row['Ngày giao'] || row.ngay_giao || row.date || '',
+            'Mã SAP': row.sap_code || row['Mã SAP'] || row.ma_sap || row.sap || '',
+            'Cụm linh kiện': row.component_cluster || row['Cụm linh kiện'] || row.cum_linh_kien || row.cluster || '',
+            'Tên linh kiện': row.component_name || row['Tên linh kiện'] || row.ten_linh_kien || row.name || '',
+            'Rà soát TCKT&CE': row.review || row['Rà soát TCKT&CE'] || row.ra_soat || row.ra_soat_tckt_ce || '',
+            'Ngày cập nhật gần nhất': row.last_update || row['Ngày cập nhật gần nhất'] || row.ngay_cap_nhat || row.updated_at || '',
+            'Tỷ lệ hoàn thiện bổ sung': String(completionRate)
+          };
+        });
+
+        // Tạo worksheet từ dữ liệu
+        const ws = XLSX.utils.json_to_sheet(excelData);
+        
+        // Điều chỉnh độ rộng cột (tùy chọn)
+        const colWidths = [
+          { wch: 8 },   // STT
+          { wch: 15 },  // PIC cụm
+          { wch: 20 },  // Dự án
+          { wch: 12 },  // Ngày giao
+          { wch: 12 },  // Mã SAP
+          { wch: 25 },  // Cụm linh kiện
+          { wch: 35 },  // Tên linh kiện
+          { wch: 18 },  // Rà soát TCKT&CE
+          { wch: 22 },  // Ngày cập nhật gần nhất
+          { wch: 25 }   // Tỷ lệ hoàn thiện bổ sung
+        ];
+        ws['!cols'] = colWidths;
+
+        // Tạo workbook
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Rà soát CE');
+
+        // Tạo tên file với timestamp
+        const now = new Date();
+        const dateStr = now.getFullYear() + '-' + 
+                       String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                       String(now.getDate()).padStart(2, '0') + '_' +
+                       String(now.getHours()).padStart(2, '0') + '-' +
+                       String(now.getMinutes()).padStart(2, '0') + '-' +
+                       String(now.getSeconds()).padStart(2, '0');
+        const filename = `Ra_soat_CE_${dateStr}.xlsx`;
+
+        // Xuất file
+        XLSX.writeFile(wb, filename);
+        
+        showToast(`Đã xuất ${filteredData.length} bản ghi ra file Excel`, 'success');
+        
+      } catch (error) {
+        console.error('[Form 2] Error exporting to Excel:', error);
+        showToast('Lỗi khi xuất file Excel: ' + error.message, 'error');
+      }
+    }
+
+    // Hàm render dữ liệu vào bảng Form 2
+    function renderForm2Table(data) {
+      // Lưu dữ liệu gốc
+      F2_ORIGINAL_DATA = data || [];
+      
+      // Populate filters
+      populateF2Filters(F2_ORIGINAL_DATA);
+      
+      // Filter dữ liệu
+      const filteredData = filterF2Data(F2_ORIGINAL_DATA);
+      
+      const tbody = document.getElementById('f2-table-body');
+      if (!tbody) return;
+      
+      if (!filteredData || !Array.isArray(filteredData) || filteredData.length === 0) {
+        tbody.innerHTML = '<tr><td class="px-3 py-4 text-center text-gray-500 border border-gray-300" colspan="9">Không có dữ liệu phù hợp với bộ lọc</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      filteredData.forEach((row, index) => {
+        // Lấy giá trị tỷ lệ hoàn thiện bổ sung - hỗ trợ nhiều tên field khác nhau
+        const completionRate = row.completion_rate || row.completion || 
+                               row['Tỷ lệ hoàn thiện bổ sung'] || row['Tỷ lệ hoàn thiện'] ||
+                               row.completion_rate_supplement || row.completion_supplement ||
+                               row.rate || row.percent || row.percentage || 
+                               row.ty_le_hoan_thien_bo_sung || row.ty_le_hoan_thien || '0%';
+        const completionPercent = parseFloat(String(completionRate).replace('%', '')) || 0;
+        const completionColor = getCompletionColor(completionPercent);
+        
+        // Hỗ trợ nhiều tên field khác nhau cho từng cột
+        html += `
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.project || row['Dự án'] || row.du_an || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.delivery_date || row['Ngày giao'] || row.ngay_giao || row.date || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.sap_code || row['Mã SAP'] || row.ma_sap || row.sap || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.component_cluster || row['Cụm linh kiện'] || row.cum_linh_kien || row.cluster || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.component_name || row['Tên linh kiện'] || row.ten_linh_kien || row.name || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.review || row['Rà soát TCKT&CE'] || row.ra_soat || row.ra_soat_tckt_ce || '')}</td>
+            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.last_update || row['Ngày cập nhật gần nhất'] || row.ngay_cap_nhat || row.updated_at || '')}</td>
+            <td class="px-3 py-4 border border-gray-300 text-center">${escapeHtml(String(completionRate))}</td>
+          </tr>
+        `;
+      });
+      
+      tbody.innerHTML = html;
+    }
+
+    // Hàm fetch dữ liệu từ webhook cho Form 2
+    async function fetchForm2Data() {
+      const loadBtn = document.getElementById('f2-load-btn');
+      const loadingDiv = document.getElementById('f2-loading');
+      const tbody = document.getElementById('f2-table-body');
+      
+      const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/0a37d9a8-8be4-4311-93cf-923e7e874128';
+      
+      try {
+        // Hiển thị loading
+        if (loadBtn) loadBtn.disabled = true;
+        if (loadingDiv) loadingDiv.classList.remove('hidden');
+        if (tbody) {
+          tbody.innerHTML = '<tr><td class="px-3 py-4 text-center text-gray-500 border border-gray-300" colspan="9">Đang tải dữ liệu...</td></tr>';
+        }
+        
+        console.log('[Form 2] Fetching data from:', webhookUrl);
+        
+        // Gọi API với query parameters (có thể thêm filter, page, limit, etc.)
+        const params = new URLSearchParams({
+          // Có thể thêm các query params ở đây nếu cần
+          // format: 'json',
+          // limit: '100',
+          // offset: '0'
+        });
+        
+        const url = `${webhookUrl}?${params.toString()}`;
+        console.log('[Form 2] Full URL:', url);
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        console.log('[Form 2] Response status:', response.status, response.statusText);
+        console.log('[Form 2] Response headers:', Object.fromEntries(response.headers.entries()));
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const responseText = await response.text();
+        console.log('[Form 2] Response text:', responseText);
+        
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          console.error('[Form 2] JSON parse error:', e);
+          // Nếu không phải JSON, thử xử lý như text
+          throw new Error('Response is not valid JSON');
+        }
+        
+        console.log('[Form 2] Parsed data:', data);
+        
+        // Xử lý dữ liệu trả về - có thể là array trực tiếp hoặc object chứa array
+        let tableData = [];
+        if (Array.isArray(data)) {
+          tableData = data;
+        } else if (data && Array.isArray(data.data)) {
+          tableData = data.data;
+        } else if (data && Array.isArray(data.results)) {
+          tableData = data.results;
+        } else if (data && Array.isArray(data.items)) {
+          tableData = data.items;
+        } else if (data && typeof data === 'object') {
+          // Nếu là object đơn, thử chuyển thành array 1 phần tử
+          tableData = [data];
+        }
+        
+        console.log('[Form 2] Table data:', tableData);
+        
+        // Render dữ liệu vào bảng
+        renderForm2Table(tableData);
+        
+        // Thông báo thành công
+        showToast(`Đã tải ${tableData.length} bản ghi`, 'success');
+        
+      } catch (error) {
+        console.error('[Form 2] Error fetching data:', error);
+        if (tbody) {
+          tbody.innerHTML = `<tr><td class="px-3 py-4 text-center text-red-500 border border-gray-300" colspan="9">Lỗi: ${escapeHtml(error.message)}</td></tr>`;
+        }
+        showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
+      } finally {
+        // Ẩn loading
+        if (loadBtn) loadBtn.disabled = false;
+        if (loadingDiv) loadingDiv.classList.add('hidden');
+      }
+    }
+
+    // Event listener cho nút tải dữ liệu Form 2
+    document.addEventListener('DOMContentLoaded', function() {
+      const f2LoadBtn = document.getElementById('f2-load-btn');
+      if (f2LoadBtn) {
+        f2LoadBtn.addEventListener('click', function() {
+          fetchForm2Data();
+        });
+      }
+      
+      // Tự động load dữ liệu khi chuyển sang Form 2 (tùy chọn)
+      const navButtons = document.querySelectorAll('.nav-btn[data-target="form2"]');
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Có thể tự động load hoặc không
+          // fetchForm2Data();
+        });
+      });
+
+      // Xử lý filter cho Form 2
+      const picFilter = document.getElementById('f2-filter-pic');
+      const projectFilter = document.getElementById('f2-filter-project');
+      const resetFilterBtn = document.getElementById('f2-reset-filter');
+      
+      if (picFilter) {
+        picFilter.addEventListener('change', function() {
+          if (F2_ORIGINAL_DATA && F2_ORIGINAL_DATA.length > 0) {
+            renderForm2Table(F2_ORIGINAL_DATA);
+          }
+        });
+      }
+      
+      if (projectFilter) {
+        projectFilter.addEventListener('change', function() {
+          if (F2_ORIGINAL_DATA && F2_ORIGINAL_DATA.length > 0) {
+            renderForm2Table(F2_ORIGINAL_DATA);
+          }
+        });
+      }
+      
+      if (resetFilterBtn) {
+        resetFilterBtn.addEventListener('click', function() {
+          if (picFilter) picFilter.value = '';
+          if (projectFilter) projectFilter.value = '';
+          if (F2_ORIGINAL_DATA && F2_ORIGINAL_DATA.length > 0) {
+            renderForm2Table(F2_ORIGINAL_DATA);
+          }
+        });
+      }
+
+      // Nút xuất Excel
+      const exportExcelBtn = document.getElementById('f2-export-excel');
+      if (exportExcelBtn) {
+        exportExcelBtn.addEventListener('click', function() {
+          exportF2ToExcel();
+        });
+      }
+
+      // ===== FORM 2 - XỬ LÝ MODAL KHAI BÁO (SO SÁNH CE) =====
+      
+      // Biến lưu trữ file
+      let F2_CE_ORIGINAL_FILE = null;
+      let F2_CE_REVIEW_FILE = null;
+      
+      // Nút mở modal Khai báo
+      const f2DeclarationBtn = document.getElementById('f2-declaration-btn');
+      if (f2DeclarationBtn) {
+        f2DeclarationBtn.addEventListener('click', function() {
+          openF2DeclarationModal();
+        });
+      }
+      
+      // Xử lý modal Khai báo
+      const modal = document.getElementById('f2-declaration-modal');
+      const closeBtns = document.querySelectorAll('#f2-modal-close, #f2-modal-close-btn');
+      
+      // Đóng modal
+      closeBtns.forEach(btn => {
+        if (btn) {
+          btn.addEventListener('click', function() {
+            closeF2DeclarationModal();
+          });
+        }
+      });
+      
+      // Đóng modal khi click ra ngoài
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeF2DeclarationModal();
+          }
+        });
+      }
+      
+      // Đóng modal bằng phím ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeF2DeclarationModal();
+        }
+      });
+      
+      // Xử lý upload file CE gốc
+      const f2CeOriginalBtn = document.getElementById('f2-ce-original-btn');
+      const f2CeOriginal = document.getElementById('f2-ce-original');
+      const f2CeOriginalRemove = document.getElementById('f2-ce-original-remove');
+      
+      if (f2CeOriginalBtn && f2CeOriginal) {
+        f2CeOriginalBtn.addEventListener('click', function() {
+          f2CeOriginal.click();
+        });
+      }
+      
+      if (f2CeOriginal) {
+        f2CeOriginal.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            F2_CE_ORIGINAL_FILE = file;
+            document.getElementById('f2-ce-original-name').textContent = file.name;
+            document.getElementById('f2-ce-original-name').className = 'text-sm text-green-600 flex-1 font-medium';
+            if (f2CeOriginalRemove) f2CeOriginalRemove.classList.remove('hidden');
+            showToast('Đã chọn file CE gốc: ' + file.name);
+          }
+        });
+      }
+      
+      if (f2CeOriginalRemove) {
+        f2CeOriginalRemove.addEventListener('click', function() {
+          if (f2CeOriginal) f2CeOriginal.value = '';
+          F2_CE_ORIGINAL_FILE = null;
+          document.getElementById('f2-ce-original-name').textContent = 'Chưa chọn file';
+          document.getElementById('f2-ce-original-name').className = 'text-sm text-gray-500 flex-1';
+          this.classList.add('hidden');
+        });
+      }
+      
+      // Xử lý upload file CE sau rà soát
+      const f2CeReviewBtn = document.getElementById('f2-ce-review-btn');
+      const f2CeReview = document.getElementById('f2-ce-review');
+      const f2CeReviewRemove = document.getElementById('f2-ce-review-remove');
+      
+      if (f2CeReviewBtn && f2CeReview) {
+        f2CeReviewBtn.addEventListener('click', function() {
+          f2CeReview.click();
+        });
+      }
+      
+      if (f2CeReview) {
+        f2CeReview.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            F2_CE_REVIEW_FILE = file;
+            document.getElementById('f2-ce-review-name').textContent = file.name;
+            document.getElementById('f2-ce-review-name').className = 'text-sm text-green-600 flex-1 font-medium';
+            if (f2CeReviewRemove) f2CeReviewRemove.classList.remove('hidden');
+            showToast('Đã chọn file CE sau rà soát: ' + file.name);
+          }
+        });
+      }
+      
+      if (f2CeReviewRemove) {
+        f2CeReviewRemove.addEventListener('click', function() {
+          if (f2CeReview) f2CeReview.value = '';
+          F2_CE_REVIEW_FILE = null;
+          document.getElementById('f2-ce-review-name').textContent = 'Chưa chọn file';
+          document.getElementById('f2-ce-review-name').className = 'text-sm text-gray-500 flex-1';
+          this.classList.add('hidden');
+        });
+      }
+      
+      // Gửi dữ liệu so sánh CE
+      const f2DeclarationSubmitBtn = document.getElementById('f2-declaration-submit-btn');
+      if (f2DeclarationSubmitBtn) {
+        f2DeclarationSubmitBtn.addEventListener('click', async function() {
+          await submitF2Declaration();
+        });
+      }
+    });
+
+    // Hàm mở modal Khai báo Form 2
+    function openF2DeclarationModal() {
+      const modal = document.getElementById('f2-declaration-modal');
+      if (!modal) return;
+      
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      
+      // Reset form
+      F2_CE_ORIGINAL_FILE = null;
+      F2_CE_REVIEW_FILE = null;
+      if (document.getElementById('f2-ce-original')) document.getElementById('f2-ce-original').value = '';
+      if (document.getElementById('f2-ce-review')) document.getElementById('f2-ce-review').value = '';
+      if (document.getElementById('f2-ce-original-name')) {
+        document.getElementById('f2-ce-original-name').textContent = 'Chưa chọn file';
+        document.getElementById('f2-ce-original-name').className = 'text-sm text-gray-500 flex-1';
+      }
+      if (document.getElementById('f2-ce-review-name')) {
+        document.getElementById('f2-ce-review-name').textContent = 'Chưa chọn file';
+        document.getElementById('f2-ce-review-name').className = 'text-sm text-gray-500 flex-1';
+      }
+      const removeBtns = document.querySelectorAll('#f2-ce-original-remove, #f2-ce-review-remove');
+      removeBtns.forEach(btn => btn.classList.add('hidden'));
+      
+      // Ẩn kết quả
+      const resultDiv = document.getElementById('f2-declaration-result');
+      if (resultDiv) resultDiv.classList.add('hidden');
+    }
+
+    // Hàm đóng modal Khai báo Form 2
+    function closeF2DeclarationModal() {
+      const modal = document.getElementById('f2-declaration-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Hàm submit form so sánh CE Form 2
+    async function submitF2Declaration() {
+      // Lấy file trực tiếp từ input element thay vì dùng biến
+      const f2CeOriginalInput = document.getElementById('f2-ce-original');
+      const f2CeReviewInput = document.getElementById('f2-ce-review');
+      
+      // Kiểm tra dữ liệu bắt buộc
+      if (!f2CeOriginalInput || !f2CeOriginalInput.files || !f2CeOriginalInput.files[0]) {
+        showToast('Vui lòng chọn file CE gốc', 'error');
+        return;
+      }
+
+      if (!f2CeReviewInput || !f2CeReviewInput.files || !f2CeReviewInput.files[0]) {
+        showToast('Vui lòng chọn file CE sau rà soát', 'error');
+        return;
+      }
+
+      const ceOriginalFile = f2CeOriginalInput.files[0];
+      const ceReviewFile = f2CeReviewInput.files[0];
+
+      // Chuẩn bị FormData để gửi
+      const formData = new FormData();
+      formData.append('ce_original', ceOriginalFile);
+      formData.append('ce_review', ceReviewFile);
+
+      // Log dữ liệu gửi đi
+      console.log('[Form 2 Declaration] Sending data:', {
+        ce_original_file: ceOriginalFile?.name || 'N/A',
+        ce_review_file: ceReviewFile?.name || 'N/A',
+        ce_original_size: ceOriginalFile?.size || 0,
+        ce_review_size: ceReviewFile?.size || 0
+      });
+
+      // Disable button và hiển thị loading
+      const submitBtn = document.getElementById('f2-declaration-submit-btn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang gửi...';
+      }
+
+      const resultDiv = document.getElementById('f2-declaration-result');
+      const resultContent = document.getElementById('f2-declaration-result-content');
+
+      try {
+        // Gửi dữ liệu lên webhook cho Form 2
+        const serverUrl = 'https://iatzhxxuk.tino.page/webhook/2b3f8c7b-8485-4c42-a46f-fb4a6019bf6d';
+        
+        console.log('[Form 2 Declaration] Sending to:', serverUrl);
+        
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          body: formData,
+        });
+
+        console.log('[Form 2 Declaration] Response status:', response.status, response.statusText);
+
+        // Đọc response text
+        let responseText = '';
+        try {
+          responseText = await response.text();
+          console.log('[Form 2 Declaration] Response text:', responseText);
+        } catch (textError) {
+          console.error('[Form 2 Declaration] Error reading response text:', textError);
+          responseText = '';
+        }
+
+        // Parse JSON nếu có thể
+        let result = null;
+        if (responseText) {
+          try {
+            result = JSON.parse(responseText);
+            console.log('[Form 2 Declaration] Parsed JSON:', result);
+          } catch (parseError) {
+            result = {
+              success: response.ok,
+              status: response.status,
+              statusText: response.statusText,
+              body: responseText,
+              message: responseText || 'Không có nội dung response'
+            };
+          }
+        } else {
+          result = {
+            success: response.ok,
+            status: response.status,
+            statusText: response.statusText,
+            message: response.ok ? 'Gửi thành công (không có response body)' : `HTTP ${response.status}: ${response.statusText}`
+          };
+        }
+
+        // Hiển thị kết quả
+        if (resultDiv && resultContent) {
+          resultDiv.classList.remove('hidden');
+          resultContent.innerHTML = `
+            <pre class="bg-white p-4 rounded border border-gray-300 text-xs overflow-auto max-h-60 whitespace-pre-wrap">${escapeHtml(JSON.stringify(result, null, 2))}</pre>
+          `;
+        }
+        
+        if (response.ok) {
+          showToast('Đã gửi dữ liệu thành công');
+        } else {
+          showToast(`Gửi không thành công: HTTP ${response.status}`, 'error');
+        }
+      } catch (error) {
+        console.error('[Form 2 Declaration] Error submitting:', error);
+        if (resultDiv && resultContent) {
+          resultDiv.classList.remove('hidden');
+          resultContent.innerHTML = `
+            <div class="text-red-600 p-4 rounded border border-red-300 bg-red-50">
+              <p class="font-semibold">Lỗi:</p>
+              <p>${escapeHtml(error.message)}</p>
+            </div>
+          `;
+        }
+        showToast('Lỗi khi gửi dữ liệu: ' + error.message, 'error');
+      } finally {
+        // Enable button lại
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Gửi lên server';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
