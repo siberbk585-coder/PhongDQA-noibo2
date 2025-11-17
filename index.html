@@ -808,7 +808,7 @@
 
           // Bảng chi tiết theo mã
           html += `
-            <div class="overflow-auto">
+            <div class="overflow-auto mb-6">
               <table class="min-w-[860px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
                 <thead class="bg-gray-50 text-gray-700">
                   <tr>
@@ -841,6 +841,48 @@
                   `).join('')}
                 </tbody>
               </table>
+            </div>`;
+
+          // Chi tiết items cho từng mã
+          html += `
+            <div class="mb-4">
+              <h4 class="text-lg font-semibold text-gray-800 mb-4">Chi tiết thay đổi theo từng mã</h4>
+              <div class="space-y-4">
+                ${rates.map((r, idx) => {
+                  const addedItems = Array.isArray(r.added_items) ? r.added_items : [];
+                  const removedItems = Array.isArray(r.removed_items) ? r.removed_items : [];
+                  const changedItems = Array.isArray(r.changed_items) ? r.changed_items : [];
+                  const hasDetails = addedItems.length > 0 || removedItems.length > 0 || changedItems.length > 0;
+                  const detailsId = `rate-details-${idx}`;
+                  
+                  if (!hasDetails) return '';
+                  
+                  return `
+                    <div class="border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
+                      <button onclick="toggleRateDetails('${detailsId}')" class="w-full px-5 py-4 bg-gradient-to-r from-blue-50 to-white hover:from-blue-100 hover:to-blue-50 transition flex items-center justify-between text-left">
+                        <div>
+                          <div class="font-semibold text-blue-800 text-lg">${idx + 1}. ${escapeHtml(r.code || '')} - ${escapeHtml(r.name || '')}</div>
+                          <div class="text-sm text-gray-600 mt-1">
+                            ${addedItems.length > 0 ? `<span class="text-green-700 font-medium">+${addedItems.length} thêm</span>` : ''}
+                            ${removedItems.length > 0 ? `<span class="text-red-700 font-medium ml-2">-${removedItems.length} xóa</span>` : ''}
+                            ${changedItems.length > 0 ? `<span class="text-yellow-700 font-medium ml-2">Δ${changedItems.length} đổi</span>` : ''}
+                          </div>
+                        </div>
+                        <svg id="icon-${detailsId}" class="w-5 h-5 text-gray-500 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                      </button>
+                      <div id="${detailsId}" class="border-t border-gray-200 bg-gray-50">
+                        <div class="p-5 space-y-5">
+                          ${addedItems.length > 0 ? renderAddedItems(addedItems, idx) : ''}
+                          ${removedItems.length > 0 ? renderRemovedItems(removedItems, idx) : ''}
+                          ${changedItems.length > 0 ? renderChangedItems(changedItems, idx) : ''}
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).filter(h => h).join('')}
+              </div>
             </div>`;
 
           vnContainer.innerHTML = html;
@@ -930,6 +972,186 @@
     }
 
     // Không sử dụng đồ thị
+
+    // Hàm toggle chi tiết cho rate cards
+    window.toggleRateDetails = function(detailsId) {
+      const details = document.getElementById(detailsId);
+      const icon = document.getElementById('icon-' + detailsId);
+      if (details) {
+        details.classList.toggle('hidden');
+        if (icon) {
+          icon.classList.toggle('rotate-180');
+        }
+      }
+    };
+
+    // Hàm render added items
+    function renderAddedItems(items, cardIdx) {
+      if (!items || items.length === 0) return '';
+      return `
+        <div class="bg-white border border-green-300 rounded-lg overflow-hidden shadow-sm">
+          <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              <h5 class="text-white font-semibold text-base">Thêm mới (${items.length} mục)</h5>
+            </div>
+          </div>
+          <div class="overflow-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-green-50">
+                <tr>
+                  <th class="px-4 py-2 border border-green-200 text-center font-semibold text-green-800">#</th>
+                  <th class="px-4 py-2 border border-green-200 font-semibold text-green-800">Chỉ tiêu</th>
+                  <th class="px-4 py-2 border border-green-200 font-semibold text-green-800">Tiêu chuẩn</th>
+                  <th class="px-4 py-2 border border-green-200 font-semibold text-green-800">Dụng cụ</th>
+                  <th class="px-4 py-2 border border-green-200 font-semibold text-green-800">Loại</th>
+                  <th class="px-4 py-2 border border-green-200 font-semibold text-green-800">Tài liệu</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${items.map((item, i) => `
+                  <tr class="hover:bg-green-50 transition">
+                    <td class="px-4 py-3 border border-green-200 text-center font-medium text-gray-700">${i + 1}</td>
+                    <td class="px-4 py-3 border border-green-200 font-medium text-gray-800">${escapeHtml(item.index || '')}</td>
+                    <td class="px-4 py-3 border border-green-200 text-gray-700">${escapeHtml(item.standard || '')}</td>
+                    <td class="px-4 py-3 border border-green-200 text-gray-700">${escapeHtml(item.tool || '')}</td>
+                    <td class="px-4 py-3 border border-green-200 text-center">
+                      <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">${escapeHtml(item.type || '')}</span>
+                    </td>
+                    <td class="px-4 py-3 border border-green-200 text-gray-700 text-xs">${escapeHtml(item.document || '')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // Hàm render removed items
+    function renderRemovedItems(items, cardIdx) {
+      if (!items || items.length === 0) return '';
+      return `
+        <div class="bg-white border border-red-300 rounded-lg overflow-hidden shadow-sm">
+          <div class="bg-gradient-to-r from-red-500 to-red-600 px-4 py-3">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              <h5 class="text-white font-semibold text-base">Bị xóa (${items.length} mục)</h5>
+            </div>
+          </div>
+          <div class="overflow-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-red-50">
+                <tr>
+                  <th class="px-4 py-2 border border-red-200 text-center font-semibold text-red-800">#</th>
+                  <th class="px-4 py-2 border border-red-200 font-semibold text-red-800">Chỉ tiêu</th>
+                  <th class="px-4 py-2 border border-red-200 font-semibold text-red-800">Tiêu chuẩn</th>
+                  <th class="px-4 py-2 border border-red-200 font-semibold text-red-800">Dụng cụ</th>
+                  <th class="px-4 py-2 border border-red-200 font-semibold text-red-800">Loại</th>
+                  <th class="px-4 py-2 border border-red-200 font-semibold text-red-800">Tài liệu</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${items.map((item, i) => `
+                  <tr class="hover:bg-red-50 transition">
+                    <td class="px-4 py-3 border border-red-200 text-center font-medium text-gray-700">${i + 1}</td>
+                    <td class="px-4 py-3 border border-red-200 font-medium text-gray-800">${escapeHtml(item.index || '')}</td>
+                    <td class="px-4 py-3 border border-red-200 text-gray-700">${escapeHtml(item.standard || '')}</td>
+                    <td class="px-4 py-3 border border-red-200 text-gray-700">${escapeHtml(item.tool || '')}</td>
+                    <td class="px-4 py-3 border border-red-200 text-center">
+                      <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">${escapeHtml(item.type || '')}</span>
+                    </td>
+                    <td class="px-4 py-3 border border-red-200 text-gray-700 text-xs">${escapeHtml(item.document || '')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // Hàm render changed items với so sánh before/after
+    function renderChangedItems(items, cardIdx) {
+      if (!items || items.length === 0) return '';
+      return `
+        <div class="bg-white border border-yellow-300 rounded-lg overflow-hidden shadow-sm">
+          <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 px-4 py-3">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+              </svg>
+              <h5 class="text-white font-semibold text-base">Thay đổi (${items.length} mục)</h5>
+            </div>
+          </div>
+          <div class="p-4 space-y-4">
+            ${items.map((item, i) => {
+              const before = item.before || {};
+              const after = item.after || {};
+              const index = item.index || '';
+              
+              // So sánh các trường để highlight thay đổi
+              const standardChanged = before.standard !== after.standard;
+              const toolChanged = before.tool !== after.tool;
+              const typeChanged = before.type !== after.type;
+              const documentChanged = before.document !== after.document;
+              
+              return `
+                <div class="border border-yellow-200 rounded-lg overflow-hidden bg-gradient-to-br from-yellow-50 to-white">
+                  <div class="bg-yellow-100 px-4 py-2 border-b border-yellow-200">
+                    <div class="flex items-center gap-2">
+                      <span class="px-2 py-1 bg-yellow-500 text-white text-xs font-semibold rounded">#${i + 1}</span>
+                      <span class="font-semibold text-yellow-900 text-sm">${escapeHtml(index)}</span>
+                    </div>
+                  </div>
+                  <div class="overflow-auto">
+                    <table class="min-w-full text-sm">
+                      <thead class="bg-yellow-50">
+                        <tr>
+                          <th class="px-4 py-2 border border-yellow-200 font-semibold text-yellow-900 w-1/6">Trường</th>
+                          <th class="px-4 py-2 border border-yellow-200 font-semibold text-red-700 w-5/12">Trước (Before)</th>
+                          <th class="px-4 py-2 border border-yellow-200 font-semibold text-green-700 w-5/12">Sau (After)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="hover:bg-yellow-50">
+                          <td class="px-4 py-3 border border-yellow-200 font-medium text-gray-800 bg-gray-50">Tiêu chuẩn</td>
+                          <td class="px-4 py-3 border border-yellow-200 ${standardChanged ? 'bg-red-50 font-medium text-red-800' : 'text-gray-700'}">${escapeHtml(before.standard || '')}</td>
+                          <td class="px-4 py-3 border border-yellow-200 ${standardChanged ? 'bg-green-50 font-medium text-green-800' : 'text-gray-700'}">${escapeHtml(after.standard || '')}</td>
+                        </tr>
+                        <tr class="hover:bg-yellow-50">
+                          <td class="px-4 py-3 border border-yellow-200 font-medium text-gray-800 bg-gray-50">Dụng cụ</td>
+                          <td class="px-4 py-3 border border-yellow-200 ${toolChanged ? 'bg-red-50 font-medium text-red-800' : 'text-gray-700'}">${escapeHtml(before.tool || '')}</td>
+                          <td class="px-4 py-3 border border-yellow-200 ${toolChanged ? 'bg-green-50 font-medium text-green-800' : 'text-gray-700'}">${escapeHtml(after.tool || '')}</td>
+                        </tr>
+                        <tr class="hover:bg-yellow-50">
+                          <td class="px-4 py-3 border border-yellow-200 font-medium text-gray-800 bg-gray-50">Loại</td>
+                          <td class="px-4 py-3 border border-yellow-200 text-center ${typeChanged ? 'bg-red-50' : ''}">
+                            ${before.type ? `<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">${escapeHtml(before.type)}</span>` : ''}
+                          </td>
+                          <td class="px-4 py-3 border border-yellow-200 text-center ${typeChanged ? 'bg-green-50' : ''}">
+                            ${after.type ? `<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">${escapeHtml(after.type)}</span>` : ''}
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-yellow-50">
+                          <td class="px-4 py-3 border border-yellow-200 font-medium text-gray-800 bg-gray-50">Tài liệu</td>
+                          <td class="px-4 py-3 border border-yellow-200 text-xs ${documentChanged ? 'bg-red-50 font-medium text-red-800' : 'text-gray-700'}">${escapeHtml(before.document || '')}</td>
+                          <td class="px-4 py-3 border border-yellow-200 text-xs ${documentChanged ? 'bg-green-50 font-medium text-green-800' : 'text-gray-700'}">${escapeHtml(after.document || '')}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
 
     function renderGroup(title, items, tone) {
       const toneMap = {
