@@ -5180,16 +5180,34 @@
     let F5_PROJECTS = [];
     let F5_FILTER_PIC = ''; // Filter theo người nhận tác vụ
     
+    // Danh sách tên "Người nhận tác vụ" cố định
+    const F5_PIC_LIST = [
+      "Nguyễn Hữu Thịnh",
+      "Nguyễn Văn Hiếu",
+      "Vũ Thị Hằng",
+      "Nguyễn Văn Linh",
+      "Đào Hoàng Dương",
+      "Bùi Đặng Quốc Huy",
+      "Đào Tuấn Kỳ",
+      "Thái Thị Giang",
+      "Trần Hiếu Nghĩa"
+    ];
+    
     /**
      * Load dữ liệu projects và tasks từ API
      * Transform từ format NocoDB (mảng các task records) sang format UI (projects với tasks)
+     * @param {string} picFilter - Tên người nhận tác vụ để lọc (optional)
      * @returns {Promise<Array>} - Mảng projects với cấu trúc: [{ id, projectCode, projectName, tasks: [...] }]
      */
-    async function loadF5Projects() {
+    async function loadF5Projects(picFilter = '') {
       try {
         // Thử gọi API với tham số để lấy tất cả records
         // Nếu API không hỗ trợ tham số, sẽ fallback về URL gốc
-        const url = 'https://iatzhxxuk.tino.page/webhook/form5-task-summary?limit=1000&all=true';
+        let url = 'https://iatzhxxuk.tino.page/webhook/form5-task-summary?limit=1000&all=true';
+        // Thêm tham số PIC vào URL nếu có
+        if (picFilter && picFilter.trim()) {
+          url += `&pic=${encodeURIComponent(picFilter.trim())}`;
+        }
         const response = await fetch(url);
         
         if (!response.ok) {
@@ -5849,6 +5867,11 @@
           const tasksTableBody = document.getElementById('f5-tasksTableBody');
           if (!tasksTableBody) return;
 
+          // Lấy giá trị PIC từ dropdown
+          const picFilter = document.getElementById('f5-filter-pic');
+          const selectedPIC = picFilter ? picFilter.value.trim() : '';
+          F5_FILTER_PIC = selectedPIC;
+
           // Disable nút và hiển thị loading
           this.disabled = true;
           const originalHTML = this.innerHTML;
@@ -5858,11 +5881,11 @@
           tasksTableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-gray-500 text-base"><span class="spinner"></span><span style="margin-left:8px">Đang tải dữ liệu...</span></td></tr>';
 
           try {
-            // Load dữ liệu từ API
-            F5_PROJECTS = await loadF5Projects();
+            // Load dữ liệu từ API với filter PIC
+            F5_PROJECTS = await loadF5Projects(F5_FILTER_PIC);
 
-      // Render bảng tác vụ
-      renderF5TasksTable();
+            // Render bảng tác vụ
+            renderF5TasksTable();
           } catch (error) {
             console.error('[Form 5] Error loading data:', error);
             tasksTableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-red-500 text-base">Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại.</td></tr>';
@@ -5884,51 +5907,48 @@
     function setupF5PICFilter() {
       const picFilter = document.getElementById('f5-filter-pic');
       if (picFilter) {
-        picFilter.addEventListener('change', (e) => {
+        // Populate dropdown với danh sách tên cố định ngay từ đầu
+        picFilter.innerHTML = '<option value="">Tất cả người nhận</option>';
+        F5_PIC_LIST.forEach(pic => {
+          const option = document.createElement('option');
+          option.value = pic;
+          option.textContent = pic;
+          picFilter.appendChild(option);
+        });
+        
+        // Event listener: khi thay đổi dropdown, tự động load lại dữ liệu với filter PIC
+        picFilter.addEventListener('change', async (e) => {
           F5_FILTER_PIC = e.target.value.trim();
-          renderF5TasksTable();
+          
+          // Hiển thị loading
+          const tasksTableBody = document.getElementById('f5-tasksTableBody');
+          if (tasksTableBody) {
+            tasksTableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-gray-500 text-base"><span class="spinner"></span><span style="margin-left:8px">Đang tải dữ liệu...</span></td></tr>';
+          }
+          
+          try {
+            // Load dữ liệu với filter PIC
+            F5_PROJECTS = await loadF5Projects(F5_FILTER_PIC);
+            // Render bảng tác vụ
+            renderF5TasksTable();
+          } catch (error) {
+            console.error('[Form 5] Error loading data with PIC filter:', error);
+            if (tasksTableBody) {
+              tasksTableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-red-500 text-base">Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại.</td></tr>';
+            }
+          }
         });
       }
     }
 
     function updateF5PICFilter() {
+      // Hàm này không còn cần thiết vì dropdown đã được populate cố định từ đầu
+      // Giữ lại để tương thích nếu có code khác gọi hàm này
       const picFilter = document.getElementById('f5-filter-pic');
       if (!picFilter) return;
 
-      // Lấy danh sách PIC chỉ từ task level (người nhận tác vụ của task chính)
-      const picSet = new Set();
-      
-      F5_PROJECTS.forEach(project => {
-        if (project.tasks) {
-          project.tasks.forEach(task => {
-            if (task.pic && task.pic.trim()) {
-              picSet.add(task.pic.trim());
-            }
-          });
-        }
-      });
-
-      // Sắp xếp danh sách PIC
-      const picList = Array.from(picSet).sort();
-
-      // Lưu giá trị hiện tại
-      const currentValue = picFilter.value;
-
-      // Clear và populate lại dropdown
-      picFilter.innerHTML = '<option value="">Tất cả người nhận</option>';
-      picList.forEach(pic => {
-        const option = document.createElement('option');
-        option.value = pic;
-        option.textContent = pic;
-        picFilter.appendChild(option);
-      });
-
-      // Khôi phục giá trị đã chọn
-      picFilter.value = currentValue;
-      if (!picList.includes(currentValue) && currentValue !== '') {
-        F5_FILTER_PIC = '';
-        picFilter.value = '';
-      }
+      // Giữ nguyên giá trị đã chọn, không thay đổi danh sách dropdown
+      // Vì danh sách đã được populate cố định từ setupF5PICFilter()
     }
 
     // ===== FORM 6 - DASHBOARD THỐNG KÊ =====
@@ -7776,7 +7796,7 @@
         // Reload dữ liệu từ server để hiển thị cập nhật
         try {
           const taskIdToExpand = taskId;
-          F5_PROJECTS = await loadF5Projects();
+          F5_PROJECTS = await loadF5Projects(F5_FILTER_PIC);
           
           const resultAfterReload = findF5Task(taskIdToExpand);
           if (resultAfterReload && resultAfterReload.task) {
@@ -8580,7 +8600,7 @@
             const taskIdToExpand = taskId;
             
             // Reload dữ liệu từ server
-            F5_PROJECTS = await loadF5Projects();
+            F5_PROJECTS = await loadF5Projects(F5_FILTER_PIC);
             
             // Tìm lại task sau khi reload và expand nó để hiển thị subtask mới
             const resultAfterReload = findF5Task(taskIdToExpand);
