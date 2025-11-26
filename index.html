@@ -719,99 +719,138 @@
     </section>
 
     <!-- Form 6 - Dashboard Thống kê -->
-    <section id="form6" class="w-full max-w-7xl bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
-      <div class="mx-auto flex w-full flex-col gap-8">
+    <section id="form6" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
+      <div class="mx-auto flex w-full flex-col gap-6">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-3">
             <div class="text-primary-blue">
               <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">space_dashboard</span>
             </div>
             <div>
-              <h2 class="text-2xl font-bold text-gray-900">Tổng quan Dự án</h2>
-              <p class="text-sm text-gray-500">Thống kê và theo dõi tiến độ các dự án</p>
+              <h2 class="text-2xl font-bold text-gray-900">Dashboard Tổng quan</h2>
+              <p class="text-sm text-gray-500">Thống kê và theo dõi tiến độ dự án, tác vụ</p>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <div class="relative w-64">
-              <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">search</span>
-              <input id="f6-searchInput" class="h-10 w-full rounded-lg border-gray-300 bg-gray-50 pl-10 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Tìm kiếm dự án..." type="text"/>
-            </div>
-          </div>
+          <button id="f6-refresh-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
+            <span class="material-symbols-outlined text-lg">refresh</span>
+            <span>Tải lại</span>
+          </button>
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="flex flex-col gap-2 rounded-xl p-6 bg-white shadow-sm border border-gray-200">
-            <p class="text-gray-600 text-base font-medium">Dự án đang chạy</p>
-            <p class="text-gray-900 tracking-tight text-3xl font-bold" id="f6-stats-running">0</p>
-          </div>
-          <div class="flex flex-col gap-2 rounded-xl p-6 bg-white shadow-sm border border-gray-200">
-            <p class="text-gray-600 text-base font-medium">Tác vụ sắp hết hạn</p>
-            <p class="text-gray-900 tracking-tight text-3xl font-bold" id="f6-stats-due">0</p>
-          </div>
-          <div class="flex flex-col gap-2 rounded-xl p-6 bg-white shadow-sm border border-gray-200">
-            <p class="text-gray-600 text-base font-medium">Thành viên hoạt động</p>
-            <p class="text-gray-900 tracking-tight text-3xl font-bold" id="f6-stats-members">0</p>
-          </div>
-          <div class="flex flex-col gap-3.5 rounded-xl p-6 bg-white shadow-sm border border-gray-200">
-            <p class="text-gray-600 text-base font-medium">Trạng thái Dự án</p>
-            <div class="flex items-center gap-4">
-              <div class="relative size-10">
-                <svg class="size-full" height="36" viewBox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg">
-                  <circle class="stroke-current text-gray-200" cx="18" cy="18" fill="transparent" r="15.9155" stroke-width="3"></circle>
-                  <circle class="stroke-current text-primary-blue" cx="18" cy="18" fill="transparent" r="15.9155" stroke-dasharray="65 35" stroke-dashoffset="25" stroke-width="3"></circle>
-                </svg>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-blue-600 text-sm font-medium mb-1">Tổng Dự án</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f6-stat-projects">0</p>
               </div>
-              <div class="flex flex-col">
-                <p class="text-gray-900 tracking-tight text-xl font-bold" id="f6-stats-progress">0%</p>
-                <p class="text-gray-500 text-xs">Đang tiến hành</p>
+              <div class="p-3 bg-blue-200 rounded-lg">
+                <span class="material-symbols-outlined text-blue-700 text-2xl">folder</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-purple-600 text-sm font-medium mb-1">Tổng Tác vụ</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f6-stat-tasks">0</p>
+              </div>
+              <div class="p-3 bg-purple-200 rounded-lg">
+                <span class="material-symbols-outlined text-purple-700 text-2xl">task</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-green-50 to-green-100 border border-green-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-green-600 text-sm font-medium mb-1">Tổng Subtask</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f6-stat-subtasks">0</p>
+              </div>
+              <div class="p-3 bg-green-200 rounded-lg">
+                <span class="material-symbols-outlined text-green-700 text-2xl">checklist</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-orange-600 text-sm font-medium mb-1">Tỷ lệ Hoàn thành</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f6-stat-completion">0%</p>
+              </div>
+              <div class="p-3 bg-orange-200 rounded-lg">
+                <span class="material-symbols-outlined text-orange-700 text-2xl">trending_up</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Filter Tabs -->
-        <div class="flex flex-col sm:flex-row justify-between gap-4 items-center py-3">
-          <div class="flex gap-2 overflow-x-auto">
-            <button class="f6-filter-btn flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-primary-blue/10 pl-4 pr-4" data-filter="all">
-              <p class="text-primary-blue text-sm font-semibold">Tất cả</p>
-            </button>
-            <button class="f6-filter-btn flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-gray-100 pl-4 pr-4" data-filter="in_progress">
-              <p class="text-gray-700 text-sm font-medium">Đang tiến hành</p>
-            </button>
-            <button class="f6-filter-btn flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-gray-100 pl-4 pr-4" data-filter="done">
-              <p class="text-gray-700 text-sm font-medium">Hoàn thành</p>
-            </button>
-            <button class="f6-filter-btn flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-gray-100 pl-4 pr-4" data-filter="pending">
-              <p class="text-gray-700 text-sm font-medium">Tạm dừng</p>
-            </button>
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Trạng thái Subtask -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Trạng thái Subtask</h3>
+            <div id="f6-chart-subtask-status" class="flex items-center justify-center min-h-[200px]">
+              <!-- Chart sẽ được render bằng JavaScript -->
+            </div>
           </div>
-          <div class="flex gap-2">
-            <button class="flex items-center justify-center rounded-lg h-10 w-10 text-gray-600 bg-white shadow-sm border border-gray-200">
-              <span class="material-symbols-outlined" style="font-size: 20px;">filter_list</span>
-            </button>
-            <button class="flex items-center justify-center rounded-lg h-10 w-10 text-gray-600 bg-white shadow-sm border border-gray-200">
-              <span class="material-symbols-outlined" style="font-size: 20px;">swap_vert</span>
-            </button>
+          <!-- Phân bổ theo PIC -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Phân bổ theo Người thực hiện</h3>
+            <div id="f6-chart-pic-distribution" class="min-h-[200px]">
+              <!-- Chart sẽ được render bằng JavaScript -->
+            </div>
           </div>
         </div>
 
-        <!-- Projects Table -->
+        <!-- Tasks sắp hết hạn -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Tác vụ sắp hết hạn (7 ngày tới)</h3>
+          </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50">
                 <tr>
-                  <th class="px-6 py-4 font-semibold" scope="col">Tên dự án</th>
-                  <th class="px-6 py-4 font-semibold" scope="col">Tiến độ</th>
-                  <th class="px-6 py-4 font-semibold" scope="col">Người phụ trách</th>
-                  <th class="px-6 py-4 font-semibold" scope="col">Hạn chót</th>
-                  <th class="px-6 py-4 font-semibold" scope="col">Trạng thái</th>
-                  <th class="px-6 py-4 font-semibold" scope="col"></th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tên tác vụ</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Dự án</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Người thực hiện</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Hạn chót</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Còn lại</th>
                 </tr>
               </thead>
-              <tbody id="f6-projectsTableBody" class="bg-white divide-y divide-gray-200">
+              <tbody id="f6-due-tasks-body" class="divide-y divide-gray-200">
+                <!-- Dữ liệu sẽ được render bằng JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bảng chi tiết Dự án -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">Chi tiết Dự án</h3>
+            <div class="flex items-center gap-2">
+              <div class="relative">
+                <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+                <input id="f6-search-input" class="h-9 w-64 rounded-lg border-gray-300 bg-gray-50 pl-9 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Tìm kiếm..." type="text"/>
+              </div>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mã dự án</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tên dự án</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Số tác vụ</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Số subtask</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tiến độ</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Người phụ trách</th>
+                </tr>
+              </thead>
+              <tbody id="f6-projects-table-body" class="divide-y divide-gray-200">
                 <!-- Dữ liệu sẽ được render bằng JavaScript -->
               </tbody>
             </table>
@@ -998,7 +1037,7 @@
   <!-- ============================================ -->
   <!-- MODAL SYSTEM - FORM 5: SELECT DECLARATION MODE (Chọn chế độ khai báo) -->
   <!-- ============================================ -->
-  <div id="modal-f5-select-declaration" class="modal-container modal-f5-select-declaration fixed inset-0 z-50 hidden" style="display: none;">
+  <div id="modal-f5-select-declaration" class="modal-container modal-f5-select-declaration fixed inset-0 z-50 hidden" style="display: none !important;">
     <div id="modal-f5-select-declaration-overlay" class="modal-overlay modal-f5-select-declaration-overlay fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
     <div id="modal-f5-select-declaration-content" class="modal-content modal-f5-select-declaration-content fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
       <div class="w-full max-w-2xl rounded-xl bg-white p-8 shadow-xl pointer-events-auto relative z-50">
@@ -1323,7 +1362,7 @@
       <div class="w-full max-w-3xl rounded-xl bg-white p-8 shadow-xl pointer-events-auto relative z-50 max-h-[90vh] overflow-y-auto">
         <div class="flex items-start justify-between mb-6">
           <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-gray-900">Gửi tác vụ thử nghiệm</h2>
+            <h2 class="text-2xl font-bold text-gray-900">Gửi form báo cáo</h2>
             <p class="text-sm text-gray-600">Tác vụ: <span id="modal-f5-declaration-send-test-task-task-name" class="font-medium text-gray-900"></span></p>
           </div>
           <button id="modal-f5-declaration-send-test-task-close" class="modal-close modal-f5-declaration-send-test-task-close text-gray-500 hover:text-gray-700 transition">
@@ -1333,27 +1372,28 @@
         
         <div id="modal-f5-declaration-send-test-task-body" class="modal-body modal-f5-declaration-send-test-task-body">
           <form id="modal-f5-declaration-send-test-task-form" class="space-y-6">
-            <!-- Trạng thái -->
+            <!-- File đính kèm -->
             <div>
-              <label class="mb-1 block text-sm font-medium text-gray-700" for="modal-f5-declaration-send-test-task-status">Trạng thái *</label>
-              <select required class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-blue focus:ring-primary-blue" id="modal-f5-declaration-send-test-task-status">
-                <option value="">Chọn trạng thái</option>
-                <option value="Cancel">Cancel</option>
-                <option value="Hoàn thành">Hoàn thành</option>
-              </select>
-            </div>
-
-            <!-- Link kết quả -->
-            <div>
-              <label class="mb-1 block text-sm font-medium text-gray-700" for="modal-f5-declaration-send-test-task-result-link">Link kết quả</label>
-              <input class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-primary-blue focus:ring-primary-blue" id="modal-f5-declaration-send-test-task-result-link" placeholder="Nhập link kết quả" type="text"/>
+              <label class="mb-1 block text-sm font-medium text-gray-700" for="modal-f5-declaration-send-test-task-attachment">File đính kèm</label>
+              <div class="flex flex-col gap-2">
+                <input type="file" id="modal-f5-declaration-send-test-task-attachment" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+                <button type="button" id="modal-f5-declaration-send-test-task-attachment-btn" class="w-full px-4 py-2 rounded-lg border-2 border-dashed border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100 transition-colors font-medium flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">attach_file</span>
+                  <span>Chọn file đính kèm</span>
+                </button>
+                <div class="flex items-center gap-2">
+                  <span id="modal-f5-declaration-send-test-task-attachment-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                  <button type="button" id="modal-f5-declaration-send-test-task-attachment-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
+                </div>
+              </div>
+              <p class="mt-1 text-xs text-gray-500">Chọn file form báo cáo để đính kèm (PDF, Word, Excel, hoặc hình ảnh)</p>
             </div>
           </form>
         </div>
         
         <div class="mt-6 flex justify-end gap-3">
           <button type="button" id="modal-f5-declaration-send-test-task-cancel" class="modal-cancel-btn modal-f5-declaration-send-test-task-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
-          <button type="button" id="modal-f5-declaration-send-test-task-submit" class="modal-submit-btn modal-f5-declaration-send-test-task-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Gửi</button>
+          <button type="button" id="modal-f5-declaration-send-test-task-submit" class="modal-submit-btn modal-f5-declaration-send-test-task-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Gửi form báo cáo</button>
         </div>
       </div>
     </div>
@@ -1440,6 +1480,151 @@
         <div class="mt-6 flex justify-end gap-3">
           <button type="button" id="modal-f5-declaration-review-fmea-cancel" class="modal-cancel-btn modal-f5-declaration-review-fmea-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
           <button type="button" id="modal-f5-declaration-review-fmea-submit" class="modal-submit-btn modal-f5-declaration-review-fmea-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Gửi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Khai báo hoàn thành -->
+  <div id="modal-f5-declaration-complete" class="modal-container modal-f5-declaration-complete fixed inset-0 z-50 hidden" style="display: none;">
+    <div id="modal-f5-declaration-complete-overlay" class="modal-overlay modal-f5-declaration-complete-overlay fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
+    <div id="modal-f5-declaration-complete-content" class="modal-content modal-f5-declaration-complete-content fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+      <div class="w-full max-w-3xl rounded-xl bg-white p-8 shadow-xl pointer-events-auto relative z-50 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-start justify-between mb-6">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-bold text-gray-900">Khai báo hoàn thành</h2>
+            <p class="text-sm text-gray-600">Tác vụ: <span id="modal-f5-declaration-complete-task-name" class="font-medium text-gray-900"></span></p>
+          </div>
+          <button id="modal-f5-declaration-complete-close" class="modal-close modal-f5-declaration-complete-close text-gray-500 hover:text-gray-700 transition">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        
+        <div id="modal-f5-declaration-complete-body" class="modal-body modal-f5-declaration-complete-body p-4 space-y-3 min-h-[460px]">
+          <!-- Tabs for Gate 1 / Gate 2 -->
+          <div id="modal-f5-declaration-complete-tabs-wrap" class="flex items-end gap-2 text-sm mb-4">
+            <button id="modal-f5-declaration-complete-tab-gate1" class="px-5 py-2.5 rounded-t-lg border border-cyan-400 bg-cyan-200 text-cyan-900 -mb-[1px] text-base md:text-lg font-semibold shadow-sm">Gate 1: Báo cáo LK/Máy</button>
+            <button id="modal-f5-declaration-complete-tab-gate2" class="px-5 py-2.5 rounded-t-lg border border-cyan-400 bg-cyan-200 text-cyan-900 -mb-[1px] text-base md:text-lg font-semibold shadow-sm">Gate 2: Báo cáo máy Base, rà soát tem nhãn</button>
+          </div>
+          
+          <!-- Thông tin người nộp, mã, tác vụ -->
+          <div class="flex flex-wrap gap-2 text-sm">
+            <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200">Người nộp: <b class="ml-1" id="modal-f5-declaration-complete-uploader-name"></b></span>
+            <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200">Mã: <b class="ml-1" id="modal-f5-declaration-complete-uploader-code"></b></span>
+            <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200">Tác vụ: <b class="ml-1" id="modal-f5-declaration-complete-uploader-task"></b></span>
+          </div>
+          
+          <!-- Gate 1 heading -->
+          <div id="modal-f5-declaration-complete-gate1-title" class="mt-2 mb-1 text-3xl md:text-4xl font-bold text-cyan-700">Gate 1: Báo cáo LK/Máy</div>
+          
+          <!-- Gate 1: Upload files -->
+          <div id="modal-f5-declaration-complete-upload-form1-split">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Báo cáo PDF (.pdf)</label>
+              <input id="modal-f5-declaration-complete-file-pdfzip" type="file" accept=".pdf" class="block w-full text-sm file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-indigo-600 file:text-white"/>
+              <p class="text-xs text-gray-500 mt-1">Chỉ nhận tệp .pdf.</p>
+            </div>
+            <div class="mt-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Báo cáo Excel (.xlsx)</label>
+              <input id="modal-f5-declaration-complete-file-xlsxzip" type="file" accept=".xlsx" class="block w-full text-sm file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-emerald-600 file:text-white"/>
+              <p class="text-xs text-gray-500 mt-1">Chỉ nhận tệp .xlsx.</p>
+            </div>
+          </div>
+          
+          <!-- Gate 1: Phân loại -->
+          <div id="modal-f5-declaration-complete-classification-group" class="mt-3 highlight-section">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phân loại</label>
+            <div class="flex flex-col gap-2">
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-classification" value="Sản phẩm" class="h-4 w-4"/>
+                <span class="text-sm">Sản phẩm</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-classification" value="Linh kiện" class="h-4 w-4"/>
+                <span class="text-sm">Linh kiện</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-classification" value="Tác vụ khác" class="h-4 w-4"/>
+                <span class="text-sm">Tác vụ khác</span>
+              </label>
+            </div>
+            <div id="modal-f5-declaration-complete-classification-note" class="mt-2 text-xs text-gray-500">Dữ liệu sẽ được gửi lên hệ thống phân tích</div>
+          </div>
+          
+          <!-- Gate 1: Kết luận -->
+          <div id="modal-f5-declaration-complete-conclusion-group" class="mt-3 highlight-section">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kết luận</label>
+            <div class="flex flex-col gap-2">
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-conclusion" value="Sản phẩm đạt chất lượng" class="h-4 w-4"/>
+                <span class="text-sm">Sản phẩm đạt chất lượng</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-conclusion" value="Sản phẩm không đạt chất lượng" class="h-4 w-4"/>
+                <span class="text-sm">Sản phẩm không đạt chất lượng</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-conclusion" value="Báo cáo tham khảo" class="h-4 w-4"/>
+                <span class="text-sm">Báo cáo tham khảo</span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Gate 1: Khai báo test bền -->
+          <div id="modal-f5-declaration-complete-durability-group" class="mt-3 highlight-section">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Khai báo test bền</label>
+            <div class="flex flex-col gap-2">
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-durability-choice" value="co" class="h-4 w-4"/>
+                <span class="text-sm">Có test bền</span>
+              </label>
+              <div id="modal-f5-declaration-complete-durability-date-wrap" class="ml-6 mt-1" style="display:none">
+                <label class="block text-xs text-gray-600 mb-1">Ngày dự kiến trả test bền</label>
+                <input id="modal-f5-declaration-complete-durability-date" type="date" class="border border-blue-300 rounded-lg bg-slate-100 p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:bg-white"/>
+              </div>
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="modal-f5-declaration-complete-durability-choice" value="khong" class="h-4 w-4"/>
+                <span class="text-sm">Không test bền</span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Gate 2: chỉ nhận file nén -->
+          <div id="modal-f5-declaration-complete-gate2" class="mt-3" style="display:none">
+            <div id="modal-f5-declaration-complete-gate2-title" class="mb-2 text-3xl md:text-4xl font-bold text-cyan-700">Gate 2: Báo cáo máy Base, rà soát tem nhãn</div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tệp nén báo cáo (Gate 2)</label>
+            <input id="modal-f5-declaration-complete-file-archive-g2" type="file" accept=".zip,.rar,.7z" class="block w-full text-sm file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-primary-blue file:text-white"/>
+            <p class="text-xs text-gray-500 mt-1">Chỉ nhận tệp nén: .zip, .rar, .7z</p>
+            <!-- Gate 2: Phân loại -->
+            <div id="modal-f5-declaration-complete-classification-group-g2" class="mt-3 highlight-section">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Phân loại</label>
+              <div class="flex flex-col gap-2">
+                <label class="inline-flex items-center gap-2">
+                  <input type="radio" name="modal-f5-declaration-complete-classification-g2" value="Sản phẩm" class="h-4 w-4"/>
+                  <span class="text-sm">Sản phẩm</span>
+                </label>
+                <label class="inline-flex items-center gap-2">
+                  <input type="radio" name="modal-f5-declaration-complete-classification-g2" value="Linh kiện" class="h-4 w-4"/>
+                  <span class="text-sm">Linh kiện</span>
+                </label>
+                <label class="inline-flex items-center gap-2">
+                  <input type="radio" name="modal-f5-declaration-complete-classification-g2" value="Tác vụ khác" class="h-4 w-4"/>
+                  <span class="text-sm">Tác vụ khác</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Checkbox Trả báo cáo BPS -->
+          <div id="modal-f5-declaration-complete-bps-option" class="flex items-center gap-2">
+            <input id="modal-f5-declaration-complete-upload-bps" type="checkbox" class="h-4 w-4" checked>
+            <label for="modal-f5-declaration-complete-upload-bps" class="text-sm text-gray-700 select-none">Trả báo cáo BPS</label>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" id="modal-f5-declaration-complete-cancel" class="modal-cancel-btn modal-f5-declaration-complete-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
+          <button type="button" id="modal-f5-declaration-complete-submit" class="modal-submit-btn modal-f5-declaration-complete-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Gửi</button>
         </div>
       </div>
     </div>
@@ -3136,6 +3321,16 @@
         formId: null,
         bodyId: 'modal-f5-declaration-review-fmea-body'
       },
+      'f5-declaration-complete': {
+        id: 'modal-f5-declaration-complete',
+        overlayId: 'modal-f5-declaration-complete-overlay',
+        contentId: 'modal-f5-declaration-complete-content',
+        closeBtnIds: ['modal-f5-declaration-complete-close'],
+        cancelBtnId: 'modal-f5-declaration-complete-cancel',
+        submitBtnId: 'modal-f5-declaration-complete-submit',
+        formId: 'modal-f5-declaration-complete-form',
+        bodyId: 'modal-f5-declaration-complete-body'
+      },
       'f4-select-component-standard': {
         id: 'modal-f4-select-component-standard',
         overlayId: 'modal-f4-select-component-standard-overlay',
@@ -4108,33 +4303,45 @@
     function formatDateTimeForWebhook(datetimeLocal) {
       if (!datetimeLocal) return null;
       // Chuyển từ YYYY-MM-DDTHH:mm sang YYYY-MM-DD HH:mm
-      return datetimeLocal.replace('T', ' ');
+      // Nếu đã là YYYY-MM-DD HH:mm thì giữ nguyên
+      if (datetimeLocal.includes('T')) {
+        return datetimeLocal.replace('T', ' ');
+      }
+      // Nếu đã là YYYY-MM-DD HH:mm thì trả về nguyên
+      return datetimeLocal;
     }
     
-    function formatSubtaskToNocoDB(subtaskData, parentTaskId, projectCode = null) {
+    function formatSubtaskToNocoDB(subtaskData, parentIdentifier, projectCode = null, taskRequestCode = null) {
       // Lấy chế độ khai báo và ghép vào Type
       const declarationMode = String(subtaskData.declarationMode || '').trim();
       const typeValue = declarationMode 
         ? `form5_subtask_${declarationMode}` 
-        : "form5_subtask";
+        : (subtaskData.type || "form5_subtask");
       
       // Format thời gian gửi về dạng YYYY-MM-DD HH:mm
       const formattedTimesend = formatDateTimeForWebhook(subtaskData.timesend);
+      const formattedFinishTime = formatDateTimeForWebhook(subtaskData.finishTime);
+      
+      // parentIdentifier có thể là:
+      // 1. ID của Task (nếu đã có từ database) - dạng số hoặc string số
+      // 2. TaskRequestCode (nếu Task chưa có ID - trường hợp tạo từ Form 4) - dạng string dài
+      // Backend sẽ tự động map TaskRequestCode -> Task Id
       
       return {
         type: typeValue,
         project_code: projectCode || null,
-        parent_id: parentTaskId, // ID của Task cha
+        parent_id: parentIdentifier, // Có thể là ID (số) hoặc TaskRequestCode (string)
+        TaskRequestCode: taskRequestCode || null, // Thêm TaskRequestCode để backend map nếu parent_id là code
         
         // Nhóm Subtask*
         SubtaskName: String(subtaskData.name || '').trim(),
         SubtaskPIC: String(subtaskData.pic || '').trim(),
         Subtaskmanhour: subtaskData.manhour ? Number(subtaskData.manhour) : null,
-        SubtaskStatus: String(subtaskData.status || 'Leader review').trim(), // Mặc định Leader review
+        SubtaskStatus: String(subtaskData.status || 'Chưa triển khai').trim(), // Mặc định Chưa triển khai
         Subtaskchecklist: String(subtaskData.checklist || '').trim(), // Tên file checklist
         Subtaskformlink: String(subtaskData.formLink || subtaskData.resultLink || '').trim() || null, // Link file checklist từ server hoặc link kết quả
         Subtasktimesend: formattedTimesend,
-        Subtaskfinishtime: subtaskData.finishTime || null,
+        Subtaskfinishtime: formattedFinishTime,
         Subtasknote: String(subtaskData.note || '').trim(),
         SubtaskPriority: String(subtaskData.priority || 'Trung bình').trim(),
         SubtaskDeclarationMode: String(subtaskData.declarationMode || '').trim(),
@@ -5061,6 +5268,313 @@
     // ============================================
 
     // Hàm tạo task trong Form 5 từ dữ liệu Form 4
+    /**
+     * Tính toán thời gian bắt đầu sau khi thêm số giờ làm việc
+     * Giờ làm việc: 8:00-12:30 (4.5h) và 13:30-17:00 (3.5h)
+     * @param {Date|string} startDateTime - Thời điểm bắt đầu
+     * @param {number} hours - Số giờ cần thêm
+     * @returns {Date} - Thời điểm kết thúc (trong giờ làm việc)
+     */
+    function addWorkingHours(startDateTime, hours) {
+      let current = new Date(startDateTime);
+      let remainingHours = hours;
+      
+      // Đảm bảo bắt đầu từ giờ làm việc hợp lệ
+      const hour = current.getHours();
+      const minute = current.getMinutes();
+      
+      // Nếu ngoài giờ làm việc, chuyển đến 8:00 ngày hôm sau
+      if (hour < 8 || (hour === 12 && minute >= 30) || (hour > 12 && hour < 13) || (hour === 13 && minute < 30) || hour >= 17) {
+        current.setDate(current.getDate() + 1);
+        current.setHours(8, 0, 0, 0);
+      } else if (hour >= 8 && hour < 12) {
+        // Đang trong buổi sáng, giữ nguyên
+      } else if (hour >= 13 && minute >= 30 && hour < 17) {
+        // Đang trong buổi chiều, giữ nguyên
+      }
+      
+      while (remainingHours > 0) {
+        const currentHour = current.getHours();
+        const currentMinute = current.getMinutes();
+        
+        // Tính thời gian còn lại trong ngày
+        let hoursRemainingToday = 0;
+        
+        if (currentHour < 12 || (currentHour === 12 && currentMinute < 30)) {
+          // Buổi sáng: còn lại đến 12:30
+          const minutesTo1230 = (12 - currentHour) * 60 + (30 - currentMinute);
+          hoursRemainingToday = minutesTo1230 / 60;
+        } else if (currentHour >= 13 && currentMinute >= 30 && currentHour < 17) {
+          // Buổi chiều: còn lại đến 17:00
+          const minutesTo1700 = (17 - currentHour) * 60 - currentMinute;
+          hoursRemainingToday = minutesTo1700 / 60;
+        } else {
+          // Ngoài giờ làm việc, chuyển đến 8:00 ngày hôm sau
+          current.setDate(current.getDate() + 1);
+          current.setHours(8, 0, 0, 0);
+          continue;
+        }
+        
+        // Nếu số giờ còn lại <= thời gian còn lại trong ngày
+        if (remainingHours <= hoursRemainingToday) {
+          // Thêm trực tiếp vào thời điểm hiện tại
+          current.setTime(current.getTime() + remainingHours * 60 * 60 * 1000);
+          remainingHours = 0;
+        } else {
+          // Vượt quá ngày hôm nay, chuyển sang ngày hôm sau
+          remainingHours -= hoursRemainingToday;
+          current.setDate(current.getDate() + 1);
+          current.setHours(8, 0, 0, 0);
+        }
+      }
+      
+      return current;
+    }
+
+    /**
+     * Tự động tạo 3 subtask A, B, C cho task X
+     * A: X + 4h làm việc
+     * B: A.completedAt + A.manhour (sẽ tính khi A done)
+     * C: B.completedAt + 4h làm việc (sẽ tính khi B done)
+     * @param {Object} taskX - Task chính từ Form 4
+     * @param {Object} project - Project chứa task
+     * @returns {Promise<Array>} - Mảng 3 subtask đã tạo
+     */
+    async function autoCreateSubtasksABC(taskX, project) {
+      try {
+        console.log('[Form 5] Auto-creating subtasks A, B, C for task:', taskX.taskName);
+        
+        // Tính thời gian bắt đầu cho subtask A
+        // timesend = Thời gian hiện tại khi tạo subtask (thời gian gửi Form 4)
+        const timeA = new Date();
+        // finishTime: null - Backend sẽ xử lý
+        
+        // Format datetime cho timesend - dạng YYYY-MM-DD HH:mm
+        const formatDateTime = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          return `${year}-${month}-${day} ${hours}:${minutes}`;
+        };
+        
+        // Lấy projectCode từ project (đảm bảo thống nhất với Task X)
+        // Ưu tiên project.projectCode vì project đã được xác định đúng khi tạo Task X
+        const projectCode = project.projectCode || null;
+        // Dùng TaskRequestCode thay vì parentTaskId vì Task X chưa có ID từ database
+        const parentTaskRequestCode = taskX.taskCode || taskX.form4Data?.requestCode || '';
+        
+        if (!parentTaskRequestCode) {
+          throw new Error('Không tìm thấy TaskRequestCode của task cha');
+        }
+        
+        // Tên subtask (có thể config sau)
+        const subtaskNames = {
+          A: 'Kiểm tra và chuẩn bị tài liệu',
+          B: 'Thực hiện đánh giá và test',
+          C: 'Hoàn thiện báo cáo và nghiệm thu'
+        };
+        
+        // Tạo 3 subtask
+        const subtasks = [];
+        
+        // Subtask A - PIC = người được giao Task, timesend = Thời gian gửi Task X, finishTime = null (backend xử lý)
+        const subtaskA = {
+          name: subtaskNames.A,
+          pic: taskX.pic || '', // PIC mặc định là người được giao Task
+          manhour: null, // Sẽ điền sau
+          status: 'Chưa triển khai',
+          timesend: formatDateTime(timeA), // timesend = Thời gian gửi Task X (createdAt)
+          finishTime: null, // Backend sẽ xử lý finishTime
+          note: 'Tự động tạo từ Form 4',
+          declarationMode: '', // Có thể config sau
+          subtaskNo: 1,
+          itemCode: taskX.form4Data?.itemCode || '',
+          type: 'form5_subtask_auto_a',
+          autoCreated: true,
+          dependsOn: null,
+          waitingFor: null
+        };
+        
+        // Subtask B - timesend = null (backend xử lý)
+        const subtaskB = {
+          name: subtaskNames.B,
+          pic: taskX.pic || '', // Có thể để backend xử lý
+          manhour: null, // Backend xử lý
+          status: 'Chưa triển khai',
+          timesend: null, // Backend sẽ tính timesend
+          note: 'Tự động tạo từ Form 4 - Chờ subtask A hoàn thành',
+          declarationMode: '',
+          subtaskNo: 2,
+          itemCode: taskX.form4Data?.itemCode || '',
+          type: 'form5_subtask_auto_b',
+          autoCreated: true,
+          dependsOn: null, // Sẽ set ID của A sau khi tạo
+          waitingFor: 'A'
+        };
+        
+        // Subtask C - PIC = người được giao Task, timesend = null (backend xử lý)
+        const subtaskC = {
+          name: subtaskNames.C,
+          pic: taskX.pic || '', // PIC mặc định là người được giao Task
+          manhour: null,
+          status: 'Chưa triển khai',
+          timesend: null, // Backend sẽ tính timesend
+          note: 'Tự động tạo từ Form 4 - Chờ subtask B hoàn thành',
+          declarationMode: '',
+          subtaskNo: 3,
+          itemCode: taskX.form4Data?.itemCode || '',
+          type: 'form5_subtask_auto_c',
+          autoCreated: true,
+          dependsOn: null, // Sẽ set ID của B sau khi tạo
+          waitingFor: 'B'
+        };
+        
+        // Format dữ liệu task cha để gửi kèm
+        const taskDataForDB = {
+          TaskRequestCode: taskX.taskCode || '',
+          TaskRequesterName: taskX.requesterName || '',
+          TaskRequesterEmail: taskX.requesterEmail || '',
+          TaskRequestDate: taskX.createdAt || '',
+          TaskDeptRequest: taskX.department || '',
+          TaskItemName: taskX.taskName || '',
+          TaskItemCode: taskX.form4Data?.itemCode || '',
+          TaskComponentType: taskX.form4Data?.componentType || '',
+          TaskComponentStandard: taskX.form4Data?.componentStandard || '',
+          TaskPurpose: taskX.form4Data?.purpose || '',
+          TaskVendor: taskX.form4Data?.vendor || '',
+          TaskQtySamples: taskX.form4Data?.qtySamples || '',
+          TaskDesiredDate: taskX.dueDate || '',
+          TaskPersonReceived: taskX.pic || '',
+          TaskNotes: taskX.form4Data?.changeReq || '',
+          TaskAppliedModel: taskX.form4Data?.appliedModel || '',
+          TaskAttachments: taskX.form4Data?.attachments || '',
+          TaskCode: taskX.taskCode || '',
+          TaskName: taskX.taskName || '',
+          TaskDescription: taskX.description || '',
+          TaskPIC: taskX.pic || '',
+          TaskDepartment: taskX.department || '',
+          TaskCreatedAt: taskX.createdAt || '',
+          TaskDueDate: taskX.dueDate || '',
+          TaskStatus: taskX.status || 'pending',
+          TaskPriority: taskX.priority || 'Trung bình',
+          project_code: projectCode || null
+        };
+        
+        // Gửi từng subtask lên backend
+        const createdSubtasks = [];
+        
+        // Tạo subtask A
+        const qaNbCodeA = generateQANBCode();
+        const subtaskAData = formatSubtaskToNocoDB({
+          name: subtaskA.name,
+          pic: subtaskA.pic,
+          manhour: subtaskA.manhour,
+          status: 'Chưa triển khai',
+          checklist: '',
+          timesend: subtaskA.timesend,
+          finishTime: null, // Backend sẽ xử lý finishTime
+          note: subtaskA.note,
+          priority: 'Trung bình',
+          declarationMode: subtaskA.declarationMode,
+          subtaskNo: subtaskA.subtaskNo,
+          itemCode: subtaskA.itemCode,
+          taskCode: qaNbCodeA,
+          type: subtaskA.type // Thêm type để formatSubtaskToNocoDB sử dụng
+        }, parentTaskRequestCode, projectCode, taskX.taskCode);
+        
+        const resultA = await submitSubtaskToNocoDB(subtaskAData, taskDataForDB);
+        createdSubtasks.push({ ...subtaskA, id: resultA.Id || resultA.id, taskCode: qaNbCodeA });
+        console.log('[Form 5] Created subtask A:', resultA);
+        
+        // Tạo subtask B (với dependsOn = A.id)
+        const qaNbCodeB = generateQANBCode();
+        const subtaskBData = formatSubtaskToNocoDB({
+          name: subtaskB.name,
+          pic: subtaskB.pic,
+          manhour: subtaskB.manhour,
+          status: 'Chưa triển khai',
+          checklist: '',
+          timesend: null, // Backend sẽ tính timesend
+          finishTime: null,
+          note: subtaskB.note,
+          priority: 'Trung bình',
+          declarationMode: subtaskB.declarationMode,
+          subtaskNo: subtaskB.subtaskNo,
+          itemCode: subtaskB.itemCode,
+          taskCode: qaNbCodeB,
+          type: subtaskB.type // Thêm type để formatSubtaskToNocoDB sử dụng
+        }, parentTaskRequestCode, projectCode, taskX.taskCode);
+        
+        // Thêm thông tin dependsOn vào note hoặc custom field
+        subtaskBData.SubtaskNote = `${subtaskB.note} | dependsOn: ${resultA.Id || resultA.id}`;
+        
+        const resultB = await submitSubtaskToNocoDB(subtaskBData, taskDataForDB);
+        createdSubtasks.push({ ...subtaskB, id: resultB.Id || resultB.id, taskCode: qaNbCodeB, dependsOn: resultA.Id || resultA.id });
+        console.log('[Form 5] Created subtask B:', resultB);
+        
+        // Tạo subtask C (với dependsOn = B.id)
+        const qaNbCodeC = generateQANBCode();
+        const subtaskCData = formatSubtaskToNocoDB({
+          name: subtaskC.name,
+          pic: subtaskC.pic,
+          manhour: subtaskC.manhour,
+          status: 'Chưa triển khai',
+          checklist: '',
+          timesend: null, // Backend sẽ tính timesend
+          finishTime: null,
+          note: subtaskC.note,
+          priority: 'Trung bình',
+          declarationMode: subtaskC.declarationMode,
+          subtaskNo: subtaskC.subtaskNo,
+          itemCode: subtaskC.itemCode,
+          taskCode: qaNbCodeC,
+          type: subtaskC.type // Thêm type để formatSubtaskToNocoDB sử dụng
+        }, parentTaskRequestCode, projectCode, taskX.taskCode);
+        
+        // Thêm thông tin dependsOn vào note
+        subtaskCData.SubtaskNote = `${subtaskC.note} | dependsOn: ${resultB.Id || resultB.id}`;
+        
+        const resultC = await submitSubtaskToNocoDB(subtaskCData, taskDataForDB);
+        createdSubtasks.push({ ...subtaskC, id: resultC.Id || resultC.id, taskCode: qaNbCodeC, dependsOn: resultB.Id || resultB.id });
+        console.log('[Form 5] Created subtask C:', resultC);
+        
+        // Thêm vào taskX.subtasks (local)
+        if (!taskX.subtasks) {
+          taskX.subtasks = [];
+        }
+        createdSubtasks.forEach(st => {
+          taskX.subtasks.push({
+            id: st.id,
+            name: st.name,
+            pic: st.pic,
+            manhour: st.manhour,
+            status: 'Chưa triển khai',
+            timesend: st.timesend,
+            finishTime: st.finishTime, // finishTime: null cho subtask A (backend xử lý), null cho B và C
+            note: st.note,
+            declarationMode: st.declarationMode,
+            subtaskNo: st.subtaskNo,
+            itemCode: st.itemCode,
+            type: st.type,
+            autoCreated: true,
+            dependsOn: st.dependsOn,
+            waitingFor: st.waitingFor,
+            subtaskCode: st.taskCode
+          });
+        });
+        
+        console.log('[Form 5] Successfully created 3 subtasks A, B, C');
+        return createdSubtasks;
+        
+      } catch (error) {
+        console.error('[Form 5] Error auto-creating subtasks:', error);
+        showToast('Lỗi khi tạo tự động subtask A, B, C: ' + error.message, 'error');
+        throw error;
+      }
+    }
+
     function createF5TaskFromForm4(form4Data) {
       const now = new Date();
       const taskId = `TASK-${Date.now()}`;
@@ -5132,7 +5646,7 @@
           componentType: form4Data.componentType || '',
           componentStandard: form4Data.componentStandard || '',
           purpose: form4Data.purpose || '',
-          projectCode: form4Data.projectCode || '',
+          projectCode: targetProject.projectCode || form4Data.projectCode || '', // Đảm bảo projectCode từ project
           vendor: form4Data.vendor || '',
           qtySamples: form4Data.qtySamples || '',
           changeReq: form4Data.changeReq || '',
@@ -5149,26 +5663,56 @@
       
       console.log('[Form 5] Created new task from Form 4:', newTask.taskName, 'in project:', targetProject.projectName);
       
+      // Tự động tạo 3 subtask A, B, C
+      autoCreateSubtasksABC(newTask, targetProject)
+        .then((createdSubtasks) => {
+          console.log('[Form 5] Auto-created subtasks:', createdSubtasks);
+          showToast(`Đã tạo tác vụ "${newTask.taskName}" và 3 subtask tự động (A, B, C)`, 'success');
+          
+          // Reload dữ liệu từ server để hiển thị subtask mới
+          loadF5Projects(F5_FILTER_PIC).then(() => {
+            // Tìm lại task sau khi reload và expand nó
+            const resultAfterReload = findF5Task(taskId);
+            if (resultAfterReload && resultAfterReload.task) {
+              resultAfterReload.task.expanded = true;
+              if (resultAfterReload.project) {
+                resultAfterReload.project.expanded = true;
+              }
+            }
+            
+            // Render lại bảng
+            renderF5TasksTable();
+            
+            // Scroll đến task mới
+            setTimeout(() => {
+              const taskRow = document.querySelector(`[data-task-id="${taskId}"]`);
+              if (taskRow) {
+                taskRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                taskRow.classList.add('bg-blue-100');
+                setTimeout(() => taskRow.classList.remove('bg-blue-100'), 3000);
+              }
+            }, 100);
+          }).catch((error) => {
+            console.error('[Form 5] Error reloading data after creating subtasks:', error);
+            // Vẫn render với dữ liệu local
+            renderF5TasksTable();
+          });
+        })
+        .catch((error) => {
+          console.error('[Form 5] Error creating auto subtasks:', error);
+          // Vẫn hiển thị task X dù subtask lỗi
+          showToast(`Đã tạo tác vụ "${newTask.taskName}" nhưng có lỗi khi tạo subtask tự động`, 'warning');
+        });
+      
       // Render lại Form 5 nếu đang mở
       const form5Section = document.getElementById('form5');
       if (form5Section && !form5Section.classList.contains('hidden')) {
         renderF5TasksTable();
-        showToast(`Đã tạo tác vụ "${newTask.taskName}" trong Form 5`, 'success');
         
         // Chuyển sang Form 5 và expand project/task
         targetProject.expanded = true;
         newTask.expanded = true;
         switchToForm('form5');
-        setTimeout(() => {
-          renderF5TasksTable();
-          // Scroll đến task mới
-          const taskRow = document.querySelector(`[data-task-id="${taskId}"]`);
-          if (taskRow) {
-            taskRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            taskRow.classList.add('bg-blue-100');
-            setTimeout(() => taskRow.classList.remove('bg-blue-100'), 3000);
-          }
-        }, 100);
       }
       
       return newTask;
@@ -5323,12 +5867,6 @@
         const declarations = []; // Giữ lại cho tương lai nếu cần
         
         records.forEach(record => {
-          const taskRequestCode = String(record.TaskRequestCode || '').trim();
-          
-          if (!taskRequestCode) {
-            return;
-          }
-
           // 1. Xác định dựa trên Subtaskno
           let subtaskNo = record.Subtaskno !== undefined ? record.Subtaskno : record.SubtaskNo;
           if (subtaskNo !== null && subtaskNo !== undefined) {
@@ -5342,16 +5880,28 @@
           // Logic phân loại:
           // - Nếu type chứa 'subtask' -> SUBTASK
           // - Hoặc nếu Subtaskno là số > 0 -> SUBTASK
+          // - Hoặc nếu có parent_id và không có TaskRequestCode -> SUBTASK
           // - Ngược lại -> TASK
           
-          const isSubtask = isSubtaskByType || (typeof subtaskNo === 'number' && !isNaN(subtaskNo) && subtaskNo > 0);
+          const hasParentId = record.parent_id !== null && record.parent_id !== undefined;
+          const hasTaskRequestCode = record.TaskRequestCode && String(record.TaskRequestCode).trim();
+          
+          const isSubtask = isSubtaskByType || 
+                           (typeof subtaskNo === 'number' && !isNaN(subtaskNo) && subtaskNo > 0) ||
+                           (hasParentId && !hasTaskRequestCode);
 
           if (isSubtask) {
             subtasks.push(record);
-            console.log(`[Form 5] Classified as SUBTASK: Id=${record.Id}, Subtaskno=${subtaskNo}, Type=${type}`);
+            console.log(`[Form 5] Classified as SUBTASK: Id=${record.Id}, Subtaskno=${subtaskNo}, Type=${type}, parent_id=${record.parent_id}`);
           } else {
-            tasks.push(record);
-            console.log(`[Form 5] Classified as TASK: Id=${record.Id}, Subtaskno=${subtaskNo}, Type=${type}`);
+            // Chỉ thêm task nếu có TaskRequestCode (task chính)
+            const taskRequestCode = String(record.TaskRequestCode || '').trim();
+            if (taskRequestCode) {
+              tasks.push(record);
+              console.log(`[Form 5] Classified as TASK: Id=${record.Id}, Subtaskno=${subtaskNo}, Type=${type}, TaskRequestCode=${taskRequestCode}`);
+            } else {
+              console.warn(`[Form 5] Skipping record Id=${record.Id}: No TaskRequestCode and not a subtask`);
+            }
           }
         });
         
@@ -5359,20 +5909,32 @@
         console.log('[Form 5] Tasks:', tasks.map(t => ({ Id: t.Id, TaskRequestCode: t.TaskRequestCode, Subtaskno: t.Subtaskno })));
         console.log('[Form 5] Subtasks:', subtasks.map(s => ({ Id: s.Id, TaskRequestCode: s.TaskRequestCode, Subtaskno: s.Subtaskno, SubtaskName: s.SubtaskName })));
         
-        // Group subtasks theo TaskRequestCode
-        // Tất cả subtasks đã được filter ở trên (Subtaskno != 0)
-        const subtasksByTaskRequestCode = {};
+        // Group subtasks theo parent_id (ID của task cha)
+        // Tạo map: parent_id -> [subtasks]
+        const subtasksByParentId = {};
         subtasks.forEach(subtask => {
-          // Chuẩn hóa key để map chính xác hơn
-          const taskRequestCode = String(subtask.TaskRequestCode || '').trim().toLowerCase();
-          if (taskRequestCode) {
-            if (!subtasksByTaskRequestCode[taskRequestCode]) {
-              subtasksByTaskRequestCode[taskRequestCode] = [];
+          const parentId = subtask.parent_id;
+          if (parentId !== null && parentId !== undefined) {
+            // Chuẩn hóa parent_id (có thể là string hoặc number)
+            const parentIdKey = String(parentId).trim();
+            if (parentIdKey) {
+              if (!subtasksByParentId[parentIdKey]) {
+                subtasksByParentId[parentIdKey] = [];
+              }
+              subtasksByParentId[parentIdKey].push(subtask);
             }
-            subtasksByTaskRequestCode[taskRequestCode].push(subtask);
           }
         });
-        console.log('[Form 5] Subtasks grouped by TaskRequestCode keys:', Object.keys(subtasksByTaskRequestCode));
+        console.log('[Form 5] Subtasks grouped by parent_id keys:', Object.keys(subtasksByParentId));
+        
+        // Tạo map TaskRequestCode -> Task Id để map subtask với task
+        const taskRequestCodeToId = {};
+        tasks.forEach(task => {
+          const taskRequestCode = String(task.TaskRequestCode || '').trim();
+          if (taskRequestCode) {
+            taskRequestCodeToId[taskRequestCode.toLowerCase()] = task.Id;
+          }
+        });
         
         // Group declarations theo parent_id (subtask Id)
         const declarationsBySubtaskId = {};
@@ -5418,12 +5980,36 @@
           // Transform task record thành format UI
           const taskId = taskRecord.Id;
           const taskRequestCode = String(taskRecord.TaskRequestCode || '').trim();
-          // Chuẩn hóa key để map với subtasks
-          const taskRequestCodeKey = taskRequestCode.toLowerCase();
-
-          // Lấy subtasks theo TaskRequestCode (cùng một dự án)
-          const taskSubtasksRaw = subtasksByTaskRequestCode[taskRequestCodeKey] || [];
-          console.log(`[Form 5] Task ${taskId} (${taskRequestCode}) has ${taskSubtasksRaw.length} subtasks:`, taskSubtasksRaw.map(s => ({ Id: s.Id, SubtaskName: s.SubtaskName, Subtaskno: s.Subtaskno })));
+          
+          // Lấy subtasks theo parent_id (ID của task này)
+          // Thử match với parent_id dạng string và number
+          const taskIdKey = String(taskId);
+          let taskSubtasksRaw = subtasksByParentId[taskIdKey] || 
+                               subtasksByParentId[String(taskId)] || 
+                               [];
+          
+          // FALLBACK: Nếu không tìm thấy subtask bằng parent_id, thử tìm bằng TaskRequestCode
+          // (Trường hợp backend chưa update parent_id từ TaskRequestCode -> Id)
+          if (taskSubtasksRaw.length === 0 && taskRequestCode) {
+            taskSubtasksRaw = subtasks.filter(subtask => {
+              // Kiểm tra nếu subtask có TaskRequestCode khớp
+              const subtaskTaskRequestCode = String(subtask.TaskRequestCode || '').trim();
+              if (subtaskTaskRequestCode && subtaskTaskRequestCode.toLowerCase() === taskRequestCode.toLowerCase()) {
+                return true;
+              }
+              // Hoặc nếu parent_id là TaskRequestCode (string dài, không phải số)
+              const parentId = String(subtask.parent_id || '').trim();
+              if (parentId && parentId.length > 10 && parentId.toLowerCase() === taskRequestCode.toLowerCase()) {
+                return true;
+              }
+              return false;
+            });
+            if (taskSubtasksRaw.length > 0) {
+              console.log(`[Form 5] Found ${taskSubtasksRaw.length} subtasks by TaskRequestCode fallback for task ${taskId}`);
+            }
+          }
+          
+          console.log(`[Form 5] Task ${taskId} (${taskRequestCode}) has ${taskSubtasksRaw.length} subtasks:`, taskSubtasksRaw.map(s => ({ Id: s.Id, SubtaskName: s.SubtaskName, Subtaskno: s.Subtaskno, parent_id: s.parent_id })));
           
           // Sắp xếp subtasks theo Subtaskno (Subtaskno != 0)
           const sortedSubtasks = [...taskSubtasksRaw].sort((a, b) => {
@@ -5450,11 +6036,15 @@
               }
             }
             
+            // Chỉ lấy deadline từ Subtaskdeadline (không lấy từ trường khác)
+            const deadlineValue = subtaskRecord.Subtaskdeadline || subtaskRecord.SubtaskDeadline || '';
+            
             return {
               id: `SUB-${subtaskId}`,
               name: subtaskRecord.SubtaskName || '',
               pic: subtaskRecord.SubtaskPIC || '',
-              dueDate: subtaskRecord.SubtaskDueDate || '',
+              deadline: deadlineValue, // Chỉ từ Subtaskdeadline
+              dueDate: deadlineValue, // Giữ để backward compatibility
               status: subtaskStatus,
               priority: subtaskRecord.SubtaskPriority || 'Trung bình',
               checked: subtaskStatus === 'done',
@@ -5463,12 +6053,14 @@
               manhour: subtaskRecord.Subtaskmanhour || null,
               checklist: subtaskRecord.Subtaskchecklist || '',
               checklistLink: subtaskRecord.Subtaskformlink || null, // Link file checklist từ webhook
+              // Lấy timesend trực tiếp từ Subtasktimesend, không convert timezone
               timesend: subtaskRecord.Subtasktimesend || null,
               finishTime: subtaskRecord.Subtaskfinishtime || null,
               note: subtaskRecord.Subtasknote || '',
               subtaskNo: subtaskNo, // Số thứ tự subtask từ database (1, 2, 3...)
               itemCode: subtaskRecord.Subtaskitemcode || '', // Mã linh kiện/sản phẩm từ webhook
-              subtaskCode: subtaskRecord.Subtaskcode || subtaskRecord.TaskCode || '' // Mã tác vụ của subtask
+              subtaskCode: subtaskRecord.Subtaskcode || subtaskRecord.TaskCode || '', // Mã tác vụ của subtask
+              idBody: subtaskRecord.id_body || null // Lưu id_body từ webhook
             };
           });
           
@@ -5509,17 +6101,8 @@
             };
           }
           
-          // Tính toán status dựa trên subtasks
-          let taskStatus = taskRecord.TaskStatus || 'pending';
-          if (taskSubtasks.length > 0) {
-            // Nếu có ít nhất 1 subtask → mặc định là "in_progress"
-            const allSubtasksDone = taskSubtasks.every(st => st.status === 'done');
-            if (allSubtasksDone) {
-              taskStatus = 'done';
-            } else {
-              taskStatus = 'in_progress';
-            }
-          }
+          // Lấy status trực tiếp từ trường TaskStatus
+          const taskStatus = taskRecord.TaskStatus || 'pending';
           
           const task = {
             id: `TASK-${taskId}`,
@@ -5863,6 +6446,9 @@
       // Thêm event listener cho nút Tra cứu
       const searchBtn = document.getElementById('f5-searchBtn');
       if (searchBtn) {
+        // Lưu HTML ban đầu của nút để restore sau
+        const originalHTML = searchBtn.innerHTML;
+        
         searchBtn.addEventListener('click', async function() {
           const tasksTableBody = document.getElementById('f5-tasksTableBody');
           if (!tasksTableBody) return;
@@ -5873,9 +6459,8 @@
           F5_FILTER_PIC = selectedPIC;
 
           // Disable nút và hiển thị loading
-          this.disabled = true;
-          const originalHTML = this.innerHTML;
-          this.innerHTML = '<span class="spinner"></span><span style="margin-left:8px">Đang tải...</span>';
+          searchBtn.disabled = true;
+          searchBtn.innerHTML = '<span class="spinner"></span><span style="margin-left:8px">Đang tải...</span>';
           
           // Hiển thị loading trong bảng
           tasksTableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-gray-500 text-base"><span class="spinner"></span><span style="margin-left:8px">Đang tải dữ liệu...</span></td></tr>';
@@ -5890,9 +6475,9 @@
             console.error('[Form 5] Error loading data:', error);
             tasksTableBody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-red-500 text-base">Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại.</td></tr>';
           } finally {
-            // Restore nút
-            this.disabled = false;
-            this.innerHTML = originalHTML;
+            // Restore nút về trạng thái ban đầu
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = originalHTML;
           }
         });
       }
@@ -5953,154 +6538,468 @@
 
     // ===== FORM 6 - DASHBOARD THỐNG KÊ =====
     
+    let F6_RAW_DATA = []; // Lưu dữ liệu raw từ webhook
+    
     // Khởi tạo Form 6
     function initForm6() {
-      renderF6Dashboard();
-      setupF6Filters();
+      loadF6Data();
+      setupF6Refresh();
       setupF6Search();
     }
 
+    // Load dữ liệu từ webhook
+    async function loadF6Data() {
+      try {
+        const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/dashboardspm1';
+        
+        // Hiển thị loading state
+        const statsProjects = document.getElementById('f6-stat-projects');
+        const statsTasks = document.getElementById('f6-stat-tasks');
+        const statsSubtasks = document.getElementById('f6-stat-subtasks');
+        const statsCompletion = document.getElementById('f6-stat-completion');
+        
+        if (statsProjects) statsProjects.textContent = '...';
+        if (statsTasks) statsTasks.textContent = '...';
+        if (statsSubtasks) statsSubtasks.textContent = '...';
+        if (statsCompletion) statsCompletion.textContent = '...';
+        
+        // Fetch dữ liệu từ webhook
+        const response = await fetch(webhookUrl);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('[Form 6] Raw response:', data);
+        
+        // Kiểm tra nếu dữ liệu là mảng
+        if (Array.isArray(data)) {
+          F6_RAW_DATA = data;
+        } else if (data.data && Array.isArray(data.data)) {
+          F6_RAW_DATA = data.data;
+        } else if (data.records && Array.isArray(data.records)) {
+          F6_RAW_DATA = data.records;
+        } else {
+          console.warn('[Form 6] Unexpected data format:', data);
+          F6_RAW_DATA = [];
+        }
+        
+        console.log('[Form 6] Loaded data:', F6_RAW_DATA.length, 'records');
+        console.log('[Form 6] First record sample:', F6_RAW_DATA[0]);
+        console.log('[Form 6] F6_RAW_DATA type:', typeof F6_RAW_DATA, Array.isArray(F6_RAW_DATA));
+        console.log('[Form 6] About to call renderF6Dashboard, function exists:', typeof renderF6Dashboard);
+        
+        // Render dashboard với dữ liệu mới
+        if (typeof renderF6Dashboard === 'function') {
+          console.log('[Form 6] Calling renderF6Dashboard()...');
+          try {
+            renderF6Dashboard();
+            console.log('[Form 6] renderF6Dashboard() completed');
+          } catch (renderError) {
+            console.error('[Form 6] Error in renderF6Dashboard:', renderError);
+            throw renderError;
+          }
+        } else {
+          console.error('[Form 6] renderF6Dashboard is not a function! Type:', typeof renderF6Dashboard);
+        }
+        
+      } catch (error) {
+        console.error('[Form 6] Error loading data:', error);
+        showToast('Không thể tải dữ liệu từ server. Vui lòng thử lại.', 'error');
+        
+        // Hiển thị lỗi trên dashboard
+        const statsProjects = document.getElementById('f6-stat-projects');
+        const statsTasks = document.getElementById('f6-stat-tasks');
+        const statsSubtasks = document.getElementById('f6-stat-subtasks');
+        const statsCompletion = document.getElementById('f6-stat-completion');
+        
+        if (statsProjects) statsProjects.textContent = '0';
+        if (statsTasks) statsTasks.textContent = '0';
+        if (statsSubtasks) statsSubtasks.textContent = '0';
+        if (statsCompletion) statsCompletion.textContent = '0%';
+        
+        // Hiển thị thông báo lỗi trong các bảng
+        const dueTasksBody = document.getElementById('f6-due-tasks-body');
+        const projectsTableBody = document.getElementById('f6-projects-table-body');
+        
+        if (dueTasksBody) {
+          dueTasksBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Không thể tải dữ liệu</td></tr>';
+        }
+        if (projectsTableBody) {
+          projectsTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-red-500">Không thể tải dữ liệu</td></tr>';
+        }
+      }
+    }
+
+    // Render dashboard
     function renderF6Dashboard() {
-      // Tính toán stats
-      const runningProjects = F5_PROJECTS.filter(p => p.status === 'in_progress').length;
-      const allTasks = getF5AllTasks();
-      const dueSoonTasks = allTasks.filter(t => {
-        if (!t.dueDate) return false;
-        const dueDate = new Date(t.dueDate);
-        const today = new Date();
-        const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-        return diffDays >= 0 && diffDays <= 7 && t.status !== 'done';
-      }).length;
+      try {
+        console.log('[Form 6] ===== START RENDER =====');
+        console.log('[Form 6] F6_RAW_DATA:', F6_RAW_DATA);
+        console.log('[Form 6] F6_RAW_DATA length:', F6_RAW_DATA ? F6_RAW_DATA.length : 'null/undefined');
+        console.log('[Form 6] Rendering dashboard with', F6_RAW_DATA ? F6_RAW_DATA.length : 0, 'records');
+        
+        if (!F6_RAW_DATA || F6_RAW_DATA.length === 0) {
+          console.warn('[Form 6] No data to render - F6_RAW_DATA is empty');
+          console.warn('[Form 6] No data to render');
+          // Hiển thị thông báo không có dữ liệu
+          const statsProjects = document.getElementById('f6-stat-projects');
+          const statsTasks = document.getElementById('f6-stat-tasks');
+          const statsSubtasks = document.getElementById('f6-stat-subtasks');
+          const statsCompletion = document.getElementById('f6-stat-completion');
+          
+          if (statsProjects) statsProjects.textContent = '0';
+          if (statsTasks) statsTasks.textContent = '0';
+          if (statsSubtasks) statsSubtasks.textContent = '0';
+          if (statsCompletion) statsCompletion.textContent = '0%';
+          
+          const dueTasksBody = document.getElementById('f6-due-tasks-body');
+          const projectsTableBody = document.getElementById('f6-projects-table-body');
+          
+          if (dueTasksBody) {
+            dueTasksBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Chưa có dữ liệu</td></tr>';
+          }
+          if (projectsTableBody) {
+            projectsTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Chưa có dữ liệu</td></tr>';
+          }
+          
+          const chartSubtask = document.getElementById('f6-chart-subtask-status');
+          const chartPIC = document.getElementById('f6-chart-pic-distribution');
+          if (chartSubtask) chartSubtask.innerHTML = '<p class="text-gray-500 text-center">Chưa có dữ liệu</p>';
+          if (chartPIC) chartPIC.innerHTML = '<p class="text-gray-500 text-center">Chưa có dữ liệu</p>';
+          
+          return;
+        }
+        
+        console.log('[Form 6] Calling processF6Data...');
+        const data = processF6Data(F6_RAW_DATA);
+        console.log('[Form 6] Processed data:', data);
+        console.log('[Form 6] Projects:', data.projects.length);
+        console.log('[Form 6] Tasks:', data.tasks.length);
+        console.log('[Form 6] Subtasks:', data.subtasks.length);
+        
+        // Update stats
+        console.log('[Form 6] Updating stats...');
+        updateF6Stats(data);
+        console.log('[Form 6] Stats updated');
+        
+        // Render charts
+        console.log('[Form 6] Rendering charts...');
+        renderF6SubtaskStatusChart(data.subtaskStatusCount);
+        renderF6PICDistributionChart(data.picDistribution);
+        console.log('[Form 6] Charts rendered');
+        
+        // Render tables
+        console.log('[Form 6] Rendering tables...');
+        renderF6DueTasksTable(data.dueTasks);
+        renderF6ProjectsTable(data.projects);
+        console.log('[Form 6] Tables rendered');
+        console.log('[Form 6] ===== END RENDER =====');
+      } catch (error) {
+        console.error('[Form 6] Error rendering dashboard:', error);
+        showToast('Có lỗi xảy ra khi hiển thị dashboard', 'error');
+      }
+    }
+
+    // Xử lý dữ liệu
+    function processF6Data(rawData) {
+      const projects = {};
+      const tasks = [];
+      const subtasks = [];
+      const picDistribution = {};
+      const subtaskStatusCount = { 'Hoàn thành': 0, 'Đang xử lý': 0, 'Chưa bắt đầu': 0 };
       
-      const allMembers = new Set();
-      F5_PROJECTS.forEach(project => {
-        if (project.pic) allMembers.add(project.pic);
-        if (project.tasks) {
-          project.tasks.forEach(task => {
-            if (task.pic) allMembers.add(task.pic);
-            if (task.subtasks) {
-              task.subtasks.forEach(st => {
-                if (st.pic) allMembers.add(st.pic);
-              });
+      if (!rawData || !Array.isArray(rawData)) {
+        console.warn('[Form 6] Invalid rawData:', rawData);
+        return {
+          projects: [],
+          tasks: [],
+          subtasks: [],
+          picDistribution: {},
+          subtaskStatusCount,
+          dueTasks: []
+        };
+      }
+      
+      rawData.forEach((record, index) => {
+        try {
+          const projectCode = record.project_code || 'UNKNOWN';
+          
+          // Tạo project nếu chưa có
+          if (!projects[projectCode]) {
+            projects[projectCode] = {
+              code: projectCode,
+              name: `Dự án ${projectCode}`,
+              taskCount: 0,
+              subtaskCount: 0,
+              completedSubtasks: 0,
+              pic: record.TaskPIC || ''
+            };
+          }
+          
+          // Kiểm tra nếu là task: type = null và parent_id = null và SubtaskName = null
+          const isTask = (!record.type || record.type === null) && 
+                        (!record.parent_id || record.parent_id === null) && 
+                        (!record.SubtaskName || record.SubtaskName === null);
+          
+          // Kiểm tra nếu là subtask: có SubtaskName hoặc type chứa "subtask"
+          const isSubtask = (record.SubtaskName && record.SubtaskName !== null) || 
+                           (record.type && String(record.type).includes('subtask'));
+          
+          if (isTask) {
+            tasks.push({
+              name: record.TaskItemName || '',
+              projectCode: projectCode,
+              pic: record.TaskPIC || '',
+              dueDate: record.TaskDesiredDate || record.TaskDueDate || '',
+              status: record.TaskStatus || 'pending'
+            });
+            projects[projectCode].taskCount++;
+          }
+          
+          if (isSubtask) {
+            const subtaskStatus = record.Subtaskstatus || record.SubtaskStatus || 'pending';
+            subtasks.push({
+              name: record.SubtaskName || '',
+              projectCode: projectCode,
+              taskName: record.TaskItemName || '',
+              pic: record.SubtaskPIC || record.TaskPIC || '',
+              deadline: record.Subtaskdeadline || record.SubtaskDeadline || '',
+              status: subtaskStatus
+            });
+            projects[projectCode].subtaskCount++;
+            
+            // Đếm trạng thái subtask
+            const status = String(subtaskStatus).toLowerCase();
+            if (status.includes('hoàn thành') || status === 'done' || status === 'completed') {
+              subtaskStatusCount['Hoàn thành']++;
+              projects[projectCode].completedSubtasks++;
+            } else if (status.includes('đang') || status.includes('in progress') || status.includes('processing')) {
+              subtaskStatusCount['Đang xử lý']++;
+            } else {
+              subtaskStatusCount['Chưa bắt đầu']++;
             }
-          });
+            
+            // Phân bổ theo PIC
+            const pic = record.SubtaskPIC || record.TaskPIC || 'Chưa gán';
+            picDistribution[pic] = (picDistribution[pic] || 0) + 1;
+          }
+        } catch (error) {
+          console.error(`[Form 6] Error processing record ${index}:`, error, record);
         }
       });
       
-      const totalProgress = F5_PROJECTS.length > 0 
-        ? Math.round(F5_PROJECTS.reduce((sum, p) => sum + calculateProjectProgress(p), 0) / F5_PROJECTS.length)
-        : 0;
-
-      // Cập nhật stats
-      document.getElementById('f6-stats-running').textContent = runningProjects;
-      document.getElementById('f6-stats-due').textContent = dueSoonTasks;
-      document.getElementById('f6-stats-members').textContent = allMembers.size;
-      document.getElementById('f6-stats-progress').textContent = `${totalProgress}%`;
-
-      // Render bảng projects
-      renderF6ProjectsTable();
+      // Tính tasks sắp hết hạn (7 ngày tới)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const dueTasks = tasks.filter(task => {
+        if (!task.dueDate) return false;
+        try {
+          const dueDate = new Date(task.dueDate);
+          dueDate.setHours(0, 0, 0, 0);
+          const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+          return diffDays >= 0 && diffDays <= 7 && task.status !== 'done' && task.status !== 'completed';
+        } catch (e) {
+          return false;
+        }
+      });
+      
+      console.log('[Form 6] Processed:', {
+        projects: Object.keys(projects).length,
+        tasks: tasks.length,
+        subtasks: subtasks.length,
+        dueTasks: dueTasks.length
+      });
+      
+      return {
+        projects: Object.values(projects),
+        tasks,
+        subtasks,
+        picDistribution,
+        subtaskStatusCount,
+        dueTasks
+      };
     }
 
-    function renderF6ProjectsTable(filterStatus = 'all') {
-      const tbody = document.getElementById('f6-projectsTableBody');
-      if (!tbody) return;
+    // Cập nhật stats cards
+    function updateF6Stats(data) {
+      const totalProjects = new Set(data.projects.map(p => p.code)).size;
+      const totalTasks = data.tasks.length;
+      const totalSubtasks = data.subtasks.length;
+      const totalCompleted = data.subtaskStatusCount['Hoàn thành'] || 0;
+      const completionRate = totalSubtasks > 0 
+        ? Math.round((totalCompleted / totalSubtasks) * 100) 
+        : 0;
+      
+      document.getElementById('f6-stat-projects').textContent = totalProjects;
+      document.getElementById('f6-stat-tasks').textContent = totalTasks;
+      document.getElementById('f6-stat-subtasks').textContent = totalSubtasks;
+      document.getElementById('f6-stat-completion').textContent = `${completionRate}%`;
+    }
 
-      let filteredProjects = [...F5_PROJECTS];
-      if (filterStatus !== 'all') {
-        filteredProjects = filteredProjects.filter(p => p.status === filterStatus);
-      }
-
-      if (filteredProjects.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500 text-base">Chưa có dự án nào.</td></tr>';
+    // Render biểu đồ trạng thái subtask
+    function renderF6SubtaskStatusChart(statusCount) {
+      const container = document.getElementById('f6-chart-subtask-status');
+      if (!container) return;
+      
+      const total = Object.values(statusCount).reduce((sum, val) => sum + val, 0);
+      if (total === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">Chưa có dữ liệu</p>';
         return;
       }
+      
+      const colors = {
+        'Hoàn thành': '#10b981',
+        'Đang xử lý': '#f59e0b',
+        'Chưa bắt đầu': '#6b7280'
+      };
+      
+      let html = '<div class="space-y-4">';
+      Object.entries(statusCount).forEach(([status, count]) => {
+        const percentage = Math.round((count / total) * 100);
+        const color = colors[status] || '#6b7280';
+        
+        html += `
+          <div class="flex items-center gap-4">
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">${status}</span>
+                <span class="text-sm font-semibold text-gray-900">${count} (${percentage}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="h-2 rounded-full transition-all" style="width: ${percentage}%; background-color: ${color}"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      
+      container.innerHTML = html;
+    }
 
-      tbody.innerHTML = filteredProjects.map(project => {
-        const progress = calculateProjectProgress(project);
-        const progressColor = progress === 100 ? 'bg-green-600' : progress >= 50 ? 'bg-primary-blue' : 'bg-yellow-500';
-        const statusBadge = getF6ProjectStatusBadge(project.status);
+    // Render biểu đồ phân bổ theo PIC
+    function renderF6PICDistributionChart(picDistribution) {
+      const container = document.getElementById('f6-chart-pic-distribution');
+      if (!container) return;
+      
+      const entries = Object.entries(picDistribution).sort((a, b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">Chưa có dữ liệu</p>';
+        return;
+      }
+      
+      const maxCount = Math.max(...entries.map(e => e[1]));
+      const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1'];
+      
+      let html = '<div class="space-y-3">';
+      entries.forEach(([pic, count], index) => {
+        const percentage = Math.round((count / maxCount) * 100);
+        const color = colors[index % colors.length];
+        
+        html += `
+          <div class="flex items-center gap-3">
+            <div class="w-32 text-sm font-medium text-gray-700 truncate" title="${pic}">${pic}</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2">
+                <div class="flex-1 bg-gray-200 rounded-full h-3">
+                  <div class="h-3 rounded-full transition-all" style="width: ${percentage}%; background-color: ${color}"></div>
+                </div>
+                <span class="text-sm font-semibold text-gray-900 w-12 text-right">${count}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      
+      container.innerHTML = html;
+    }
+
+    // Render bảng tasks sắp hết hạn
+    function renderF6DueTasksTable(dueTasks) {
+      const tbody = document.getElementById('f6-due-tasks-body');
+      if (!tbody) return;
+      
+      if (dueTasks.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Không có tác vụ nào sắp hết hạn</td></tr>';
+        return;
+      }
+      
+      const today = new Date();
+      tbody.innerHTML = dueTasks.map(task => {
+        const dueDate = new Date(task.dueDate);
+        const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+        const urgencyClass = diffDays <= 2 ? 'text-red-600 font-semibold' : diffDays <= 4 ? 'text-orange-600' : 'text-gray-600';
         
         return `
-          <tr class="bg-white border-b hover:bg-gray-50 transition-colors f6-project-row cursor-pointer" data-project-id="${project.id}">
-            <td class="px-6 py-4">
-              <div class="font-bold text-gray-900 f6-project-name">${project.projectName}</div>
-              <div class="text-xs text-gray-500">${project.description || ''}</div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-2">
-                <div class="w-24 bg-gray-200 rounded-full h-2">
-                  <div class="${progressColor} h-2 rounded-full" style="width: ${progress}%"></div>
-                </div>
-                <span class="font-medium text-gray-700">${progress}%</span>
-              </div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-2">
-                <span class="font-medium text-gray-800">${project.pic || '-'}</span>
-              </div>
-            </td>
-            <td class="px-6 py-4 font-medium text-gray-800">${formatF5Date(project.dueDate)}</td>
-            <td class="px-6 py-4">${statusBadge}</td>
-            <td class="px-6 py-4 text-right">
-              <button type="button" class="f6-view-project-detail-btn text-gray-500 hover:text-gray-800" data-project-id="${project.id}">
-                <span class="material-symbols-outlined">more_horiz</span>
-              </button>
-            </td>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 font-medium text-gray-900">${escapeHtml(task.name || '-')}</td>
+            <td class="px-6 py-4 text-gray-600">${escapeHtml(task.projectCode || '-')}</td>
+            <td class="px-6 py-4 text-gray-600">${escapeHtml(task.pic || '-')}</td>
+            <td class="px-6 py-4 text-gray-600">${formatF5Date(task.dueDate)}</td>
+            <td class="px-6 py-4 ${urgencyClass}">${diffDays} ngày</td>
           </tr>
         `;
       }).join('');
+    }
+
+    // Render bảng chi tiết dự án
+    function renderF6ProjectsTable(projects) {
+      const tbody = document.getElementById('f6-projects-table-body');
+      if (!tbody) return;
       
-      // Gắn event listeners cho project rows
-      setupF6ProjectEventListeners();
+      if (projects.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Chưa có dữ liệu</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = projects.map(project => {
+        const progress = project.subtaskCount > 0 
+          ? Math.round((project.completedSubtasks / project.subtaskCount) * 100) 
+          : 0;
+        const progressColor = progress === 100 ? 'bg-green-500' : progress >= 50 ? 'bg-blue-500' : 'bg-yellow-500';
+        
+        return `
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 font-mono text-sm font-semibold text-gray-900">${escapeHtml(project.code)}</td>
+            <td class="px-6 py-4 font-medium text-gray-900">${escapeHtml(project.name)}</td>
+            <td class="px-6 py-4 text-center text-gray-600">${project.taskCount}</td>
+            <td class="px-6 py-4 text-center text-gray-600">${project.subtaskCount}</td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-2">
+                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                  <div class="${progressColor} h-2 rounded-full transition-all" style="width: ${progress}%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-700 w-12">${progress}%</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-gray-600">${escapeHtml(project.pic || '-')}</td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    function getF6ProjectStatusBadge(status) {
-      const statusMap = {
-        'pending': { text: 'Tạm dừng', class: 'bg-yellow-100 text-yellow-700' },
-        'in_progress': { text: 'Đang tiến hành', class: 'bg-purple-100 text-purple-700' },
-        'done': { text: 'Hoàn thành', class: 'bg-green-100 text-green-700' }
-      };
-      const statusInfo = statusMap[status] || statusMap['pending'];
-      return `<span class="text-xs font-medium ${statusInfo.class} py-1 px-2.5 rounded-full">${statusInfo.text}</span>`;
-    }
-
-    function setupF6Filters() {
-      const filterBtns = document.querySelectorAll('.f6-filter-btn');
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const filter = e.target.closest('.f6-filter-btn').getAttribute('data-filter');
-          
-          // Update active state
-          filterBtns.forEach(b => {
-            b.classList.remove('bg-primary-blue/10');
-            b.classList.add('bg-gray-100');
-            const p = b.querySelector('p');
-            if (p) {
-              p.classList.remove('text-primary-blue', 'font-semibold');
-              p.classList.add('text-gray-700', 'font-medium');
-            }
-          });
-          
-          e.target.closest('.f6-filter-btn').classList.remove('bg-gray-100');
-          e.target.closest('.f6-filter-btn').classList.add('bg-primary-blue/10');
-          const p = e.target.closest('.f6-filter-btn').querySelector('p');
-          if (p) {
-            p.classList.remove('text-gray-700', 'font-medium');
-            p.classList.add('text-primary-blue', 'font-semibold');
-          }
-          
-          renderF6ProjectsTable(filter);
-        });
+    // Setup refresh button
+    function setupF6Refresh() {
+      const refreshBtn = document.getElementById('f6-refresh-btn');
+      if (!refreshBtn) return;
+      
+      refreshBtn.addEventListener('click', () => {
+        loadF6Data();
+        showToast('Đang tải lại dữ liệu...', 'info');
       });
     }
 
+    // Setup search
     function setupF6Search() {
-      const searchInput = document.getElementById('f6-searchInput');
+      const searchInput = document.getElementById('f6-search-input');
       if (!searchInput) return;
       
       searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
-        const tbody = document.getElementById('f6-projectsTableBody');
+        const tbody = document.getElementById('f6-projects-table-body');
         if (!tbody) return;
         
         const rows = tbody.querySelectorAll('tr');
@@ -6113,31 +7012,32 @@
 
 
     /**
-     * Cập nhật trạng thái task dựa trên subtasks
-     * - Nếu có ít nhất 1 subtask → status = "in_progress" (trừ khi tất cả đều done)
-     * - Nếu tất cả subtask done → status = "done"
-     * - Nếu không có subtask → giữ nguyên status
+     * Cập nhật trạng thái task - Status được lấy trực tiếp từ trường TaskStatus
+     * Không tính toán từ subtasks nữa
      */
     function updateF5TaskStatus(taskId) {
       const result = findF5Task(taskId);
       if (!result || !result.task) return;
       
-      const task = result.task;
+      // Status của task được lấy trực tiếp từ trường TaskStatus, không tính toán từ subtasks
+      // Giữ nguyên status hiện tại từ TaskStatus
+      return;
       
-      // Nếu không có subtask, giữ nguyên status
-      if (!task.subtasks || task.subtasks.length === 0) {
-        return;
-      }
-
-      // Kiểm tra tất cả subtask đã done chưa
-      const allDone = task.subtasks.every(st => st.status === 'done');
-
-      if (allDone) {
-        task.status = 'done';
-      } else {
-        // Có ít nhất 1 subtask → mặc định là "in_progress"
-        task.status = 'in_progress';
-      }
+      // Kiểm tra và cập nhật subtask B/C khi A/B done
+      // NOTE: Đã tắt logic tự động tính timesend cho B và C - Backend sẽ xử lý
+      /*
+      task.subtasks.forEach(subtask => {
+        // Nếu subtask A vừa done, cập nhật B
+        if (subtask.type === 'form5_subtask_auto_a' && subtask.status === 'done') {
+          updateSubtaskBWhenADone(subtask, task);
+        }
+        
+        // Nếu subtask B vừa done, cập nhật C
+        if (subtask.type === 'form5_subtask_auto_b' && subtask.status === 'done') {
+          updateSubtaskCWhenBDone(subtask, task);
+        }
+      });
+      */
       
       // Cập nhật project status
       updateF5ProjectStatus(result.project);
@@ -6195,13 +7095,76 @@
     function formatF5Date(dateStr) {
       if (!dateStr) return '';
       try {
-        const date = new Date(dateStr);
-        if (isNaN(date.getTime())) return dateStr;
-        return date.toLocaleDateString('vi-VN', { 
-          year: 'numeric', 
-          month: '2-digit', 
-          day: '2-digit' 
-        });
+        // Nếu dateStr đã có format YYYY-MM-DD HH:mm hoặc YYYY-MM-DD HH:mm:ss (không có timezone), giữ nguyên
+        if (dateStr.includes(' ') && dateStr.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/)) {
+          // Format: YYYY-MM-DD HH:mm hoặc YYYY-MM-DD HH:mm:ss
+          const parts = dateStr.split(' ');
+          if (parts.length >= 2) {
+            const datePart = parts[0];
+            const timePart = parts[1].split(':');
+            if (timePart.length >= 2) {
+              const hours = timePart[0].padStart(2, '0');
+              const minutes = timePart[1].padStart(2, '0');
+              return `${datePart} ${hours}:${minutes}`;
+            }
+          }
+        }
+        
+        // Nếu có timezone (như +00:00, +07:00, Z), chỉ lấy phần date/time, bỏ timezone (không convert)
+        if (dateStr.includes('+') || dateStr.includes('Z')) {
+          // Loại bỏ timezone, chỉ lấy phần YYYY-MM-DD HH:mm:ss (giữ nguyên giá trị, không convert)
+          let dateTimePart = dateStr;
+          
+          // Loại bỏ +XX:XX hoặc +XXXX
+          if (dateStr.includes('+')) {
+            const plusIndex = dateStr.indexOf('+');
+            dateTimePart = dateStr.substring(0, plusIndex).trim();
+          }
+          // Loại bỏ Z (UTC)
+          else if (dateStr.includes('Z')) {
+            dateTimePart = dateStr.replace('Z', '').trim();
+          }
+          
+          // Format thành YYYY-MM-DD HH:mm (bỏ giây nếu có, thay T bằng space)
+          dateTimePart = dateTimePart.replace('T', ' ');
+          if (dateTimePart.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/)) {
+            // Bỏ giây nếu có
+            const parts = dateTimePart.split(':');
+            if (parts.length >= 2) {
+              return parts.slice(0, 2).join(':');
+            }
+            return dateTimePart;
+          }
+        }
+        
+        // Nếu có T (ISO format), xử lý tương tự
+        if (dateStr.includes('T')) {
+          const parts = dateStr.split('T');
+          if (parts.length >= 2) {
+            const datePart = parts[0];
+            let timePart = parts[1];
+            // Loại bỏ timezone nếu có (không convert)
+            if (timePart.includes('+')) {
+              timePart = timePart.split('+')[0];
+            } else if (timePart.includes('Z')) {
+              timePart = timePart.replace('Z', '');
+            }
+            const timeParts = timePart.split(':');
+            if (timeParts.length >= 2) {
+              const hours = timeParts[0].padStart(2, '0');
+              const minutes = timeParts[1].padStart(2, '0');
+              return `${datePart} ${hours}:${minutes}`;
+            }
+          }
+        }
+        
+        // Nếu chỉ có ngày (YYYY-MM-DD), giữ nguyên format YYYY-MM-DD
+        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          return dateStr;
+        }
+        
+        // Fallback: trả về nguyên bản
+        return dateStr;
       } catch {
         return dateStr;
       }
@@ -6277,7 +7240,7 @@
             <td class="px-4 py-4 text-sm text-gray-900">-</td>
             <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(project.createdAt)}</td>
             <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(project.dueDate)}</td>
-            <td class="px-4 py-4">${getF5StatusBadge(project.status)}</td>
+            <td class="px-4 py-4 text-sm text-gray-500 text-center">-</td>
             <td class="px-4 py-4 text-sm font-mono text-gray-600">${project.projectCode}</td>
             <td class="px-4 py-4">
               <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -6320,13 +7283,16 @@
                 <td class="px-4 py-4 text-sm text-gray-900">${task.department || '-'}</td>
                 <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(task.createdAt)}</td>
                 <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(task.dueDate)}</td>
-                <td class="px-4 py-4">${getF5StatusBadge(task.status)}</td>
+                <td class="px-4 py-4 text-sm text-gray-500 text-center">-</td>
                 <td class="px-4 py-4 text-sm font-mono text-gray-600">${task.taskCode}</td>
                 <td class="px-4 py-4">
                   <div class="flex items-center gap-2">
+                    <!-- Tạm khóa nút thêm tác vụ con - tính năng đang phát triển -->
+                    <!--
                     <button type="button" class="f5-add-subtask-btn flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg transition-all transform hover:scale-110" data-task-id="${task.id}" title="Thêm tác vụ con">
                       <span class="material-symbols-outlined text-xl">add</span>
                     </button>
+                    -->
                     <button type="button" class="f5-view-detail-btn text-gray-500 hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" data-task-id="${task.id}">
                       <span class="material-symbols-outlined text-xl">more_horiz</span>
                     </button>
@@ -6344,34 +7310,41 @@
                 // Chuẩn hóa status để kiểm tra done hoặc cancelled
                 const normalizedSubtaskStatus = String(st.status || '').toLowerCase().trim();
                 const subtaskStatusClass = (normalizedSubtaskStatus === 'done' || normalizedSubtaskStatus === 'cancel' || normalizedSubtaskStatus === 'cancelled') ? 'line-through text-gray-500' : 'text-gray-900';
-                const subtaskNoDisplay = st.subtaskNo ? `<span class="text-gray-500 font-semibold">#${st.subtaskNo}</span> ` : '';
                 
-                // Chỉ hiển thị nút khai báo nếu subtask có type hoặc declarationMode
-                const hasDeclarationMode = (st.type && st.type.startsWith('form5_subtask_')) || st.declarationMode;
-                const declarationBtnHtml = hasDeclarationMode 
+                // Hiển thị nút khai báo dựa trên tên tác vụ
+                // "Kiểm tra và chuẩn bị tài liệu" → Gửi form báo cáo
+                // "Hoàn thiện báo cáo và nghiệm thu" → Khai báo hoàn thành
+                const subtaskName = String(st.name || '').trim();
+                const showDeclarationBtn = subtaskName === 'Kiểm tra và chuẩn bị tài liệu' || subtaskName === 'Hoàn thiện báo cáo và nghiệm thu';
+                const declarationBtnHtml = showDeclarationBtn 
                   ? `<button type="button" class="f5-declaration-btn flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors shadow-sm" data-task-id="${task.id}" data-subtask-id="${st.id}" data-type="subtask" data-subtask-type="${st.type || ''}" data-declaration-mode="${st.declarationMode || ''}" title="Khai báo">
                       <span class="material-symbols-outlined text-sm">description</span>
                       <span>Khai báo</span>
                     </button>`
-                  : '';
+                  : '<div class="w-[120px]"></div>'; // Placeholder để giữ vị trí khi không có nút khai báo
+                
+                // Số thứ tự subtask với độ rộng cố định để căn chỉnh đẹp
+                const subtaskNoDisplay = st.subtaskNo 
+                  ? `<span class="inline-block w-8 text-right text-gray-500 font-semibold">#${st.subtaskNo}</span>` 
+                  : `<span class="inline-block w-8"></span>`;
                 
                 html += `
-                  <tr class="group hover:bg-green-50/50 transition" data-task-id="${task.id}" data-subtask-id="${st.id}">
-                    <td class="px-6 py-4">
-                      <div class="ml-14 flex items-center gap-3">
-                        <span class="w-6"></span>
+                  <tr class="group hover:bg-green-50/50 transition bg-green-50/10" data-task-id="${task.id}" data-subtask-id="${st.id}">
+                    <td class="px-6 py-3">
+                      <div class="ml-16 flex items-center gap-3">
                         ${declarationBtnHtml}
-                        <span class="font-normal ${subtaskStatusClass} f5-subtask-name cursor-pointer hover:text-blue-500" data-task-id="${task.id}" data-subtask-id="${st.id}">${subtaskNoDisplay}${st.name}</span>
+                        ${subtaskNoDisplay}
+                        <span class="font-normal text-sm ${subtaskStatusClass} f5-subtask-name cursor-pointer hover:text-blue-500" data-task-id="${task.id}" data-subtask-id="${st.id}">${st.name}</span>
                       </div>
                     </td>
-                    <td class="px-4 py-4 text-sm text-gray-900">-</td>
-                    <td class="px-4 py-4 text-sm text-gray-900">${st.pic || '-'}</td>
-                    <td class="px-4 py-4 text-sm text-gray-900">-</td>
-                    <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(st.timesend)}</td>
-                    <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(st.dueDate)}</td>
-                    <td class="px-4 py-4">${getF5SubtaskStatusBadge(st.status)}</td>
-                    <td class="px-4 py-4 text-sm font-mono text-gray-600">${st.subtaskCode || '-'}</td>
-                    <td class="px-4 py-4">
+                    <td class="px-4 py-3 text-sm text-gray-500 text-center">-</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${st.pic || '-'}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500 text-center">-</td>
+                    <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.timesend) || '-'}</td>
+                    <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.deadline || st.dueDate) || '-'}</td>
+                    <td class="px-4 py-3">${getF5SubtaskStatusBadge(st.status)}</td>
+                    <td class="px-4 py-3 text-sm font-mono text-gray-600">${st.subtaskCode || '-'}</td>
+                    <td class="px-4 py-3">
                       <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button type="button" class="f5-view-subtask-detail-btn text-gray-500 hover:text-blue-500" data-task-id="${task.id}" data-subtask-id="${st.id}">
                           <span class="material-symbols-outlined text-xl">more_horiz</span>
@@ -6382,7 +7355,8 @@
                 `;
               });
 
-              // Row để thêm subtask mới
+              // Row để thêm subtask mới - Tạm khóa tính năng đang phát triển
+              /*
               html += `
                 <tr class="group hover:bg-blue-50/50 transition" data-task-id="${task.id}">
                   <td class="py-3 pl-20 pr-6" colspan="9">
@@ -6393,6 +7367,7 @@
                   </td>
                 </tr>
               `;
+              */
             }
           });
         }
@@ -6448,15 +7423,40 @@
             e.stopPropagation();
             const taskId = declarationBtn.getAttribute('data-task-id');
             const subtaskId = declarationBtn.getAttribute('data-subtask-id');
-            const type = declarationBtn.getAttribute('data-type');
-            const subtaskType = declarationBtn.getAttribute('data-subtask-type');
-            const declarationMode = declarationBtn.getAttribute('data-declaration-mode');
             
-            if (taskId) {
-              openF5SelectDeclarationModal(taskId, subtaskId || null, type, subtaskType || null, declarationMode || null);
-            } else {
+            if (!taskId) {
               console.error('[Form 5] No task-id found on declaration button');
+              return;
             }
+            
+            // Tìm subtask để xác định số thứ tự
+            const result = findF5Task(taskId);
+            if (!result || !result.task) {
+              showToast('Không tìm thấy tác vụ', 'error');
+              return;
+            }
+            
+            const task = result.task;
+            if (subtaskId && task.subtasks) {
+              const subtask = task.subtasks.find(st => st.id === subtaskId);
+              if (subtask) {
+                const subtaskName = String(subtask.name || '').trim();
+                
+                // "Kiểm tra và chuẩn bị tài liệu" → Mở trực tiếp "Gửi form báo cáo" (send-test-task)
+                if (subtaskName === 'Kiểm tra và chuẩn bị tài liệu') {
+                  openF5DeclarationSendTestTaskModal(taskId, subtaskId);
+                  return;
+                }
+                // "Hoàn thiện báo cáo và nghiệm thu" → Mở trực tiếp "Khai báo hoàn thành" (complete)
+                if (subtaskName === 'Hoàn thiện báo cáo và nghiệm thu') {
+                  openF5DeclarationCompleteModal(taskId, subtaskId);
+                  return;
+                }
+              }
+            }
+            
+            // Nếu không phải subtask có chức năng khai báo, hiển thị thông báo
+            showToast('Tác vụ con này không có chức năng khai báo.', 'info');
           }
         });
         console.log('[Form 5] Event listener attached to tbody for declaration buttons');
@@ -6511,7 +7511,8 @@
         console.log('[Form 5] Event listener attached to tbody for view detail');
       }
 
-      // Nút thêm subtask - sử dụng event delegation để tránh gắn listener nhiều lần
+      // Nút thêm subtask - Tạm khóa tính năng đang phát triển
+      /*
       if (!tbody._f5SubtaskListenerAttached) {
         tbody._f5SubtaskListenerAttached = true;
         tbody.addEventListener('click', (e) => {
@@ -6545,6 +7546,7 @@
         });
         console.log('[Form 5] Event listener attached to tbody for add subtask buttons');
       }
+      */
 
     }
 
@@ -7215,26 +8217,168 @@
     // ===== END FORM 5: IMPORT EXCEL FUNCTIONALITY =====
 
     // Cập nhật các hàm khác để dùng findF5Task
+    /**
+     * Cập nhật subtask B khi subtask A hoàn thành
+     * Tính timesend = A.completedAt + A.manhour
+     * @param {Object} subtaskA - Subtask A đã hoàn thành
+     * @param {Object} task - Task chứa subtask
+     */
+    async function updateSubtaskBWhenADone(subtaskA, task) {
+      try {
+        // Tìm subtask B có waitingFor = 'A' và dependsOn = A.id
+        const subtaskB = task.subtasks?.find(st => 
+          st.waitingFor === 'A' && 
+          (st.dependsOn === subtaskA.id || st.dependsOn === String(subtaskA.id))
+        );
+        
+        if (!subtaskB) {
+          console.log('[Form 5] No subtask B found waiting for A');
+          return;
+        }
+        
+        // Lấy manhour của A (nếu có)
+        let aManhour = subtaskA.manhour ? parseFloat(subtaskA.manhour) : 4; // Mặc định 4h nếu không có
+        if (isNaN(aManhour) || aManhour <= 0) {
+          console.warn('[Form 5] Invalid manhour for subtask A, using default 4h');
+          aManhour = 4;
+        }
+        
+        // Tính thời gian hoàn thành của A (hoặc dùng thời gian hiện tại)
+        const aCompletedAt = subtaskA.finishTime ? new Date(subtaskA.finishTime) : new Date();
+        
+        // Tính timesend cho B = A.completedAt + A.manhour
+        const timeB = addWorkingHours(aCompletedAt, aManhour);
+        const formatDateTime = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          return `${year}-${month}-${day}T${hours}:${minutes}`;
+        };
+        
+        const timesendB = formatDateTime(timeB);
+        
+        // Cập nhật subtask B trong local
+        subtaskB.timesend = timesendB;
+        subtaskB.manhour = aManhour; // Copy manhour từ A
+        subtaskB.status = 'pending'; // Hoặc 'in_progress' nếu đã đến giờ
+        
+        // Gửi cập nhật lên backend
+        const updateEndpoint = 'https://iatzhxxuk.tino.page/webhook/form5-subtask-update';
+        const updateData = {
+          Id: subtaskB.id,
+          SubtaskTimesend: timesendB,
+          SubtaskManhour: aManhour,
+          SubtaskStatus: subtaskB.status
+        };
+        
+        const response = await fetch(updateEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+        
+        if (response.ok) {
+          console.log('[Form 5] Updated subtask B timesend:', timesendB);
+          showToast(`Subtask B sẽ bắt đầu lúc ${timesendB}`, 'success');
+        } else {
+          console.warn('[Form 5] Failed to update subtask B:', await response.text());
+        }
+        
+      } catch (error) {
+        console.error('[Form 5] Error updating subtask B:', error);
+      }
+    }
+
+    /**
+     * Cập nhật subtask C khi subtask B hoàn thành
+     * Tính timesend = B.completedAt + 4 giờ làm việc
+     * @param {Object} subtaskB - Subtask B đã hoàn thành
+     * @param {Object} task - Task chứa subtask
+     */
+    async function updateSubtaskCWhenBDone(subtaskB, task) {
+      try {
+        // Tìm subtask C có waitingFor = 'B' và dependsOn = B.id
+        const subtaskC = task.subtasks?.find(st => 
+          st.waitingFor === 'B' && 
+          (st.dependsOn === subtaskB.id || st.dependsOn === String(subtaskB.id))
+        );
+        
+        if (!subtaskC) {
+          console.log('[Form 5] No subtask C found waiting for B');
+          return;
+        }
+        
+        // Tính thời gian hoàn thành của B (hoặc dùng thời gian hiện tại)
+        const bCompletedAt = subtaskB.finishTime ? new Date(subtaskB.finishTime) : new Date();
+        
+        // Tính timesend cho C = B.completedAt + 4 giờ làm việc
+        const timeC = addWorkingHours(bCompletedAt, 4);
+        const formatDateTime = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          return `${year}-${month}-${day}T${hours}:${minutes}`;
+        };
+        
+        const timesendC = formatDateTime(timeC);
+        
+        // Cập nhật subtask C trong local
+        subtaskC.timesend = timesendC;
+        subtaskC.status = 'pending'; // Hoặc 'in_progress' nếu đã đến giờ
+        
+        // Gửi cập nhật lên backend
+        const updateEndpoint = 'https://iatzhxxuk.tino.page/webhook/form5-subtask-update';
+        const updateData = {
+          Id: subtaskC.id,
+          SubtaskTimesend: timesendC,
+          SubtaskStatus: subtaskC.status
+        };
+        
+        const response = await fetch(updateEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+        
+        if (response.ok) {
+          console.log('[Form 5] Updated subtask C timesend:', timesendC);
+          showToast(`Subtask C sẽ bắt đầu lúc ${timesendC}`, 'success');
+        } else {
+          console.warn('[Form 5] Failed to update subtask C:', await response.text());
+        }
+        
+      } catch (error) {
+        console.error('[Form 5] Error updating subtask C:', error);
+      }
+    }
+
     function updateF5TaskStatus(taskId) {
       const result = findF5Task(taskId);
       if (!result || !result.task) return;
       
-      const task = result.task;
-      
-      // Nếu không có subtask, giữ nguyên status
-      if (!task.subtasks || task.subtasks.length === 0) {
-        return;
-      }
+      // Status của task được lấy trực tiếp từ trường TaskStatus, không tính toán từ subtasks
+      // Giữ nguyên status hiện tại từ TaskStatus
+      return;
 
-      // Kiểm tra tất cả subtask đã done chưa
-      const allDone = task.subtasks.every(st => st.status === 'done');
-
-      if (allDone) {
-        task.status = 'done';
-      } else {
-        // Có ít nhất 1 subtask → mặc định là "in_progress"
-        task.status = 'in_progress';
-      }
+      // Kiểm tra và cập nhật subtask B/C khi A/B done
+      // NOTE: Đã tắt logic tự động tính timesend cho B và C - Backend sẽ xử lý
+      /*
+      task.subtasks.forEach(subtask => {
+        // Nếu subtask A vừa done, cập nhật B
+        if (subtask.type === 'form5_subtask_auto_a' && subtask.status === 'done') {
+          updateSubtaskBWhenADone(subtask, task);
+        }
+        
+        // Nếu subtask B vừa done, cập nhật C
+        if (subtask.type === 'form5_subtask_auto_b' && subtask.status === 'done') {
+          updateSubtaskCWhenBDone(subtask, task);
+        }
+      });
+      */
 
       // Cập nhật project status nếu cần
       updateF5ProjectStatus(result.project);
@@ -7348,30 +8492,27 @@
       
       const task = result.task;
       
-      // Nếu là subtask, luôn mở trực tiếp modal khai báo với chế độ đã chọn khi tạo
+      // Kiểm tra subtask dựa trên tên tác vụ
       if (subtaskId && task.subtasks) {
         const subtask = task.subtasks.find(st => st.id === subtaskId);
         if (subtask) {
-          // Ưu tiên dùng declarationMode từ parameter, sau đó từ subtask object
-          let mode = declarationMode || subtask.declarationMode;
+          const subtaskName = String(subtask.name || '').trim();
           
-          // Nếu không có declarationMode, thử extract từ type
-          if (!mode && (subtaskType || subtask.type)) {
-            const typeToCheck = subtaskType || subtask.type;
-            if (typeToCheck && typeToCheck.startsWith('form5_subtask_')) {
-              mode = typeToCheck.replace('form5_subtask_', '');
-            }
-          }
-          
-          if (mode) {
-            // Mở trực tiếp modal khai báo với chế độ đã chọn khi tạo subtask
-            handleF5DeclarationModeSelect(mode, taskId, subtaskId);
-            return;
-          } else {
-            // Nếu subtask không có declarationMode (trường hợp cũ), hiển thị thông báo
-            showToast('Tác vụ con này chưa có chế độ khai báo. Vui lòng tạo lại tác vụ con với chế độ khai báo.', 'error');
+          // "Kiểm tra và chuẩn bị tài liệu" → Mở "Gửi form báo cáo"
+          if (subtaskName === 'Kiểm tra và chuẩn bị tài liệu') {
+            openF5DeclarationSendTestTaskModal(taskId, subtaskId);
             return;
           }
+          
+          // "Hoàn thiện báo cáo và nghiệm thu" → Mở "Khai báo hoàn thành"
+          if (subtaskName === 'Hoàn thiện báo cáo và nghiệm thu') {
+            openF5DeclarationCompleteModal(taskId, subtaskId);
+            return;
+          }
+          
+          // Subtask khác không có chức năng khai báo
+          showToast('Tác vụ con này không có chức năng khai báo.', 'info');
+          return;
         }
       }
       
@@ -7529,77 +8670,14 @@
         modal.setAttribute('data-task-id', taskId);
         if (subtaskId) modal.setAttribute('data-subtask-id', subtaskId);
         
-        // Điền dữ liệu subtask vào form
-        if (subtaskId && task.subtasks) {
-          const subtask = task.subtasks.find(st => st.id === subtaskId);
-          if (subtask) {
-            // Hiển thị thông tin project và task cha (read-only)
-            const projectNameEl = document.getElementById('modal-f5-declaration-send-test-task-project-name');
-            const projectCodeEl = document.getElementById('modal-f5-declaration-send-test-task-project-code');
-            const parentTaskNameEl = document.getElementById('modal-f5-declaration-send-test-task-parent-task-name');
-            const parentTaskCodeEl = document.getElementById('modal-f5-declaration-send-test-task-parent-task-code');
-            
-            if (result.project) {
-              if (projectNameEl) projectNameEl.textContent = result.project.projectName || '-';
-              if (projectCodeEl) projectCodeEl.textContent = result.project.projectCode || '-';
-            }
-            if (parentTaskNameEl) parentTaskNameEl.textContent = task.taskName || '-';
-            if (parentTaskCodeEl) parentTaskCodeEl.textContent = task.taskCode || '-';
-            
-            // Điền dữ liệu subtask vào các input có thể chỉnh sửa
-            const subtaskNameInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-name');
-            const subtaskItemCodeInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-item-code');
-            const subtaskNoInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-no');
-            const subtaskPicInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-pic');
-            const subtaskManhourInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-manhour');
-            const subtaskTimesendInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-timesend');
-            const subtaskChecklistInput = document.getElementById('modal-f5-declaration-send-test-task-subtask-checklist');
-            const subtaskNoteTextarea = document.getElementById('modal-f5-declaration-send-test-task-subtask-note');
-            const checklistCurrentEl = document.getElementById('modal-f5-declaration-send-test-task-checklist-current');
-            
-            if (subtaskNameInput) subtaskNameInput.value = subtask.name || '';
-            if (subtaskItemCodeInput) subtaskItemCodeInput.value = subtask.itemCode || '';
-            if (subtaskNoInput) subtaskNoInput.value = subtask.subtaskNo ? `#${subtask.subtaskNo}` : '';
-            if (subtaskPicInput) subtaskPicInput.value = subtask.pic || '';
-            if (subtaskManhourInput) subtaskManhourInput.value = subtask.manhour || '';
-            
-            // Thời gian gửi mặc định là thời điểm mở modal
-            if (subtaskTimesendInput) {
-              const now = new Date();
-              const year = now.getFullYear();
-              const month = String(now.getMonth() + 1).padStart(2, '0');
-              const day = String(now.getDate()).padStart(2, '0');
-              const hours = String(now.getHours()).padStart(2, '0');
-              const minutes = String(now.getMinutes()).padStart(2, '0');
-              subtaskTimesendInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            }
-            
-            if (subtaskNoteTextarea) subtaskNoteTextarea.value = subtask.note || '';
-            
-            // Hiển thị file checklist hiện tại và link
-            const checklistNameEl = document.getElementById('modal-f5-declaration-send-test-task-checklist-name');
-            const checklistLinkEl = document.getElementById('modal-f5-declaration-send-test-task-checklist-link');
-            
-            if (subtask.checklist || subtask.checklistLink) {
-              // Hiển thị tên file
-              if (checklistNameEl) {
-                checklistNameEl.textContent = subtask.checklist || 'File đã tải lên';
-              }
-              
-              // Hiển thị link download nếu có
-              if (checklistLinkEl && subtask.checklistLink) {
-                checklistLinkEl.href = subtask.checklistLink;
-                checklistLinkEl.classList.remove('hidden');
-                checklistLinkEl.textContent = `Tải xuống: ${subtask.checklist || 'File'}`;
-              } else if (checklistLinkEl) {
-                checklistLinkEl.classList.add('hidden');
-              }
-            } else {
-              if (checklistNameEl) checklistNameEl.textContent = '-';
-              if (checklistLinkEl) checklistLinkEl.classList.add('hidden');
-            }
-          }
-        }
+        // Reset form
+        const attachmentInput = document.getElementById('modal-f5-declaration-send-test-task-attachment');
+        const attachmentNameSpan = document.getElementById('modal-f5-declaration-send-test-task-attachment-name');
+        const attachmentRemoveBtn = document.getElementById('modal-f5-declaration-send-test-task-attachment-remove');
+        
+        if (attachmentInput) attachmentInput.value = '';
+        if (attachmentNameSpan) attachmentNameSpan.textContent = 'Chưa chọn file';
+        if (attachmentRemoveBtn) attachmentRemoveBtn.classList.add('hidden');
       });
       
       if (!success) console.error('[Form 5] Failed to open send-test-task modal');
@@ -7653,12 +8731,12 @@
       }
       
       // Lấy dữ liệu từ form
-      const subtaskStatus = document.getElementById('modal-f5-declaration-send-test-task-status')?.value?.trim();
-      const subtaskResultLink = document.getElementById('modal-f5-declaration-send-test-task-result-link')?.value?.trim();
+      const attachmentInput = document.getElementById('modal-f5-declaration-send-test-task-attachment');
+      const attachmentFile = attachmentInput?.files?.[0];
       
       // Validate
-      if (!subtaskStatus) {
-        showToast('Vui lòng chọn trạng thái', 'error');
+      if (!attachmentFile) {
+        showToast('Vui lòng chọn file form báo cáo để đính kèm', 'error');
         return;
       }
       
@@ -7704,7 +8782,7 @@
         pic: currentSubtask?.pic || '',
         manhour: currentSubtask?.manhour || null,
         dueDate: null,
-        status: subtaskStatus, // Trạng thái từ form
+        status: currentSubtask?.status || 'Chưa triển khai', // Giữ nguyên trạng thái hiện tại
         timesend: currentSubtask?.timesend || null,
         finishTime: null,
         note: currentSubtask?.note || '',
@@ -7712,8 +8790,7 @@
         subtaskNo: currentSubtask?.subtaskNo || null,
         declarationMode: 'send-test-task',
         taskCode: qaNbCode,
-        itemCode: currentSubtask?.itemCode || '',
-        resultLink: subtaskResultLink || '' // Link kết quả
+        itemCode: currentSubtask?.itemCode || ''
       };
       
       // Format theo NocoDB để gửi yêu cầu cập nhật subtask
@@ -7770,14 +8847,18 @@
         // Gửi lên webhook để submit declaration
         const endpoint = 'https://iatzhxxuk.tino.page/webhook/form5-declaration-submit';
         
-        // Gửi JSON như bình thường
-        console.log('[Form 5] Sending declaration (JSON)');
+        // Tạo FormData để gửi file đính kèm
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(formattedData));
+        if (attachmentFile) {
+          formData.append('attachment', attachmentFile);
+        }
+        
+        // Gửi FormData với file đính kèm
+        console.log('[Form 5] Sending declaration with attachment');
         const response = await fetch(endpoint, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formattedData)
+          body: formData
         });
         
         if (!response.ok) {
@@ -7873,6 +8954,475 @@
       });
       
       if (!success) console.error('[Form 5] Failed to open review-fmea modal');
+    }
+    
+    // Hàm mở modal Khai báo hoàn thành
+    function openF5DeclarationCompleteModal(taskId, subtaskId = null) {
+      const result = findF5Task(taskId);
+      if (!result || !result.task) {
+        showToast('Không tìm thấy tác vụ', 'error');
+        return;
+      }
+      
+      const task = result.task;
+      let taskName = task.taskName || 'Tác vụ';
+      if (subtaskId && task.subtasks) {
+        const subtask = task.subtasks.find(st => st.id === subtaskId);
+        if (subtask) taskName = subtask.name || taskName;
+      }
+      
+      const success = openModal('f5-declaration-complete', (modal, config) => {
+        const taskNameEl = document.getElementById('modal-f5-declaration-complete-task-name');
+        if (taskNameEl) taskNameEl.textContent = taskName;
+        modal.setAttribute('data-task-id', taskId);
+        if (subtaskId) modal.setAttribute('data-subtask-id', subtaskId);
+        
+        // Set thông tin người nộp, mã, tác vụ
+        const uploaderNameEl = document.getElementById('modal-f5-declaration-complete-uploader-name');
+        const uploaderCodeEl = document.getElementById('modal-f5-declaration-complete-uploader-code');
+        const uploaderTaskEl = document.getElementById('modal-f5-declaration-complete-uploader-task');
+        const subtask = task.subtasks?.find(st => st.id === subtaskId);
+        if (uploaderNameEl) uploaderNameEl.textContent = subtask?.pic || task.pic || '';
+        if (uploaderCodeEl) uploaderCodeEl.textContent = subtask?.taskCode || task.taskCode || '';
+        if (uploaderTaskEl) uploaderTaskEl.textContent = subtask?.name || task.taskName || '';
+        
+        // Reset form - Gate 1
+        const pdfInput = document.getElementById('modal-f5-declaration-complete-file-pdfzip');
+        const xlsxInput = document.getElementById('modal-f5-declaration-complete-file-xlsxzip');
+        if (pdfInput) pdfInput.value = '';
+        if (xlsxInput) xlsxInput.value = '';
+        
+        // Reset radio buttons
+        document.querySelectorAll('input[name="modal-f5-declaration-complete-classification"]').forEach(el => el.checked = false);
+        document.querySelectorAll('input[name="modal-f5-declaration-complete-conclusion"]').forEach(el => el.checked = false);
+        document.querySelectorAll('input[name="modal-f5-declaration-complete-durability-choice"]').forEach(el => el.checked = false);
+        
+        // Reset Gate 2
+        const archiveG2 = document.getElementById('modal-f5-declaration-complete-file-archive-g2');
+        if (archiveG2) archiveG2.value = '';
+        document.querySelectorAll('input[name="modal-f5-declaration-complete-classification-g2"]').forEach(el => el.checked = false);
+        
+        // Reset BPS checkbox
+        const bpsCheckbox = document.getElementById('modal-f5-declaration-complete-upload-bps');
+        if (bpsCheckbox) bpsCheckbox.checked = true;
+        
+        // Reset durability date
+        const durDateWrap = document.getElementById('modal-f5-declaration-complete-durability-date-wrap');
+        const durDate = document.getElementById('modal-f5-declaration-complete-durability-date');
+        if (durDateWrap) durDateWrap.style.display = 'none';
+        if (durDate) durDate.value = '';
+        
+        // Hiển thị Gate 1, ẩn Gate 2
+        const gate1Title = document.getElementById('modal-f5-declaration-complete-gate1-title');
+        const gate2Div = document.getElementById('modal-f5-declaration-complete-gate2');
+        if (gate1Title) gate1Title.style.display = '';
+        if (gate2Div) gate2Div.style.display = 'none';
+        
+        // Enable submit button
+        const submitBtn = document.getElementById('modal-f5-declaration-complete-submit');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.style.pointerEvents = 'auto';
+          submitBtn.style.opacity = '1';
+        }
+        
+        // Kích hoạt tab Gate 1
+        const tabGate1 = document.getElementById('modal-f5-declaration-complete-tab-gate1');
+        const tabGate2 = document.getElementById('modal-f5-declaration-complete-tab-gate2');
+        if (tabGate1) {
+          tabGate1.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+          tabGate1.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+        }
+        if (tabGate2) {
+          tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+          tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+        }
+        
+        // Đảm bảo event listener được gắn
+        setTimeout(() => {
+          const completeSubmitBtn = document.getElementById('modal-f5-declaration-complete-submit');
+          if (completeSubmitBtn) {
+            // Gỡ listener cũ nếu có
+            completeSubmitBtn.removeEventListener('click', handleF5CompleteSubmit);
+            // Gắn listener mới
+            completeSubmitBtn.addEventListener('click', handleF5CompleteSubmit);
+            console.log('[Form 5] Submit button listener attached in modal open');
+          }
+        }, 100);
+      });
+      
+      if (!success) console.error('[Form 5] Failed to open complete modal');
+    }
+    
+    // Hàm xử lý submit cho modal Khai báo hoàn thành
+    async function handleF5CompleteSubmit(e) {
+      console.log('[Form 5] Submit button clicked', e);
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const modal = document.getElementById('modal-f5-declaration-complete');
+      if (!modal) {
+        console.error('[Form 5] Modal not found');
+        return;
+      }
+      
+      const taskId = modal.getAttribute('data-task-id');
+      const subtaskId = modal.getAttribute('data-subtask-id');
+      
+      if (!taskId || !subtaskId) {
+        showToast('Thiếu thông tin tác vụ hoặc tác vụ con', 'error');
+        return;
+      }
+      
+      // Xác định Gate đang active
+      const gate2Div = document.getElementById('modal-f5-declaration-complete-gate2');
+      const isGate2 = gate2Div && gate2Div.style.display !== 'none';
+      
+      // Lấy file upload
+      let fPdf = null;
+      let fXlsx = null;
+      let fArchive = null;
+      
+      if (isGate2) {
+        // Gate 2: chỉ file nén
+        const archiveInput = document.getElementById('modal-f5-declaration-complete-file-archive-g2');
+        if (!archiveInput || !archiveInput.files || archiveInput.files.length === 0) {
+          showToast('Vui lòng chọn tệp nén (.zip/.rar/.7z)', 'error');
+          return;
+        }
+        fArchive = archiveInput.files[0];
+        const ext = String(fArchive.name || '').toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+        if (!['zip', 'rar', '7z'].includes(ext)) {
+          showToast('Chỉ nhận tệp nén .zip/.rar/.7z cho Gate 2', 'error');
+          return;
+        }
+      } else {
+        // Gate 1: PDF và Excel
+        const pdfInput = document.getElementById('modal-f5-declaration-complete-file-pdfzip');
+        const xlsxInput = document.getElementById('modal-f5-declaration-complete-file-xlsxzip');
+        
+        // Validate file PDF (bắt buộc)
+        if (!pdfInput || !pdfInput.files || pdfInput.files.length === 0) {
+          showToast('Vui lòng chọn file PDF', 'error');
+          return;
+        }
+        fPdf = pdfInput.files[0];
+        const extPdf = String(fPdf.name || '').toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+        if (extPdf !== 'pdf') {
+          showToast('File PDF không đúng định dạng (.pdf)', 'error');
+          return;
+        }
+        
+        // Validate file Excel (bắt buộc)
+        if (!xlsxInput || !xlsxInput.files || xlsxInput.files.length === 0) {
+          showToast('Vui lòng chọn file Excel (.xlsx)', 'error');
+          return;
+        }
+        fXlsx = xlsxInput.files[0];
+        const extX = String(fXlsx.name || '').toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+        if (extX !== 'xlsx') {
+          showToast('File Excel không đúng định dạng (.xlsx)', 'error');
+          return;
+        }
+      }
+      
+      // Lấy các giá trị từ form
+      const classification = document.querySelector('input[name="modal-f5-declaration-complete-classification"]:checked')?.value || 
+                            document.querySelector('input[name="modal-f5-declaration-complete-classification-g2"]:checked')?.value || '';
+      const conclusion = document.querySelector('input[name="modal-f5-declaration-complete-conclusion"]:checked')?.value || '';
+      const durabilityChoice = document.querySelector('input[name="modal-f5-declaration-complete-durability-choice"]:checked')?.value || '';
+      const durabilityDate = document.getElementById('modal-f5-declaration-complete-durability-date')?.value || '';
+      const bpsCheckbox = document.getElementById('modal-f5-declaration-complete-upload-bps');
+      const bpsChecked = bpsCheckbox ? bpsCheckbox.checked : false;
+      
+      // Lấy các giá trị khác (nếu có)
+      const subtaskNote = ''; // Modal mới không có trường note riêng
+      const subtaskResultLink = ''; // Modal mới không có trường resultLink riêng
+      const subtaskStatus = 'done'; // Khai báo hoàn thành = done
+      
+      // Tìm subtask và project để lấy thông tin
+      const result = findF5Task(taskId);
+      if (!result || !result.task) {
+        showToast('Không tìm thấy tác vụ', 'error');
+        return;
+      }
+      
+      const projectCode = result.project?.projectCode || null;
+      const taskRequestCode = result.task.taskCode || '';
+      
+      // Lấy ID thực của subtask từ database
+      const subtaskDbId = subtaskId.replace('SUB-', '');
+      
+      // Tìm task ID thực từ database để làm parent_id
+      const taskDbId = taskId.replace('TASK-', '');
+      
+      // Lấy mã tác vụ từ subtask đã có
+      let qaNbCode = null;
+      if (result.task.subtasks) {
+        const subtask = result.task.subtasks.find(st => st.id === subtaskId);
+        if (subtask && subtask.taskCode) {
+          qaNbCode = subtask.taskCode;
+        }
+      }
+      // Nếu không có mã, tạo mới
+      if (!qaNbCode) {
+        qaNbCode = generateQANBCode();
+      }
+      
+      // Lấy thông tin subtask hiện tại để giữ lại các trường khác
+      let currentSubtask = null;
+      if (result.task.subtasks) {
+        currentSubtask = result.task.subtasks.find(st => st.id === subtaskId);
+      }
+      
+      // Chuẩn bị dữ liệu subtask đã chỉnh sửa
+      const subtaskData = {
+        name: currentSubtask?.name || '',
+        pic: currentSubtask?.pic || '',
+        manhour: currentSubtask?.manhour || null,
+        dueDate: null,
+        status: subtaskStatus, // Trạng thái từ form
+        timesend: currentSubtask?.timesend || null,
+        finishTime: null,
+        note: subtaskNote || currentSubtask?.note || '', // Ghi chú từ form hoặc giữ nguyên
+        checklist: currentSubtask?.checklist || '',
+        subtaskNo: currentSubtask?.subtaskNo || null,
+        declarationMode: 'complete',
+        taskCode: qaNbCode,
+        itemCode: currentSubtask?.itemCode || '',
+        resultLink: subtaskResultLink || '' // Link kết quả
+      };
+      
+      // Format theo NocoDB để gửi yêu cầu cập nhật subtask
+      const formattedData = formatSubtaskToNocoDB(subtaskData, taskDbId, projectCode);
+      
+      // Thêm ID của subtask để cập nhật
+      formattedData.Id = subtaskDbId;
+      
+      // Thêm TaskRequestCode để webhook biết task cha
+      formattedData.TaskRequestCode = taskRequestCode;
+      
+      // Thêm mã QA.NB vào dữ liệu gửi lên
+      formattedData.TaskCode = qaNbCode;
+      
+      // Thêm dữ liệu task chính (parent task) vào payload
+      const taskData = {
+        Id: taskDbId,
+        TaskRequestCode: taskRequestCode,
+        TaskCode: result.task.taskCode || '',
+        TaskName: result.task.taskName || '',
+        TaskItemName: result.task.taskName || '',
+        TaskItemCode: result.task.form4Data?.itemCode || '',
+        TaskRequesterName: result.task.requesterName || '',
+        TaskRequesterEmail: result.task.requesterEmail || '',
+        TaskRequestDate: result.task.createdAt || '',
+        TaskDeptRequest: result.task.department || '',
+        TaskPurpose: result.task.form4Data?.purpose || '',
+        TaskPIC: result.task.pic || '',
+        TaskStatus: result.task.status || 'pending',
+        TaskPriority: result.task.priority || 'Trung bình',
+        TaskDueDate: result.task.dueDate || null,
+        TaskDescription: result.task.description || '',
+        TaskAttachments: result.task.form4Data?.attachments || '',
+        project_code: projectCode || null,
+        TaskForm4Data: result.task.form4Data ? JSON.stringify(result.task.form4Data) : null
+      };
+      
+      // Thêm taskData vào payload
+      formattedData.taskData = taskData;
+      
+      // Thêm timestamp dạng YYYY-MM-DD HH:mm
+      formattedData.timestamp = getCurrentTimestamp();
+      
+      // Hiển thị loading
+      const submitBtn = document.getElementById('modal-f5-declaration-complete-submit');
+      const originalText = submitBtn?.textContent;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang gửi yêu cầu...';
+      }
+      
+      try {
+        // Tạo FormData để gửi file (giống Form 1)
+        const fd = new FormData();
+        
+        // Append files theo Gate
+        if (isGate2) {
+          // Gate 2: chỉ file nén
+          fd.append('file_archive', fArchive);
+          fd.append('file_name', fArchive.name || '');
+          fd.append('upload_type', 'archive_only');
+        } else {
+          // Gate 1: PDF và Excel
+          fd.append('file_pdfzip', fPdf);
+          fd.append('file_name', fPdf.name || '');
+          fd.append('file_xlsxzip', fXlsx);
+          fd.append('file_name_xlsx', fXlsx.name || '');
+          fd.append('upload_type', 'pdf_xlsx');
+        }
+        
+        // Timestamp
+        const formatDdMmYyyyHHmm = (date) => {
+          const d = new Date(date);
+          const day = String(d.getDate()).padStart(2, '0');
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const year = d.getFullYear();
+          const hours = String(d.getHours()).padStart(2, '0');
+          const minutes = String(d.getMinutes()).padStart(2, '0');
+          return `${day}/${month}/${year} ${hours}:${minutes}`;
+        };
+        fd.append('timestamp', formatDdMmYyyyHHmm(new Date()));
+        
+        // Thông tin người nộp và tác vụ
+        const subtask = result.task.subtasks?.find(st => st.id === subtaskId);
+        fd.append('nguoi_nop', subtask?.pic || result.task.pic || '');
+        fd.append('ma_tac_vu', qaNbCode || taskRequestCode);
+        fd.append('ten_tac_vu', subtask?.name || result.task.taskName || '');
+        fd.append('form', 'Form 5');
+        fd.append('system', '0'); // System khác 1
+        
+        // Thêm các trường từ form
+        if (classification) {
+          fd.append('phan_loai', classification);
+        }
+        if (conclusion) {
+          fd.append('ket_luan', conclusion);
+        }
+        if (durabilityChoice) {
+          fd.append('test_ben', durabilityChoice === 'co' ? 'Có test bền' : 'Không test bền');
+          if (durabilityChoice === 'co' && durabilityDate) {
+            fd.append('ngay_du_kien_tra_test_ben', durabilityDate);
+          }
+        }
+        if (bpsCheckbox) {
+          fd.append('is_bps', bpsChecked ? '1' : '0');
+        }
+        
+        // Thêm ID subtask nếu có
+        if (subtaskDbId) {
+          fd.append('id', String(subtaskDbId));
+        }
+        
+        // Thêm id_body từ subtask (nếu có)
+        if (currentSubtask && currentSubtask.idBody) {
+          fd.append('id_body', String(currentSubtask.idBody));
+        }
+        
+        // Meta JSON (giống Form 1)
+        const activeGate = isGate2 ? 'Gate 2' : 'Gate 1';
+        const uploadType = isGate2 ? 'archive_only' : 'pdf_xlsx';
+        const meta = {
+          action: 'form1_upload',
+          gate: activeGate,
+          person_name: subtask?.pic || result.task.pic || '',
+          taskId: qaNbCode || taskRequestCode,
+          code: qaNbCode || taskRequestCode,
+          taskName: subtask?.name || result.task.taskName || '',
+          ket_luan: isGate2 ? 'Báo cáo máy Base, rà soát tem nhãn' : (conclusion || ''),
+          phan_loai: classification || '',
+          test_ben: durabilityChoice === 'co' ? 'Có test bền' : (durabilityChoice === 'khong' ? 'Không test bền' : ''),
+          ngay_du_kien_tra_test_ben: durabilityDate || '',
+          is_bps: bpsChecked ? '1' : '0',
+          system: '0',
+          upload_type: uploadType,
+          timestamp_iso: new Date().toISOString(),
+          id_body: currentSubtask?.idBody || null // Thêm id_body vào metadata
+        };
+        fd.append('meta_json', JSON.stringify(meta));
+        fd.append('body', JSON.stringify(meta));
+        fd.append('action', 'form1_upload');
+        fd.append('gate', activeGate);
+        
+        // Gửi đồng thời 3 webhook
+        const UPLOAD_URL_1 = 'https://iatzhxxuk.tino.page/webhook/TrabaocaoDQA';
+        const UPLOAD_URL_2 = 'https://iatzhxxuk.tino.page/webhook/TrabaocaoSPMdqa';
+        const UPDATE_URL = 'https://iatzhxxuk.tino.page/webhook/form5-declaration-submit';
+        
+        console.log('[Form 5] Sending complete declaration to 3 webhooks simultaneously');
+        
+        // Gửi đồng thời: 2 webhook upload file và 1 webhook cập nhật subtask
+        const [uploadResponse1, uploadResponse2, updateResponse] = await Promise.all([
+          // Webhook 1: TrabaocaoDQA
+          fetch(UPLOAD_URL_1, {
+            method: 'POST',
+            body: fd,
+            mode: 'no-cors'
+          }),
+          // Webhook 2: TrabaocaoSPMdqa
+          fetch(UPLOAD_URL_2, {
+            method: 'POST',
+            body: fd,
+            mode: 'no-cors'
+          }),
+          // Webhook 3: Cập nhật subtask status
+          fetch(UPDATE_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formattedData)
+          })
+        ]);
+        
+        // Vì mode: 'no-cors', không thể kiểm tra uploadResponse.ok
+        console.log('[Form 5] File upload sent to both webhooks (TrabaocaoDQA and TrabaocaoSPMdqa)');
+        
+        // Kiểm tra response của webhook cập nhật subtask
+        if (!updateResponse.ok) {
+          throw new Error(`HTTP error! status: ${updateResponse.status}`);
+        }
+        
+        // Kiểm tra và parse JSON response
+        let responseData = null;
+        try {
+          const responseText = await updateResponse.text();
+          if (responseText && responseText.trim()) {
+            responseData = JSON.parse(responseText);
+            console.log('[Form 5] Subtask updated:', responseData);
+          } else {
+            console.log('[Form 5] Subtask update response is empty, but request succeeded');
+          }
+        } catch (jsonError) {
+          console.warn('[Form 5] Response is not valid JSON, but request may have succeeded:', jsonError);
+          // Không throw error vì webhook có thể đã xử lý thành công dù response không phải JSON
+        }
+        
+        // Hiển thị mã đã tạo trong toast
+        showToast(`Đã gửi báo cáo và cập nhật thành công. Mã tác vụ: ${qaNbCode}`, 'success', 5000);
+        
+        // Đóng modal
+        closeModal('f5-declaration-complete');
+        
+        // Reload dữ liệu từ server để hiển thị cập nhật
+        try {
+          const taskIdToExpand = taskId;
+          F5_PROJECTS = await loadF5Projects(F5_FILTER_PIC);
+          
+          const resultAfterReload = findF5Task(taskIdToExpand);
+          if (resultAfterReload && resultAfterReload.task) {
+            resultAfterReload.task.expanded = true;
+            if (resultAfterReload.project) {
+              resultAfterReload.project.expanded = true;
+            }
+          }
+          
+          renderF5TasksTable();
+        } catch (reloadError) {
+          console.error('[Form 5] Failed to reload data:', reloadError);
+          showToast('Đã gửi yêu cầu nhưng không thể tải lại dữ liệu. Vui lòng làm mới trang.', 'warning');
+          renderF5TasksTable();
+        }
+        
+      } catch (error) {
+        console.error('[Form 5] Failed to submit subtask update:', error);
+        showToast('Gửi yêu cầu thất bại. Vui lòng thử lại.', 'error');
+      } finally {
+        // Restore button
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          if (originalText) submitBtn.textContent = originalText;
+        }
+      }
     }
     
     // ============================================
@@ -8229,7 +9779,7 @@
                   </div>
                   <div>
                     <label class="text-xs font-semibold text-gray-500 uppercase">Ngày hết hạn</label>
-                    <p class="text-base text-gray-900 mt-1">${formatF5Date(subtask.dueDate) || '-'}</p>
+                    <p class="text-base text-gray-900 mt-1">${formatF5Date(subtask.deadline || subtask.dueDate) || '-'}</p>
                   </div>
                 </div>
               </div>
@@ -8651,6 +10201,71 @@
       initModalListeners('f5-declaration-send-test-task');
       initModalListeners('f5-declaration-review-4m');
       initModalListeners('f5-declaration-review-fmea');
+      initModalListeners('f5-declaration-complete');
+      
+      // Setup tabs và event listeners cho modal f5-declaration-complete
+      (function setupF5CompleteModalTabs() {
+        const tabGate1 = document.getElementById('modal-f5-declaration-complete-tab-gate1');
+        const tabGate2 = document.getElementById('modal-f5-declaration-complete-tab-gate2');
+        const gate1Title = document.getElementById('modal-f5-declaration-complete-gate1-title');
+        const gate2Div = document.getElementById('modal-f5-declaration-complete-gate2');
+        const uploadForm1Split = document.getElementById('modal-f5-declaration-complete-upload-form1-split');
+        const classificationGroup = document.getElementById('modal-f5-declaration-complete-classification-group');
+        const conclusionGroup = document.getElementById('modal-f5-declaration-complete-conclusion-group');
+        const durabilityGroup = document.getElementById('modal-f5-declaration-complete-durability-group');
+        
+        function activateGate1() {
+          if (tabGate1) {
+            tabGate1.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate1.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (tabGate2) {
+            tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (gate1Title) gate1Title.style.display = '';
+          if (gate2Div) gate2Div.style.display = 'none';
+          if (uploadForm1Split) uploadForm1Split.style.display = '';
+          if (classificationGroup) classificationGroup.style.display = '';
+          if (conclusionGroup) conclusionGroup.style.display = '';
+          if (durabilityGroup) durabilityGroup.style.display = '';
+        }
+        
+        function activateGate2() {
+          if (tabGate1) {
+            tabGate1.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate1.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (tabGate2) {
+            tabGate2.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate2.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (gate1Title) gate1Title.style.display = 'none';
+          if (gate2Div) gate2Div.style.display = '';
+          if (uploadForm1Split) uploadForm1Split.style.display = 'none';
+          if (classificationGroup) classificationGroup.style.display = 'none';
+          if (conclusionGroup) conclusionGroup.style.display = 'none';
+          if (durabilityGroup) durabilityGroup.style.display = 'none';
+        }
+        
+        if (tabGate1) {
+          tabGate1.addEventListener('click', activateGate1);
+        }
+        if (tabGate2) {
+          tabGate2.addEventListener('click', activateGate2);
+        }
+        
+        // Xử lý radio button "Có test bền" để hiển thị date picker
+        const durabilityRadios = document.querySelectorAll('input[name="modal-f5-declaration-complete-durability-choice"]');
+        const durDateWrap = document.getElementById('modal-f5-declaration-complete-durability-date-wrap');
+        durabilityRadios.forEach(radio => {
+          radio.addEventListener('change', function() {
+            if (durDateWrap) {
+              durDateWrap.style.display = (this.value === 'co') ? '' : 'none';
+            }
+          });
+        });
+      })();
       
       // Khởi tạo modal listeners cho modal xem chi tiết
       initModalListeners('f5-view-detail');
@@ -8685,12 +10300,53 @@
         }
       });
       
+      // Xử lý file upload cho modal send-test-task
+      const attachmentInput = document.getElementById('modal-f5-declaration-send-test-task-attachment');
+      const attachmentBtn = document.getElementById('modal-f5-declaration-send-test-task-attachment-btn');
+      const attachmentNameSpan = document.getElementById('modal-f5-declaration-send-test-task-attachment-name');
+      const attachmentRemoveBtn = document.getElementById('modal-f5-declaration-send-test-task-attachment-remove');
+      
+      if (attachmentBtn && attachmentInput) {
+        attachmentBtn.addEventListener('click', () => {
+          attachmentInput.click();
+        });
+      }
+      
+      if (attachmentInput && attachmentNameSpan && attachmentRemoveBtn) {
+        attachmentInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            attachmentNameSpan.textContent = file.name;
+            attachmentRemoveBtn.classList.remove('hidden');
+          } else {
+            attachmentNameSpan.textContent = 'Chưa chọn file';
+            attachmentRemoveBtn.classList.add('hidden');
+          }
+        });
+      }
+      
+      if (attachmentRemoveBtn && attachmentInput && attachmentNameSpan) {
+        attachmentRemoveBtn.addEventListener('click', () => {
+          attachmentInput.value = '';
+          attachmentNameSpan.textContent = 'Chưa chọn file';
+          attachmentRemoveBtn.classList.add('hidden');
+        });
+      }
+      
       // Xử lý submit cho modal send-test-task
       const sendTestTaskSubmitBtn = document.getElementById('modal-f5-declaration-send-test-task-submit');
       if (sendTestTaskSubmitBtn && !sendTestTaskSubmitBtn._submitListenerAttached) {
         sendTestTaskSubmitBtn._submitListenerAttached = true;
         sendTestTaskSubmitBtn.addEventListener('click', handleF5SendTestTaskSubmit);
         console.log('[Form 5] Send test task submit listener attached');
+      }
+      
+      // Xử lý submit cho modal complete
+      const completeSubmitBtn = document.getElementById('modal-f5-declaration-complete-submit');
+      if (completeSubmitBtn && !completeSubmitBtn._submitListenerAttached) {
+        completeSubmitBtn._submitListenerAttached = true;
+        completeSubmitBtn.addEventListener('click', handleF5CompleteSubmit);
+        console.log('[Form 5] Complete submit listener attached');
       }
       
       // Test: Thêm hàm global để test modal
@@ -8706,176 +10362,7 @@
       console.log('[Form 5] Test function available: window.testF5Modal()');
     });
 
-    function renderF6Dashboard() {
-      // Tính toán stats
-      const runningProjects = F5_PROJECTS.filter(p => p.status === 'in_progress').length;
-      const allTasks = getF5AllTasks();
-      const dueSoonTasks = allTasks.filter(t => {
-        if (!t.dueDate) return false;
-        const dueDate = new Date(t.dueDate);
-        const today = new Date();
-        const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-        return diffDays >= 0 && diffDays <= 7 && t.status !== 'done';
-      }).length;
-      
-      const allMembers = new Set();
-      F5_PROJECTS.forEach(project => {
-        if (project.pic) allMembers.add(project.pic);
-        if (project.tasks) {
-          project.tasks.forEach(task => {
-            if (task.pic) allMembers.add(task.pic);
-            if (task.subtasks) {
-              task.subtasks.forEach(st => {
-                if (st.pic) allMembers.add(st.pic);
-              });
-            }
-          });
-        }
-      });
-      
-      const totalProgress = F5_PROJECTS.length > 0 
-        ? Math.round(F5_PROJECTS.reduce((sum, p) => sum + calculateProjectProgress(p), 0) / F5_PROJECTS.length)
-        : 0;
-
-      // Cập nhật stats
-      const statsRunning = document.getElementById('f6-stats-running');
-      const statsDue = document.getElementById('f6-stats-due');
-      const statsMembers = document.getElementById('f6-stats-members');
-      const statsProgress = document.getElementById('f6-stats-progress');
-      
-      if (statsRunning) statsRunning.textContent = runningProjects;
-      if (statsDue) statsDue.textContent = dueSoonTasks;
-      if (statsMembers) statsMembers.textContent = allMembers.size;
-      if (statsProgress) statsProgress.textContent = `${totalProgress}%`;
-
-      // Render bảng projects
-      renderF6ProjectsTable();
-    }
-
-    function renderF6ProjectsTable(filterStatus = 'all') {
-      const tbody = document.getElementById('f6-projectsTableBody');
-      if (!tbody) return;
-
-      let filteredProjects = [...F5_PROJECTS];
-      if (filterStatus !== 'all') {
-        filteredProjects = filteredProjects.filter(p => p.status === filterStatus);
-      }
-
-      if (filteredProjects.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500 text-base">Chưa có dự án nào.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = filteredProjects.map(project => {
-        const progress = calculateProjectProgress(project);
-        const progressColor = progress === 100 ? 'bg-green-600' : progress >= 50 ? 'bg-primary-blue' : 'bg-yellow-500';
-        const statusBadge = getF6ProjectStatusBadge(project.status);
-        
-        return `
-          <tr class="bg-white border-b hover:bg-gray-50 transition-colors f6-project-row cursor-pointer" data-project-id="${project.id}">
-            <td class="px-6 py-4">
-              <div class="font-bold text-gray-900 f6-project-name">${project.projectName}</div>
-              <div class="text-xs text-gray-500">${project.description || ''}</div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-2">
-                <div class="w-24 bg-gray-200 rounded-full h-2">
-                  <div class="${progressColor} h-2 rounded-full" style="width: ${progress}%"></div>
-                </div>
-                <span class="font-medium text-gray-700">${progress}%</span>
-              </div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-2">
-                <span class="font-medium text-gray-800">${project.pic || '-'}</span>
-              </div>
-            </td>
-            <td class="px-6 py-4 font-medium text-gray-800">${formatF5Date(project.dueDate)}</td>
-            <td class="px-6 py-4">${statusBadge}</td>
-            <td class="px-6 py-4 text-right">
-              <button type="button" class="f6-view-project-detail-btn text-gray-500 hover:text-gray-800" data-project-id="${project.id}">
-                <span class="material-symbols-outlined">more_horiz</span>
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-      
-      // Gắn event listeners cho project rows
-      setupF6ProjectEventListeners();
-    }
-
-    function getF6ProjectStatusBadge(status) {
-      const statusMap = {
-        'pending': { text: 'Tạm dừng', class: 'bg-yellow-100 text-yellow-700' },
-        'in_progress': { text: 'Đang tiến hành', class: 'bg-purple-100 text-purple-700' },
-        'done': { text: 'Hoàn thành', class: 'bg-green-100 text-green-700' }
-      };
-      const statusInfo = statusMap[status] || statusMap['pending'];
-      return `<span class="text-xs font-medium ${statusInfo.class} py-1 px-2.5 rounded-full">${statusInfo.text}</span>`;
-    }
-
-    function setupF6Filters() {
-      const filterBtns = document.querySelectorAll('.f6-filter-btn');
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const filterBtn = e.target.closest('.f6-filter-btn');
-          if (!filterBtn) return;
-          const filter = filterBtn.getAttribute('data-filter');
-          
-          // Update active state
-          filterBtns.forEach(b => {
-            b.classList.remove('bg-primary-blue/10');
-            b.classList.add('bg-gray-100');
-            const p = b.querySelector('p');
-            if (p) {
-              p.classList.remove('text-primary-blue', 'font-semibold');
-              p.classList.add('text-gray-700', 'font-medium');
-            }
-          });
-          
-          filterBtn.classList.remove('bg-gray-100');
-          filterBtn.classList.add('bg-primary-blue/10');
-          const p = filterBtn.querySelector('p');
-          if (p) {
-            p.classList.remove('text-gray-700', 'font-medium');
-            p.classList.add('text-primary-blue', 'font-semibold');
-          }
-          
-          renderF6ProjectsTable(filter);
-        });
-      });
-    }
-
-    function setupF6Search() {
-      const searchInput = document.getElementById('f6-searchInput');
-      if (!searchInput) return;
-      
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        const tbody = document.getElementById('f6-projectsTableBody');
-        if (!tbody) return;
-        
-        const rows = tbody.querySelectorAll('tr');
-        rows.forEach(row => {
-          const text = row.textContent.toLowerCase();
-          row.style.display = text.includes(query) ? '' : 'none';
-        });
-      });
-    }
-
-    // Event listener cho tbody Form 6 - chỉ gắn một lần
-    let f6TbodyListenerAttached = false;
-    
-    function setupF6ProjectEventListeners() {
-      const tbody = document.getElementById('f6-projectsTableBody');
-      if (!tbody) return;
-      
-      // Chỉ gắn listener một lần
-      if (f6TbodyListenerAttached) return;
-      f6TbodyListenerAttached = true;
-      
-    }
+    // Các hàm cũ đã được thay thế bằng hàm mới ở trên
 
 
   </script>
