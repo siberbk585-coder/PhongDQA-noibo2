@@ -280,8 +280,8 @@
           <p class="text-sm font-semibold">Form 2 - Rà soát CE</p>
         </button>
         <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-text-light-secondary text-left text-sm" data-target="form3">
-          <span class="material-symbols-outlined text-xl">upload_file</span>
-          <p class="text-sm font-semibold">Form 3 - Upload Excel</p>
+          <span class="material-symbols-outlined text-xl">table_chart</span>
+          <p class="text-sm font-semibold">Form 3 - Quản lý dự án</p>
         </button>
         <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-text-light-secondary text-left text-sm" data-target="form4">
           <span class="material-symbols-outlined text-xl">assignment</span>
@@ -294,6 +294,10 @@
         <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-text-light-secondary text-left text-sm" data-target="form6">
           <span class="material-symbols-outlined text-xl">space_dashboard</span>
           <p class="text-sm font-semibold">Form 6 - Dashboard Thống kê</p>
+        </button>
+        <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-text-light-secondary text-left text-sm" data-target="form7">
+          <span class="material-symbols-outlined text-xl">analytics</span>
+          <p class="text-sm font-semibold">Form 7 - Dashboard Dữ liệu Excel</p>
         </button>
       </nav>
     </div>
@@ -462,97 +466,150 @@
       </div>
     </section>
 
-    <!-- Form 3 - Upload Excel -->
-    <section id="form3" class="w-full bg-white p-6 rounded-lg shadow-md hidden">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-semibold text-blue-800">Form 3 - Upload Excel</h2>
-      </div>
-
-      <!-- Upload file -->
-      <div id="section-upload" class="mb-6 hidden">
-        <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">Upload file Excel</h3>
-        
-        <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 max-w-md">
-          <label class="block text-sm font-medium text-gray-700 mb-2">File Excel (.xlsx)</label>
-          <div class="flex flex-col gap-2">
-            <input type="file" id="f3-excel-file" accept=".xlsx,.xls" class="hidden">
-            <button id="f3-excel-file-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file Excel</button>
-            <div class="flex items-center gap-2">
-              <span id="f3-excel-file-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
-              <button id="f3-excel-file-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
-            </div>
+    <!-- Form 3 - Quản lý dự án -->
+    <section id="form3" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
+      <div class="mx-auto flex w-full flex-col gap-6">
+        <!-- Page Heading -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <p class="text-4xl font-black leading-tight tracking-tighter text-gray-900">Quản lý dự án</p>
+            <p class="text-base font-normal text-gray-600">Xem và quản lý dữ liệu dự án theo cấu trúc Epic - Story - Subtask.</p>
           </div>
-        </div>
-      </div>
-
-      <!-- Nút gửi -->
-      <div class="flex justify-center mb-6 hidden">
-        <button id="f3-submit-btn" class="px-8 py-3 rounded-lg text-white font-semibold bg-primary-blue hover:brightness-105 submit-btn">
-          Tải lên server
-        </button>
-      </div>
-
-      <!-- Bảng thống kê -->
-      <div id="f3-statistics-section" class="mb-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2">Bảng thống kê</h3>
           <div class="flex items-center gap-3">
-            <button id="f3-load-statistics-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-              </svg>
-              Tải dữ liệu thống kê
+            <button id="f3-load-data-btn" class="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md hover:shadow-lg">
+              <span class="material-symbols-outlined">refresh</span>
+              <span>Tải dữ liệu</span>
             </button>
-            <div id="f3-statistics-loading" class="hidden flex items-center gap-2 text-blue-600">
-              <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span>Đang tải...</span>
+            <button id="f3-export-btn" class="flex items-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium shadow-md hover:shadow-lg">
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>Xuất Excel</span>
+            </button>
+          </div>
+      </div>
+
+        <!-- Upload Section -->
+        <div class="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 p-6 shadow-sm hidden">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Upload File Excel</h3>
+            <span class="text-xs text-gray-500">Hỗ trợ .xlsx, .xls</span>
+          </div>
+          
+          <div id="f3-drop-zone" class="relative border-2 border-dashed border-blue-300 rounded-lg p-8 text-center bg-white hover:border-blue-500 transition-colors cursor-pointer">
+            <input type="file" id="f3-excel-file" accept=".xlsx,.xls" class="hidden">
+            <div id="f3-drop-content" class="flex flex-col items-center gap-3">
+              <span class="material-symbols-outlined text-5xl text-blue-500">cloud_upload</span>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Kéo thả file Excel vào đây</p>
+                <p class="text-xs text-gray-500 mt-1">hoặc click để chọn file</p>
             </div>
           </div>
+            <div id="f3-file-info" class="hidden flex items-center justify-between gap-3 mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+              <div class="flex items-center gap-3 flex-1">
+                <span class="material-symbols-outlined text-green-600">description</span>
+                <div class="flex-1 text-left">
+                  <p id="f3-file-name" class="text-sm font-medium text-gray-900"></p>
+                  <p id="f3-file-size" class="text-xs text-gray-500"></p>
+        </div>
+      </div>
+              <button id="f3-file-remove" class="text-red-500 hover:text-red-700 transition">
+                <span class="material-symbols-outlined">close</span>
+        </button>
+            </div>
+      </div>
+
+          <div class="flex items-center justify-center gap-3 mt-4">
+            <button id="f3-submit-btn" class="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              <span class="material-symbols-outlined">upload</span>
+              <span>Tải lên server</span>
+            </button>
+            </div>
+          </div>
+
+        <!-- Search and Filter -->
+        <div class="flex flex-wrap items-center gap-4 rounded-lg bg-white p-4 shadow-sm border border-gray-200">
+          <div class="relative flex-1 min-w-[250px]">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+            <input id="f3-search-input" type="text" placeholder="Tìm kiếm..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm">
+          </div>
+          <select id="f3-filter-status" class="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[150px]">
+            <option value="">Tất cả trạng thái</option>
+            <option value="hoàn thành đúng hạn">Hoàn thành đúng hạn</option>
+            <option value="đang triển khai">Đang triển khai</option>
+            <option value="chưa triển khai">Chưa triển khai</option>
+            <option value="cancelled">Đã hủy</option>
+          </select>
+          <select id="f3-filter-assignee" class="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[180px]">
+            <option value="">Tất cả người thực hiện</option>
+            <!-- Options sẽ được populate bằng JavaScript -->
+          </select>
+          <select id="f3-filter-level" class="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[160px]">
+            <option value="all">Tất cả cấp</option>
+            <option value="story">Story và Subtask</option>
+            <option value="subtask">Chỉ Subtask</option>
+          </select>
         </div>
 
-        <div class="border border-gray-200 rounded-lg shadow-md overflow-x-auto" style="max-height: calc(100vh - 200px); overflow-y: auto;">
-          <table class="w-full text-sm border-collapse">
-            <thead class="bg-gradient-to-r from-blue-100 to-blue-50 sticky top-0 z-10">
-              <tr class="text-left text-gray-700">
-                <th class="px-3 py-3 min-w-[80px] border border-gray-300 whitespace-nowrap">Id</th>
-                <th class="px-3 py-3 min-w-[220px] border border-gray-300 whitespace-nowrap">Epic</th>
-                <th class="px-3 py-3 min-w-[220px] border border-gray-300 whitespace-nowrap">Story</th>
-                <th class="px-3 py-3 min-w-[280px] border border-gray-300 whitespace-nowrap">Sub-task</th>
-                <th class="px-3 py-3 min-w-[140px] border border-gray-300 whitespace-nowrap">Groupcode</th>
-                <th class="px-3 py-3 min-w-[160px] border border-gray-300 whitespace-nowrap">Tên nhân viên</th>
-                <th class="px-3 py-3 min-w-[130px] border border-gray-300 whitespace-nowrap">Ngày bắt đầu</th>
-                <th class="px-3 py-3 min-w-[130px] border border-gray-300 whitespace-nowrap">Hạn hoàn thành</th>
-                <th class="px-3 py-3 min-w-[130px] border border-gray-300 whitespace-nowrap">Ngày hoàn thành</th>
-                <th class="px-3 py-3 min-w-[140px] border border-gray-300 whitespace-nowrap">Trạng thái</th>
-                <th class="px-3 py-3 min-w-[130px] border border-gray-300 whitespace-nowrap">Category</th>
-                <th class="px-3 py-3 min-w-[130px] border border-gray-300 whitespace-nowrap">Jira Key</th>
-                <th class="px-3 py-3 min-w-[220px] border border-gray-300 whitespace-nowrap">Ghi chú (jira_note)</th>
-                <th class="px-3 py-3 min-w-[130px] border border-gray-300 whitespace-nowrap">Tháng (month_key)</th>
-                <th class="px-3 py-3 min-w-[200px] border border-gray-300 whitespace-nowrap">Text</th>
-                <th class="px-3 py-3 min-w-[180px] border border-gray-300 whitespace-nowrap">Ngày tạo</th>
-                <th class="px-3 py-3 min-w-[180px] border border-gray-300 whitespace-nowrap">Ngày cập nhật</th>
+        <!-- Hierarchical Data Table -->
+        <div class="rounded-lg bg-white shadow-sm border border-gray-200 overflow-hidden">
+          <div class="overflow-x-auto overflow-y-auto" style="max-height: calc(100vh - 400px); scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9;">
+            <style>
+              .f3-table-scroll::-webkit-scrollbar {
+                height: 12px;
+                width: 12px;
+              }
+              .f3-table-scroll::-webkit-scrollbar-track {
+                background: #f1f5f9;
+                border-radius: 6px;
+              }
+              .f3-table-scroll::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 6px;
+                border: 2px solid #f1f5f9;
+              }
+              .f3-table-scroll::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+              }
+            </style>
+            <div class="f3-table-scroll">
+              <table class="w-full text-sm" style="min-width: 2000px; table-layout: fixed;">
+              <thead class="bg-gradient-to-r from-blue-50 to-indigo-50 sticky top-0 z-10 border-b border-gray-200">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 50px; min-width: 50px;"></th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 300px; min-width: 300px;">Tên công việc</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 150px; min-width: 150px;">Work Group</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 180px; min-width: 180px;">Work Type</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 180px; min-width: 180px;">Người thực hiện</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 130px; min-width: 130px;">Ngày bắt đầu</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 140px; min-width: 140px;">Hạn hoàn thành</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 140px; min-width: 140px;">Ngày hoàn thành</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 140px; min-width: 140px;">Trạng thái</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 150px; min-width: 150px;">Jira Key</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 300px; min-width: 300px;">Note</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700" style="width: 140px; min-width: 140px;">Khai báo thay đổi</th>
               </tr>
             </thead>
-            <tbody id="f3-statistics-body" class="divide-y divide-gray-200 bg-white">
-              <tr><td class="px-3 py-4 text-center text-gray-500" colspan="17">Chưa có dữ liệu. Vui lòng nhấn "Tải dữ liệu thống kê" để tải dữ liệu.</td></tr>
+              <tbody id="f3-table-body" class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td colspan="12" class="px-6 py-8 text-center text-gray-500">
+                    <div class="flex flex-col items-center gap-2">
+                      <span class="material-symbols-outlined text-4xl text-gray-300">table_chart</span>
+                      <p>Chưa có dữ liệu. Vui lòng tải dữ liệu hoặc upload file Excel.</p>
+                    </div>
+                  </td>
+                </tr>
             </tbody>
           </table>
+            </div>
         </div>
       </div>
 
-      <!-- Kết quả trả về -->
-      <div id="f3-result" class="hidden">
-        <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">Kết quả trả về</h3>
-        
-        <div class="border border-gray-200 rounded-lg bg-gray-50 p-4">
-          <div class="flex items-center justify-between mb-2">
-            <label class="block text-sm font-medium text-gray-700">Response:</label>
-            <button id="f3-copy-result" class="px-3 py-1 text-xs rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Copy</button>
-          </div>
-          <pre id="f3-result-content" class="bg-white border border-gray-300 rounded p-4 overflow-auto max-h-[60vh] text-sm font-mono text-gray-800 whitespace-pre-wrap">Chưa có kết quả</pre>
+        <!-- Loading Indicator -->
+        <div id="f3-loading" class="hidden flex items-center justify-center gap-2 text-blue-600 py-4">
+          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Đang tải...</span>
         </div>
       </div>
     </section>
@@ -705,6 +762,7 @@
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Ngày gửi</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Ngày hết hạn</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Trạng thái</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Số giờ thực hiện</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Mã tác vụ</th>
                   <th class="w-auto p-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600"></th>
                 </tr>
@@ -854,6 +912,152 @@
                 <!-- Dữ liệu sẽ được render bằng JavaScript -->
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form 7 - Dashboard Dữ liệu Excel -->
+    <section id="form7" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
+      <div class="mx-auto flex w-full flex-col gap-6">
+        <!-- Page Heading -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <p class="text-4xl font-black leading-tight tracking-tighter text-gray-900">Dashboard Dữ liệu Excel</p>
+            <p class="text-base font-normal text-gray-600">Thống kê và phân tích dữ liệu từ Excel.</p>
+          </div>
+          <button id="f7-refresh-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
+            <span class="material-symbols-outlined text-lg">refresh</span>
+            <span>Tải lại</span>
+          </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-blue-600 text-sm font-medium mb-1">Tổng Epic</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-epics">0</p>
+              </div>
+              <div class="p-3 bg-blue-200 rounded-lg">
+                <span class="material-symbols-outlined text-blue-700 text-2xl">folder</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-purple-600 text-sm font-medium mb-1">Tổng Story</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-stories">0</p>
+              </div>
+              <div class="p-3 bg-purple-200 rounded-lg">
+                <span class="material-symbols-outlined text-purple-700 text-2xl">description</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-green-50 to-green-100 border border-green-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-green-600 text-sm font-medium mb-1">Tổng Subtask</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-subtasks">0</p>
+              </div>
+              <div class="p-3 bg-green-200 rounded-lg">
+                <span class="material-symbols-outlined text-green-700 text-2xl">task</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-orange-600 text-sm font-medium mb-1">Tỷ lệ Hoàn thành</p>
+                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-completion">0%</p>
+              </div>
+              <div class="p-3 bg-orange-200 rounded-lg">
+                <span class="material-symbols-outlined text-orange-700 text-2xl">trending_up</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ASSIGNEE FOCUS SECTION -->
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-3xl text-blue-600">people</span>
+            <h2 class="text-2xl font-bold text-gray-900">Dashboard Phân tích theo Người thực hiện</h2>
+          </div>
+        </div>
+
+        <!-- Main Content Row: Assignee Progress + Status Table -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+          <!-- Assignee Progress Overview - Biểu đồ cột (2/3 width) -->
+          <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-blue-600">trending_up</span>
+              <h3 class="text-lg font-semibold text-gray-900">Tiến độ hoàn thành theo Người thực hiện</h3>
+            </div>
+            <div id="f7-assignee-progress" class="w-full">
+              <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
+            </div>
+          </div>
+
+          <!-- Status Breakdown Table - Gọn lại (1/3 width) -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
+            <div class="p-3 border-b border-gray-200 flex-shrink-0">
+              <h3 class="text-sm font-semibold text-gray-900">Chi tiết theo Trạng thái</h3>
+            </div>
+            <div class="overflow-x-auto overflow-y-auto flex-1" style="max-height: calc(200px + 3rem);">
+              <table class="w-full text-xs">
+                <thead class="bg-gray-50 sticky top-0">
+                  <tr>
+                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">Trạng thái</th>
+                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">SL</th>
+                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">%</th>
+                  </tr>
+                </thead>
+                <tbody id="f7-status-table-body" class="divide-y divide-gray-200">
+                  <tr>
+                    <td colspan="3" class="px-2 py-3 text-center text-gray-500 text-xs">Chưa có dữ liệu</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phân bổ Task và Task đến hạn - Grid 2 cột -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Phân bổ Task - Biểu đồ tròn (1/2 width) -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-indigo-600">pie_chart</span>
+              <h3 class="text-lg font-semibold text-gray-900">Phân bổ Task theo Người thực hiện</h3>
+            </div>
+            <div id="f7-chart-assignee" class="min-h-[300px] flex items-center justify-center">
+              <p class="text-gray-500 text-center">Chưa có dữ liệu</p>
+            </div>
+          </div>
+
+          <!-- Task đến hạn (1/2 width) -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-red-600">schedule</span>
+              <h3 class="text-lg font-semibold text-gray-900">Các Task đến hạn</h3>
+            </div>
+            <div id="f7-due-tasks" class="min-h-[300px]">
+              <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assignee Details -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-green-600">person</span>
+            <h3 class="text-lg font-semibold text-gray-900">Chi tiết theo từng Người thực hiện</h3>
+          </div>
+          <div id="f7-assignee-details" class="min-h-[200px]">
+            <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
           </div>
         </div>
       </div>
@@ -1674,6 +1878,85 @@
   </div>
   <!-- ============================================ -->
   <!-- END MODAL SYSTEM - FORM 4: SELECT COMPONENT STANDARD -->
+  <!-- ============================================ -->
+
+  <!-- ============================================ -->
+  <!-- MODAL SYSTEM - FORM 3: DECLARATION (Khai báo thay đổi) -->
+  <!-- ============================================ -->
+  <div id="modal-f3-declaration" class="modal-container modal-f3-declaration fixed inset-0 z-50 hidden" style="display: none;">
+    <div id="modal-f3-declaration-overlay" class="modal-overlay modal-f3-declaration-overlay fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
+    <div id="modal-f3-declaration-content" class="modal-content modal-f3-declaration-content fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+      <div class="w-full max-w-3xl rounded-xl bg-white p-8 shadow-xl pointer-events-auto relative z-50 max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="flex items-start justify-between mb-6">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-bold text-gray-900">Cập nhật thông tin</h2>
+            <p class="text-sm text-gray-600">Cập nhật trạng thái, Jira Key và Note cho tác vụ</p>
+          </div>
+          <button id="modal-f3-declaration-close" class="modal-close modal-f3-declaration-close text-gray-500 hover:text-gray-700 transition">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        
+        <!-- Modal Body -->
+        <div id="modal-f3-declaration-body" class="modal-body modal-f3-declaration-body overflow-y-auto flex-1 p-4 space-y-6">
+          <!-- Thông tin tác vụ -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <h4 class="text-lg font-semibold text-gray-700 mb-3">Thông tin tác vụ</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Epic</label>
+                <input type="text" id="modal-f3-declaration-epic" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" readonly/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Story</label>
+                <input type="text" id="modal-f3-declaration-story" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" readonly/>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Subtask</label>
+                <input type="text" id="modal-f3-declaration-subtask" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" readonly/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cập nhật thông tin -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-blue-50">
+            <h4 class="text-lg font-semibold text-gray-700 mb-3">Cập nhật thông tin</h4>
+            
+            <!-- Trạng thái -->
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái *</label>
+              <select id="modal-f3-declaration-status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <option value="">Chọn trạng thái</option>
+                <option value="Hoàn thành đúng hạn">Hoàn thành đúng hạn</option>
+                <option value="Đang triển khai">Đang triển khai</option>
+                <option value="Chưa triển khai">Chưa triển khai</option>
+              </select>
+            </div>
+
+            <!-- Jira Key -->
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Jira Key</label>
+              <input type="text" id="modal-f3-declaration-jira-key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập Jira Key..."/>
+            </div>
+
+            <!-- Note -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Note</label>
+              <textarea id="modal-f3-declaration-note" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập ghi chú..."></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="mt-6 flex justify-end gap-3 border-t border-gray-200 pt-4">
+          <button type="button" id="modal-f3-declaration-cancel" class="modal-cancel-btn modal-f3-declaration-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
+          <button type="button" id="modal-f3-declaration-submit" class="modal-submit-btn modal-f3-declaration-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Lưu thay đổi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================ -->
+  <!-- END MODAL SYSTEM - FORM 3: DECLARATION -->
   <!-- ============================================ -->
 
   <!-- ============================================ -->
@@ -3341,6 +3624,16 @@
         formId: null,
         bodyId: 'modal-f4-select-component-standard-body'
       },
+      'f3-declaration': {
+        id: 'modal-f3-declaration',
+        overlayId: 'modal-f3-declaration-overlay',
+        contentId: 'modal-f3-declaration-content',
+        closeBtnIds: ['modal-f3-declaration-close'],
+        cancelBtnId: 'modal-f3-declaration-cancel',
+        submitBtnId: 'modal-f3-declaration-submit',
+        formId: null,
+        bodyId: 'modal-f3-declaration-body'
+      },
       'f5-view-detail': {
         id: 'modal-f5-view-detail',
         overlayId: 'modal-f5-view-detail-overlay',
@@ -3762,133 +4055,695 @@
       }
     }
 
-    // ===== FORM 3 - UPLOAD EXCEL =====
+    // ===== FORM 3 - QUẢN LÝ DỰ ÁN =====
     
-    // Biến lưu trữ file
+    // Biến lưu trữ
     let F3_EXCEL_FILE = null;
+    let F3_ALL_DATA = [];
+    let F3_FILTERED_DATA = [];
 
-    // Hàm format ngày tháng
-    function formatDateTime(dateString) {
-      if (!dateString) return '';
+    // Hàm format ngày
+    function formatF3Date(dateString) {
+      if (!dateString) return '-';
       try {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return dateString;
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-        return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      } catch (e) {
-        return dateString;
-      }
-    }
-
-    // Hàm format ngày (không có giờ)
-    function formatDate(dateString) {
-      if (!dateString) return '';
-      try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
-        const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
         return `${day}/${month}/${year}`;
       } catch (e) {
         return dateString;
       }
     }
 
-    // Hàm render bảng thống kê Form 3
-    function renderForm3StatisticsTable(data) {
-      const tbody = document.getElementById('f3-statistics-body');
+    // Hàm format file size
+    function formatFileSize(bytes) {
+      if (!bytes) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    // Hàm lấy badge trạng thái - khớp với dữ liệu JSON
+    function getF3StatusBadge(status) {
+      if (!status) return '<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">-</span>';
+      const statusStr = String(status).trim();
+      const statusLower = statusStr.toLowerCase();
+      
+      // Khớp chính xác với các giá trị trong JSON
+      if (statusLower === 'hoàn thành đúng hạn' || statusLower.includes('hoàn thành')) {
+        return '<span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">Hoàn thành đúng hạn</span>';
+      } else if (statusLower === 'đang triển khai' || statusLower.includes('đang triển khai')) {
+        return '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">Đang triển khai</span>';
+      } else if (statusLower === 'chưa triển khai' || statusLower.includes('chưa triển khai')) {
+        return '<span class="px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-700">Chưa triển khai</span>';
+      } else if (statusLower.includes('hủy') || statusLower.includes('cancel') || statusLower.includes('cancelled')) {
+        return '<span class="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-700">Đã hủy</span>';
+      }
+      // Fallback: hiển thị giá trị gốc nếu không khớp
+      return `<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">${escapeHtml(statusStr)}</span>`;
+    }
+
+    // Hàm render bảng dữ liệu hierarchical (Epic -> Story -> Subtask)
+    function renderF3Table(data) {
+      const tbody = document.getElementById('f3-table-body');
       if (!tbody) return;
       
       if (!data || !Array.isArray(data) || data.length === 0) {
-        tbody.innerHTML = '<tr><td class="px-3 py-4 text-center text-gray-500 border border-gray-300" colspan="17">Không có dữ liệu</td></tr>';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="12" class="px-6 py-8 text-center text-gray-500">
+              <div class="flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-4xl text-gray-300">table_chart</span>
+                <p>Không có dữ liệu</p>
+              </div>
+            </td>
+          </tr>
+        `;
         return;
       }
       
       let html = '';
-      data.forEach((row, index) => {
-        // Lấy dữ liệu theo đúng tên field từ JSON mẫu
-        const id = row.Id !== undefined && row.Id !== null ? row.Id : (row.id !== undefined ? row.id : '');
-        const epic = row.Epic !== undefined && row.Epic !== null ? row.Epic : (row.epic !== undefined ? row.epic : '');
-        const story = row.Story !== undefined && row.Story !== null ? row.Story : (row.story !== undefined ? row.story : '');
-        const subTask = row['sub-task'] !== undefined && row['sub-task'] !== null ? row['sub-task'] : (row.sub_task !== undefined ? row.sub_task : (row.subtask !== undefined ? row.subtask : ''));
-        const groupcode = row.groupcode !== undefined && row.groupcode !== null ? row.groupcode : (row.group_code !== undefined ? row.group_code : '');
-        const tenNhanVien = row['Tên nhân viên'] !== undefined && row['Tên nhân viên'] !== null ? row['Tên nhân viên'] : (row.ten_nhan_vien !== undefined ? row.ten_nhan_vien : (row.name !== undefined ? row.name : ''));
-        const jiraStartDate = row.jira_start_date !== undefined && row.jira_start_date !== null ? row.jira_start_date : (row.start_date !== undefined ? row.start_date : '');
-        const jiraDueDate = row.jira_due_date !== undefined && row.jira_due_date !== null ? row.jira_due_date : (row.due_date !== undefined ? row.due_date : '');
-        const jiraDoneDate = row.jira_done_date !== undefined && row.jira_done_date !== null ? row.jira_done_date : (row.done_date !== undefined ? row.done_date : '');
-        const jiraStatus = row.jira_status !== undefined && row.jira_status !== null ? row.jira_status : (row.status !== undefined ? row.status : '');
-        const category = row.category !== undefined && row.category !== null ? row.category : '';
-        const jiraKey = row.jira_key !== undefined && row.jira_key !== null ? row.jira_key : (row.key !== undefined ? row.key : '');
-        const jiraNote = row.jira_note !== undefined && row.jira_note !== null ? row.jira_note : (row.note !== undefined ? row.note : '');
-        const monthKey = row.month_key !== undefined && row.month_key !== null ? row.month_key : (row.month !== undefined ? row.month : '');
-        const text = row.Text !== undefined && row.Text !== null ? row.Text : (row.text !== undefined ? row.text : '');
-        const createdAt = row.CreatedAt !== undefined && row.CreatedAt !== null ? row.CreatedAt : (row.created_at !== undefined ? row.created_at : '');
-        const updatedAt = row.UpdatedAt !== undefined && row.UpdatedAt !== null ? row.UpdatedAt : (row.updated_at !== undefined ? row.updated_at : '');
+      let epicIndex = 0;
+      
+      data.forEach((item) => {
+        if (!item.epics || !Array.isArray(item.epics)) return;
         
-        // Xác định màu badge cho trạng thái
-        let statusBadgeClass = 'bg-gray-100 text-gray-700';
-        const statusLower = String(jiraStatus).toLowerCase();
-        if (statusLower.includes('hoàn thành') || statusLower.includes('done') || statusLower.includes('completed')) {
-          statusBadgeClass = 'bg-green-100 text-green-700';
-        } else if (statusLower.includes('đang làm') || statusLower.includes('in progress') || statusLower.includes('đang thực hiện')) {
-          statusBadgeClass = 'bg-blue-100 text-blue-700';
-        } else if (statusLower.includes('chưa bắt đầu') || statusLower.includes('not started') || statusLower.includes('to do')) {
-          statusBadgeClass = 'bg-yellow-100 text-yellow-700';
-        } else if (statusLower.includes('hủy') || statusLower.includes('cancel') || statusLower.includes('cancelled')) {
-          statusBadgeClass = 'bg-red-100 text-red-700';
-        }
-        
+        item.epics.forEach((epic) => {
+          const epicId = `epic-${epicIndex}`;
+          const isExpanded = epic.expanded !== false; // Mặc định expanded
+          
+          // Epic row
         html += `
-          <tr class="hover:bg-gray-50">
-            <td class="px-3 py-4 border border-gray-300 text-center font-medium">${escapeHtml(String(id))}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(String(epic))}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(String(story))}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(String(subTask))}</td>
-            <td class="px-3 py-4 border border-gray-300 font-mono text-xs">${escapeHtml(String(groupcode))}</td>
-            <td class="px-3 py-4 border border-gray-300 font-medium">${escapeHtml(String(tenNhanVien))}</td>
-            <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">${formatDate(jiraStartDate)}</td>
-            <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">${formatDate(jiraDueDate)}</td>
-            <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">${formatDate(jiraDoneDate)}</td>
-            <td class="px-3 py-4 border border-gray-300">
-              <span class="px-2 py-1 rounded text-xs font-medium ${statusBadgeClass}">${escapeHtml(String(jiraStatus))}</span>
+            <tr class="group hover:bg-purple-50/50 transition bg-purple-50/30 f3-epic-row" data-epic-id="${epicId}" data-level="epic">
+              <td class="px-4 py-4">
+                <span class="material-symbols-outlined cursor-pointer f3-epic-expand text-purple-600 ${isExpanded ? '' : 'rotate-[-90deg]'}" data-epic-id="${epicId}">expand_more</span>
             </td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(String(category))}</td>
-            <td class="px-3 py-4 border border-gray-300 font-mono text-xs">${escapeHtml(String(jiraKey))}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(String(jiraNote))}</td>
-            <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">${formatDate(monthKey)}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(String(text))}</td>
-            <td class="px-3 py-4 border border-gray-300 text-xs whitespace-nowrap">${formatDateTime(createdAt)}</td>
-            <td class="px-3 py-4 border border-gray-300 text-xs whitespace-nowrap">${formatDateTime(updatedAt)}</td>
+              <td class="px-4 py-4" style="max-width: 300px;">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-purple-600 text-lg flex-shrink-0">folder</span>
+                  <span class="font-bold text-base text-gray-900 f3-epic-name cursor-pointer hover:text-blue-500 break-words">${escapeHtml(epic.epic || '-')}</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-700">${escapeHtml(epic.workGroup || '-')}</td>
+              <td class="px-4 py-4 text-sm text-gray-700">${escapeHtml(epic.workType || '-')}</td>
+              <td class="px-4 py-4 text-sm font-medium text-gray-900">${escapeHtml(epic.assignee || '-')}</td>
+              <td class="px-4 py-4 text-sm text-gray-600 whitespace-nowrap">${formatF3Date(epic.startDate)}</td>
+              <td class="px-4 py-4 text-sm text-gray-600 whitespace-nowrap">${formatF3Date(epic.dueDate === 'Invalid Date' ? null : epic.dueDate)}</td>
+              <td class="px-4 py-4 text-sm text-gray-600 whitespace-nowrap">${formatF3Date(epic.finishDate)}</td>
+              <td class="px-4 py-4">${getF3StatusBadge(epic.status)}</td>
+              <td class="px-4 py-4 text-sm font-mono text-gray-600">
+                ${epic.jiraKey ? `<a href="${escapeHtml(epic.jiraLink || '#')}" target="_blank" class="text-blue-600 hover:underline">${escapeHtml(epic.jiraKey)}</a>` : '-'}
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-700" style="max-width: 300px;">
+                <div class="break-words" title="${escapeHtml(epic.note || '')}">${escapeHtml(epic.note || '-')}</div>
+              </td>
+              <td class="px-4 py-4 text-center">-</td>
+              <td class="px-4 py-4 text-center">-</td>
+            </tr>
+          `;
+
+          // Story rows (chỉ hiển thị nếu epic expanded)
+          if (isExpanded && epic.stories && Array.isArray(epic.stories)) {
+            epic.stories.forEach((story) => {
+              const storyId = `${epicId}-story-${story.storyKey || Math.random()}`;
+              const storyExpanded = story.expanded !== false;
+              
+              html += `
+                <tr class="group hover:bg-blue-50/50 transition bg-blue-50/20 f3-story-row hidden" data-epic-id="${epicId}" data-story-id="${storyId}" data-level="story">
+                  <td class="px-4 py-3">
+                    <div class="flex items-center gap-2 ml-6">
+                      <span class="material-symbols-outlined cursor-pointer f3-story-expand text-blue-500 ${storyExpanded ? '' : 'rotate-[-90deg]'}" data-story-id="${storyId}">expand_more</span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3" style="max-width: 300px;">
+                    <div class="flex items-center gap-2 ml-6">
+                      <span class="material-symbols-outlined text-blue-600 text-base flex-shrink-0">description</span>
+                      <span class="font-medium text-sm text-gray-900 f3-story-name cursor-pointer hover:text-blue-500 break-words">${escapeHtml(story.story || '-')}</span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-sm text-gray-500">-</td>
+                  <td class="px-4 py-3 text-center">-</td>
+                </tr>
+              `;
+
+              // Subtask rows (chỉ hiển thị nếu story expanded)
+              if (storyExpanded && story.subtasks && Array.isArray(story.subtasks)) {
+                story.subtasks.forEach((subtask) => {
+                  html += `
+                    <tr class="group hover:bg-green-50/50 transition bg-green-50/10 f3-subtask-row hidden" data-epic-id="${epicId}" data-story-id="${storyId}" data-level="subtask">
+                      <td class="px-4 py-2"></td>
+                      <td class="px-4 py-2" style="max-width: 300px;">
+                        <div class="flex items-center gap-2 ml-12">
+                          <span class="material-symbols-outlined text-green-600 text-sm flex-shrink-0">task</span>
+                          <span class="text-sm text-gray-700 break-words">${escapeHtml(subtask.subtask || subtask.workGroup || subtask.taskCode || '-')}</span>
+                        </div>
+                      </td>
+                      <td class="px-4 py-2 text-sm text-gray-700">${escapeHtml(subtask.workGroup || '-')}</td>
+                      <td class="px-4 py-2 text-sm text-gray-700">${escapeHtml(subtask.workType || '-')}</td>
+                      <td class="px-4 py-2 text-sm font-medium text-gray-900">${escapeHtml(subtask.assignee || '-')}</td>
+                      <td class="px-4 py-2 text-sm text-gray-600 whitespace-nowrap">${formatF3Date(subtask.startDate === 'Invalid Date' ? null : subtask.startDate)}</td>
+                      <td class="px-4 py-2 text-sm text-gray-600 whitespace-nowrap">${formatF3Date(subtask.dueDate === 'Invalid Date' ? null : subtask.dueDate)}</td>
+                      <td class="px-4 py-2 text-sm text-gray-600 whitespace-nowrap">${formatF3Date(subtask.finishDate)}</td>
+                      <td class="px-4 py-2">${getF3StatusBadge(subtask.status)}</td>
+                      <td class="px-4 py-2 text-sm font-mono text-gray-600">
+                        ${subtask.jiraKey ? `<a href="${escapeHtml(subtask.jiraLink || '#')}" target="_blank" class="text-blue-600 hover:underline">${escapeHtml(subtask.jiraKey)}</a>` : '-'}
+                      </td>
+                      <td class="px-4 py-2 text-sm text-gray-700" style="max-width: 300px;">
+                        <div class="break-words" title="${escapeHtml(subtask.note || '')}">${escapeHtml(subtask.note || '-')}</div>
+                      </td>
+                      <td class="px-4 py-2 text-center">
+                        <button type="button" class="f3-declaration-btn px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm" data-subtask-id="${subtask.id || subtask.taskCode}" data-epic="${escapeHtml(epic.epic || '')}" data-story="${escapeHtml(story.story || '')}" data-subtask="${escapeHtml(subtask.subtask || subtask.workGroup || subtask.taskCode || '')}" title="Khai báo thay đổi">
+                          <span class="material-symbols-outlined text-sm align-middle">assignment</span>
+                          <span>Khai báo</span>
+                        </button>
+                      </td>
           </tr>
         `;
+                });
+              }
+            });
+          }
+          
+          epicIndex++;
+        });
       });
       
       tbody.innerHTML = html;
+      
+      // Gắn event listeners cho expand/collapse
+      setupF3ExpandListeners();
+      
+      // Áp dụng filter cấp hiển thị
+      applyF3LevelFilter();
     }
 
-    // Hàm fetch dữ liệu thống kê từ webhook cho Form 3
-    async function fetchForm3Statistics() {
-      const loadBtn = document.getElementById('f3-load-statistics-btn');
-      const loadingDiv = document.getElementById('f3-statistics-loading');
-      const tbody = document.getElementById('f3-statistics-body');
+    // Hàm áp dụng filter cấp hiển thị
+    function applyF3LevelFilter() {
+      const levelFilter = document.getElementById('f3-filter-level');
+      if (!levelFilter) return;
       
-      const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/8e092ef5-f201-490b-a17c-c360d7cc74f4';
-      
-      try {
-        // Hiển thị loading
-        if (loadBtn) loadBtn.disabled = true;
-        if (loadingDiv) loadingDiv.classList.remove('hidden');
-        if (tbody) {
-          tbody.innerHTML = '<tr><td class="px-3 py-4 text-center text-gray-500 border border-gray-300" colspan="17">Đang tải dữ liệu...</td></tr>';
+      const levelValue = levelFilter.value;
+      const tbody = document.getElementById('f3-table-body');
+      if (!tbody) return;
+
+      // Lấy tất cả các row
+      const epicRows = tbody.querySelectorAll('.f3-epic-row');
+      const storyRows = tbody.querySelectorAll('.f3-story-row');
+      const subtaskRows = tbody.querySelectorAll('.f3-subtask-row');
+
+      if (levelValue === 'story') {
+        // Chỉ hiển thị Story và Subtask, ẩn Epic
+        // Tự động expand tất cả epic và story để hiển thị
+        epicRows.forEach(epicRow => {
+          epicRow.classList.add('hidden'); // Ẩn epic row
+          const epicId = epicRow.getAttribute('data-epic-id');
+          const expandBtn = epicRow.querySelector('.f3-epic-expand');
+          if (expandBtn) {
+            expandBtn.classList.remove('rotate-[-90deg]'); // Expand epic
+          }
+          // Hiển thị tất cả story rows của epic này
+          tbody.querySelectorAll(`tr[data-epic-id="${epicId}"].f3-story-row`).forEach(storyRow => {
+            storyRow.classList.remove('hidden');
+            const storyId = storyRow.getAttribute('data-story-id');
+            const storyExpandBtn = storyRow.querySelector('.f3-story-expand');
+            if (storyExpandBtn) {
+              storyExpandBtn.classList.remove('rotate-[-90deg]'); // Expand story
+            }
+            // Hiển thị tất cả subtask rows của story này
+            tbody.querySelectorAll(`tr[data-story-id="${storyId}"].f3-subtask-row`).forEach(subtaskRow => {
+              subtaskRow.classList.remove('hidden');
+            });
+          });
+        });
+      } else if (levelValue === 'subtask') {
+        // Chỉ hiển thị Subtask, ẩn Epic và Story
+        epicRows.forEach(row => {
+          row.classList.add('hidden');
+        });
+        storyRows.forEach(row => {
+          row.classList.add('hidden');
+        });
+        // Hiển thị tất cả subtask rows
+        subtaskRows.forEach(row => {
+          row.classList.remove('hidden');
+        });
+      } else {
+        // Hiển thị tất cả (all) - giữ nguyên trạng thái expand/collapse
+        // Không cần làm gì, vì render đã xử lý expand/collapse
+      }
+    }
+
+    // Hàm setup event listeners cho expand/collapse
+    function setupF3ExpandListeners() {
+      // Epic expand/collapse
+      document.querySelectorAll('.f3-epic-expand').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const epicId = btn.getAttribute('data-epic-id');
+          const epicRow = btn.closest('tr');
+          const isExpanded = !btn.classList.contains('rotate-[-90deg]');
+          
+          // Toggle icon
+          if (isExpanded) {
+            btn.classList.add('rotate-[-90deg]');
+          } else {
+            btn.classList.remove('rotate-[-90deg]');
+          }
+          
+          // Toggle story rows
+          document.querySelectorAll(`tr[data-epic-id="${epicId}"].f3-story-row`).forEach(row => {
+            if (isExpanded) {
+              row.classList.add('hidden');
+            } else {
+              row.classList.remove('hidden');
+            }
+          });
+          
+          // Áp dụng lại filter level sau khi expand/collapse
+          applyF3LevelFilter();
+        });
+      });
+
+      // Story expand/collapse
+      document.querySelectorAll('.f3-story-expand').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const storyId = btn.getAttribute('data-story-id');
+          const isExpanded = !btn.classList.contains('rotate-[-90deg]');
+          
+          // Toggle icon
+          if (isExpanded) {
+            btn.classList.add('rotate-[-90deg]');
+          } else {
+            btn.classList.remove('rotate-[-90deg]');
+          }
+          
+          // Toggle subtask rows
+          document.querySelectorAll(`tr[data-story-id="${storyId}"].f3-subtask-row`).forEach(row => {
+            if (isExpanded) {
+              row.classList.add('hidden');
+            } else {
+              row.classList.remove('hidden');
+            }
+          });
+          
+          // Áp dụng lại filter level sau khi expand/collapse
+          applyF3LevelFilter();
+        });
+      });
+    }
+
+    // Hàm populate assignee filter dropdown
+    function populateF3AssigneeFilter(flatData) {
+      const assigneeFilter = document.getElementById('f3-filter-assignee');
+      if (!assigneeFilter) return;
+
+      const assignees = new Set();
+      flatData.forEach(record => {
+        if (record.assignee && record.assignee.trim()) {
+          assignees.add(record.assignee.trim());
         }
+      });
+
+      const sortedAssignees = Array.from(assignees).sort();
+      assigneeFilter.innerHTML = '<option value="">Tất cả người thực hiện</option>';
+      sortedAssignees.forEach(assignee => {
+        const option = document.createElement('option');
+        option.value = assignee;
+        option.textContent = assignee;
+        assigneeFilter.appendChild(option);
+      });
+    }
+
+    // Hàm lọc dữ liệu (hierarchical)
+    function filterF3Data() {
+      const searchInput = document.getElementById('f3-search-input');
+      const statusFilter = document.getElementById('f3-filter-status');
+      const assigneeFilter = document.getElementById('f3-filter-assignee');
+      
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const statusValue = statusFilter ? statusFilter.value : '';
+      const assigneeValue = assigneeFilter ? assigneeFilter.value : '';
+
+      // Deep filter cho hierarchical data
+      F3_FILTERED_DATA = F3_ALL_DATA.map(item => {
+        if (!item.epics || !Array.isArray(item.epics)) return item;
         
-        console.log('[Form 3 Statistics] Fetching data from:', webhookUrl);
+        const filteredEpics = item.epics.map(epic => {
+          // Kiểm tra epic có match không
+          const epicMatch = (!searchTerm || 
+            (epic.epic && epic.epic.toLowerCase().includes(searchTerm)) ||
+            (epic.workGroup && epic.workGroup.toLowerCase().includes(searchTerm)) ||
+            (epic.assignee && epic.assignee.toLowerCase().includes(searchTerm)) ||
+            (epic.note && epic.note.toLowerCase().includes(searchTerm))
+          ) && (!statusValue || matchStatus(epic.status, statusValue))
+          && (!assigneeValue || (epic.assignee && epic.assignee.trim() === assigneeValue));
+          
+          // Filter stories
+          const filteredStories = (epic.stories || []).map(story => {
+            const storyMatch = (!searchTerm || 
+              (story.story && story.story.toLowerCase().includes(searchTerm))
+            ) && (!statusValue || (story.storyTask && matchStatus(story.storyTask.status, statusValue)))
+            && (!assigneeValue || (story.assignee && story.assignee.trim() === assigneeValue));
+            
+            // Filter subtasks
+            const filteredSubtasks = (story.subtasks || []).filter(subtask => {
+              const subtaskMatch = (!searchTerm || 
+                (subtask.subtask && subtask.subtask.toLowerCase().includes(searchTerm)) ||
+                (subtask.workGroup && subtask.workGroup.toLowerCase().includes(searchTerm)) ||
+                (subtask.assignee && subtask.assignee.toLowerCase().includes(searchTerm)) ||
+                (subtask.note && subtask.note.toLowerCase().includes(searchTerm))
+              ) && (!statusValue || matchStatus(subtask.status, statusValue))
+              && (!assigneeValue || (subtask.assignee && subtask.assignee.trim() === assigneeValue));
+              
+              return subtaskMatch;
+            });
+            
+            if (storyMatch || filteredSubtasks.length > 0) {
+              return { ...story, subtasks: filteredSubtasks };
+            }
+            return null;
+          }).filter(s => s !== null);
+          
+          if (epicMatch || filteredStories.length > 0) {
+            return { ...epic, stories: filteredStories };
+          }
+          return null;
+        }).filter(e => e !== null);
+        
+        return { ...item, epics: filteredEpics };
+      });
+
+      renderF3Table(F3_FILTERED_DATA);
+    }
+
+    // Helper function để match status - khớp với dữ liệu JSON
+    function matchStatus(status, filterValue) {
+      if (!status) return false;
+      const statusStr = String(status).trim();
+      const statusLower = statusStr.toLowerCase();
+      const filterLower = String(filterValue).toLowerCase().trim();
+      
+      // Khớp chính xác với các giá trị trong JSON
+      if (filterLower === 'hoàn thành đúng hạn') {
+        return statusLower === 'hoàn thành đúng hạn' || statusLower.includes('hoàn thành');
+      } else if (filterLower === 'đang triển khai') {
+        return statusLower === 'đang triển khai' || statusLower.includes('đang triển khai');
+      } else if (filterLower === 'chưa triển khai') {
+        return statusLower === 'chưa triển khai' || statusLower.includes('chưa triển khai');
+      } else if (filterLower === 'cancelled' || filterLower === 'đã hủy') {
+        return statusLower.includes('hủy') || statusLower.includes('cancel') || statusLower.includes('cancelled');
+      }
+      return true;
+    }
+
+    // Hàm normalize key để match chính xác
+    function normalizeKey(text) {
+      if (!text) return '';
+      return String(text).toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Bỏ dấu tiếng Việt
+        .replace(/[^\w\s]/g, '') // Bỏ ký tự đặc biệt (bao gồm dấu chấm)
+        .replace(/\s+/g, ' ') // Chuẩn hóa khoảng trắng
+        .trim()
+        .replace(/\s+$/, ''); // Bỏ khoảng trắng cuối
+    }
+
+    // Hàm transform dữ liệu từ flat array sang hierarchical structure
+    // KHÔNG dùng epic_key và story_key, chỉ match bằng text
+    function transformF3FlatToHierarchical(flatData) {
+      if (!Array.isArray(flatData) || flatData.length === 0) {
+        return [];
+      }
+
+      const epicsMap = {}; // Key: normalized epic text
+      const storiesMap = {}; // Key: normalized story text
+      const subtasksPending = []; // Lưu subtasks chưa được gắn vào story/epic
+
+      // Bước 1: Tạo epics và stories trước
+      flatData.forEach(record => {
+        const level = record.level || '';
+        const epic = (record.epic || '').trim();
+        const story = (record.story || '').trim();
+        
+        // Chỉ dùng text để tạo key, KHÔNG dùng epic_key hay story_key
+        const epicKey = normalizeKey(epic);
+        const storyKey = normalizeKey(story) || `story-${record.Id || Math.random()}`;
+
+        if (level === 'epic') {
+          if (epicKey && !epicsMap[epicKey]) {
+            epicsMap[epicKey] = {
+              epic: epic,
+              epicKey: epicKey,
+              workGroup: record.work_group || '',
+              workType: record.work_type || '',
+              assignee: record.assignee || '',
+              startDate: record.start_date || '',
+              dueDate: record.due_date || '',
+              finishDate: record.finish_date || '',
+              status: record.status || '',
+              isCanceled: record.is_canceled === 'true' || record.is_canceled === true,
+              note: record.note || '',
+              jiraLink: record.jira_link || '',
+              jiraKey: record.jira_key || '',
+              taskCode: record.task_code || '',
+              stories: [],
+              expanded: true
+            };
+          }
+        } else if (level === 'story') {
+          if (storyKey && !storiesMap[storyKey]) {
+            storiesMap[storyKey] = {
+              story: story,
+              storyKey: storyKey,
+              epic: epic,
+              epicKey: normalizeKey(epic), // Match bằng epic text
+              workGroup: record.work_group || '',
+              workType: record.work_type || '',
+              assignee: record.assignee || '',
+              startDate: record.start_date || '',
+              dueDate: record.due_date || '',
+              finishDate: record.finish_date || '',
+              status: record.status || '',
+              isCanceled: record.is_canceled === 'true' || record.is_canceled === true,
+              note: record.note || '',
+              jiraLink: record.jira_link || '',
+              jiraKey: record.jira_key || '',
+              taskCode: record.task_code || '',
+              subtasks: [],
+              expanded: true
+            };
+          }
+        }
+      });
+
+      // Bước 2: Gắn stories vào epics - match bằng epic text đã normalize
+      Object.values(storiesMap).forEach(story => {
+        const epicKey = story.epicKey; // Đã được normalize từ epic text
+        if (epicKey && epicsMap[epicKey]) {
+          // Kiểm tra xem story đã tồn tại chưa
+          const existingStory = epicsMap[epicKey].stories.find(s => {
+            const sStoryText = normalizeKey(s.story);
+            const storyText = normalizeKey(story.story);
+            return sStoryText === storyText || s.storyKey === story.storyKey;
+          });
+          if (!existingStory) {
+            epicsMap[epicKey].stories.push(story);
+          }
+        }
+      });
+
+      // Bước 3: Xử lý subtasks
+      let subtaskCount = 0;
+      let matchedCount = 0;
+      flatData.forEach(record => {
+        const level = record.level || '';
+        if (level !== 'subtask') return;
+        
+        subtaskCount++;
+
+        const epic = (record.epic || '').trim();
+        const story = (record.story || '').trim();
+        // KHÔNG dùng epic_key và story_key, chỉ normalize từ text
+        const epicKey = normalizeKey(epic);
+        const storyKey = normalizeKey(story);
+
+        const subtask = {
+          subtask: record.subtask || record.work_group || record.task_code || '',
+          epic: epic,
+          epicKey: epicKey,
+          story: story,
+          storyKey: storyKey,
+          workGroup: record.work_group || '',
+          workType: record.work_type || '',
+          assignee: record.assignee || '',
+          startDate: record.start_date || '',
+          dueDate: record.due_date || '',
+          finishDate: record.finish_date || '',
+          status: record.status || '',
+          isCanceled: record.is_canceled === 'true' || record.is_canceled === true,
+          note: record.note || '',
+          jiraLink: record.jira_link || '',
+          jiraKey: record.jira_key || '',
+          taskCode: record.task_code || '',
+          id: record.Id || record.id || null,
+          declarationChanged: false
+        };
+
+        // Tìm story phù hợp - match bằng story text đã normalize (KHÔNG dùng story_key)
+        let foundStory = null;
+        if (story && story.trim()) {
+          const normalizedStoryText = normalizeKey(story);
+          // Tìm story bằng story text đã normalize
+          foundStory = Object.values(storiesMap).find(s => {
+            const sStoryText = normalizeKey(s.story);
+            return sStoryText === normalizedStoryText || sStoryText === storyKey;
+          });
+        }
+
+        if (foundStory) {
+          matchedCount++;
+          // Gắn vào story tìm được
+          foundStory.subtasks.push(subtask);
+          // Đảm bảo story được gắn vào epic - match bằng epic text đã normalize
+          const foundEpicKey = foundStory.epicKey || normalizeKey(foundStory.epic);
+          if (foundEpicKey) {
+            // Tìm epic phù hợp bằng epicKey (đã normalize từ text)
+            let targetEpic = epicsMap[foundEpicKey];
+            if (!targetEpic && epicKey) {
+              targetEpic = epicsMap[epicKey];
+            }
+            if (!targetEpic) {
+              // Tìm bằng epic text đã normalize
+              const normalizedEpic = normalizeKey(epic);
+              targetEpic = Object.values(epicsMap).find(e => {
+                const eEpicText = normalizeKey(e.epic);
+                return eEpicText === normalizedEpic || eEpicText === foundEpicKey || e.epicKey === epicKey;
+              });
+            }
+            if (targetEpic) {
+              const storyExists = targetEpic.stories.find(s => {
+                const sStoryText = normalizeKey(s.story);
+                const foundStoryText = normalizeKey(foundStory.story);
+                return sStoryText === foundStoryText || s.storyKey === foundStory.storyKey;
+              });
+              if (!storyExists) {
+                targetEpic.stories.push(foundStory);
+              }
+            }
+          }
+        } else if (epicKey && epicsMap[epicKey]) {
+          // Nếu không tìm thấy story, tạo story ảo hoặc thêm vào story đầu tiên
+          const epic = epicsMap[epicKey];
+          if (story && story.trim()) {
+            // Tạo story mới nếu có tên story
+            const newStoryKey = storyKey || `story-${record.Id || Math.random()}`;
+            const newStory = {
+              story: story,
+              storyKey: newStoryKey,
+              epic: epic,
+              epicKey: epicKey,
+              subtasks: [subtask],
+              expanded: true
+            };
+            if (!epic.stories.find(s => s.storyKey === newStoryKey)) {
+              epic.stories.push(newStory);
+            }
+          } else {
+            // Nếu không có story, tạo story ảo "Không có Story"
+            if (!epic.stories.length) {
+              epic.stories.push({
+                story: 'Không có Story',
+                storyKey: 'no-story',
+                subtasks: [subtask],
+                expanded: true
+              });
+            } else {
+              // Thêm vào story đầu tiên
+              epic.stories[0].subtasks.push(subtask);
+            }
+          }
+        } else {
+          // Nếu không tìm thấy epic, lưu vào pending để xử lý sau
+          subtasksPending.push({ subtask, epicKey, storyKey, epic, story });
+        }
+      });
+
+      // Bước 4: Xử lý subtasks pending (tạo epic nếu cần)
+      subtasksPending.forEach(({ subtask, epicKey, epic }) => {
+        if (epicKey && !epicsMap[epicKey] && epic) {
+          // Tạo epic mới từ subtask
+          epicsMap[epicKey] = {
+            epic: epic,
+            epicKey: epicKey,
+            workGroup: subtask.workGroup || '',
+            workType: subtask.workType || '',
+            assignee: subtask.assignee || '',
+            startDate: '',
+            dueDate: '',
+            finishDate: '',
+            status: '',
+            isCanceled: false,
+            note: '',
+            jiraLink: '',
+            jiraKey: '',
+            taskCode: '',
+            stories: [{
+              story: subtask.story || 'Không có Story',
+              storyKey: subtask.storyKey || 'no-story',
+              subtasks: [subtask],
+              expanded: true
+            }],
+            expanded: true
+          };
+        }
+      });
+
+      // Bước 5: Sắp xếp stories và subtasks
+      Object.values(epicsMap).forEach(epic => {
+        epic.stories.sort((a, b) => (a.storyKey || '').localeCompare(b.storyKey || ''));
+        epic.stories.forEach(story => {
+          story.subtasks.sort((a, b) => (a.taskCode || '').localeCompare(b.taskCode || ''));
+        });
+      });
+
+      // Debug log
+      const totalSubtasksInStructure = Object.values(epicsMap).reduce((sum, epic) => {
+        return sum + epic.stories.reduce((s, story) => s + (story.subtasks?.length || 0), 0);
+      }, 0);
+      console.log(`[Form 3 Transform] Total subtasks in flat data: ${subtaskCount}, Matched to stories: ${matchedCount}, Total in structure: ${totalSubtasksInStructure}`);
+
+      return [{
+        epics: Object.values(epicsMap).sort((a, b) => (a.epicKey || '').localeCompare(b.epicKey || ''))
+      }];
+    }
+
+    // Hàm tải dữ liệu từ webhook
+    async function loadF3Data() {
+      const loadingDiv = document.getElementById('f3-loading');
+      const loadBtn = document.getElementById('f3-load-data-btn');
+      const tbody = document.getElementById('f3-table-body');
+
+      const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/form3quanlyduannhomSPM';
+
+      try {
+        if (loadingDiv) loadingDiv.classList.remove('hidden');
+        if (loadBtn) loadBtn.disabled = true;
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="12" class="px-6 py-8 text-center text-gray-500">Đang tải dữ liệu...</td></tr>';
+        }
         
         const response = await fetch(webhookUrl, {
           method: 'GET',
@@ -3898,269 +4753,1348 @@
           }
         });
         
-        console.log('[Form 3 Statistics] Response status:', response.status, response.statusText);
-        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const responseText = await response.text();
-        console.log('[Form 3 Statistics] Response text:', responseText);
-        
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (e) {
-          console.error('[Form 3 Statistics] JSON parse error:', e);
-          throw new Error('Response is not valid JSON');
-        }
-        
-        console.log('[Form 3 Statistics] Parsed data:', data);
-        
-        // Xử lý dữ liệu trả về - có thể là array trực tiếp hoặc object chứa array
-        let tableData = [];
+        let data = JSON.parse(responseText);
+
+        // Xử lý nhiều format response - dữ liệu có thể là array trực tiếp hoặc object chứa array
+        let flatData = [];
         if (Array.isArray(data)) {
-          tableData = data;
+          flatData = data;
         } else if (data && Array.isArray(data.data)) {
-          tableData = data.data;
+          flatData = data.data;
         } else if (data && Array.isArray(data.results)) {
-          tableData = data.results;
+          flatData = data.results;
         } else if (data && Array.isArray(data.items)) {
-          tableData = data.items;
+          flatData = data.items;
         } else if (data && typeof data === 'object') {
-          // Nếu là object đơn, thử chuyển thành array 1 phần tử
-          tableData = [data];
+          flatData = [data];
         }
+
+        // Transform từ flat array sang hierarchical structure
+        const hierarchicalData = transformF3FlatToHierarchical(flatData);
+
+        F3_ALL_DATA = hierarchicalData;
+        F3_FILTERED_DATA = hierarchicalData;
         
-        console.log('[Form 3 Statistics] Table data:', tableData);
+        // Populate assignee filter
+        populateF3AssigneeFilter(flatData);
         
-        // Render dữ liệu vào bảng
-        renderForm3StatisticsTable(tableData);
-        
-        // Thông báo thành công
-        showToast(`Đã tải ${tableData.length} bản ghi thống kê`, 'success');
+        renderF3Table(F3_FILTERED_DATA);
+
+        showToast(`Đã tải ${flatData.length} bản ghi`, 'success');
         
       } catch (error) {
-        console.error('[Form 3 Statistics] Error fetching data:', error);
+        console.error('[Form 3] Error loading data:', error);
         if (tbody) {
-          tbody.innerHTML = `<tr><td class="px-3 py-4 text-center text-red-500 border border-gray-300" colspan="17">Lỗi: ${escapeHtml(error.message)}</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="11" class="px-6 py-8 text-center text-red-500">Lỗi: ${escapeHtml(error.message)}</td></tr>`;
         }
-        showToast('Lỗi khi tải dữ liệu thống kê: ' + error.message, 'error');
+        showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
       } finally {
-        // Ẩn loading
-        if (loadBtn) loadBtn.disabled = false;
         if (loadingDiv) loadingDiv.classList.add('hidden');
+        if (loadBtn) loadBtn.disabled = false;
       }
     }
 
-    // Xử lý upload file Excel
-    document.addEventListener('DOMContentLoaded', function() {
-      const f3ExcelFileBtn = document.getElementById('f3-excel-file-btn');
-      const f3ExcelFile = document.getElementById('f3-excel-file');
-      const f3ExcelFileRemove = document.getElementById('f3-excel-file-remove');
-      const f3SubmitBtn = document.getElementById('f3-submit-btn');
-      const f3CopyResultBtn = document.getElementById('f3-copy-result');
-      const f3LoadStatisticsBtn = document.getElementById('f3-load-statistics-btn');
-
-      // Nút chọn file
-      if (f3ExcelFileBtn && f3ExcelFile) {
-        f3ExcelFileBtn.addEventListener('click', function() {
-          f3ExcelFile.click();
-        });
-      }
-
-      // Xử lý khi chọn file
-      if (f3ExcelFile) {
-        f3ExcelFile.addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (file) {
-            // Kiểm tra định dạng file
-            const validExtensions = ['.xlsx', '.xls'];
-            const fileName = file.name.toLowerCase();
-            const isValidFile = validExtensions.some(ext => fileName.endsWith(ext));
-            
-            if (!isValidFile) {
-              showToast('Vui lòng chọn file Excel (.xlsx hoặc .xls)', 'error');
-              this.value = '';
-              return;
-            }
-
-            F3_EXCEL_FILE = file;
-            document.getElementById('f3-excel-file-name').textContent = file.name;
-            document.getElementById('f3-excel-file-name').className = 'text-sm text-green-600 flex-1 font-medium';
-            if (f3ExcelFileRemove) f3ExcelFileRemove.classList.remove('hidden');
-            showToast('Đã chọn file: ' + file.name);
-          }
-        });
-      }
-
-      // Xóa file
-      if (f3ExcelFileRemove) {
-        f3ExcelFileRemove.addEventListener('click', function() {
-          if (f3ExcelFile) f3ExcelFile.value = '';
-          F3_EXCEL_FILE = null;
-          document.getElementById('f3-excel-file-name').textContent = 'Chưa chọn file';
-          document.getElementById('f3-excel-file-name').className = 'text-sm text-gray-500 flex-1';
-          this.classList.add('hidden');
-        });
-      }
-
-      // Nút submit
-      if (f3SubmitBtn) {
-        f3SubmitBtn.addEventListener('click', async function() {
-          await submitForm3();
-        });
-      }
-
-      // Nút copy kết quả
-      if (f3CopyResultBtn) {
-        f3CopyResultBtn.addEventListener('click', function() {
-          const resultContent = document.getElementById('f3-result-content');
-          if (resultContent && resultContent.textContent && resultContent.textContent !== 'Chưa có kết quả') {
-            navigator.clipboard.writeText(resultContent.textContent).then(() => {
-              showToast('Đã copy kết quả vào clipboard');
-            }).catch(err => {
-              console.error('Error copying to clipboard:', err);
-              showToast('Lỗi khi copy kết quả', 'error');
-            });
-          } else {
-            showToast('Không có dữ liệu để copy', 'error');
-          }
-        });
-      }
-
-      // Nút tải dữ liệu thống kê
-      if (f3LoadStatisticsBtn) {
-        f3LoadStatisticsBtn.addEventListener('click', function() {
-          fetchForm3Statistics();
-        });
-      }
-    });
-
-    // Hàm submit Form 3
-    async function submitForm3() {
-      // Kiểm tra file
+    // Hàm upload file
+    async function submitF3File() {
       if (!F3_EXCEL_FILE) {
         showToast('Vui lòng chọn file Excel', 'error');
         return;
       }
 
-      // Chuẩn bị FormData để gửi
+      const submitBtn = document.getElementById('f3-submit-btn');
       const formData = new FormData();
       formData.append('file', F3_EXCEL_FILE);
 
-      // Log dữ liệu gửi đi
-      console.log('[Form 3] Sending data:', {
-        file_name: F3_EXCEL_FILE?.name || 'N/A',
-        file_size: F3_EXCEL_FILE?.size || 0,
-        file_type: F3_EXCEL_FILE?.type || 'N/A'
-      });
-
-      // Disable button và hiển thị loading
-      const submitBtn = document.getElementById('f3-submit-btn');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner"></span> Đang tải lên...';
-      }
-
-      const resultDiv = document.getElementById('f3-result');
-      const resultContent = document.getElementById('f3-result-content');
+      const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/70bdcfa3-d7bf-4dc5-942c-5c9adcb37b7b';
 
       try {
-        // Gửi dữ liệu lên webhook
-        const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/70bdcfa3-d7bf-4dc5-942c-5c9adcb37b7b';
-        
-        console.log('[Form 3] Sending to:', webhookUrl);
-        
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner"></span> Đang tải lên...';
+        }
+
         const response = await fetch(webhookUrl, {
           method: 'POST',
-          body: formData,
-          // Không set Content-Type header, browser sẽ tự set với boundary cho FormData
+          body: formData
         });
 
-        console.log('[Form 3] Response status:', response.status, response.statusText);
-        console.log('[Form 3] Response headers:', Object.fromEntries(response.headers.entries()));
-
-        // Đọc response text trước (có thể là JSON hoặc text)
-        let responseText = '';
-        try {
-          responseText = await response.text();
-          console.log('[Form 3] Response text:', responseText);
-        } catch (textError) {
-          console.error('[Form 3] Error reading response text:', textError);
-          responseText = '';
-        }
-
-        // Parse JSON nếu có thể
-        let result = null;
-        if (responseText) {
-          try {
-            result = JSON.parse(responseText);
-            console.log('[Form 3] Parsed JSON:', result);
-          } catch (parseError) {
-            // Nếu không parse được JSON, giữ nguyên text
-            console.log('[Form 3] Response is not JSON, keeping as text');
-            result = {
-              success: response.ok,
-              status: response.status,
-              statusText: response.statusText,
-              body: responseText,
-              message: responseText || 'Không có nội dung response'
-            };
-          }
-        } else {
-          result = {
-            success: response.ok,
-            status: response.status,
-            statusText: response.statusText,
-            message: response.ok ? 'Tải lên thành công (không có response body)' : `HTTP ${response.status}: ${response.statusText}`
-          };
-        }
-
-        // Hiển thị kết quả
-        if (resultDiv && resultContent) {
-          resultDiv.classList.remove('hidden');
-          const formattedResult = typeof result === 'object' ? JSON.stringify(result, null, 2) : result;
-          resultContent.textContent = formattedResult;
-          resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-        
         if (response.ok) {
-          showToast('Đã tải file lên thành công');
+          showToast('Đã tải file lên thành công', 'success');
+          // Tự động tải lại dữ liệu sau khi upload
+          setTimeout(() => loadF3Data(), 1000);
         } else {
           showToast(`Tải lên không thành công: HTTP ${response.status}`, 'error');
         }
       } catch (error) {
         console.error('[Form 3] Error uploading:', error);
-        console.error('[Form 3] Error details:', {
-          name: error.name,
-          message: error.message,
-          stack: error.stack
-        });
-        
         showToast('Lỗi khi tải file lên: ' + error.message, 'error');
-        
-        // Hiển thị lỗi
-        if (resultDiv && resultContent) {
-          resultDiv.classList.remove('hidden');
-          const errorResult = {
-            error: true,
-            name: error.name || 'Unknown Error',
-            message: error.message || 'Có lỗi xảy ra',
-            timestamp: new Date().toISOString(),
-            details: error.stack || 'Không có chi tiết'
-          };
-          resultContent.textContent = JSON.stringify(errorResult, null, 2);
-          resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
       } finally {
-        // Enable button lại
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Tải lên server';
+          submitBtn.innerHTML = '<span class="material-symbols-outlined">upload</span><span>Tải lên server</span>';
         }
       }
     }
+
+    // Hàm chuyển đổi dữ liệu hierarchical sang flat array để xuất Excel
+    function flattenF3DataForExport(data) {
+      const flatData = [];
+      
+      data.forEach(item => {
+        if (!item.epics || !Array.isArray(item.epics)) return;
+        
+        item.epics.forEach(epic => {
+          // Epic row
+          flatData.push({
+            'Level': 'Epic',
+            'Epic': epic.epic || '',
+            'Story': '',
+            'Subtask': '',
+            'Work Group': epic.workGroup || '',
+            'Work Type': epic.workType || '',
+            'Người thực hiện': epic.assignee || '',
+            'Ngày bắt đầu': formatF3Date(epic.startDate),
+            'Hạn hoàn thành': formatF3Date(epic.dueDate === 'Invalid Date' ? null : epic.dueDate),
+            'Ngày hoàn thành': formatF3Date(epic.finishDate),
+            'Trạng thái': epic.status || '',
+            'Jira Key': epic.jiraKey || '',
+            'Note': epic.note || '',
+            'Khai báo thay đổi': epic.declarationChanged ? 'Có' : 'Không'
+          });
+          
+          // Story rows
+          if (epic.stories && Array.isArray(epic.stories)) {
+            epic.stories.forEach(story => {
+              flatData.push({
+                'Level': 'Story',
+                'Epic': epic.epic || '',
+                'Story': story.story || '',
+                'Subtask': '',
+                'Work Group': story.workGroup || '',
+                'Work Type': story.workType || '',
+                'Người thực hiện': story.assignee || '',
+                'Ngày bắt đầu': formatF3Date(story.startDate),
+                'Hạn hoàn thành': formatF3Date(story.dueDate === 'Invalid Date' ? null : story.dueDate),
+                'Ngày hoàn thành': formatF3Date(story.finishDate),
+                'Trạng thái': story.status || '',
+                'Jira Key': story.jiraKey || '',
+                'Note': story.note || '',
+                'Khai báo thay đổi': story.declarationChanged ? 'Có' : 'Không'
+              });
+              
+              // Subtask rows
+              if (story.subtasks && Array.isArray(story.subtasks)) {
+                story.subtasks.forEach(subtask => {
+                  flatData.push({
+                    'Level': 'Subtask',
+                    'Epic': epic.epic || '',
+                    'Story': story.story || '',
+                    'Subtask': subtask.subtask || subtask.workGroup || subtask.taskCode || '',
+                    'Work Group': subtask.workGroup || '',
+                    'Work Type': subtask.workType || '',
+                    'Người thực hiện': subtask.assignee || '',
+                    'Ngày bắt đầu': formatF3Date(subtask.startDate === 'Invalid Date' ? null : subtask.startDate),
+                    'Hạn hoàn thành': formatF3Date(subtask.dueDate === 'Invalid Date' ? null : subtask.dueDate),
+                    'Ngày hoàn thành': formatF3Date(subtask.finishDate),
+                    'Trạng thái': subtask.status || '',
+                    'Jira Key': subtask.jiraKey || '',
+                    'Note': subtask.note || '',
+                    'Khai báo thay đổi': subtask.declarationChanged ? 'Có' : 'Không'
+                  });
+                });
+              }
+            });
+          }
+        });
+      });
+      
+      return flatData;
+    }
+
+    // Hàm export Excel
+    function exportF3ToExcel() {
+      // Sử dụng dữ liệu đã lọc nếu có, nếu không thì dùng toàn bộ dữ liệu
+      const dataToExport = F3_FILTERED_DATA.length > 0 ? F3_FILTERED_DATA : F3_ALL_DATA;
+      
+      if (!dataToExport || dataToExport.length === 0 || 
+          (dataToExport[0] && (!dataToExport[0].epics || dataToExport[0].epics.length === 0))) {
+        showToast('Không có dữ liệu để xuất', 'error');
+        return;
+      }
+
+      try {
+        // Chuyển đổi dữ liệu hierarchical sang flat array
+        const flatData = flattenF3DataForExport(dataToExport);
+        
+        if (flatData.length === 0) {
+          showToast('Không có dữ liệu để xuất', 'error');
+          return;
+        }
+
+        // Tạo workbook mới
+        const wb = XLSX.utils.book_new();
+        
+        // Chuyển đổi dữ liệu sang worksheet
+        const ws = XLSX.utils.json_to_sheet(flatData);
+        
+        // Đặt độ rộng cột
+        const colWidths = [
+          { wch: 10 }, // Level
+          { wch: 40 }, // Epic
+          { wch: 40 }, // Story
+          { wch: 40 }, // Subtask
+          { wch: 20 }, // Work Group
+          { wch: 25 }, // Work Type
+          { wch: 20 }, // Người thực hiện
+          { wch: 15 }, // Ngày bắt đầu
+          { wch: 15 }, // Hạn hoàn thành
+          { wch: 15 }, // Ngày hoàn thành
+          { wch: 20 }, // Trạng thái
+          { wch: 15 }, // Jira Key
+          { wch: 50 }, // Note
+          { wch: 18 }  // Khai báo thay đổi
+        ];
+        ws['!cols'] = colWidths;
+        
+        // Thêm worksheet vào workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Dữ liệu dự án');
+        
+        // Tạo tên file với timestamp
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const timeStr = now.toTimeString().slice(0, 5).replace(':', '');
+        const fileName = `Form3_DuAn_${dateStr}_${timeStr}.xlsx`;
+        
+        // Xuất file
+        XLSX.writeFile(wb, fileName);
+        
+        showToast(`Đã xuất ${flatData.length} dòng dữ liệu thành công!`, 'success');
+        
+      } catch (error) {
+        console.error('[Form 3] Error exporting to Excel:', error);
+        showToast('Có lỗi xảy ra khi xuất Excel. Vui lòng thử lại.', 'error');
+      }
+    }
+
+    // Hàm mở modal khai báo Form 3
+    function openF3DeclarationModal(subtaskId, epic, story, subtask) {
+      // Tìm subtask trong dữ liệu để lấy thông tin hiện tại
+      let currentSubtask = null;
+      F3_ALL_DATA.forEach(item => {
+        if (item.epics) {
+          item.epics.forEach(e => {
+            if (e.stories) {
+              e.stories.forEach(s => {
+                if (s.subtasks) {
+                  s.subtasks.forEach(st => {
+                    if ((st.id && st.id.toString() === subtaskId) || 
+                        (st.taskCode && st.taskCode === subtaskId)) {
+                      currentSubtask = st;
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+      
+      const success = openModal('f3-declaration', (modal, config) => {
+        // Điền thông tin tác vụ vào modal
+        const epicInput = document.getElementById('modal-f3-declaration-epic');
+        const storyInput = document.getElementById('modal-f3-declaration-story');
+        const subtaskInput = document.getElementById('modal-f3-declaration-subtask');
+        
+        if (epicInput) epicInput.value = epic || '';
+        if (storyInput) storyInput.value = story || '';
+        if (subtaskInput) subtaskInput.value = subtask || '';
+        
+        // Điền thông tin hiện tại vào các trường có thể chỉnh sửa
+        const statusSelect = document.getElementById('modal-f3-declaration-status');
+        const jiraKeyInput = document.getElementById('modal-f3-declaration-jira-key');
+        const noteInput = document.getElementById('modal-f3-declaration-note');
+        
+        if (statusSelect && currentSubtask) {
+          statusSelect.value = currentSubtask.status || '';
+        }
+        if (jiraKeyInput && currentSubtask) {
+          jiraKeyInput.value = currentSubtask.jiraKey || '';
+        }
+        if (noteInput && currentSubtask) {
+          noteInput.value = currentSubtask.note || '';
+        }
+        
+        // Lưu subtaskId vào modal để dùng khi submit
+        modal.setAttribute('data-subtask-id', subtaskId);
+      });
+      
+      if (!success) {
+        console.error('[Form 3] Failed to open declaration modal');
+        showToast('Không thể mở modal khai báo', 'error');
+      }
+    }
+
+    // Hàm xử lý submit khai báo Form 3
+    async function handleF3DeclarationSubmit() {
+      const modal = document.getElementById('modal-f3-declaration');
+      if (!modal) return;
+      
+      const subtaskId = modal.getAttribute('data-subtask-id');
+      const status = document.getElementById('modal-f3-declaration-status')?.value || '';
+      const jiraKey = document.getElementById('modal-f3-declaration-jira-key')?.value || '';
+      const note = document.getElementById('modal-f3-declaration-note')?.value || '';
+
+      // Validate
+      if (!status.trim()) {
+        showToast('Vui lòng chọn trạng thái', 'error');
+        return;
+      }
+
+      // Disable submit button
+      const submitBtn = document.getElementById('modal-f3-declaration-submit');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang lưu...';
+      }
+
+      try {
+        // TODO: Cập nhật webhook URL sau
+        const WEBHOOK_URL = 'https://your-webhook-url.com/form3-declaration';
+        
+        // Tạo payload để gửi
+        const payload = {
+          subtaskId: subtaskId || '',
+          status: status.trim(),
+          jiraKey: jiraKey.trim(),
+          note: note.trim()
+        };
+        
+        // Gửi dữ liệu lên webhook
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('[Form 3] Declaration submitted:', result);
+        
+        // Cập nhật dữ liệu trong F3_ALL_DATA
+        F3_ALL_DATA.forEach(item => {
+          if (item.epics) {
+            item.epics.forEach(epic => {
+              if (epic.stories) {
+                epic.stories.forEach(story => {
+                  if (story.subtasks) {
+                    story.subtasks.forEach(subtask => {
+                      if ((subtask.id && subtask.id.toString() === subtaskId) || 
+                          (subtask.taskCode && subtask.taskCode === subtaskId)) {
+                        // Cập nhật các trường
+                        subtask.status = status.trim();
+                        subtask.jiraKey = jiraKey.trim();
+                        subtask.note = note.trim();
+                        subtask.declarationChanged = true;
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+        
+        // Cập nhật F3_FILTERED_DATA nếu có
+        if (F3_FILTERED_DATA.length > 0) {
+          F3_FILTERED_DATA.forEach(item => {
+            if (item.epics) {
+              item.epics.forEach(epic => {
+                if (epic.stories) {
+                  epic.stories.forEach(story => {
+                    if (story.subtasks) {
+                      story.subtasks.forEach(subtask => {
+                        if ((subtask.id && subtask.id.toString() === subtaskId) || 
+                            (subtask.taskCode && subtask.taskCode === subtaskId)) {
+                          subtask.status = status.trim();
+                          subtask.jiraKey = jiraKey.trim();
+                          subtask.note = note.trim();
+                          subtask.declarationChanged = true;
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+        
+        showToast('Cập nhật thông tin thành công!', 'success');
+        
+        // Đóng modal và reset form
+        closeModal('f3-declaration');
+        resetF3DeclarationForm();
+        
+        // Re-render bảng để cập nhật trạng thái
+        renderF3Table(F3_FILTERED_DATA.length > 0 ? F3_FILTERED_DATA : F3_ALL_DATA);
+        
+      } catch (error) {
+        console.error('[Form 3] Error submitting declaration:', error);
+        showToast('Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại.', 'error');
+      } finally {
+        // Re-enable submit button
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Lưu thay đổi';
+        }
+      }
+    }
+
+    // Hàm reset form khai báo Form 3
+    function resetF3DeclarationForm() {
+      const statusSelect = document.getElementById('modal-f3-declaration-status');
+      const jiraKeyInput = document.getElementById('modal-f3-declaration-jira-key');
+      const noteInput = document.getElementById('modal-f3-declaration-note');
+      
+      if (statusSelect) statusSelect.value = '';
+      if (jiraKeyInput) jiraKeyInput.value = '';
+      if (noteInput) noteInput.value = '';
+    }
+
+    // Khởi tạo Form 3
+    document.addEventListener('DOMContentLoaded', function() {
+      const dropZone = document.getElementById('f3-drop-zone');
+      const fileInput = document.getElementById('f3-excel-file');
+      const fileInfo = document.getElementById('f3-file-info');
+      const fileName = document.getElementById('f3-file-name');
+      const fileSize = document.getElementById('f3-file-size');
+      const fileRemove = document.getElementById('f3-file-remove');
+      const submitBtn = document.getElementById('f3-submit-btn');
+      const loadBtn = document.getElementById('f3-load-data-btn');
+      const exportBtn = document.getElementById('f3-export-btn');
+      const searchInput = document.getElementById('f3-search-input');
+      const statusFilter = document.getElementById('f3-filter-status');
+
+      // Drag & drop
+      if (dropZone && fileInput) {
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropZone.classList.add('border-blue-500', 'bg-blue-50');
+        });
+        dropZone.addEventListener('dragleave', () => {
+          dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+        dropZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+          }
+        });
+      }
+
+      // Chọn file
+      if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+          }
+        });
+      }
+
+      function handleFileSelect(file) {
+            const validExtensions = ['.xlsx', '.xls'];
+        const fileNameLower = file.name.toLowerCase();
+        const isValid = validExtensions.some(ext => fileNameLower.endsWith(ext));
+            
+        if (!isValid) {
+              showToast('Vui lòng chọn file Excel (.xlsx hoặc .xls)', 'error');
+              return;
+            }
+
+            F3_EXCEL_FILE = file;
+        if (fileInfo) fileInfo.classList.remove('hidden');
+        if (fileName) fileName.textContent = file.name;
+        if (fileSize) fileSize.textContent = formatFileSize(file.size);
+        if (submitBtn) submitBtn.disabled = false;
+        document.getElementById('f3-drop-content').classList.add('hidden');
+      }
+
+      // Xóa file
+      if (fileRemove) {
+        fileRemove.addEventListener('click', (e) => {
+          e.stopPropagation();
+          F3_EXCEL_FILE = null;
+          if (fileInput) fileInput.value = '';
+          if (fileInfo) fileInfo.classList.add('hidden');
+          if (submitBtn) submitBtn.disabled = true;
+          document.getElementById('f3-drop-content').classList.remove('hidden');
+        });
+      }
+
+      // Submit
+      if (submitBtn) {
+        submitBtn.addEventListener('click', submitF3File);
+      }
+
+      // Load data
+      if (loadBtn) {
+        loadBtn.addEventListener('click', loadF3Data);
+      }
+
+      // Export
+      if (exportBtn) {
+        exportBtn.addEventListener('click', exportF3ToExcel);
+      }
+
+      // Search & filter
+      if (searchInput) {
+        searchInput.addEventListener('input', filterF3Data);
+      }
+      if (statusFilter) {
+        statusFilter.addEventListener('change', filterF3Data);
+      }
+      
+      const assigneeFilter = document.getElementById('f3-filter-assignee');
+      if (assigneeFilter) {
+        assigneeFilter.addEventListener('change', filterF3Data);
+      }
+
+      const levelFilter = document.getElementById('f3-filter-level');
+      if (levelFilter) {
+        levelFilter.addEventListener('change', () => {
+          applyF3LevelFilter();
+        });
+      }
+
+      // Event listener cho nút khai báo thay đổi (delegation)
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.f3-declaration-btn')) {
+          const btn = e.target.closest('.f3-declaration-btn');
+          const subtaskId = btn.getAttribute('data-subtask-id');
+          const epic = btn.getAttribute('data-epic');
+          const story = btn.getAttribute('data-story');
+          const subtask = btn.getAttribute('data-subtask');
+          
+          openF3DeclarationModal(subtaskId, epic, story, subtask);
+        }
+      });
+      
+      // Khởi tạo modal listeners
+      initModalListeners('f3-declaration');
+      
+      // Event listener cho nút submit
+      const f3DeclarationSubmitBtn = document.getElementById('modal-f3-declaration-submit');
+      if (f3DeclarationSubmitBtn) {
+        f3DeclarationSubmitBtn.addEventListener('click', handleF3DeclarationSubmit);
+      }
+    });
+
+    // ===== FORM 7 - DASHBOARD DỮ LIỆU EXCEL =====
+    
+    let F7_ALL_DATA = [];
+
+    // Hàm tính toán thống kê từ dữ liệu flat (như Form 3)
+    function calculateF7Stats(flatData) {
+      if (!Array.isArray(flatData) || flatData.length === 0) {
+        return {
+          totalEpics: 0,
+          totalStories: 0,
+          totalSubtasks: 0,
+          completedSubtasks: 0,
+          completionRate: 0,
+          statusCount: {},
+          assigneeCount: {},
+          workGroupCount: {},
+          assigneeDetails: {},
+          assigneeWorkload: {},
+          assigneeProgress: {},
+          dueTasks: []
+        };
+      }
+
+      let totalEpics = 0;
+      let totalStories = 0;
+      let totalSubtasks = 0;
+      let completedSubtasks = 0;
+      const statusCount = {};
+      const assigneeCount = {};
+      const workGroupCount = {};
+      const assigneeDetails = {}; // Chi tiết theo assignee
+      const assigneeWorkload = {}; // Khối lượng công việc theo assignee
+      const assigneeProgress = {}; // Tiến độ theo assignee
+      const dueTasks = []; // Task đến hạn
+
+      const epicSet = new Set();
+      const storySet = new Set();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      flatData.forEach(record => {
+        const level = (record.level || '').toLowerCase();
+        const assignee = (record.assignee || '').trim();
+        const status = (record.status || 'Chưa xác định').trim();
+        const workGroup = (record.work_group || '').trim();
+        const epic = (record.epic || '').trim();
+        const story = (record.story || '').trim();
+        const dueDate = record.due_date || '';
+        const taskCode = record.task_code || '';
+        const subtask = record.subtask || '';
+        
+        // Kiểm tra task đến hạn
+        if (dueDate && dueDate !== 'Invalid Date' && dueDate.trim()) {
+          try {
+            const due = new Date(dueDate);
+            due.setHours(0, 0, 0, 0);
+            const statusLower = status.toLowerCase();
+            // Chỉ tính task chưa hoàn thành và đã quá hạn
+            if (due < today && !statusLower.includes('hoàn thành') && !statusLower.includes('done') && !statusLower.includes('completed') && statusLower !== 'hủy' && statusLower !== 'cancel') {
+              dueTasks.push({
+                assignee: assignee || 'Chưa xác định',
+                taskCode: taskCode,
+                subtask: subtask || story || epic || 'N/A',
+                dueDate: dueDate,
+                status: status,
+                level: level,
+                workGroup: workGroup,
+                daysOverdue: Math.floor((today - due) / (1000 * 60 * 60 * 24))
+              });
+            }
+          } catch (e) {
+            // Bỏ qua nếu không parse được date
+          }
+        }
+        
+        // Đếm theo level
+        if (level === 'epic') {
+          const epicKey = epic || record.Id || Math.random();
+          if (!epicSet.has(epicKey)) {
+            epicSet.add(epicKey);
+            totalEpics++;
+          }
+        } else if (level === 'story') {
+          const storyKey = story || record.Id || Math.random();
+          if (!storySet.has(storyKey)) {
+            storySet.add(storyKey);
+            totalStories++;
+          }
+        } else if (level === 'subtask') {
+          totalSubtasks++;
+        }
+
+        // Đếm trạng thái
+        statusCount[status] = (statusCount[status] || 0) + 1;
+
+        // Đếm work group
+        if (workGroup) {
+          workGroupCount[workGroup] = (workGroupCount[workGroup] || 0) + 1;
+        }
+
+        // Xử lý theo assignee (tập trung chính)
+        if (assignee) {
+          // Đếm tổng số task theo assignee
+          assigneeCount[assignee] = (assigneeCount[assignee] || 0) + 1;
+
+          // Khởi tạo chi tiết assignee nếu chưa có
+          if (!assigneeDetails[assignee]) {
+            assigneeDetails[assignee] = {
+              total: 0,
+              epics: 0,
+              stories: 0,
+              subtasks: 0,
+              statusCount: {},
+              workGroups: new Set(),
+              completed: 0,
+              inProgress: 0,
+              pending: 0,
+              canceled: 0
+            };
+          }
+
+          const details = assigneeDetails[assignee];
+          details.total++;
+
+          // Đếm theo level
+          if (level === 'epic') {
+            details.epics++;
+          } else if (level === 'story') {
+            details.stories++;
+          } else if (level === 'subtask') {
+            details.subtasks++;
+          }
+
+          // Đếm trạng thái theo assignee
+          details.statusCount[status] = (details.statusCount[status] || 0) + 1;
+
+          // Đếm work groups
+          if (workGroup) {
+            details.workGroups.add(workGroup);
+          }
+
+          // Phân loại trạng thái
+          const statusLower = status.toLowerCase();
+          if (statusLower.includes('hoàn thành') || statusLower.includes('done') || statusLower.includes('completed')) {
+            details.completed++;
+            if (level === 'subtask') completedSubtasks++;
+          } else if (statusLower.includes('đang') || statusLower.includes('progress') || statusLower.includes('triển khai')) {
+            details.inProgress++;
+          } else if (statusLower.includes('chưa') || statusLower.includes('pending') || statusLower.includes('to do')) {
+            details.pending++;
+          } else if (statusLower.includes('hủy') || statusLower.includes('cancel')) {
+            details.canceled++;
+          }
+
+          // Tính workload (số task đang làm)
+          if (!assigneeWorkload[assignee]) {
+            assigneeWorkload[assignee] = {
+              total: 0,
+              active: 0,
+              completed: 0
+            };
+          }
+          assigneeWorkload[assignee].total++;
+          if (statusLower.includes('đang') || statusLower.includes('progress') || statusLower.includes('triển khai')) {
+            assigneeWorkload[assignee].active++;
+          }
+          if (statusLower.includes('hoàn thành') || statusLower.includes('done') || statusLower.includes('completed')) {
+            assigneeWorkload[assignee].completed++;
+          }
+
+          // Tính tiến độ
+          if (!assigneeProgress[assignee]) {
+            assigneeProgress[assignee] = {
+              total: 0,
+              completed: 0,
+              rate: 0
+            };
+          }
+          assigneeProgress[assignee].total++;
+          if (statusLower.includes('hoàn thành') || statusLower.includes('done') || statusLower.includes('completed')) {
+            assigneeProgress[assignee].completed++;
+          }
+        }
+      });
+
+      // Tính completion rate cho từng assignee
+      Object.keys(assigneeProgress).forEach(assignee => {
+        const progress = assigneeProgress[assignee];
+        progress.rate = progress.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0;
+      });
+
+      // Chuyển Set thành số lượng cho workGroups
+      Object.keys(assigneeDetails).forEach(assignee => {
+        assigneeDetails[assignee].workGroups = assigneeDetails[assignee].workGroups.size;
+      });
+
+      const completionRate = totalSubtasks > 0 ? Math.round((completedSubtasks / totalSubtasks) * 100) : 0;
+
+      // Sắp xếp task đến hạn theo số ngày quá hạn (nhiều nhất trước)
+      dueTasks.sort((a, b) => b.daysOverdue - a.daysOverdue);
+
+      return {
+        totalEpics,
+        totalStories,
+        totalSubtasks,
+        completedSubtasks,
+        completionRate,
+        statusCount,
+        assigneeCount,
+        workGroupCount,
+        assigneeDetails,
+        assigneeWorkload,
+        assigneeProgress,
+        dueTasks
+      };
+    }
+
+    // Hàm render stats cards
+    function renderF7StatsCards(stats) {
+      document.getElementById('f7-stat-epics').textContent = stats.totalEpics;
+      document.getElementById('f7-stat-stories').textContent = stats.totalStories;
+      document.getElementById('f7-stat-subtasks').textContent = stats.totalSubtasks;
+      document.getElementById('f7-stat-completion').textContent = stats.completionRate + '%';
+    }
+
+    // Hàm render chart trạng thái (dạng text chart)
+    function renderF7StatusChart(statusCount) {
+      const chartDiv = document.getElementById('f7-chart-subtask-status');
+      if (!chartDiv) return;
+
+      const entries = Object.entries(statusCount).sort((a, b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        chartDiv.innerHTML = '<p class="text-gray-500">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      const maxCount = Math.max(...entries.map(e => e[1]));
+      let html = '<div class="space-y-3">';
+      
+      entries.forEach(([status, count]) => {
+        const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+        const statusLower = String(status).toLowerCase();
+        let colorClass = 'bg-gray-200';
+        
+        if (statusLower.includes('hoàn thành') || statusLower.includes('done') || statusLower.includes('completed')) {
+          colorClass = 'bg-green-500';
+        } else if (statusLower.includes('đang') || statusLower.includes('progress') || statusLower.includes('triển khai')) {
+          colorClass = 'bg-blue-500';
+        } else if (statusLower.includes('chưa') || statusLower.includes('pending') || statusLower.includes('to do')) {
+          colorClass = 'bg-yellow-500';
+        } else if (statusLower.includes('hủy') || statusLower.includes('cancel')) {
+          colorClass = 'bg-red-500';
+        }
+        
+        html += `
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm font-medium text-gray-700">${escapeHtml(status)}</span>
+              <span class="text-sm text-gray-600">${count}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="${colorClass} h-2.5 rounded-full transition-all" style="width: ${percentage}%"></div>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      chartDiv.innerHTML = html;
+    }
+
+    // Hàm render chart người thực hiện (cải thiện)
+    // Hàm render biểu đồ tròn phân bổ task theo assignee
+    function renderF7AssigneeChart(assigneeCount) {
+      const chartDiv = document.getElementById('f7-chart-assignee');
+      if (!chartDiv) return;
+
+      const entries = Object.entries(assigneeCount).sort((a, b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        chartDiv.innerHTML = '<p class="text-gray-500 text-center">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      const total = entries.reduce((sum, [, count]) => sum + count, 0);
+      if (total === 0) {
+        chartDiv.innerHTML = '<p class="text-gray-500 text-center">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      // Màu sắc cho biểu đồ tròn
+      const colors = [
+        '#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444',
+        '#06B6D4', '#EC4899', '#84CC16', '#F97316', '#6366F1',
+        '#14B8A6', '#A855F7', '#22C55E', '#EAB308', '#DC2626'
+      ];
+
+      // Tính toán góc cho từng phần
+      let currentAngle = 0; // Bắt đầu từ 0 độ
+      let html = '<div class="flex flex-col items-center gap-6">';
+      
+      // Vẽ biểu đồ tròn bằng SVG
+      const size = 220;
+      const radius = size / 2 - 15;
+      const center = size / 2;
+      const strokeWidth = 30;
+      
+      html += `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" class="transform -rotate-90">`;
+      
+      entries.forEach(([assignee, count], index) => {
+        const percentage = (count / total) * 100;
+        const angle = (count / total) * 360;
+        const endAngle = currentAngle + angle;
+        
+        // Tính toán cho arc
+        const startRad = (currentAngle * Math.PI) / 180;
+        const endRad = (endAngle * Math.PI) / 180;
+        
+        const x1 = center + radius * Math.cos(startRad);
+        const y1 = center + radius * Math.sin(startRad);
+        const x2 = center + radius * Math.cos(endRad);
+        const y2 = center + radius * Math.sin(endRad);
+        
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        
+        const color = colors[index % colors.length];
+        
+        // Vẽ arc
+        html += `
+          <path
+            d="M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z"
+            fill="${color}"
+            stroke="white"
+            stroke-width="3"
+            class="hover:opacity-80 transition-opacity cursor-pointer"
+            title="${escapeHtml(assignee)}: ${count} task (${percentage.toFixed(1)}%)"
+          />
+        `;
+        
+        currentAngle = endAngle;
+      });
+      
+      html += '</svg>';
+      
+      // Thêm legend
+      html += '<div class="grid grid-cols-1 gap-2 w-full max-w-md">';
+      entries.forEach(([assignee, count], index) => {
+        const percentage = ((count / total) * 100).toFixed(1);
+        const color = colors[index % colors.length];
+        html += `
+          <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded" style="background-color: ${color}"></div>
+              <span class="text-sm font-medium text-gray-900">${escapeHtml(assignee)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-600">${count}</span>
+              <span class="text-xs text-gray-500">(${percentage}%)</span>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      
+      html += '</div>';
+      chartDiv.innerHTML = html;
+    }
+
+    // Hàm render task đến hạn
+    function renderF7DueTasks(dueTasks) {
+      const container = document.getElementById('f7-due-tasks');
+      if (!container) return;
+
+      if (!Array.isArray(dueTasks) || dueTasks.length === 0) {
+        container.innerHTML = '<div class="flex flex-col items-center justify-center h-full py-8"><p class="text-green-600 text-lg font-semibold">✓ Không có task nào đến hạn</p><p class="text-gray-500 text-sm mt-2">Tất cả task đều đúng hạn</p></div>';
+        return;
+      }
+
+      // Nhóm theo assignee
+      const byAssignee = {};
+      dueTasks.forEach(task => {
+        if (!byAssignee[task.assignee]) {
+          byAssignee[task.assignee] = [];
+        }
+        byAssignee[task.assignee].push(task);
+      });
+
+      let html = `<div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-600">warning</span>
+          <span class="text-lg font-bold text-red-700">${dueTasks.length} task đến hạn</span>
+        </div>
+      </div>`;
+
+      html += '<div class="space-y-3 max-h-[400px] overflow-y-auto">';
+
+      Object.entries(byAssignee).sort((a, b) => b[1].length - a[1].length).forEach(([assignee, tasks]) => {
+        html += `
+          <div class="border border-red-200 rounded-lg p-3 bg-red-50/50">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-semibold text-gray-900">${escapeHtml(assignee)}</span>
+              <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-semibold">${tasks.length} task</span>
+            </div>
+            <div class="space-y-2">
+        `;
+
+        tasks.slice(0, 5).forEach(task => {
+          const daysText = task.daysOverdue === 1 ? '1 ngày' : `${task.daysOverdue} ngày`;
+          html += `
+            <div class="bg-white rounded p-2 border border-red-100">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-medium text-gray-900 truncate" title="${escapeHtml(task.subtask)}">${escapeHtml(task.subtask)}</p>
+                  ${task.taskCode ? `<p class="text-xs text-gray-500 mt-0.5">${escapeHtml(task.taskCode)}</p>` : ''}
+                </div>
+                <div class="flex flex-col items-end">
+                  <span class="text-xs font-bold text-red-600">${daysText}</span>
+                  <span class="text-xs text-gray-500">quá hạn</span>
+                </div>
+              </div>
+              <div class="mt-1 flex items-center gap-2">
+                <span class="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">${escapeHtml(task.status)}</span>
+                ${task.workGroup ? `<span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">${escapeHtml(task.workGroup)}</span>` : ''}
+              </div>
+            </div>
+          `;
+        });
+
+        if (tasks.length > 5) {
+          html += `<p class="text-xs text-gray-500 text-center pt-1">... và ${tasks.length - 5} task khác</p>`;
+        }
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // Hàm render chi tiết theo assignee
+    function renderF7AssigneeDetails(assigneeDetails) {
+      const container = document.getElementById('f7-assignee-details');
+      if (!container) return;
+
+      const entries = Object.entries(assigneeDetails).sort((a, b) => b[1].total - a[1].total);
+      if (entries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      let html = '<div class="space-y-4">';
+      
+      entries.forEach(([assignee, details]) => {
+        const completionRate = details.total > 0 ? Math.round((details.completed / details.total) * 100) : 0;
+        const inProgressRate = details.total > 0 ? Math.round((details.inProgress / details.total) * 100) : 0;
+        
+        html += `
+          <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="text-lg font-bold text-gray-900">${escapeHtml(assignee)}</h4>
+              <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">${details.total} task</span>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div class="text-center p-3 bg-purple-50 rounded-lg">
+                <p class="text-xs text-purple-600 font-medium mb-1">Epic</p>
+                <p class="text-2xl font-bold text-purple-700">${details.epics}</p>
+              </div>
+              <div class="text-center p-3 bg-blue-50 rounded-lg">
+                <p class="text-xs text-blue-600 font-medium mb-1">Story</p>
+                <p class="text-2xl font-bold text-blue-700">${details.stories}</p>
+              </div>
+              <div class="text-center p-3 bg-green-50 rounded-lg">
+                <p class="text-xs text-green-600 font-medium mb-1">Subtask</p>
+                <p class="text-2xl font-bold text-green-700">${details.subtasks}</p>
+              </div>
+              <div class="text-center p-3 bg-orange-50 rounded-lg">
+                <p class="text-xs text-orange-600 font-medium mb-1">Work Groups</p>
+                <p class="text-2xl font-bold text-orange-700">${details.workGroups}</p>
+              </div>
+            </div>
+
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Hoàn thành</span>
+                <span class="font-semibold text-green-600">${details.completed} (${completionRate}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-green-500 h-2 rounded-full transition-all" style="width: ${completionRate}%"></div>
+              </div>
+            </div>
+
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Đang triển khai</span>
+                <span class="font-semibold text-blue-600">${details.inProgress} (${inProgressRate}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-500 h-2 rounded-full transition-all" style="width: ${inProgressRate}%"></div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              ${Object.entries(details.statusCount).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([status, count]) => {
+                const statusLower = status.toLowerCase();
+                let badgeClass = 'bg-gray-100 text-gray-700';
+                if (statusLower.includes('hoàn thành') || statusLower.includes('done')) {
+                  badgeClass = 'bg-green-100 text-green-700';
+                } else if (statusLower.includes('đang') || statusLower.includes('progress')) {
+                  badgeClass = 'bg-blue-100 text-blue-700';
+                } else if (statusLower.includes('chưa') || statusLower.includes('pending')) {
+                  badgeClass = 'bg-yellow-100 text-yellow-700';
+                } else if (statusLower.includes('hủy') || statusLower.includes('cancel')) {
+                  badgeClass = 'bg-red-100 text-red-700';
+                }
+                return `<span class="px-2 py-1 rounded text-xs font-medium ${badgeClass}">${escapeHtml(status)}: ${count}</span>`;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // Hàm render workload theo assignee
+    function renderF7AssigneeWorkload(assigneeWorkload) {
+      const container = document.getElementById('f7-assignee-workload');
+      if (!container) return;
+
+      const entries = Object.entries(assigneeWorkload).sort((a, b) => b[1].active - a[1].active);
+      if (entries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      let html = '<div class="space-y-3">';
+      
+      entries.forEach(([assignee, workload]) => {
+        const activeRate = workload.total > 0 ? Math.round((workload.active / workload.total) * 100) : 0;
+        const completedRate = workload.total > 0 ? Math.round((workload.completed / workload.total) * 100) : 0;
+        
+        html += `
+          <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-semibold text-gray-900">${escapeHtml(assignee)}</span>
+              <span class="text-sm text-gray-600">Tổng: ${workload.total}</span>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-blue-600">Đang làm</span>
+                <span class="font-semibold">${workload.active} (${activeRate}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-blue-500 h-2.5 rounded-full transition-all" style="width: ${activeRate}%"></div>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-green-600">Đã hoàn thành</span>
+                <span class="font-semibold">${workload.completed} (${completedRate}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-green-500 h-2.5 rounded-full transition-all" style="width: ${completedRate}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // Hàm render tiến độ theo assignee - Biểu đồ cột (làm lại từ đầu)
+    function renderF7AssigneeProgress(assigneeProgress) {
+      const container = document.getElementById('f7-assignee-progress');
+      if (!container) return;
+
+      const entries = Object.entries(assigneeProgress).sort((a, b) => b[1].rate - a[1].rate);
+      if (entries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      const maxRate = 100; // Luôn dùng 100% làm max để so sánh công bằng
+      const chartHeight = 150;
+      const barWidthPercent = Math.min(8, 100 / entries.length); // Tối đa 8% mỗi cột
+      
+      let html = '<div class="w-full">';
+      
+      // Vẽ trục Y
+      html += '<div class="flex items-stretch" style="height: ' + (chartHeight + 50) + 'px;">';
+      html += '<div class="flex flex-col justify-between pr-2 mr-2" style="width: 40px;">';
+      for (let i = 100; i >= 0; i -= 20) {
+        html += `<div class="text-xs text-gray-500 text-right">${i}%</div>`;
+      }
+      html += '</div>';
+      
+      // Vẽ các cột
+      html += '<div class="flex-1 flex items-end justify-between gap-1 border-b border-gray-300" style="height: ' + chartHeight + 'px; padding-bottom: 40px;">';
+      
+      entries.forEach(([assignee, progress]) => {
+        const rate = progress.rate;
+        const barHeight = (rate / maxRate) * chartHeight;
+        
+        let colorClass = 'bg-gray-400';
+        if (rate >= 80) {
+          colorClass = 'bg-green-500';
+        } else if (rate >= 50) {
+          colorClass = 'bg-blue-500';
+        } else if (rate >= 30) {
+          colorClass = 'bg-yellow-500';
+        } else {
+          colorClass = 'bg-red-500';
+        }
+        
+        html += `
+          <div class="flex flex-col items-center flex-1 min-w-0" style="max-width: ${barWidthPercent}%;">
+            <div class="w-full ${colorClass} rounded-t hover:opacity-80 transition-opacity cursor-pointer relative" style="height: ${barHeight}px; min-height: ${barHeight > 0 ? '4px' : '0'};" title="${escapeHtml(assignee)}: ${rate}% (${progress.completed}/${progress.total})">
+              ${barHeight >= 20 ? `<span class="absolute top-1 left-1/2 transform -translate-x-1/2 text-white text-[10px] font-bold">${rate}%</span>` : ''}
+            </div>
+            <div class="mt-2 text-center w-full px-1">
+              <p class="text-[10px] font-medium text-gray-900 truncate" title="${escapeHtml(assignee)}">${escapeHtml(assignee)}</p>
+              <p class="text-[9px] text-gray-600 mt-0.5">${progress.completed}/${progress.total}</p>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div></div></div>';
+      
+      container.innerHTML = html;
+    }
+
+    // Hàm render chart work group
+    function renderF7WorkGroupChart(workGroupCount) {
+      const chartDiv = document.getElementById('f7-chart-workgroup');
+      if (!chartDiv) return;
+
+      const entries = Object.entries(workGroupCount).sort((a, b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        chartDiv.innerHTML = '<p class="text-gray-500">Chưa có dữ liệu</p>';
+        return;
+      }
+
+      const maxCount = Math.max(...entries.map(e => e[1]));
+      let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
+      
+      entries.forEach(([workGroup, count]) => {
+        const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+        html += `
+          <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">${escapeHtml(workGroup)}</span>
+              <span class="text-sm font-bold text-gray-900">${count}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-purple-500 h-2 rounded-full transition-all" style="width: ${percentage}%"></div>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      chartDiv.innerHTML = html;
+    }
+
+    // Hàm render bảng trạng thái
+    function renderF7StatusTable(statusCount, totalSubtasks) {
+      const tbody = document.getElementById('f7-status-table-body');
+      if (!tbody) return;
+
+      const entries = Object.entries(statusCount).sort((a, b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="px-2 py-3 text-center text-gray-500 text-xs">Chưa có dữ liệu</td></tr>';
+        return;
+      }
+
+      let html = '';
+      entries.forEach(([status, count]) => {
+        const percentage = totalSubtasks > 0 ? Math.round((count / totalSubtasks) * 100) : 0;
+        const statusLower = String(status).toLowerCase();
+        let badgeClass = 'bg-gray-100 text-gray-700';
+        
+        if (statusLower.includes('hoàn thành') || statusLower.includes('done') || statusLower.includes('completed')) {
+          badgeClass = 'bg-green-100 text-green-700';
+        } else if (statusLower.includes('đang') || statusLower.includes('progress') || statusLower.includes('triển khai')) {
+          badgeClass = 'bg-blue-100 text-blue-700';
+        } else if (statusLower.includes('chưa') || statusLower.includes('pending') || statusLower.includes('to do')) {
+          badgeClass = 'bg-yellow-100 text-yellow-700';
+        } else if (statusLower.includes('hủy') || statusLower.includes('cancel')) {
+          badgeClass = 'bg-red-100 text-red-700';
+        }
+        
+        html += `
+          <tr class="hover:bg-gray-50">
+            <td class="px-2 py-1.5">
+              <span class="px-1.5 py-0.5 rounded text-xs font-medium ${badgeClass}">${escapeHtml(status)}</span>
+            </td>
+            <td class="px-2 py-1.5 text-xs font-medium text-gray-900">${count}</td>
+            <td class="px-2 py-1.5 text-xs text-gray-600 font-semibold">${percentage}%</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    // Hàm tải và render dashboard
+    async function loadF7Dashboard() {
+      const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/form3quanlyduannhomSPM';
+      const refreshBtn = document.getElementById('f7-refresh-btn');
+
+      try {
+        if (refreshBtn) refreshBtn.disabled = true;
+
+        const response = await fetch(webhookUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseText = await response.text();
+        let data = JSON.parse(responseText);
+
+        // Xử lý nhiều format response - dữ liệu flat như Form 3
+        let flatData = [];
+        if (Array.isArray(data)) {
+          flatData = data;
+        } else if (data && Array.isArray(data.data)) {
+          flatData = data.data;
+        } else if (data && Array.isArray(data.results)) {
+          flatData = data.results;
+        } else if (data && Array.isArray(data.items)) {
+          flatData = data.items;
+        } else if (data && typeof data === 'object') {
+          flatData = [data];
+        }
+
+        F7_ALL_DATA = flatData;
+        const stats = calculateF7Stats(flatData);
+
+        // Render tất cả components
+        renderF7StatsCards(stats);
+        renderF7AssigneeChart(stats.assigneeCount);
+        renderF7StatusTable(stats.statusCount, stats.totalSubtasks);
+        renderF7AssigneeDetails(stats.assigneeDetails);
+        renderF7AssigneeProgress(stats.assigneeProgress);
+        renderF7DueTasks(stats.dueTasks);
+
+        showToast(`Đã tải ${flatData.length} bản ghi thành công`, 'success');
+
+      } catch (error) {
+        console.error('[Form 7] Error loading dashboard:', error);
+        showToast('Lỗi khi tải dashboard: ' + error.message, 'error');
+      } finally {
+        if (refreshBtn) refreshBtn.disabled = false;
+      }
+    }
+
+    // Khởi tạo Form 7
+    document.addEventListener('DOMContentLoaded', function() {
+      const refreshBtn = document.getElementById('f7-refresh-btn');
+      
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', loadF7Dashboard);
+      }
+
+      // Tự động load khi form được hiển thị
+      const form7Section = document.getElementById('form7');
+      if (form7Section) {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              if (!form7Section.classList.contains('hidden')) {
+                loadF7Dashboard();
+              }
+            }
+          });
+        });
+        observer.observe(form7Section, { attributes: true });
+      }
+    });
 
     // ===== FORM 4 - PHIẾU NHẬP TÁC VỤ =====
     
@@ -6029,9 +7963,11 @@
             let declarationMode = subtaskRecord.SubtaskDeclarationMode || '';
             
             // Nếu có type dạng "form5_subtask_<mode>", extract mode từ type
+            // Bỏ qua các type "auto_a", "auto_b", "auto_c" vì chúng không phải là declaration mode hợp lệ
             if (type && type.startsWith('form5_subtask_')) {
               const extractedMode = type.replace('form5_subtask_', '');
-              if (extractedMode) {
+              // Chỉ extract nếu không phải là auto_a, auto_b, auto_c
+              if (extractedMode && !extractedMode.startsWith('auto_')) {
                 declarationMode = extractedMode;
               }
             }
@@ -6051,6 +7987,7 @@
               type: type, // Lưu type từ webhook
               declarationMode: declarationMode, // Declaration mode (từ SubtaskDeclarationMode hoặc extract từ type)
               manhour: subtaskRecord.Subtaskmanhour || null,
+              timespend: subtaskRecord.Subtasktimespend || null, // Số giờ thực hiện
               checklist: subtaskRecord.Subtaskchecklist || '',
               checklistLink: subtaskRecord.Subtaskformlink || null, // Link file checklist từ webhook
               // Lấy timesend trực tiếp từ Subtasktimesend, không convert timezone
@@ -7195,7 +9132,7 @@
 
       const allTasks = getF5AllTasks();
       if (F5_PROJECTS.length === 0 || allTasks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-gray-500 text-base">Chưa có dữ liệu. Vui lòng nhấn nút "Tra cứu" để tải dữ liệu.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="px-6 py-8 text-center text-gray-500 text-base">Chưa có dữ liệu. Vui lòng nhấn nút "Tra cứu" để tải dữ liệu.</td></tr>';
         // Populate PIC filter dropdown
         updateF5PICFilter();
         return;
@@ -7241,6 +9178,7 @@
             <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(project.createdAt)}</td>
             <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(project.dueDate)}</td>
             <td class="px-4 py-4 text-sm text-gray-500 text-center">-</td>
+            <td class="px-4 py-4 text-sm text-gray-600 text-center">-</td>
             <td class="px-4 py-4 text-sm font-mono text-gray-600">${project.projectCode}</td>
             <td class="px-4 py-4">
               <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -7284,6 +9222,7 @@
                 <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(task.createdAt)}</td>
                 <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(task.dueDate)}</td>
                 <td class="px-4 py-4 text-sm text-gray-500 text-center">-</td>
+                <td class="px-4 py-4 text-sm text-gray-600 text-center">-</td>
                 <td class="px-4 py-4 text-sm font-mono text-gray-600">${task.taskCode}</td>
                 <td class="px-4 py-4">
                   <div class="flex items-center gap-2">
@@ -7311,11 +9250,12 @@
                 const normalizedSubtaskStatus = String(st.status || '').toLowerCase().trim();
                 const subtaskStatusClass = (normalizedSubtaskStatus === 'done' || normalizedSubtaskStatus === 'cancel' || normalizedSubtaskStatus === 'cancelled') ? 'line-through text-gray-500' : 'text-gray-900';
                 
-                // Hiển thị nút khai báo dựa trên tên tác vụ
-                // "Kiểm tra và chuẩn bị tài liệu" → Gửi form báo cáo
-                // "Hoàn thiện báo cáo và nghiệm thu" → Khai báo hoàn thành
+                // Hiển thị nút khai báo dựa trên declarationMode hoặc tên tác vụ
+                // Nếu subtask có declarationMode thì cho phép khai báo
+                // Hoặc nếu tên là "Kiểm tra và chuẩn bị tài liệu" hoặc "Hoàn thiện báo cáo và nghiệm thu"
                 const subtaskName = String(st.name || '').trim();
-                const showDeclarationBtn = subtaskName === 'Kiểm tra và chuẩn bị tài liệu' || subtaskName === 'Hoàn thiện báo cáo và nghiệm thu';
+                const declarationMode = String(st.declarationMode || '').trim();
+                const showDeclarationBtn = declarationMode || subtaskName === 'Kiểm tra và chuẩn bị tài liệu' || subtaskName === 'Hoàn thiện báo cáo và nghiệm thu';
                 const declarationBtnHtml = showDeclarationBtn 
                   ? `<button type="button" class="f5-declaration-btn flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors shadow-sm" data-task-id="${task.id}" data-subtask-id="${st.id}" data-type="subtask" data-subtask-type="${st.type || ''}" data-declaration-mode="${st.declarationMode || ''}" title="Khai báo">
                       <span class="material-symbols-outlined text-sm">description</span>
@@ -7343,6 +9283,11 @@
                     <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.timesend) || '-'}</td>
                     <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.deadline || st.dueDate) || '-'}</td>
                     <td class="px-4 py-3">${getF5SubtaskStatusBadge(st.status)}</td>
+                    <td class="px-4 py-3 text-sm text-gray-600 text-center">${(function() {
+                      if (st.timespend === null || st.timespend === undefined || st.timespend === '') return '-';
+                      const numValue = typeof st.timespend === 'number' ? st.timespend : parseFloat(st.timespend);
+                      return !isNaN(numValue) ? numValue.toFixed(1) : st.timespend;
+                    })()}</td>
                     <td class="px-4 py-3 text-sm font-mono text-gray-600">${st.subtaskCode || '-'}</td>
                     <td class="px-4 py-3">
                       <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -7441,6 +9386,13 @@
               const subtask = task.subtasks.find(st => st.id === subtaskId);
               if (subtask) {
                 const subtaskName = String(subtask.name || '').trim();
+                const declarationMode = String(subtask.declarationMode || '').trim();
+                
+                // Nếu subtask có declarationMode, mở modal tương ứng
+                if (declarationMode) {
+                  handleF5DeclarationModeSelect(declarationMode, taskId, subtaskId);
+                  return;
+                }
                 
                 // "Kiểm tra và chuẩn bị tài liệu" → Mở trực tiếp "Gửi form báo cáo" (send-test-task)
                 if (subtaskName === 'Kiểm tra và chuẩn bị tài liệu') {
@@ -8492,11 +10444,18 @@
       
       const task = result.task;
       
-      // Kiểm tra subtask dựa trên tên tác vụ
+      // Kiểm tra subtask dựa trên declarationMode hoặc tên tác vụ
       if (subtaskId && task.subtasks) {
         const subtask = task.subtasks.find(st => st.id === subtaskId);
         if (subtask) {
           const subtaskName = String(subtask.name || '').trim();
+          const declarationMode = String(subtask.declarationMode || '').trim();
+          
+          // Nếu subtask có declarationMode, mở modal tương ứng
+          if (declarationMode) {
+            handleF5DeclarationModeSelect(declarationMode, taskId, subtaskId);
+            return;
+          }
           
           // "Kiểm tra và chuẩn bị tài liệu" → Mở "Gửi form báo cáo"
           if (subtaskName === 'Kiểm tra và chuẩn bị tài liệu') {
