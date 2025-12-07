@@ -686,14 +686,8 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input required id="f4-productName" name="productName" type="text" placeholder="Tên sản phẩm/linh kiện *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
             <input required name="productCode" type="text" placeholder="Mã sản phẩm/linh kiện *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            <div class="md:col-span-2">
-              <div class="mt-2">
-                <button type="button" id="f4-componentModalBtn" class="px-3 py-2 rounded-lg border border-blue-300 bg-white text-blue-700 hover:bg-blue-50 transition">Công chuẩn tham khảo</button>
-              </div>
-              <input type="hidden" name="componentType" id="f4-componentType" value="" />
-              <input type="hidden" name="componentStandard" id="f4-componentStandard" />
-              <div id="f4-componentStandardNote" class="text-sm text-gray-600 mt-1 hidden"></div>
-            </div>
+            <input type="hidden" name="componentType" id="f4-componentType" value="" />
+            <input type="hidden" name="componentStandard" id="f4-componentStandard" value="0" />
             <select required name="requestPurpose" id="f4-requestPurpose" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2">
               <option value="">Mục đích yêu cầu *</option>
               <option value="Đánh giá SP mới">Đánh giá sản phẩm mới</option>
@@ -728,6 +722,19 @@
               <option>Đào Tuấn Kỳ</option>
               <option>Thái Thị Giang</option>
               <option>Trần Hiếu Nghĩa</option>
+            </select>
+            <select name="evaluator" id="f4-evaluator" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Người nhận đánh giá</option>
+              <option>Đỗ Quang Long</option>
+              <option>Nguyễn Thị Hiền</option>
+              <option>Phạm Thành Trung Kiên</option>
+              <option>Lê Ngọc Ánh</option>
+              <option>Hà Mỹ Linh</option>
+              <option>Phạm Thị Minh</option>
+              <option>Lê Văn Sơn</option>
+              <option>Lại Quốc Lộc</option>
+              <option>Lê Thị Thảo</option>
+              <option>Vũ Thị Thanh Hiền</option>
             </select>
             <select name="tester" id="f4-tester" class="hidden w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">Người thử nghiệm</option>
@@ -1987,46 +1994,6 @@
   <!-- END MODAL SYSTEM - FORM 5: DECLARATION MODALS -->
   <!-- ============================================ -->
 
-  <!-- ============================================ -->
-  <!-- MODAL SYSTEM - FORM 4: SELECT COMPONENT STANDARD (Chọn công chuẩn tham khảo) -->
-  <!-- ============================================ -->
-  <div id="modal-f4-select-component-standard" class="modal-container modal-f4-select-component-standard fixed inset-0 z-50 hidden" style="display: none;">
-    <div id="modal-f4-select-component-standard-overlay" class="modal-overlay modal-f4-select-component-standard-overlay fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
-    <div id="modal-f4-select-component-standard-content" class="modal-content modal-f4-select-component-standard-content fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-      <div class="w-full max-w-4xl rounded-xl bg-white p-8 shadow-xl pointer-events-auto relative z-50 max-h-[90vh] overflow-hidden flex flex-col">
-        <div class="flex items-start justify-between mb-6">
-          <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-gray-900">Chọn công chuẩn tham khảo</h2>
-            <p class="text-sm text-gray-600">Chọn công chuẩn từ danh sách để tự động điền thông tin</p>
-          </div>
-          <button id="modal-f4-select-component-standard-close" class="modal-close modal-f4-select-component-standard-close text-gray-500 hover:text-gray-700 transition">
-            <span class="material-symbols-outlined">close</span>
-          </button>
-        </div>
-        
-        <!-- Search box -->
-        <div class="mb-4">
-          <div class="relative">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-            <input type="text" id="modal-f4-select-component-standard-search" placeholder="Tìm kiếm công chuẩn..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-primary-blue focus:ring-primary-blue">
-          </div>
-        </div>
-        
-        <!-- Component list -->
-        <div id="modal-f4-select-component-standard-body" class="modal-body modal-f4-select-component-standard-body overflow-y-auto flex-1 border border-gray-200 rounded-lg p-4">
-          <div id="modal-f4-select-component-standard-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <!-- Danh sách sẽ được render bằng JavaScript -->
-          </div>
-        </div>
-        
-        <div class="mt-6 flex justify-end gap-3 border-t border-gray-200 pt-4">
-          <button type="button" id="modal-f4-select-component-standard-cancel" class="modal-cancel-btn modal-f4-select-component-standard-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ============================================ -->
-  <!-- END MODAL SYSTEM - FORM 4: SELECT COMPONENT STANDARD -->
   <!-- ============================================ -->
 
   <!-- ============================================ -->
@@ -3792,16 +3759,6 @@
         submitBtnId: 'modal-f5-declaration-complete-submit',
         formId: 'modal-f5-declaration-complete-form',
         bodyId: 'modal-f5-declaration-complete-body'
-      },
-      'f4-select-component-standard': {
-        id: 'modal-f4-select-component-standard',
-        overlayId: 'modal-f4-select-component-standard-overlay',
-        contentId: 'modal-f4-select-component-standard-content',
-        closeBtnIds: ['modal-f4-select-component-standard-close'],
-        cancelBtnId: 'modal-f4-select-component-standard-cancel',
-        submitBtnId: null,
-        formId: null,
-        bodyId: 'modal-f4-select-component-standard-body'
       },
       'f3-declaration': {
         id: 'modal-f3-declaration',
@@ -7158,6 +7115,7 @@
         desiredDate: normalizedDesiredDate,
         changeReq: formData.notes || '',
         appliedModel: formData.appliedModel || '',
+        evaluator: formData.evaluator || '',
         attachments: formData.attachments || ''
       };
       
@@ -7455,9 +7413,6 @@
       // Generate request code
       setF4RequestCode();
 
-      // Setup component type
-      setupF4ComponentType();
-
       // Setup purpose change handler
       setupF4PurposeHandler();
 
@@ -7473,9 +7428,6 @@
 
       // Setup form submit
       setupF4FormSubmit();
-      
-      // Setup component standard modal
-      setupF4ComponentStandardModal();
     }
 
     function setF4RequestCode() {
@@ -7491,164 +7443,6 @@
       el.value = `QA.SPM.${mmdd}-${rnd}`;
     }
 
-    // Hàm mở modal chọn công chuẩn tham khảo
-    function openF4SelectComponentStandardModal() {
-      const success = openModal('f4-select-component-standard', (modal, config) => {
-        // Render danh sách công chuẩn từ F4_COMPONENT_ITEMS
-        renderF4ComponentStandardList();
-      });
-      
-      if (!success) {
-        console.error('[Form 4] Failed to open select component standard modal');
-      }
-    }
-    
-    // Hàm render danh sách công chuẩn
-    function renderF4ComponentStandardList(filterText = '') {
-      const listContainer = document.getElementById('modal-f4-select-component-standard-list');
-      if (!listContainer) return;
-      
-      // Lọc danh sách theo filterText
-      const filteredItems = F4_COMPONENT_ITEMS.filter(item => {
-        if (!filterText) return true;
-        const searchText = filterText.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
-        const itemName = item.name.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
-        return itemName.includes(searchText);
-      });
-      
-      // Render danh sách
-      listContainer.innerHTML = filteredItems.map(item => `
-        <button type="button" class="f4-component-standard-item flex flex-col items-start gap-2 p-4 rounded-lg border-2 border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all group text-left" data-name="${item.name}" data-std="${item.std}">
-          <div class="flex items-center justify-between w-full">
-            <h3 class="font-semibold text-gray-900 group-hover:text-primary-blue">${item.name}</h3>
-            <span class="text-sm font-medium text-primary-blue bg-blue-100 px-2 py-1 rounded">${item.std} giờ</span>
-          </div>
-          <p class="text-xs text-gray-500">Công chuẩn: ${item.std} giờ</p>
-        </button>
-      `).join('');
-      
-      // Gắn event listener cho các item
-      listContainer.querySelectorAll('.f4-component-standard-item').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const name = this.getAttribute('data-name');
-          const std = this.getAttribute('data-std');
-          handleF4ComponentStandardSelect(name, std);
-        });
-      });
-    }
-    
-    // Hàm xử lý khi chọn công chuẩn
-    function handleF4ComponentStandardSelect(name, std) {
-      const hiddenStd = document.getElementById('f4-componentStandard');
-      const note = document.getElementById('f4-componentStandardNote');
-      
-      // Cập nhật giá trị công chuẩn
-      if (hiddenStd) {
-        hiddenStd.value = std || '0';
-      }
-      
-      // Hiển thị thông báo đã chọn
-      if (note) {
-        note.classList.remove('hidden');
-        note.textContent = `Đã chọn công chuẩn tham khảo: ${name} (${std} giờ)`;
-      }
-      
-      console.log('[Form 4] Selected component standard:', name, 'std:', std);
-      
-      // Đóng modal
-      closeModal('f4-select-component-standard');
-      
-      showToast(`Đã chọn công chuẩn: ${name}`, 'success');
-    }
-    
-    // Hàm setup modal chọn công chuẩn
-    function setupF4ComponentStandardModal() {
-      // Khởi tạo modal listeners
-      initModalListeners('f4-select-component-standard');
-      
-      // Event listener cho nút mở modal
-      const componentModalBtn = document.getElementById('f4-componentModalBtn');
-      if (componentModalBtn && !componentModalBtn._f4ListenerAttached) {
-        componentModalBtn._f4ListenerAttached = true;
-        componentModalBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          openF4SelectComponentStandardModal();
-        });
-      }
-      
-      // Event listener cho search box
-      const searchInput = document.getElementById('modal-f4-select-component-standard-search');
-      if (searchInput && !searchInput._f4ListenerAttached) {
-        searchInput._f4ListenerAttached = true;
-        searchInput.addEventListener('input', function(e) {
-          const filterText = e.target.value.trim();
-          renderF4ComponentStandardList(filterText);
-        });
-      }
-    }
-
-    function setupF4ComponentType() {
-      const hiddenStd = document.getElementById('f4-componentStandard');
-      const note = document.getElementById('f4-componentStandardNote');
-      if (!hiddenStd) return;
-
-      const f4ComponentTableBody = document.getElementById('f4-componentTableBody');
-      const f4ComponentSearch = document.getElementById('f4-componentSearch');
-
-      function normalize(s) {
-        return (s||'').toString().normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
-      }
-
-      if (f4ComponentSearch && !f4ComponentSearch._f4ListenerAttached) {
-        f4ComponentSearch._f4ListenerAttached = true;
-        f4ComponentSearch.addEventListener('input', (e) => {
-          renderF4ComponentTable(e.target.value);
-        });
-      }
-
-      function renderF4ComponentTable(filter) {
-        if (!f4ComponentTableBody) {
-          console.error('[Form4] Table body element not found!');
-          return;
-        }
-        const n = normalize(filter);
-        const rows = F4_COMPONENT_ITEMS
-          .filter(i => i.name !== 'Linh kiện khác' && (!n || normalize(i.name).includes(n)))
-          .sort((a,b)=> a.name.localeCompare(b.name));
-        
-        console.log('[Form4] Rendering', rows.length, 'component items');
-        
-        if (!rows.length) {
-          f4ComponentTableBody.innerHTML = '<tr><td colspan="2" class="px-4 py-3 text-gray-500">Không có dữ liệu</td></tr>';
-          return;
-        }
-        f4ComponentTableBody.innerHTML = rows.map(i=>`<tr class="hover:bg-blue-50 cursor-pointer">
-          <td class="px-4 py-2">${i.name}</td>
-          <td class="px-4 py-2">${i.std}</td>
-        </tr>`).join('');
-        
-        // Handle row click - sử dụng event delegation để tránh gắn listener nhiều lần
-        f4ComponentTableBody.onclick = (e) => {
-          const tr = e.target.closest('tr');
-          if (!tr || tr.children.length < 2) return;
-          const name = tr.children[0]?.textContent?.trim() || '';
-          const std = tr.children[1]?.textContent?.trim() || '';
-          if (name && std) {
-            // Chỉ cập nhật công chuẩn tham khảo
-            if (hiddenStd) {
-              hiddenStd.value = std || '0';
-            }
-            // Cập nhật note để hiển thị thông tin đã chọn
-            if (note) {
-              note.classList.remove('hidden');
-              note.textContent = `Đã chọn công chuẩn tham khảo: ${name} (${std} giờ)`;
-            }
-            console.log('[Form4] Selected standard reference:', name, 'std:', std);
-          }
-        };
-      }
-    }
 
     function setupF4PurposeHandler() {
       const purposeSelect = document.getElementById('f4-requestPurpose');
@@ -8026,6 +7820,7 @@
           SpecialReq: '',
           Receiver: String(data.personReceived || '').trim(),
           pic: String(data.pic || '').trim(),
+          evaluator: String(data.evaluator || '').trim(),
           tester: String(data.tester || '').trim(),
           appliedModel: String(data.appliedModel || '').trim(),
           Score: String(componentStdStr), Odoojira: '', Assignee: String(data.pic || '').trim()
@@ -8346,10 +8141,10 @@
           waitingFor: null
         };
         
-        // Subtask B - timesend = null (backend xử lý)
+        // Subtask B - PIC = Evaluator (Người nhận đánh giá), timesend = null (backend xử lý)
         const subtaskB = {
           name: subtaskNames.B,
-          pic: taskX.pic || '', // Có thể để backend xử lý
+          pic: taskX.form4Data?.evaluator || taskX.pic || '', // PIC = Evaluator từ Form 4
           manhour: null, // Backend xử lý
           status: 'Chưa triển khai',
           timesend: null, // Backend sẽ tính timesend
@@ -8599,6 +8394,7 @@
           vendor: form4Data.vendor || '',
           qtySamples: form4Data.qtySamples || '',
           changeReq: form4Data.changeReq || '',
+          evaluator: form4Data.evaluator || '',
           attachments: form4Data.attachments || ''
         },
         subtasks: [] // Khởi tạo mảng subtasks rỗng
