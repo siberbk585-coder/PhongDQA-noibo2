@@ -4727,7 +4727,7 @@
                 <span class="text-blue-700 text-sm f3-epic-name cursor-pointer hover:text-blue-800 break-words">${escapeHtml(epic.epic || '-')}</span>
               </div>
               <div class="col-span-1 flex items-center">
-                <button type="button" class="f3-add-story-btn px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors" data-epic-id="${epicIndex}" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">Thêm Story</button>
+                <button type="button" class="f3-add-story-btn px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">Thêm Story</button>
               </div>
               <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(epic.assignee || '-')}</div>
               <div class="col-span-1 flex items-center">${getF3StatusBadge(epic.status)}</div>
@@ -4756,7 +4756,7 @@
                     <span class="text-purple-700 text-sm f3-story-name cursor-pointer hover:text-purple-800 break-words">${escapeHtml(story.story || '-')}</span>
                   </div>
                   <div class="col-span-1 flex items-center">
-                    <button type="button" class="f3-add-subtask-btn px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors" data-epic-id="${epicIndex}" data-story-index="${storyIdx}" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">Thêm Subtask</button>
+                    <button type="button" class="f3-add-subtask-btn px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">Thêm Subtask</button>
                   </div>
                   <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(story.assignee || '-')}</div>
                   <div class="col-span-1 flex items-center">${getF3StatusBadge(story.status)}</div>
@@ -4976,9 +4976,8 @@
       document.querySelectorAll('.f3-add-story-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          const epicId = btn.getAttribute('data-epic-id');
           const epicName = btn.getAttribute('data-epic-name');
-          openF3AddStoryModal(epicId, epicName);
+          openF3AddStoryModal(epicName);
         });
       });
 
@@ -4986,11 +4985,9 @@
       document.querySelectorAll('.f3-add-subtask-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          const epicId = btn.getAttribute('data-epic-id');
-          const storyIndex = btn.getAttribute('data-story-index');
           const epicName = btn.getAttribute('data-epic-name');
           const storyName = btn.getAttribute('data-story-name');
-          openF3AddSubtaskModal(epicId, storyIndex, epicName, storyName);
+          openF3AddSubtaskModal(epicName, storyName);
         });
       });
     }
@@ -5087,8 +5084,11 @@
       const filterLower = String(filterValue).toLowerCase().trim();
       
       // Khớp chính xác với các giá trị trong JSON
-      if (filterLower === 'hoàn thành đúng hạn') {
-        return statusLower === 'hoàn thành đúng hạn' || statusLower.includes('hoàn thành');
+      if (filterLower === 'hoàn thành') {
+        // Match với "hoàn thành", "hoàn thành đúng hạn", "hoàn thành chậm", v.v.
+        return statusLower.includes('hoàn thành');
+      } else if (filterLower === 'hoàn thành đúng hạn') {
+        return statusLower === 'hoàn thành đúng hạn' || statusLower.includes('hoàn thành đúng hạn');
       } else if (filterLower === 'đang triển khai') {
         return statusLower === 'đang triển khai' || statusLower.includes('đang triển khai');
       } else if (filterLower === 'chưa triển khai') {
@@ -6324,14 +6324,14 @@
     }
 
     // Hàm mở modal thêm Story
-    function openF3AddStoryModal(epicId, epicName) {
+    function openF3AddStoryModal(epicName) {
       const epicNameEl = document.getElementById('modal-f3-add-story-epic-name');
       const epicIdEl = document.getElementById('modal-f3-add-story-epic-id');
       const storyCodeEl = document.getElementById('modal-f3-add-story-code');
       const statusEl = document.getElementById('modal-f3-add-story-status');
       
       if (epicNameEl) epicNameEl.textContent = epicName || '';
-      if (epicIdEl) epicIdEl.value = epicId || '';
+      if (epicIdEl) epicIdEl.value = epicName || ''; // Lưu epic name thay vì index
       
       // Reset form
       document.getElementById('modal-f3-add-story-form').reset();
@@ -6380,7 +6380,7 @@
     }
 
     // Hàm mở modal thêm Sub-task
-    function openF3AddSubtaskModal(epicId, storyIndex, epicName, storyName) {
+    function openF3AddSubtaskModal(epicName, storyName) {
       const storyNameEl = document.getElementById('modal-f3-add-subtask-story-name');
       const epicNameEl = document.getElementById('modal-f3-add-subtask-epic-name');
       const epicIdEl = document.getElementById('modal-f3-add-subtask-epic-id');
@@ -6390,8 +6390,8 @@
       
       if (storyNameEl) storyNameEl.textContent = storyName || '';
       if (epicNameEl) epicNameEl.textContent = epicName || '';
-      if (epicIdEl) epicIdEl.value = epicId || '';
-      if (storyIdEl) storyIdEl.value = storyIndex || '';
+      if (epicIdEl) epicIdEl.value = epicName || ''; // Lưu epic name thay vì index
+      if (storyIdEl) storyIdEl.value = storyName || ''; // Lưu story name thay vì index
       
       // Reset form
       document.getElementById('modal-f3-add-subtask-form').reset();
@@ -6418,7 +6418,7 @@
       const form = document.getElementById('modal-f3-add-story-form');
       if (!form) return;
 
-      const epicId = parseInt(document.getElementById('modal-f3-add-story-epic-id')?.value || '0');
+      const epicNameFromModal = document.getElementById('modal-f3-add-story-epic-id')?.value || '';
       const storyName = document.getElementById('modal-f3-add-story-name')?.value.trim() || '';
       
       // Validation các trường bắt buộc (ngoại trừ Note)
@@ -6454,15 +6454,17 @@
         return;
       }
 
-      // Lấy thông tin Epic để gửi kèm
-      let epicName = '';
+      // Tìm Epic bằng name trong F3_ALL_DATA
+      let epicName = epicNameFromModal;
       let epicKey = '';
       if (F3_ALL_DATA && F3_ALL_DATA.length > 0) {
         const dataItem = F3_ALL_DATA[0];
-        if (dataItem.epics && Array.isArray(dataItem.epics) && dataItem.epics[epicId]) {
-          const epic = dataItem.epics[epicId];
-          epicName = epic.epic || '';
-          epicKey = epic.epicKey || epic.epic || '';
+        if (dataItem.epics && Array.isArray(dataItem.epics)) {
+          const epic = dataItem.epics.find(e => normalizeKey(e.epic) === normalizeKey(epicNameFromModal));
+          if (epic) {
+            epicName = epic.epic || epicNameFromModal;
+            epicKey = epic.epicKey || epic.epic || '';
+          }
         }
       }
 
@@ -6521,8 +6523,8 @@
       const form = document.getElementById('modal-f3-add-subtask-form');
       if (!form) return;
 
-      const epicId = parseInt(document.getElementById('modal-f3-add-subtask-epic-id')?.value || '0');
-      const storyIndex = parseInt(document.getElementById('modal-f3-add-subtask-story-id')?.value || '-1');
+      const epicNameFromModal = document.getElementById('modal-f3-add-subtask-epic-id')?.value || '';
+      const storyNameFromModal = document.getElementById('modal-f3-add-subtask-story-id')?.value || '';
       const subtaskName = document.getElementById('modal-f3-add-subtask-name')?.value.trim() || '';
       
       if (!subtaskName) {
@@ -6530,30 +6532,36 @@
         return;
       }
 
-      if (storyIndex < 0) {
-        showToast('Không tìm thấy Story index', 'error');
+      if (!epicNameFromModal || !storyNameFromModal) {
+        showToast('Không tìm thấy Epic hoặc Story', 'error');
         return;
       }
 
-      // Lấy thông tin Epic và Story để gửi kèm (toàn bộ dữ liệu)
+      // Tìm Epic và Story bằng name trong F3_ALL_DATA
       let epicData = null;
       let storyData = null;
-      let epicName = '';
+      let epicName = epicNameFromModal;
       let epicKey = '';
-      let storyName = '';
+      let storyName = storyNameFromModal;
       let storyKey = '';
       
       if (F3_ALL_DATA && F3_ALL_DATA.length > 0) {
         const dataItem = F3_ALL_DATA[0];
-        if (dataItem.epics && Array.isArray(dataItem.epics) && dataItem.epics[epicId]) {
-          epicData = dataItem.epics[epicId];
-          epicName = epicData.epic || '';
-          epicKey = epicData.epicKey || epicData.epic || '';
-          
-          if (epicData.stories && Array.isArray(epicData.stories) && epicData.stories[storyIndex]) {
-            storyData = epicData.stories[storyIndex];
-            storyName = storyData.story || '';
-            storyKey = storyData.storyKey || storyData.story || '';
+        if (dataItem.epics && Array.isArray(dataItem.epics)) {
+          // Tìm Epic bằng name
+          epicData = dataItem.epics.find(e => normalizeKey(e.epic) === normalizeKey(epicNameFromModal));
+          if (epicData) {
+            epicName = epicData.epic || epicNameFromModal;
+            epicKey = epicData.epicKey || epicData.epic || '';
+            
+            // Tìm Story bằng name trong Epic đã tìm được
+            if (epicData.stories && Array.isArray(epicData.stories)) {
+              storyData = epicData.stories.find(s => normalizeKey(s.story) === normalizeKey(storyNameFromModal));
+              if (storyData) {
+                storyName = storyData.story || storyNameFromModal;
+                storyKey = storyData.storyKey || storyData.story || '';
+              }
+            }
           }
         }
       }
