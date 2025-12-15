@@ -5837,6 +5837,17 @@
 
       const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/form3quanlyduannhomSPM';
 
+      // Lưu trạng thái filter hiện tại trước khi tải lại
+      const searchInput = document.getElementById('f3-search-input');
+      const statusFilter = document.getElementById('f3-filter-status');
+      const assigneeFilter = document.getElementById('f3-filter-assignee');
+      const levelFilter = document.getElementById('f3-filter-level');
+      
+      const savedSearch = searchInput ? searchInput.value : '';
+      const savedStatus = statusFilter ? statusFilter.value : '';
+      const savedAssignee = assigneeFilter ? assigneeFilter.value : '';
+      const savedLevel = levelFilter ? levelFilter.value : '';
+
       try {
         if (loadingDiv) loadingDiv.classList.remove('hidden');
         if (loadBtn) loadBtn.disabled = true;
@@ -5880,8 +5891,17 @@
         // Populate assignee filter
         populateF3AssigneeFilter(flatData);
         
-        // CHỈ render bảng SAU KHI đã nhận và xử lý xong dữ liệu từ webhook
-        renderF3Table(F3_FILTERED_DATA);
+        // Khôi phục lại giá trị filter đã lưu
+        if (searchInput) searchInput.value = savedSearch;
+        if (statusFilter) statusFilter.value = savedStatus;
+        if (assigneeFilter) assigneeFilter.value = savedAssignee;
+        if (levelFilter) levelFilter.value = savedLevel;
+        
+        // Áp dụng lại filter với giá trị đã lưu
+        filterF3Data();
+        
+        // CHỈ render bảng SAU KHI đã nhận và xử lý xong dữ liệu từ webhook và áp dụng lại filter
+        // renderF3Table đã được gọi trong filterF3Data() nên không cần gọi lại
 
         showToast(`Đã tải ${flatData.length} bản ghi`, 'success');
         
