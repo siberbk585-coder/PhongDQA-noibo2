@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ảo <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -90,6 +90,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style type="text/tailwindcss">
     .material-symbols-outlined {
       font-variation-settings:
@@ -4623,16 +4624,40 @@
 
     // Hàm format ngày
     function formatF3Date(dateString) {
-      if (!dateString) return '-';
+      if (!dateString || dateString === '' || dateString === 'Invalid Date' || dateString.trim() === '') return '-';
+      
+      // Loại bỏ khoảng trắng thừa
+      const cleaned = String(dateString).trim();
+      
       try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
+        // Hỗ trợ nhiều định dạng ngày
+        let date;
+        
+        // Định dạng yyyy-mm-dd HH:mm hoặc yyyy-mm-dd HH:mm:ss
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?/.test(cleaned)) {
+          // Parse định dạng có giờ
+          date = new Date(cleaned.replace(' ', 'T'));
+        } 
+        // Định dạng yyyy-mm-dd
+        else if (/^\d{4}-\d{2}-\d{2}$/.test(cleaned)) {
+          date = new Date(cleaned + 'T00:00:00');
+        }
+        // Các định dạng khác
+        else {
+          date = new Date(cleaned);
+        }
+        
+        // Kiểm tra xem date có hợp lệ không
+        if (isNaN(date.getTime())) {
+          return '-';
+        }
+        
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
       } catch (e) {
-        return dateString;
+        return '-';
       }
     }
 
@@ -4694,34 +4719,25 @@
           
           // Epic row
           html += `
-            <div class="group border-b border-[#f1f0f4] last:border-0 hover:bg-[#faf9ff] transition-colors f3-epic-row" data-epic-id="${epicId}" data-level="epic">
-              <div class="grid grid-cols-12 gap-4 px-6 py-3 items-center">
-                <div class="col-span-3 flex items-center gap-2">
-                  <button class="p-1 hover:bg-[#f1f0f4] rounded-md transition-colors f3-epic-expand" data-epic-id="${epicId}">
-                    <span class="material-symbols-outlined text-[#6b6189] text-[20px] ${isExpanded ? '' : 'rotate-[-90deg]'}">expand_more</span>
-                  </button>
-                  <div class="w-6 h-6 flex items-center justify-center rounded bg-purple-100 text-primary">
-                    <span class="material-symbols-outlined text-[16px]">bolt</span>
-                  </div>
-                  <span class="font-bold text-[#131118] text-sm f3-epic-name cursor-pointer hover:text-primary break-words">${escapeHtml(epic.epic || '-')}</span>
-                </div>
-                <div class="col-span-1 flex items-center justify-center">
-                  <button type="button" class="f3-add-story-btn px-2 py-1 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-full transition-colors shadow-sm" data-epic-id="${epicIndex}" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">
-                    <span class="material-symbols-outlined text-[14px]">add</span>
-                  </button>
-                </div>
-                <div class="col-span-2 flex items-center gap-2">
-                  <span class="text-sm text-[#131118]">${escapeHtml(epic.assignee || '-')}</span>
-                </div>
-                <div class="col-span-1">${getF3StatusBadge(epic.status)}</div>
-                <div class="col-span-1 text-sm text-[#131118]">${formatF3Date(epic.startDate === 'Invalid Date' ? null : epic.startDate)}</div>
-                <div class="col-span-1 text-sm text-[#131118]">${formatF3Date(epic.dueDate === 'Invalid Date' ? null : epic.dueDate)}</div>
-                <div class="col-span-1 text-sm text-green-600">${formatF3Date(epic.finishDate === 'Invalid Date' ? null : epic.finishDate)}</div>
-                <div class="col-span-1">
-                  ${epic.jiraKey ? `<a href="${escapeHtml(epic.jiraLink || '#')}" target="_blank" class="text-xs font-medium text-primary hover:underline">${escapeHtml(epic.jiraKey)}</a>` : '-'}
-                </div>
-                <div class="col-span-1 text-sm text-[#6b6189] break-words whitespace-pre-wrap" title="${escapeHtml(epic.note || '')}">${escapeHtml(epic.note || '-')}</div>
+            <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-blue-50 font-semibold hover:bg-opacity-80 transition-colors border-b border-[#f1f0f4] f3-epic-row" data-epic-id="${epicId}" data-level="epic">
+              <div class="col-span-3 flex items-center gap-2">
+                <button class="p-1 hover:bg-blue-100 rounded transition-colors f3-epic-expand" data-epic-id="${epicId}">
+                  <span class="material-icons text-sm text-gray-600 cursor-pointer ${isExpanded ? '' : 'rotate-[-90deg]'}">expand_more</span>
+                </button>
+                <span class="text-blue-700 text-sm f3-epic-name cursor-pointer hover:text-blue-800 break-words">${escapeHtml(epic.epic || '-')}</span>
               </div>
+              <div class="col-span-1 flex items-center">
+                <button type="button" class="f3-add-story-btn px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors" data-epic-id="${epicIndex}" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">Thêm Story</button>
+              </div>
+              <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(epic.assignee || '-')}</div>
+              <div class="col-span-1 flex items-center">${getF3StatusBadge(epic.status)}</div>
+              <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(epic.startDate === 'Invalid Date' ? null : epic.startDate)}</div>
+              <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(epic.dueDate === 'Invalid Date' ? null : epic.dueDate)}</div>
+              <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(epic.finishDate === 'Invalid Date' ? null : epic.finishDate)}</div>
+              <div class="col-span-1 flex items-center text-sm text-gray-700">
+                ${epic.jiraKey ? (epic.jiraLink ? `<a href="${escapeHtml(epic.jiraLink)}" target="_blank" class="text-xs font-medium text-primary-blue hover:underline">${escapeHtml(epic.jiraKey)}</a>` : `<span class="text-xs font-medium text-gray-700">${escapeHtml(epic.jiraKey)}</span>`) : '-'}
+              </div>
+              <div class="col-span-1 flex items-center text-sm text-gray-600">${escapeHtml((epic.note || '').substring(0, 30))}${(epic.note || '').length > 30 ? '...' : ''}</div>
             </div>
           `;
 
@@ -4732,37 +4748,25 @@
               const storyExpanded = story.expanded !== false;
               
               html += `
-                <div class="group border-b border-[#f1f0f4] last:border-0 bg-white hover:bg-[#faf9ff] transition-colors f3-story-row" data-epic-id="${epicId}" data-story-id="${storyId}" data-story-index="${storyIdx}" data-level="story">
-                  <div class="grid grid-cols-12 gap-4 px-6 py-2.5 items-center">
-                    <div class="col-span-3 flex items-center gap-2 pl-10 relative">
-                      <!-- Tree connector visual -->
-                      <div class="absolute left-[22px] top-0 bottom-1/2 w-[1px] bg-[#e5e7eb] -translate-y-1/2 h-full"></div>
-                      <div class="absolute left-[22px] bottom-1/2 w-[14px] h-[1px] bg-[#e5e7eb]"></div>
-                      <button class="p-0.5 hover:bg-[#f1f0f4] rounded transition-colors f3-story-expand" data-story-id="${storyId}">
-                        <span class="material-symbols-outlined text-[#9ca3af] text-[18px] ${storyExpanded ? '' : 'rotate-[-90deg]'}">expand_more</span>
-                      </button>
-                      <div class="w-5 h-5 flex items-center justify-center rounded bg-green-100 text-green-700">
-                        <span class="material-symbols-outlined text-[14px]">bookmark</span>
-                      </div>
-                      <span class="font-semibold text-[#131118] text-sm f3-story-name cursor-pointer hover:text-primary break-words">${escapeHtml(story.story || '-')}</span>
-                    </div>
-                    <div class="col-span-1 flex items-center justify-center">
-                      <button type="button" class="f3-add-subtask-btn px-2 py-1 text-xs font-medium text-white bg-yellow-600 hover:bg-yellow-700 rounded-full transition-colors shadow-sm" data-epic-id="${epicIndex}" data-story-index="${storyIdx}" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">
-                        <span class="material-symbols-outlined text-[14px]">add</span>
-                      </button>
-                    </div>
-                    <div class="col-span-2 flex items-center gap-2">
-                      <span class="text-sm text-[#6b6189]">${escapeHtml(story.assignee || '-')}</span>
-                    </div>
-                    <div class="col-span-1">${getF3StatusBadge(story.status)}</div>
-                    <div class="col-span-1 text-sm text-[#6b6189]">${formatF3Date(story.startDate === 'Invalid Date' ? null : story.startDate)}</div>
-                    <div class="col-span-1 text-sm text-[#6b6189]">${formatF3Date(story.dueDate === 'Invalid Date' ? null : story.dueDate)}</div>
-                    <div class="col-span-1 text-sm text-green-600">${formatF3Date(story.finishDate === 'Invalid Date' ? null : story.finishDate)}</div>
-                    <div class="col-span-1">
-                      ${story.jiraKey ? `<a href="${escapeHtml(story.jiraLink || '#')}" target="_blank" class="text-xs font-medium text-primary/70 hover:underline">${escapeHtml(story.jiraKey)}</a>` : '-'}
-                    </div>
-                    <div class="col-span-1 text-sm text-[#9ca3af] break-words whitespace-pre-wrap" title="${escapeHtml(story.note || '')}">${escapeHtml(story.note || '-')}</div>
+                <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-purple-50 hover:bg-opacity-80 transition-colors border-b border-[#f1f0f4] f3-story-row" data-epic-id="${epicId}" data-story-id="${storyId}" data-story-index="${storyIdx}" data-level="story">
+                  <div class="col-span-3 flex items-center gap-2" style="padding-left: 24px;">
+                    <button class="p-1 hover:bg-purple-100 rounded transition-colors f3-story-expand" data-story-id="${storyId}">
+                      <span class="material-icons text-sm text-gray-600 cursor-pointer ${storyExpanded ? '' : 'rotate-[-90deg]'}">expand_more</span>
+                    </button>
+                    <span class="text-purple-700 text-sm f3-story-name cursor-pointer hover:text-purple-800 break-words">${escapeHtml(story.story || '-')}</span>
                   </div>
+                  <div class="col-span-1 flex items-center">
+                    <button type="button" class="f3-add-subtask-btn px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors" data-epic-id="${epicIndex}" data-story-index="${storyIdx}" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">Thêm Subtask</button>
+                  </div>
+                  <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(story.assignee || '-')}</div>
+                  <div class="col-span-1 flex items-center">${getF3StatusBadge(story.status)}</div>
+                  <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(story.startDate === 'Invalid Date' ? null : story.startDate)}</div>
+                  <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(story.dueDate === 'Invalid Date' ? null : story.dueDate)}</div>
+                  <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(story.finishDate === 'Invalid Date' ? null : story.finishDate)}</div>
+                  <div class="col-span-1 flex items-center text-sm text-gray-700">
+                    ${story.jiraKey ? (story.jiraLink ? `<a href="${escapeHtml(story.jiraLink)}" target="_blank" class="text-xs font-medium text-primary-blue hover:underline">${escapeHtml(story.jiraKey)}</a>` : `<span class="text-xs font-medium text-gray-700">${escapeHtml(story.jiraKey)}</span>`) : '-'}
+                  </div>
+                  <div class="col-span-1 flex items-center text-sm text-gray-600">${escapeHtml((story.note || '').substring(0, 30))}${(story.note || '').length > 30 ? '...' : ''}</div>
                 </div>
               `;
 
@@ -4770,45 +4774,30 @@
               if (storyExpanded && story.subtasks && Array.isArray(story.subtasks)) {
                 story.subtasks.forEach((subtask) => {
                   html += `
-                    <div class="group border-b border-[#f1f0f4] last:border-0 bg-white hover:bg-[#faf9ff] transition-colors f3-subtask-row" data-epic-id="${epicId}" data-story-id="${storyId}" data-level="subtask">
-                      <div class="grid grid-cols-12 gap-4 px-6 py-2 items-center">
-                        <div class="col-span-3 flex items-center gap-2 pl-20 relative">
-                          <!-- Tree connector visual -->
-                          <div class="absolute left-[22px] top-0 bottom-0 w-[1px] bg-[#e5e7eb]"></div>
-                          <div class="absolute left-[60px] top-0 bottom-1/2 w-[1px] bg-[#e5e7eb] -translate-y-1/2 h-full"></div>
-                          <div class="absolute left-[60px] bottom-1/2 w-[14px] h-[1px] bg-[#e5e7eb]"></div>
-                          <div class="w-4 h-4 flex items-center justify-center rounded bg-blue-100 text-blue-600">
-                            <span class="material-symbols-outlined text-[12px]">check_box_outline_blank</span>
-                          </div>
-                          <span class="text-[#4b5563] text-sm break-words">${escapeHtml(subtask.subtask || subtask.workGroup || subtask.taskCode || '-')}</span>
-                        </div>
-                        <div class="col-span-1 flex items-center justify-center">
-                          ${(function() {
-                            const statusLower = (subtask.status || '').toLowerCase().trim();
-                            const isCompleted = statusLower === 'hoàn thành' || statusLower.includes('hoàn thành') || statusLower === 'done' || statusLower.includes('done') || statusLower === 'completed' || statusLower.includes('completed');
-                            if (isCompleted) {
-                              return `<button type="button" class="f3-declaration-btn px-2 py-1 text-xs font-medium text-gray-400 bg-gray-200 cursor-not-allowed rounded-full opacity-50" disabled title="Không thể khai báo khi đã hoàn thành">
-                                <span class="material-symbols-outlined text-[14px]">flag</span>
-                              </button>`;
-                            } else {
-                              return `<button type="button" class="f3-declaration-btn px-2 py-1 text-xs font-medium text-white bg-primary hover:bg-blue-700 rounded-full transition-colors shadow-sm" data-subtask-id="${subtask.id || subtask.taskCode}" data-epic="${escapeHtml(epic.epic || '')}" data-story="${escapeHtml(story.story || '')}" data-subtask="${escapeHtml(subtask.subtask || subtask.workGroup || subtask.taskCode || '')}" title="Khai báo thay đổi">
-                                <span class="material-symbols-outlined text-[14px]">flag</span>
-                              </button>`;
-                            }
-                          })()}
-                        </div>
-                        <div class="col-span-2 flex items-center gap-2 opacity-80">
-                          <span class="text-sm text-[#6b6189]">${escapeHtml(subtask.assignee || '-')}</span>
-                        </div>
-                        <div class="col-span-1">${getF3StatusBadge(subtask.status)}</div>
-                        <div class="col-span-1 text-sm text-[#6b6189]">${formatF3Date(subtask.startDate === 'Invalid Date' ? null : subtask.startDate)}</div>
-                        <div class="col-span-1 text-sm text-[#6b6189]">${formatF3Date(subtask.dueDate === 'Invalid Date' ? null : subtask.dueDate)}</div>
-                        <div class="col-span-1 text-sm text-green-600">${formatF3Date(subtask.finishDate === 'Invalid Date' ? null : subtask.finishDate)}</div>
-                        <div class="col-span-1">
-                          ${subtask.jiraKey ? `<a href="${escapeHtml(subtask.jiraLink || '#')}" target="_blank" class="text-xs font-medium text-primary/70 hover:underline">${escapeHtml(subtask.jiraKey)}</a>` : '-'}
-                        </div>
-                        <div class="col-span-1 text-sm text-[#9ca3af] break-words whitespace-pre-wrap" title="${escapeHtml(subtask.note || '')}">${escapeHtml(subtask.note || '-')}</div>
+                    <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-white hover:bg-opacity-80 transition-colors border-b border-[#f1f0f4] f3-subtask-row" data-epic-id="${epicId}" data-story-id="${storyId}" data-level="subtask">
+                      <div class="col-span-3 flex items-center gap-2" style="padding-left: 48px;">
+                        <span class="text-gray-900 text-sm break-words">${escapeHtml(subtask.subtask || subtask.workGroup || subtask.taskCode || '-')}</span>
                       </div>
+                      <div class="col-span-1 flex items-center">
+                        ${(function() {
+                          const statusLower = (subtask.status || '').toLowerCase().trim();
+                          const isCompleted = statusLower === 'hoàn thành' || statusLower.includes('hoàn thành') || statusLower === 'done' || statusLower.includes('done') || statusLower === 'completed' || statusLower.includes('completed');
+                          if (isCompleted) {
+                            return `<button type="button" class="f3-declaration-btn px-2 py-1 text-xs bg-gray-300 text-gray-500 cursor-not-allowed opacity-60 pointer-events-none rounded" disabled title="Không thể khai báo khi đã hoàn thành">Đã hoàn thành</button>`;
+                          } else {
+                            return `<button type="button" class="f3-declaration-btn px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors" data-subtask-id="${subtask.id || subtask.taskCode}" data-epic="${escapeHtml(epic.epic || '')}" data-story="${escapeHtml(story.story || '')}" data-subtask="${escapeHtml(subtask.subtask || subtask.workGroup || subtask.taskCode || '')}" title="Khai báo thay đổi">Thay đổi</button>`;
+                          }
+                        })()}
+                      </div>
+                      <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(subtask.assignee || '-')}</div>
+                      <div class="col-span-1 flex items-center">${getF3StatusBadge(subtask.status)}</div>
+                      <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(subtask.startDate === 'Invalid Date' ? null : subtask.startDate)}</div>
+                      <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(subtask.dueDate === 'Invalid Date' ? null : subtask.dueDate)}</div>
+                      <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF3Date(subtask.finishDate === 'Invalid Date' ? null : subtask.finishDate)}</div>
+                        <div class="col-span-1 flex items-center text-sm text-gray-700">
+                          ${subtask.jiraKey ? (subtask.jiraLink ? `<a href="${escapeHtml(subtask.jiraLink)}" target="_blank" class="text-xs font-medium text-primary-blue hover:underline">${escapeHtml(subtask.jiraKey)}</a>` : `<span class="text-xs font-medium text-gray-700">${escapeHtml(subtask.jiraKey)}</span>`) : '-'}
+                        </div>
+                      <div class="col-span-1 flex items-center text-sm text-gray-600">${escapeHtml((subtask.note || '').substring(0, 30))}${(subtask.note || '').length > 30 ? '...' : ''}</div>
                     </div>
                   `;
                 });
@@ -4851,7 +4840,7 @@
           const epicId = epicRow.getAttribute('data-epic-id');
           const expandBtn = epicRow.querySelector('.f3-epic-expand');
           if (expandBtn) {
-            const icon = expandBtn.querySelector('.material-symbols-outlined');
+            const icon = expandBtn.querySelector('.material-icons');
             if (icon) icon.classList.remove('rotate-[-90deg]'); // Expand epic
           }
           // Hiển thị tất cả story rows của epic này
@@ -4860,7 +4849,7 @@
             const storyId = storyRow.getAttribute('data-story-id');
             const storyExpandBtn = storyRow.querySelector('.f3-story-expand');
             if (storyExpandBtn) {
-              const icon = storyExpandBtn.querySelector('.material-symbols-outlined');
+              const icon = storyExpandBtn.querySelector('.material-icons');
               if (icon) icon.classList.remove('rotate-[-90deg]'); // Expand story
             }
             // Hiển thị tất cả subtask rows của story này
@@ -4887,7 +4876,7 @@
           epicRow.classList.remove('hidden'); // Hiển thị epic row
           const epicId = epicRow.getAttribute('data-epic-id');
           const expandBtn = epicRow.querySelector('.f3-epic-expand');
-          const isEpicExpanded = expandBtn && !expandBtn.querySelector('.material-symbols-outlined')?.classList.contains('rotate-[-90deg]');
+          const isEpicExpanded = expandBtn && !expandBtn.querySelector('.material-icons')?.classList.contains('rotate-[-90deg]');
           
           // Hiển thị/ẩn story rows dựa trên trạng thái expand của epic
           tbody.querySelectorAll(`div[data-epic-id="${epicId}"].f3-story-row`).forEach(storyRow => {
@@ -4895,7 +4884,7 @@
               storyRow.classList.remove('hidden');
               const storyId = storyRow.getAttribute('data-story-id');
               const storyExpandBtn = storyRow.querySelector('.f3-story-expand');
-              const isStoryExpanded = storyExpandBtn && !storyExpandBtn.querySelector('.material-symbols-outlined')?.classList.contains('rotate-[-90deg]');
+              const isStoryExpanded = storyExpandBtn && !storyExpandBtn.querySelector('.material-icons')?.classList.contains('rotate-[-90deg]');
               
               // Hiển thị/ẩn subtask rows dựa trên trạng thái expand của story
               tbody.querySelectorAll(`div[data-story-id="${storyId}"].f3-subtask-row`).forEach(subtaskRow => {
@@ -4926,7 +4915,7 @@
           e.stopPropagation();
           const epicId = btn.getAttribute('data-epic-id');
           const epicRow = btn.closest('.f3-epic-row');
-          const icon = btn.querySelector('.material-symbols-outlined');
+          const icon = btn.querySelector('.material-icons');
           const isExpanded = !icon || !icon.classList.contains('rotate-[-90deg]');
           
           // Toggle icon
@@ -4957,7 +4946,7 @@
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const storyId = btn.getAttribute('data-story-id');
-          const icon = btn.querySelector('.material-symbols-outlined');
+          const icon = btn.querySelector('.material-icons');
           const isExpanded = !icon || !icon.classList.contains('rotate-[-90deg]');
           
           // Toggle icon
@@ -5851,9 +5840,7 @@
       try {
         if (loadingDiv) loadingDiv.classList.remove('hidden');
         if (loadBtn) loadBtn.disabled = true;
-        if (tbody) {
-          tbody.innerHTML = '<div class="px-6 py-8 text-center text-[#6b6189]">Đang tải dữ liệu...</div>';
-        }
+        // KHÔNG thay đổi tbody ở đây - giữ nguyên bảng cũ cho đến khi nhận được dữ liệu mới
         
         const response = await fetch(webhookUrl, {
           method: 'GET',
@@ -5893,6 +5880,7 @@
         // Populate assignee filter
         populateF3AssigneeFilter(flatData);
         
+        // CHỈ render bảng SAU KHI đã nhận và xử lý xong dữ liệu từ webhook
         renderF3Table(F3_FILTERED_DATA);
 
         showToast(`Đã tải ${flatData.length} bản ghi`, 'success');
