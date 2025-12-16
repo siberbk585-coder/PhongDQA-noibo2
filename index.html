@@ -100,8 +100,15 @@
       'opsz' 24;
       font-size: inherit;
     }
-    .spinner{border:2px solid #e5e7eb;border-top:2px solid #3b82f6;border-radius:50%;width:16px;height:16px;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
-    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+      .spinner{border:2px solid #e5e7eb;border-top:2px solid #3b82f6;border-radius:50%;width:16px;height:16px;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
+      @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+      /* Christmas decorations */
+      .christmas-tree{display:inline-block;animation:sway 2s ease-in-out infinite;transform-origin:center bottom}
+      .christmas-star{display:inline-block;animation:twinkle 1.5s ease-in-out infinite}
+      .snowflake{display:inline-block;animation:float 3s ease-in-out infinite;opacity:0.8}
+      @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+      @keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.2)}}
+      @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
     .header-container{background:linear-gradient(135deg,#2563eb 0%,#60a5fa 100%);position:relative;overflow:hidden}
     .header-container::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");opacity:.4}
     .modal{position:fixed;inset:0;background:rgba(15,23,42,0.35);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
@@ -334,39 +341,41 @@
   <aside id="sidebar-nav" class="flex h-full w-64 flex-shrink-0 flex-col justify-between p-4 border-r border-border-light">
     <div class="flex flex-col gap-6">
       <div class="flex items-center gap-3 px-2">
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-lg">DQA</div>
-        <div class="flex flex-col">
-          <h1 class="text-text-light-primary text-base font-bold leading-normal">Cổng Tác Vụ DQA</h1>
-          <p class="text-text-light-secondary text-sm font-normal leading-normal">Project Management</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/9029/9029692.png" alt="🎄" class="christmas-tree w-16 h-16 object-contain" />
+        <div class="flex flex-col relative">
+          <h1 class="text-text-light-primary text-base font-bold leading-normal flex items-center gap-2">
+            Cổng Tác Vụ DQA
+            <img src="https://cdn-icons-png.flaticon.com/512/9029/9029692.png" alt="⭐" class="christmas-star w-4 h-4 object-contain animate-pulse" />
+          </h1>
         </div>
       </div>
       <nav class="flex flex-col gap-2">
         <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form1">
-          <span class="material-symbols-outlined text-xl">search</span>
+          <span class="text-lg">🔍</span>
           <p class="text-sm font-semibold">Form 1 - So sánh CE</p>
         </button>
         <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form2">
-          <span class="material-symbols-outlined text-xl">bar_chart</span>
+          <span class="text-lg">📊</span>
           <p class="text-sm font-semibold">Form 2 - Rà soát CE</p>
         </button>
         
         <!-- Nhóm: Quản lý công việc SPM -->
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="spm-group">
-            <span class="material-symbols-outlined text-xl group-expand-icon">expand_more</span>
+            <span class="text-lg group-expand-icon">🎅</span>
             <p class="text-sm font-semibold">Quản lý công việc SPM</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="spm-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form3">
-              <span class="material-symbols-outlined text-xl">table_chart</span>
+              <span class="text-base">📋</span>
               <p class="text-sm font-semibold">Form 3 - Quản lý dự án</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form7">
-              <span class="material-symbols-outlined text-xl">analytics</span>
+              <span class="text-base">📈</span>
               <p class="text-sm font-semibold">Form 7 - Dashboard Dữ liệu Excel</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form8">
-              <span class="material-symbols-outlined text-xl">calendar_month</span>
+              <span class="text-base">📅</span>
               <p class="text-sm font-semibold">Form 8 - Calendar View</p>
             </button>
           </div>
@@ -375,20 +384,20 @@
         <!-- Nhóm: Tác vụ chuyển tiếp SOP -->
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="sop-group">
-            <span class="material-symbols-outlined text-xl group-expand-icon">expand_more</span>
+            <span class="text-lg group-expand-icon">🔔</span>
             <p class="text-sm font-semibold">Tác vụ chuyển tiếp SOP</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="sop-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form4">
-              <span class="material-symbols-outlined text-xl">assignment</span>
+              <span class="text-base">📝</span>
               <p class="text-sm font-semibold">Form 4 - Phiếu nhập tác vụ</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form5">
-              <span class="material-symbols-outlined text-xl">folder_managed</span>
+              <span class="text-base">📁</span>
               <p class="text-sm font-semibold">Form 5 - Quản lý Tác vụ Sản phẩm Mới</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form6">
-              <span class="material-symbols-outlined text-xl">space_dashboard</span>
+              <span class="text-base">📊</span>
               <p class="text-sm font-semibold">Form 6 - Dashboard Thống kê</p>
             </button>
           </div>
@@ -647,6 +656,7 @@
               <option value="story">Story và Subtask</option>
               <option value="subtask">Chỉ Subtask</option>
             </select>
+            <input type="month" id="f3-filter-month" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer" placeholder="Lọc theo tháng">
           </div>
         </div>
 
@@ -880,6 +890,7 @@
               <option value="">Tất cả người nhận</option>
               <!-- Options sẽ được populate bằng JavaScript -->
             </select>
+            <input type="month" id="f5-filter-month" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Lọc theo tháng">
             <button id="f5-searchBtn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
               <span class="material-symbols-outlined text-lg">search</span>
               Tra cứu
@@ -1937,10 +1948,11 @@
         </div>
         
         <div id="modal-f5-declaration-complete-body" class="modal-body modal-f5-declaration-complete-body p-4 space-y-3 min-h-[460px]">
-          <!-- Tabs for Gate 1 / Gate 2 -->
+          <!-- Tabs for Gate 1 / Gate 2 / Gate 3 -->
           <div id="modal-f5-declaration-complete-tabs-wrap" class="flex items-end gap-2 text-sm mb-4">
             <button id="modal-f5-declaration-complete-tab-gate1" class="px-5 py-2.5 rounded-t-lg border border-cyan-400 bg-cyan-200 text-cyan-900 -mb-[1px] text-base md:text-lg font-semibold shadow-sm">Gate 1: Báo cáo LK/Máy</button>
             <button id="modal-f5-declaration-complete-tab-gate2" class="px-5 py-2.5 rounded-t-lg border border-cyan-400 bg-cyan-200 text-cyan-900 -mb-[1px] text-base md:text-lg font-semibold shadow-sm">Gate 2: Báo cáo máy Base, rà soát tem nhãn</button>
+            <button id="modal-f5-declaration-complete-tab-gate3" class="px-5 py-2.5 rounded-t-lg border border-cyan-400 bg-cyan-200 text-cyan-900 -mb-[1px] text-base md:text-lg font-semibold shadow-sm" style="display:none">Gate 3: Cập nhật báo cáo</button>
           </div>
           
           <!-- Thông tin người nộp, mã, tác vụ -->
@@ -2051,6 +2063,44 @@
             </div>
           </div>
           
+          <!-- Gate 3: Cập nhật báo cáo (chỉ hiển thị khi tác vụ đã done) -->
+          <div id="modal-f5-declaration-complete-gate3" class="mt-3" style="display:none">
+            <div id="modal-f5-declaration-complete-gate3-title" class="mb-2 text-3xl md:text-4xl font-bold text-cyan-700">Gate 3: Cập nhật báo cáo</div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Báo cáo PDF (.pdf)</label>
+              <input id="modal-f5-declaration-complete-file-pdfzip-g3" type="file" accept=".pdf" class="block w-full text-sm file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-indigo-600 file:text-white"/>
+              <p class="text-xs text-gray-500 mt-1">Chỉ nhận tệp .pdf (tùy chọn).</p>
+            </div>
+            <div class="mt-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Báo cáo Excel (.xlsx)</label>
+              <input id="modal-f5-declaration-complete-file-xlsxzip-g3" type="file" accept=".xlsx" class="block w-full text-sm file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-emerald-600 file:text-white"/>
+              <p class="text-xs text-gray-500 mt-1">Chỉ nhận tệp .xlsx (tùy chọn).</p>
+            </div>
+            <!-- Gate 3: Kết luận -->
+            <div class="mt-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Kết luận</label>
+              <div class="flex flex-col gap-2">
+                <label class="inline-flex items-center gap-2">
+                  <input type="radio" name="modal-f5-declaration-complete-conclusion-g3" value="Sản phẩm đạt chất lượng" class="h-4 w-4"/>
+                  <span class="text-sm">Sản phẩm đạt chất lượng</span>
+                </label>
+                <label class="inline-flex items-center gap-2">
+                  <input type="radio" name="modal-f5-declaration-complete-conclusion-g3" value="Sản phẩm không đạt chất lượng" class="h-4 w-4"/>
+                  <span class="text-sm">Sản phẩm không đạt chất lượng</span>
+                </label>
+                <label class="inline-flex items-center gap-2">
+                  <input type="radio" name="modal-f5-declaration-complete-conclusion-g3" value="Báo cáo tham khảo" class="h-4 w-4"/>
+                  <span class="text-sm">Báo cáo tham khảo</span>
+                </label>
+              </div>
+            </div>
+            <div class="mt-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nội dung cập nhật *</label>
+              <textarea id="modal-f5-declaration-complete-gate3-content" rows="5" class="w-full border border-blue-300 rounded-lg bg-slate-100 p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:bg-white resize-y" placeholder="Nhập nội dung cập nhật báo cáo..."></textarea>
+              <p class="text-xs text-gray-500 mt-1">Gate 3 chỉ sử dụng khi tác vụ đã được hoàn thành (Done).</p>
+            </div>
+          </div>
+          
           <!-- Checkbox Trả báo cáo BPS -->
           <div id="modal-f5-declaration-complete-bps-option" class="flex items-center gap-2">
             <input id="modal-f5-declaration-complete-upload-bps" type="checkbox" class="h-4 w-4" checked>
@@ -2068,6 +2118,47 @@
 
   <!-- ============================================ -->
   <!-- END MODAL SYSTEM - FORM 5: DECLARATION MODALS -->
+  <!-- ============================================ -->
+
+  <!-- ============================================ -->
+  <!-- MODAL SYSTEM - FORM 5: SUBTASK DOWNLOAD REPORTS (Tải báo cáo) -->
+  <!-- ============================================ -->
+  <div id="modal-f5-subtask-download" class="modal-container modal-f5-subtask-download fixed inset-0 z-50 hidden" style="display: none;">
+    <div id="modal-f5-subtask-download-overlay" class="modal-overlay modal-f5-subtask-download-overlay fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
+    <div id="modal-f5-subtask-download-content" class="modal-content modal-f5-subtask-download-content fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+      <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl pointer-events-auto relative z-50">
+        <div class="flex items-start justify-between mb-6">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-bold text-gray-900">Tải báo cáo</h2>
+            <p class="text-sm text-gray-600">Subtask: <span id="modal-f5-subtask-download-subtask-name" class="font-medium text-gray-900"></span></p>
+          </div>
+          <button id="modal-f5-subtask-download-close" class="modal-close modal-f5-subtask-download-close text-gray-500 hover:text-gray-700 transition">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        
+        <div class="space-y-4">
+          <!-- Nút tải báo cáo PDF -->
+          <button type="button" id="modal-f5-subtask-download-pdf-btn" class="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-lg border-2 border-red-300 bg-red-50 hover:bg-red-100 text-red-700 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <span class="material-symbols-outlined text-2xl">picture_as_pdf</span>
+            <span>Tải báo cáo PDF</span>
+          </button>
+          
+          <!-- Nút tải báo cáo Excel -->
+          <button type="button" id="modal-f5-subtask-download-excel-btn" class="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-lg border-2 border-green-300 bg-green-50 hover:bg-green-100 text-green-700 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <span class="material-symbols-outlined text-2xl">table_chart</span>
+            <span>Tải báo cáo Excel</span>
+          </button>
+        </div>
+        
+        <div class="mt-6 flex justify-end">
+          <button type="button" id="modal-f5-subtask-download-cancel" class="modal-cancel-btn modal-f5-subtask-download-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================ -->
+  <!-- END MODAL SYSTEM - FORM 5: SUBTASK DOWNLOAD REPORTS -->
   <!-- ============================================ -->
 
   <!-- ============================================ -->
@@ -4087,6 +4178,16 @@
         submitBtnId: null,
         formId: null,
         bodyId: 'modal-f5-view-detail-body'
+      },
+      'f5-subtask-download': {
+        id: 'modal-f5-subtask-download',
+        overlayId: 'modal-f5-subtask-download-overlay',
+        contentId: 'modal-f5-subtask-download-content',
+        closeBtnIds: ['modal-f5-subtask-download-close', 'modal-f5-subtask-download-cancel'],
+        cancelBtnId: 'modal-f5-subtask-download-cancel',
+        submitBtnId: null,
+        formId: null,
+        bodyId: null
       }
     };
     
@@ -5015,14 +5116,42 @@
     }
 
     // Hàm lọc dữ liệu (hierarchical)
+    // Helper function để kiểm tra ngày có thuộc tháng được chọn không
+    function matchesMonthFilter(dateString, monthFilter) {
+      if (!monthFilter || !dateString) return true; // Không filter nếu không có giá trị
+      
+      try {
+        // Parse dateString - hỗ trợ nhiều format
+        let dateToParse = dateString;
+        if (dateString.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/)) {
+          dateToParse = dateString.replace(' ', 'T');
+        } else if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          dateToParse = `${dateString}T00:00:00`;
+        }
+        
+        const date = new Date(dateToParse);
+        if (isNaN(date.getTime())) return true; // Nếu không parse được, không filter
+        
+        const itemYear = date.getFullYear();
+        const itemMonth = String(date.getMonth() + 1).padStart(2, '0');
+        const itemMonthStr = `${itemYear}-${itemMonth}`;
+        
+        return itemMonthStr === monthFilter;
+      } catch (e) {
+        return true; // Nếu có lỗi, không filter
+      }
+    }
+
     function filterF3Data() {
       const searchInput = document.getElementById('f3-search-input');
       const statusFilter = document.getElementById('f3-filter-status');
       const assigneeFilter = document.getElementById('f3-filter-assignee');
+      const monthFilter = document.getElementById('f3-filter-month');
       
       const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
       const statusValue = statusFilter ? statusFilter.value : '';
       const assigneeValue = assigneeFilter ? assigneeFilter.value : '';
+      const monthValue = monthFilter ? monthFilter.value : '';
 
       // Deep filter cho hierarchical data
       F3_FILTERED_DATA = F3_ALL_DATA.map(item => {
@@ -5036,14 +5165,16 @@
             (epic.assignee && epic.assignee.toLowerCase().includes(searchTerm)) ||
             (epic.note && epic.note.toLowerCase().includes(searchTerm))
           ) && (!statusValue || matchStatus(epic.status, statusValue))
-          && (!assigneeValue || (epic.assignee && epic.assignee.trim() === assigneeValue));
+          && (!assigneeValue || (epic.assignee && epic.assignee.trim() === assigneeValue))
+          && (!monthValue || matchesMonthFilter(epic.startDate, monthValue));
           
           // Filter stories
           const filteredStories = (epic.stories || []).map(story => {
             const storyMatch = (!searchTerm || 
               (story.story && story.story.toLowerCase().includes(searchTerm))
             ) && (!statusValue || (story.storyTask && matchStatus(story.storyTask.status, statusValue)))
-            && (!assigneeValue || (story.assignee && story.assignee.trim() === assigneeValue));
+            && (!assigneeValue || (story.assignee && story.assignee.trim() === assigneeValue))
+            && (!monthValue || matchesMonthFilter(story.startDate, monthValue));
             
             // Filter subtasks
             const filteredSubtasks = (story.subtasks || []).filter(subtask => {
@@ -5053,7 +5184,8 @@
                 (subtask.assignee && subtask.assignee.toLowerCase().includes(searchTerm)) ||
                 (subtask.note && subtask.note.toLowerCase().includes(searchTerm))
               ) && (!statusValue || matchStatus(subtask.status, statusValue))
-              && (!assigneeValue || (subtask.assignee && subtask.assignee.trim() === assigneeValue));
+              && (!assigneeValue || (subtask.assignee && subtask.assignee.trim() === assigneeValue))
+              && (!monthValue || matchesMonthFilter(subtask.startDate, monthValue));
               
               return subtaskMatch;
             });
@@ -5842,11 +5974,13 @@
       const statusFilter = document.getElementById('f3-filter-status');
       const assigneeFilter = document.getElementById('f3-filter-assignee');
       const levelFilter = document.getElementById('f3-filter-level');
+      const monthFilter = document.getElementById('f3-filter-month');
       
       const savedSearch = searchInput ? searchInput.value : '';
       const savedStatus = statusFilter ? statusFilter.value : '';
       const savedAssignee = assigneeFilter ? assigneeFilter.value : '';
       const savedLevel = levelFilter ? levelFilter.value : '';
+      const savedMonth = monthFilter ? monthFilter.value : '';
 
       try {
         if (loadingDiv) loadingDiv.classList.remove('hidden');
@@ -5896,6 +6030,7 @@
         if (statusFilter) statusFilter.value = savedStatus;
         if (assigneeFilter) assigneeFilter.value = savedAssignee;
         if (levelFilter) levelFilter.value = savedLevel;
+        if (monthFilter) monthFilter.value = savedMonth;
         
         // Áp dụng lại filter với giá trị đã lưu
         filterF3Data();
@@ -6917,6 +7052,17 @@
         levelFilter.addEventListener('change', () => {
           applyF3LevelFilter();
         });
+      }
+
+      const monthFilter = document.getElementById('f3-filter-month');
+      if (monthFilter) {
+        // Set mặc định là tháng hiện tại
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        monthFilter.value = `${year}-${month}`;
+        
+        monthFilter.addEventListener('change', filterF3Data);
       }
 
       // Event listener cho nút khai báo thay đổi (delegation)
@@ -8761,7 +8907,7 @@
         SubtaskDeclarationMode: String(subtaskData.declarationMode || '').trim(),
         Subtaskno: subtaskData.subtaskNo ? Number(subtaskData.subtaskNo) : null,
         Subtaskitemcode: String(subtaskData.itemCode || '').trim(), // Mã linh kiện/sản phẩm
-        TaskCode: String(subtaskData.taskCode || '').trim() || null // Mã tác vụ QA.NB.DDMM-xxxxxx
+        TaskCode: String(subtaskData.taskCode || '').trim() || null // Mã tác vụ QA.NB.DDMM-xxxxxx (hoặc QA.NB.DDMM-xxxxxx-NSPM cho subtask A,B,C)
       };
     }
     
@@ -9718,7 +9864,7 @@
         const createdSubtasks = [];
         
         // Tạo subtask A
-        const qaNbCodeA = generateQANBCode();
+        const qaNbCodeA = generateQANBCodeForForm4();
         const subtaskAData = formatSubtaskToNocoDB({
           name: subtaskA.name,
           pic: subtaskA.pic,
@@ -9741,7 +9887,7 @@
         console.log('[Form 5] Created subtask A:', resultA);
         
         // Tạo subtask B (với dependsOn = A.id)
-        const qaNbCodeB = generateQANBCode();
+        const qaNbCodeB = generateQANBCodeForForm4();
         const subtaskBData = formatSubtaskToNocoDB({
           name: subtaskB.name,
           pic: subtaskB.pic,
@@ -9767,7 +9913,7 @@
         console.log('[Form 5] Created subtask B:', resultB);
         
         // Tạo subtask C (với dependsOn = B.id)
-        const qaNbCodeC = generateQANBCode();
+        const qaNbCodeC = generateQANBCodeForForm4();
         const subtaskCData = formatSubtaskToNocoDB({
           name: subtaskC.name,
           pic: subtaskC.pic,
@@ -9976,6 +10122,9 @@
     // Biến lưu trữ dữ liệu projects - sẽ được load từ API
     let F5_PROJECTS = [];
     let F5_FILTER_PIC = ''; // Filter theo người nhận tác vụ
+    // Filter theo tháng dựa trên ngày gửi (timesend) - mặc định là tháng hiện tại
+    const now = new Date();
+    let F5_FILTER_MONTH = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     
     // Danh sách tên "Người nhận tác vụ" cố định
     const F5_PIC_LIST = [
@@ -10317,7 +10466,9 @@
               itemCode: subtaskRecord.Subtaskitemcode || '', // Mã linh kiện/sản phẩm từ webhook
               subtaskCode: subtaskRecord.Subtaskcode || subtaskRecord.TaskCode || '', // Mã tác vụ của subtask
               idBody: subtaskRecord.id_body || null, // Lưu id_body từ webhook
-              Subtaskresultlink: (subtaskRecord.Subtaskresultlink && String(subtaskRecord.Subtaskresultlink).trim()) || null // Link kết quả từ webhook
+              Subtaskresultlink: (subtaskRecord.Subtaskresultlink && String(subtaskRecord.Subtaskresultlink).trim()) || null, // Link kết quả từ webhook
+              linkBCpdf: (subtaskRecord['link BCpdf'] && String(subtaskRecord['link BCpdf']).trim()) || (subtaskRecord.linkBCpdf && String(subtaskRecord.linkBCpdf).trim()) || null, // Link báo cáo PDF
+              linkBCexcel: (subtaskRecord['link BCexcel'] && String(subtaskRecord['link BCexcel']).trim()) || (subtaskRecord.linkBCexcel && String(subtaskRecord.linkBCexcel).trim()) || null // Link báo cáo Excel
             };
           });
           
@@ -10878,6 +11029,26 @@
 
       // Setup PIC filter
       setupF5PICFilter();
+      
+      // Setup Month filter
+      setupF5MonthFilter();
+    }
+    
+    function setupF5MonthFilter() {
+      const monthFilter = document.getElementById('f5-filter-month');
+      if (monthFilter) {
+        // Set giá trị mặc định là tháng hiện tại
+        if (!monthFilter.value) {
+          monthFilter.value = F5_FILTER_MONTH;
+        }
+        
+        // Event listener: khi thay đổi tháng, chỉ render lại bảng (không load lại từ API)
+        monthFilter.addEventListener('change', (e) => {
+          F5_FILTER_MONTH = e.target.value.trim();
+          // Chỉ render lại bảng với filter mới, không cần load lại từ API
+          renderF5TasksTable();
+        });
+      }
     }
 
     function setupF5PICFilter() {
@@ -11462,6 +11633,8 @@
         'in_progress': { text: 'Đang triển khai', class: 'bg-blue-100 text-blue-800' },
         'done': { text: 'Hoàn thành', class: 'bg-green-100 text-green-800' },
         'hoàn thành': { text: 'Hoàn thành', class: 'bg-green-100 text-green-800' },
+        'cần update': { text: 'Cần update', class: 'bg-yellow-100 text-yellow-800' },
+        'can update': { text: 'Cần update', class: 'bg-yellow-100 text-yellow-800' },
         'cancel': { text: 'Hủy bỏ', class: 'bg-red-100 text-red-800' },
         'cancelled': { text: 'Hủy bỏ', class: 'bg-red-100 text-red-800' },
         'leader review': { text: 'Leader review', class: 'bg-purple-100 text-purple-800' }
@@ -11474,6 +11647,9 @@
       }
       if (originalStatus === 'Hoàn thành' || originalStatus === 'hoàn thành') {
         return `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Hoàn thành</span>`;
+      }
+      if (originalStatus === 'Cần update' || originalStatus === 'Cần Update' || originalStatus === 'cần update' || originalStatus === 'Can update' || originalStatus === 'can update') {
+        return `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Cần update</span>`;
       }
       if (originalStatus === 'Cancel' || originalStatus === 'cancel') {
         return `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Hủy bỏ</span>`;
@@ -11641,7 +11817,7 @@
           }
         }
         // Project row (cấp 1)
-        const projectStatusClass = project.status === 'done' ? 'line-through text-gray-500' : 'text-gray-900';
+        const projectStatusClass = 'text-gray-900';
         const projectTasks = project.tasks || [];
         const projectProgress = calculateProjectProgress(project);
         
@@ -11689,7 +11865,7 @@
             }
             
             // Task row (cấp 2)
-            const statusClass = task.status === 'done' ? 'line-through text-gray-500' : 'text-gray-900';
+            const statusClass = 'text-gray-900';
             html += `
               <tr class="group hover:bg-blue-50/50 transition bg-blue-50/20" data-task-id="${task.id}" data-project-id="${project.id}">
                 <td class="px-6 py-4">
@@ -11722,7 +11898,7 @@
                       <span class="material-symbols-outlined text-xl">add</span>
                     </button>
                     -->
-                    <button type="button" class="f5-view-detail-btn text-gray-500 hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" data-task-id="${task.id}">
+                    <button type="button" class="f5-view-detail-btn flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-600 hover:text-blue-700 transition-all shadow-sm hover:shadow-md" data-task-id="${task.id}" title="Xem chi tiết">
                       <span class="material-symbols-outlined text-xl">more_horiz</span>
                     </button>
                   </div>
@@ -11736,9 +11912,55 @@
                 // Không filter subtask theo PIC - chỉ filter theo task PIC
                 // Subtask sẽ hiển thị nếu task cha có PIC khớp
                 
+                // Filter theo tháng dựa trên ngày gửi (timesend)
+                if (F5_FILTER_MONTH) {
+                  const timesend = st.timesend;
+                  if (!timesend) {
+                    return; // Skip subtask nếu không có timesend
+                  }
+                  // Parse timesend để lấy tháng/năm
+                  let timesendDate = null;
+                  try {
+                    // Thử parse các định dạng khác nhau
+                    const timesendStr = String(timesend).trim();
+                    if (timesendStr.includes('T')) {
+                      timesendDate = new Date(timesendStr);
+                    } else if (timesendStr.includes('-')) {
+                      // Format YYYY-MM-DD hoặc YYYY-MM-DD HH:mm
+                      const datePart = timesendStr.split(' ')[0];
+                      timesendDate = new Date(datePart + 'T00:00:00');
+                    } else if (timesendStr.includes('/')) {
+                      // Format DD/MM/YYYY hoặc DD/MM/YYYY HH:mm
+                      const parts = timesendStr.split(' ');
+                      const datePart = parts[0];
+                      const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                      if (dateMatch) {
+                        const day = dateMatch[1].padStart(2, '0');
+                        const month = dateMatch[2].padStart(2, '0');
+                        const year = dateMatch[3];
+                        timesendDate = new Date(`${year}-${month}-${day}T00:00:00`);
+                      }
+                    }
+                    
+                    if (!timesendDate || isNaN(timesendDate.getTime())) {
+                      return; // Skip nếu không parse được
+                    }
+                    
+                    // Format tháng/năm từ timesend: YYYY-MM
+                    const timesendMonth = `${timesendDate.getFullYear()}-${String(timesendDate.getMonth() + 1).padStart(2, '0')}`;
+                    
+                    // So sánh với filter month
+                    if (timesendMonth !== F5_FILTER_MONTH) {
+                      return; // Skip subtask nếu không khớp tháng
+                    }
+                  } catch (e) {
+                    return; // Skip nếu có lỗi parse
+                  }
+                }
+                
                 // Chuẩn hóa status để kiểm tra done hoặc cancelled
                 const normalizedSubtaskStatus = String(st.status || '').toLowerCase().trim();
-                const subtaskStatusClass = (normalizedSubtaskStatus === 'done' || normalizedSubtaskStatus === 'cancel' || normalizedSubtaskStatus === 'cancelled') ? 'line-through text-gray-500' : 'text-gray-900';
+                const subtaskStatusClass = 'text-gray-900';
                 
                 // Hiển thị nút khai báo dựa trên declarationMode hoặc tên tác vụ
                 // Nếu subtask có declarationMode thì cho phép khai báo
@@ -11763,7 +11985,10 @@
                   }
                 }
                 
-                // Hiển thị nút khai báo: nếu bị khóa thì làm mờ, nếu không hiển thị thì dùng placeholder
+                // Kiểm tra nếu subtask đã hoàn thành (done) hoặc "Cần update" thì hiển thị nút "Cập nhật báo cáo"
+                const isDone = normalizedSubtaskStatus === 'done' || normalizedSubtaskStatus === 'completed' || normalizedSubtaskStatus === 'hoàn thành' || normalizedSubtaskStatus === 'đã hoàn thành' || normalizedSubtaskStatus === 'cần update' || normalizedSubtaskStatus === 'can update';
+                
+                // Hiển thị nút khai báo hoặc cập nhật báo cáo: nếu bị khóa thì làm mờ, nếu không hiển thị thì dùng placeholder
                 let declarationBtnHtml = '';
                 if (showDeclarationBtn) {
                   if (isDeclarationLocked) {
@@ -11771,6 +11996,12 @@
                     declarationBtnHtml = `<button type="button" class="f5-declaration-btn flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg transition-colors shadow-sm opacity-50" data-task-id="${task.id}" data-subtask-id="${st.id}" data-type="subtask" data-subtask-type="${st.type || ''}" data-declaration-mode="${st.declarationMode || ''}" data-locked="true" title="Khai báo đã bị khóa" disabled>
                         <span class="material-symbols-outlined text-sm">description</span>
                         <span>Khai báo</span>
+                      </button>`;
+                  } else if (isDone) {
+                    // Tác vụ đã Done: hiển thị nút "Cập nhật báo cáo" (màu hồng giống Form 1)
+                    declarationBtnHtml = `<button type="button" class="f5-declaration-btn f5-update-report-btn flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-pink-600 hover:bg-pink-700 rounded-lg transition-colors shadow-sm" data-task-id="${task.id}" data-subtask-id="${st.id}" data-type="subtask" data-subtask-type="${st.type || ''}" data-declaration-mode="${st.declarationMode || ''}" data-is-done="true" title="Cập nhật báo cáo">
+                        <span class="material-symbols-outlined text-sm">edit</span>
+                        <span>Cập nhật báo cáo</span>
                       </button>`;
                   } else {
                     // Nút bình thường: có thể click
@@ -11820,8 +12051,8 @@
                       })()}
                     </td>
                     <td class="px-4 py-3">
-                      <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button type="button" class="f5-view-subtask-detail-btn text-gray-500 hover:text-blue-500" data-task-id="${task.id}" data-subtask-id="${st.id}">
+                      <div class="flex items-center justify-end gap-2">
+                        <button type="button" class="f5-view-subtask-detail-btn flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-600 hover:text-blue-700 transition-all shadow-sm hover:shadow-md" data-task-id="${task.id}" data-subtask-id="${st.id}" title="Tải báo cáo">
                           <span class="material-symbols-outlined text-xl">more_horiz</span>
                         </button>
                       </div>
@@ -12031,6 +12262,51 @@
             const subtaskId = subtaskName.getAttribute('data-subtask-id');
             if (taskId && subtaskId) {
               openF5ViewSubtaskDetail(taskId, subtaskId);
+            }
+            return;
+          }
+          
+          // Click vào nút 3 chấm của subtask (f5-view-subtask-detail-btn)
+          const subtaskDetailBtn = e.target.closest('.f5-view-subtask-detail-btn');
+          if (subtaskDetailBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const taskId = subtaskDetailBtn.getAttribute('data-task-id');
+            const subtaskId = subtaskDetailBtn.getAttribute('data-subtask-id');
+            console.log('[Form 5] Subtask detail button clicked:', { taskId, subtaskId });
+            if (taskId && subtaskId) {
+              openF5ViewSubtaskDetail(taskId, subtaskId);
+            } else {
+              console.error('[Form 5] Missing taskId or subtaskId:', { taskId, subtaskId });
+            }
+            return;
+          }
+          
+          // Click vào icon bên trong nút 3 chấm của subtask
+          const iconInSubtaskBtn = e.target.closest('.material-symbols-outlined');
+          if (iconInSubtaskBtn && iconInSubtaskBtn.parentElement && iconInSubtaskBtn.parentElement.classList.contains('f5-view-subtask-detail-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const parentBtn = iconInSubtaskBtn.parentElement;
+            const taskId = parentBtn.getAttribute('data-task-id');
+            const subtaskId = parentBtn.getAttribute('data-subtask-id');
+            console.log('[Form 5] Subtask detail icon clicked:', { taskId, subtaskId });
+            if (taskId && subtaskId) {
+              openF5ViewSubtaskDetail(taskId, subtaskId);
+            } else {
+              console.error('[Form 5] Missing taskId or subtaskId:', { taskId, subtaskId });
+            }
+            return;
+          }
+          
+          // Click vào nút 3 chấm của task (f5-view-detail-btn)
+          const taskDetailBtn = e.target.closest('.f5-view-detail-btn');
+          if (taskDetailBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const taskId = taskDetailBtn.getAttribute('data-task-id');
+            if (taskId) {
+              openF5ViewTaskDetail(taskId);
             }
             return;
           }
@@ -13227,7 +13503,7 @@
       if (!success) console.error('[Form 5] Failed to open send-test-task modal');
     }
     
-    // Hàm tạo mã QA.NB.DDMM-xxxxxx
+    // Hàm tạo mã QA.NB.DDMM-xxxxxx (cho subtask thủ công)
     function generateQANBCode() {
       const now = new Date();
       const day = String(now.getDate()).padStart(2, '0');
@@ -13242,6 +13518,23 @@
       }
       
       return `QA.NB.${ddmm}-${randomPart}`;
+    }
+
+    // Hàm tạo mã QA.NB.DDMM-xxxxxx-NSPM (cho subtask A, B, C tự động từ Form 4)
+    function generateQANBCodeForForm4() {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const ddmm = day + month;
+      
+      // Tạo 6 ký tự ngẫu nhiên (số và chữ)
+      const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let randomPart = '';
+      for (let i = 0; i < 6; i++) {
+        randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      
+      return `QA.NB.${ddmm}-${randomPart}-NSPM`;
     }
 
     // Hàm helper tạo timestamp dạng YYYY-MM-DD HH:mm
@@ -13530,6 +13823,10 @@
         if (uploaderCodeEl) uploaderCodeEl.textContent = subtask?.taskCode || task.taskCode || '';
         if (uploaderTaskEl) uploaderTaskEl.textContent = subtask?.name || task.taskName || '';
         
+        // Kiểm tra nếu subtask đã done hoặc "Cần update" thì hiển thị Gate 3
+        const normalizedSubtaskStatus = String(subtask?.status || '').toLowerCase().trim();
+        const isDone = normalizedSubtaskStatus === 'done' || normalizedSubtaskStatus === 'completed' || normalizedSubtaskStatus === 'hoàn thành' || normalizedSubtaskStatus === 'đã hoàn thành' || normalizedSubtaskStatus === 'cần update' || normalizedSubtaskStatus === 'can update';
+        
         // Reset form - Gate 1
         const pdfInput = document.getElementById('modal-f5-declaration-complete-file-pdfzip');
         const xlsxInput = document.getElementById('modal-f5-declaration-complete-file-xlsxzip');
@@ -13546,6 +13843,15 @@
         if (archiveG2) archiveG2.value = '';
         document.querySelectorAll('input[name="modal-f5-declaration-complete-classification-g2"]').forEach(el => el.checked = false);
         
+        // Reset Gate 3
+        const pdfInputG3 = document.getElementById('modal-f5-declaration-complete-file-pdfzip-g3');
+        const xlsxInputG3 = document.getElementById('modal-f5-declaration-complete-file-xlsxzip-g3');
+        const gate3Content = document.getElementById('modal-f5-declaration-complete-gate3-content');
+        if (pdfInputG3) pdfInputG3.value = '';
+        if (xlsxInputG3) xlsxInputG3.value = '';
+        if (gate3Content) gate3Content.value = '';
+        document.querySelectorAll('input[name="modal-f5-declaration-complete-conclusion-g3"]').forEach(el => el.checked = false);
+        
         // Reset BPS checkbox
         const bpsCheckbox = document.getElementById('modal-f5-declaration-complete-upload-bps');
         if (bpsCheckbox) bpsCheckbox.checked = true;
@@ -13556,11 +13862,46 @@
         if (durDateWrap) durDateWrap.style.display = 'none';
         if (durDate) durDate.value = '';
         
-        // Hiển thị Gate 1, ẩn Gate 2
+        // Hiển thị Gate phù hợp: nếu done thì hiển thị Gate 3, ngược lại hiển thị Gate 1
         const gate1Title = document.getElementById('modal-f5-declaration-complete-gate1-title');
         const gate2Div = document.getElementById('modal-f5-declaration-complete-gate2');
-        if (gate1Title) gate1Title.style.display = '';
-        if (gate2Div) gate2Div.style.display = 'none';
+        const gate3Div = document.getElementById('modal-f5-declaration-complete-gate3');
+        const uploadForm1Split = document.getElementById('modal-f5-declaration-complete-upload-form1-split');
+        const classificationGroup = document.getElementById('modal-f5-declaration-complete-classification-group');
+        const conclusionGroup = document.getElementById('modal-f5-declaration-complete-conclusion-group');
+        const durabilityGroup = document.getElementById('modal-f5-declaration-complete-durability-group');
+        const bpsOption = document.getElementById('modal-f5-declaration-complete-bps-option');
+        
+        // Tab Gate 3
+        const tabGate3 = document.getElementById('modal-f5-declaration-complete-tab-gate3');
+        
+        if (isDone) {
+          // Tác vụ đã done: hiển thị Gate 3
+          if (tabGate3) {
+            tabGate3.style.display = '';
+            tabGate3.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate3.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (gate1Title) gate1Title.style.display = 'none';
+          if (gate2Div) gate2Div.style.display = 'none';
+          if (gate3Div) gate3Div.style.display = '';
+          if (uploadForm1Split) uploadForm1Split.style.display = 'none';
+          if (classificationGroup) classificationGroup.style.display = 'none';
+          if (conclusionGroup) conclusionGroup.style.display = 'none';
+          if (durabilityGroup) durabilityGroup.style.display = 'none';
+          if (bpsOption) bpsOption.style.display = 'none';
+        } else {
+          // Tác vụ chưa done: hiển thị Gate 1
+          if (tabGate3) tabGate3.style.display = 'none';
+          if (gate1Title) gate1Title.style.display = '';
+          if (gate2Div) gate2Div.style.display = 'none';
+          if (gate3Div) gate3Div.style.display = 'none';
+          if (uploadForm1Split) uploadForm1Split.style.display = '';
+          if (classificationGroup) classificationGroup.style.display = '';
+          if (conclusionGroup) conclusionGroup.style.display = '';
+          if (durabilityGroup) durabilityGroup.style.display = '';
+          if (bpsOption) bpsOption.style.display = '';
+        }
         
         // Enable submit button
         const submitBtn = document.getElementById('modal-f5-declaration-complete-submit');
@@ -13568,18 +13909,32 @@
           submitBtn.disabled = false;
           submitBtn.style.pointerEvents = 'auto';
           submitBtn.style.opacity = '1';
+          submitBtn.textContent = isDone ? 'Gửi cập nhật' : 'Gửi';
         }
         
-        // Kích hoạt tab Gate 1
+        // Kích hoạt tab Gate 1 hoặc Gate 3
         const tabGate1 = document.getElementById('modal-f5-declaration-complete-tab-gate1');
         const tabGate2 = document.getElementById('modal-f5-declaration-complete-tab-gate2');
-        if (tabGate1) {
-          tabGate1.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
-          tabGate1.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
-        }
-        if (tabGate2) {
-          tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
-          tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+        if (isDone) {
+          // Gate 3 active
+          if (tabGate1) {
+            tabGate1.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate1.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (tabGate2) {
+            tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+        } else {
+          // Gate 1 active
+          if (tabGate1) {
+            tabGate1.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate1.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (tabGate2) {
+            tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
         }
         
         // Đảm bảo event listener được gắn
@@ -13618,16 +13973,71 @@
         return;
       }
       
+      // Tìm subtask và project để lấy thông tin (cần thiết cho validation tên file)
+      const result = findF5Task(taskId);
+      if (!result || !result.task) {
+        showToast('Không tìm thấy tác vụ', 'error');
+        return;
+      }
+      
       // Xác định Gate đang active
       const gate2Div = document.getElementById('modal-f5-declaration-complete-gate2');
+      const gate3Div = document.getElementById('modal-f5-declaration-complete-gate3');
       const isGate2 = gate2Div && gate2Div.style.display !== 'none';
+      const isGate3 = gate3Div && gate3Div.style.display !== 'none';
       
       // Lấy file upload
       let fPdf = null;
       let fXlsx = null;
       let fArchive = null;
+      let fPdfG3 = null;
+      let fXlsxG3 = null;
+      let gate3Content = '';
       
-      if (isGate2) {
+      if (isGate3) {
+        // Gate 3: Cập nhật báo cáo (PDF/Excel tùy chọn, nội dung cập nhật bắt buộc)
+        const pdfInputG3 = document.getElementById('modal-f5-declaration-complete-file-pdfzip-g3');
+        const xlsxInputG3 = document.getElementById('modal-f5-declaration-complete-file-xlsxzip-g3');
+        const contentInput = document.getElementById('modal-f5-declaration-complete-gate3-content');
+        
+        // Validate nội dung cập nhật (bắt buộc)
+        if (!contentInput || !contentInput.value || !contentInput.value.trim()) {
+          showToast('Vui lòng nhập nội dung cập nhật', 'error');
+          return;
+        }
+        gate3Content = contentInput.value.trim();
+        
+        // Lấy file PDF nếu có (tùy chọn)
+        if (pdfInputG3 && pdfInputG3.files && pdfInputG3.files.length > 0) {
+          fPdfG3 = pdfInputG3.files[0];
+          const extPdf = String(fPdfG3.name || '').toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+          if (extPdf !== 'pdf') {
+            showToast('File PDF không đúng định dạng (.pdf)', 'error');
+            return;
+          }
+        }
+        
+        // Lấy file Excel nếu có (tùy chọn)
+        if (xlsxInputG3 && xlsxInputG3.files && xlsxInputG3.files.length > 0) {
+          fXlsxG3 = xlsxInputG3.files[0];
+          const extX = String(fXlsxG3.name || '').toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+          if (extX !== 'xlsx') {
+            showToast('File Excel không đúng định dạng (.xlsx)', 'error');
+            return;
+          }
+          // Kiểm tra tên file phải đúng định dạng QA.R.xx-xxxxxx cho tác vụ C
+          const subtask = result.task.subtasks?.find(st => st.id === subtaskId);
+          const subtaskName = String(subtask?.name || '').trim();
+          if (subtaskName === 'Hoàn thiện báo cáo và nghiệm thu') {
+            const fileNameWithoutExt = fXlsxG3.name.replace(/\.xlsx$/i, '');
+            const fileNamePattern = /^QA\.R\.\d{2}-\d{6}$/i;
+            if (!fileNamePattern.test(fileNameWithoutExt)){
+              showToast('Tên file Excel phải đúng định dạng: QA.R.xx-xxxxxx (ví dụ: QA.R.25-023028)','error');
+              return;
+            }
+          }
+        }
+      } else if (isGate2) {
         // Gate 2: chỉ file nén
         const archiveInput = document.getElementById('modal-f5-declaration-complete-file-archive-g2');
         if (!archiveInput || !archiveInput.files || archiveInput.files.length === 0) {
@@ -13668,6 +14078,17 @@
           showToast('File Excel không đúng định dạng (.xlsx)', 'error');
           return;
         }
+        // Kiểm tra tên file phải đúng định dạng QA.R.xx-xxxxxx cho tác vụ C
+        const subtask = result.task.subtasks?.find(st => st.id === subtaskId);
+        const subtaskName = String(subtask?.name || '').trim();
+        if (subtaskName === 'Hoàn thiện báo cáo và nghiệm thu') {
+          const fileNameWithoutExt = fXlsx.name.replace(/\.xlsx$/i, '');
+          const fileNamePattern = /^QA\.R\.\d{2}-\d{6}$/i;
+          if (!fileNamePattern.test(fileNameWithoutExt)){
+            showToast('Tên file Excel phải đúng định dạng: QA.R.xx-xxxxxx (ví dụ: QA.R.25-023028)','error');
+            return;
+          }
+        }
       }
       
       // Lấy các giá trị từ form
@@ -13684,12 +14105,7 @@
       const subtaskResultLink = ''; // Modal mới không có trường resultLink riêng
       const subtaskStatus = 'done'; // Khai báo hoàn thành = done
       
-      // Tìm subtask và project để lấy thông tin
-      const result = findF5Task(taskId);
-      if (!result || !result.task) {
-        showToast('Không tìm thấy tác vụ', 'error');
-        return;
-      }
+      // result đã được định nghĩa ở trên
       
       const projectCode = result.project?.projectCode || null;
       const taskRequestCode = result.task.taskCode || '';
@@ -13787,6 +14203,121 @@
       }
       
       try {
+        // Xử lý Gate 3: Cập nhật báo cáo
+        if (isGate3) {
+          // Tạo FormData để gửi file
+          const fd = new FormData();
+          
+          // Append files nếu có
+          if (fPdfG3) {
+            fd.append('file_pdfzip', fPdfG3);
+            fd.append('file_name', fPdfG3.name || '');
+          }
+          if (fXlsxG3) {
+            fd.append('file_xlsxzip', fXlsxG3);
+            fd.append('file_name_xlsx', fXlsxG3.name || '');
+          }
+          
+          fd.append('noi_dung_cap_nhat', gate3Content);
+          fd.append('upload_type', fXlsxG3 ? (fPdfG3 ? 'pdf_xlsx' : 'xlsx_only') : (fPdfG3 ? 'pdf_only' : 'text_only'));
+          
+          // Timestamp
+          const formatDdMmYyyyHHmm = (date) => {
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+          };
+          fd.append('timestamp', formatDdMmYyyyHHmm(new Date()));
+          
+          // Thông tin người nộp và tác vụ
+          const subtask = result.task.subtasks?.find(st => st.id === subtaskId);
+          fd.append('nguoi_nop', subtask?.pic || result.task.pic || '');
+          fd.append('ma_tac_vu', qaNbCode || taskRequestCode);
+          fd.append('ten_tac_vu', subtask?.name || result.task.taskName || '');
+          fd.append('form', 'Form 5');
+          fd.append('system', '0');
+          
+          // Thêm ID subtask nếu có
+          if (subtaskDbId) {
+            fd.append('id', String(subtaskDbId));
+          }
+          
+          // Thêm id_body từ subtask (nếu có)
+          if (currentSubtask && currentSubtask.idBody) {
+            fd.append('id_body', String(currentSubtask.idBody));
+          }
+          
+          // Append Gate 3 conclusion nếu có
+          const conclusionG3 = document.querySelector('input[name="modal-f5-declaration-complete-conclusion-g3"]:checked')?.value || '';
+          if (conclusionG3) {
+            fd.append('ket_luan', conclusionG3);
+          }
+          
+          // Meta JSON
+          const meta = {
+            action: 'form1_upload',
+            gate: 'Gate 3',
+            person_name: subtask?.pic || result.task.pic || '',
+            taskId: qaNbCode || taskRequestCode,
+            code: qaNbCode || taskRequestCode,
+            taskName: subtask?.name || result.task.taskName || '',
+            noi_dung_cap_nhat: gate3Content,
+            ket_luan: conclusionG3 || '',
+            upload_type: fXlsxG3 ? (fPdfG3 ? 'pdf_xlsx' : 'xlsx_only') : (fPdfG3 ? 'pdf_only' : 'text_only'),
+            is_bps: '0',
+            system: '0',
+            timestamp_iso: new Date().toISOString()
+          };
+          fd.append('meta_json', JSON.stringify(meta));
+          fd.append('body', JSON.stringify(meta));
+          fd.append('action', 'form1_upload');
+          fd.append('gate', 'Gate 3');
+          
+          // Gửi đến webhook
+          const UPLOAD_URL = 'https://iatzhxxuk.tino.page/webhook/f5TrabaocaoSPMDQA';
+          
+          console.log('[Form 5] Sending Gate 3 update to webhook f5TrabaocaoSPMDQA');
+          
+          await fetch(UPLOAD_URL, {
+            method: 'POST',
+            body: fd,
+            mode: 'no-cors'
+          });
+          
+          console.log('[Form 5] Gate 3 update sent successfully');
+          
+          showToast('Đã gửi cập nhật báo cáo Gate 3 thành công.', 'success', 5000);
+          
+          // Đóng modal
+          closeModal('f5-declaration-complete');
+          
+          // Reload dữ liệu từ server để hiển thị cập nhật
+          try {
+            const taskIdToExpand = taskId;
+            F5_PROJECTS = await loadF5Projects(F5_FILTER_PIC);
+            
+            const resultAfterReload = findF5Task(taskIdToExpand);
+            if (resultAfterReload && resultAfterReload.task) {
+              resultAfterReload.task.expanded = true;
+              if (resultAfterReload.project) {
+                resultAfterReload.project.expanded = true;
+              }
+            }
+            
+            renderF5TasksTable();
+          } catch (reloadError) {
+            console.error('[Form 5] Failed to reload data:', reloadError);
+            showToast('Đã gửi cập nhật nhưng không thể tải lại dữ liệu. Vui lòng làm mới trang.', 'warning');
+            renderF5TasksTable();
+          }
+          
+          return; // Kết thúc hàm sau khi xử lý Gate 3
+        }
+        
         // Tạo FormData để gửi file (giống Form 1)
         const fd = new FormData();
         
@@ -13877,62 +14408,23 @@
         fd.append('action', 'form1_upload');
         fd.append('gate', activeGate);
         
-        // Gửi đồng thời 3 webhook
-        const UPLOAD_URL_1 = 'https://iatzhxxuk.tino.page/webhook/TrabaocaoDQA';
-        const UPLOAD_URL_2 = 'https://iatzhxxuk.tino.page/webhook/TrabaocaoSPMdqa';
-        const UPDATE_URL = 'https://iatzhxxuk.tino.page/webhook/form5-declaration-submit';
+        // Gửi đến webhook upload file báo cáo (chỉ 1 webhook duy nhất cho tác vụ C)
+        const UPLOAD_URL = 'https://iatzhxxuk.tino.page/webhook/f5TrabaocaoSPMDQA';
         
-        console.log('[Form 5] Sending complete declaration to 3 webhooks simultaneously');
+        console.log('[Form 5] Sending complete declaration to webhook f5TrabaocaoSPMDQA');
         
-        // Gửi đồng thời: 2 webhook upload file và 1 webhook cập nhật subtask
-        const [uploadResponse1, uploadResponse2, updateResponse] = await Promise.all([
-          // Webhook 1: TrabaocaoDQA
-          fetch(UPLOAD_URL_1, {
-            method: 'POST',
-            body: fd,
-            mode: 'no-cors'
-          }),
-          // Webhook 2: TrabaocaoSPMdqa
-          fetch(UPLOAD_URL_2, {
-            method: 'POST',
-            body: fd,
-            mode: 'no-cors'
-          }),
-          // Webhook 3: Cập nhật subtask status
-          fetch(UPDATE_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formattedData)
-          })
-        ]);
+        // Gửi file báo cáo đến webhook
+        const uploadResponse = await fetch(UPLOAD_URL, {
+          method: 'POST',
+          body: fd,
+          mode: 'no-cors'
+        });
         
         // Vì mode: 'no-cors', không thể kiểm tra uploadResponse.ok
-        console.log('[Form 5] File upload sent to both webhooks (TrabaocaoDQA and TrabaocaoSPMdqa)');
-        
-        // Kiểm tra response của webhook cập nhật subtask
-        if (!updateResponse.ok) {
-          throw new Error(`HTTP error! status: ${updateResponse.status}`);
-        }
-        
-        // Kiểm tra và parse JSON response
-        let responseData = null;
-        try {
-          const responseText = await updateResponse.text();
-          if (responseText && responseText.trim()) {
-            responseData = JSON.parse(responseText);
-            console.log('[Form 5] Subtask updated:', responseData);
-          } else {
-            console.log('[Form 5] Subtask update response is empty, but request succeeded');
-          }
-        } catch (jsonError) {
-          console.warn('[Form 5] Response is not valid JSON, but request may have succeeded:', jsonError);
-          // Không throw error vì webhook có thể đã xử lý thành công dù response không phải JSON
-        }
+        console.log('[Form 5] File upload sent to webhook f5TrabaocaoSPMDQA');
         
         // Hiển thị mã đã tạo trong toast
-        showToast(`Đã gửi báo cáo và cập nhật thành công. Mã tác vụ: ${qaNbCode}`, 'success', 5000);
+        showToast(`Đã gửi báo cáo thành công. Mã tác vụ: ${qaNbCode}`, 'success', 5000);
         
         // Đóng modal
         closeModal('f5-declaration-complete');
@@ -14261,101 +14753,69 @@
       if (!success) console.error('[Form 5] Failed to open task detail modal');
     }
     
-    // Hàm mở modal chi tiết subtask
+    // Hàm mở modal tải báo cáo subtask
     function openF5ViewSubtaskDetail(taskId, subtaskId) {
+      console.log('[Form 5] openF5ViewSubtaskDetail called:', { taskId, subtaskId });
       const result = findF5Task(taskId);
       if (!result || !result.task) {
+        console.error('[Form 5] Task not found:', taskId);
         showToast('Không tìm thấy tác vụ', 'error');
         return;
       }
       
       const task = result.task;
+      console.log('[Form 5] Task found, subtasks:', task.subtasks?.map(st => ({ id: st.id, name: st.name })));
       const subtask = task.subtasks ? task.subtasks.find(st => st.id === subtaskId) : null;
       
       if (!subtask) {
+        console.error('[Form 5] Subtask not found:', subtaskId, 'Available subtask IDs:', task.subtasks?.map(st => st.id));
         showToast('Không tìm thấy subtask', 'error');
         return;
       }
       
-      const modeNames = {
-        'review-file-nctn': 'Rà soát file với NCTN',
-        'review-ce-qc': 'Gửi rà soát CE với QC',
-        'train-qc': 'Đào tạo QC',
-        'send-test-task': 'Gửi tác vụ thử nghiệm',
-        'review-4m': 'Rà soát 4M',
-        'review-fmea': 'Rà soát FMEA'
-      };
+      console.log('[Form 5] Subtask found:', { id: subtask.id, name: subtask.name, linkBCpdf: subtask.linkBCpdf, linkBCexcel: subtask.linkBCexcel });
       
-      const success = openModal('f5-view-detail', (modal, config) => {
-        const titleEl = document.getElementById('modal-f5-view-detail-title');
-        const subtitleEl = document.getElementById('modal-f5-view-detail-subtitle');
-        const bodyEl = document.getElementById('modal-f5-view-detail-body');
+      // Lấy link từ subtask
+      const linkBCpdf = subtask.linkBCpdf || null;
+      const linkBCexcel = subtask.linkBCexcel || null;
+      
+      const success = openModal('f5-subtask-download', (modal, config) => {
+        const subtaskNameEl = document.getElementById('modal-f5-subtask-download-subtask-name');
+        const pdfBtn = document.getElementById('modal-f5-subtask-download-pdf-btn');
+        const excelBtn = document.getElementById('modal-f5-subtask-download-excel-btn');
         
-        if (titleEl) titleEl.textContent = 'Chi tiết Subtask';
-        if (subtitleEl) subtitleEl.textContent = `Task: ${task.taskName || task.taskCode || ''}`;
+        if (subtaskNameEl) {
+          subtaskNameEl.textContent = subtask.name || 'N/A';
+        }
         
-        if (bodyEl) {
-          bodyEl.innerHTML = `
-            <div class="space-y-6">
-              <!-- Thông tin cơ bản Subtask -->
-              <div class="border-b border-gray-200 pb-4">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Thông tin Subtask</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Tên subtask</label>
-                    <p class="text-base font-semibold text-gray-900 mt-1">${subtask.name || '-'}</p>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Chế độ khai báo</label>
-                    <p class="text-base text-blue-600 font-medium mt-1">${subtask.declarationMode ? (modeNames[subtask.declarationMode] || subtask.declarationMode) : '-'}</p>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Người thực hiện</label>
-                    <p class="text-base text-gray-900 mt-1">${subtask.pic || '-'}</p>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Trạng thái</label>
-                    <div class="mt-1">${getF5SubtaskStatusBadge(subtask.status)}</div>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Ưu tiên</label>
-                    <div class="mt-1">${getF5PriorityBadge(subtask.priority)}</div>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Ngày hết hạn</label>
-                    <p class="text-base text-gray-900 mt-1">${formatF5Date(subtask.deadline || subtask.dueDate) || '-'}</p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Thông tin Task cha -->
-              <div class="border-t border-gray-200 pt-4">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Thông tin Task cha</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Tên task</label>
-                    <p class="text-base font-semibold text-gray-900 mt-1">${task.taskName || '-'}</p>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Mã task</label>
-                    <p class="text-base font-mono text-gray-900 mt-1">${task.taskCode || '-'}</p>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Người phụ trách</label>
-                    <p class="text-base text-gray-900 mt-1">${task.pic || '-'}</p>
-                  </div>
-                  <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Trạng thái</label>
-                    <div class="mt-1">${getF5StatusBadge(task.status)}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
+        // Cập nhật nút PDF
+        if (pdfBtn) {
+          if (linkBCpdf && linkBCpdf.trim()) {
+            pdfBtn.disabled = false;
+            pdfBtn.onclick = () => {
+              window.open(linkBCpdf.trim(), '_blank');
+            };
+          } else {
+            pdfBtn.disabled = true;
+            pdfBtn.onclick = null;
+          }
+        }
+        
+        // Cập nhật nút Excel
+        if (excelBtn) {
+          if (linkBCexcel && linkBCexcel.trim()) {
+            excelBtn.disabled = false;
+            excelBtn.onclick = () => {
+              window.open(linkBCexcel.trim(), '_blank');
+            };
+          } else {
+            excelBtn.disabled = true;
+            excelBtn.onclick = null;
+          }
         }
       });
       
-      if (!success) console.error('[Form 5] Failed to open subtask detail modal');
+      if (!success) console.error('[Form 5] Failed to open subtask download modal');
     }
 
     // Xử lý submit form thêm subtask
@@ -14549,7 +15009,7 @@
       }, 0);
       const subtaskNo = maxSubtaskNo + 1; // Subtask số tiếp theo (bắt đầu từ 1)
       
-      // Tạo mã QA.NB.DDMM-xxxxxx khi thêm tác vụ con
+      // Tạo mã QA.NB.DDMM-xxxxxx khi thêm tác vụ con (subtask thủ công)
       const qaNbCode = generateQANBCode();
       
       // Format dữ liệu theo schema NocoDB
@@ -14751,12 +15211,15 @@
       (function setupF5CompleteModalTabs() {
         const tabGate1 = document.getElementById('modal-f5-declaration-complete-tab-gate1');
         const tabGate2 = document.getElementById('modal-f5-declaration-complete-tab-gate2');
+        const tabGate3 = document.getElementById('modal-f5-declaration-complete-tab-gate3');
         const gate1Title = document.getElementById('modal-f5-declaration-complete-gate1-title');
         const gate2Div = document.getElementById('modal-f5-declaration-complete-gate2');
+        const gate3Div = document.getElementById('modal-f5-declaration-complete-gate3');
         const uploadForm1Split = document.getElementById('modal-f5-declaration-complete-upload-form1-split');
         const classificationGroup = document.getElementById('modal-f5-declaration-complete-classification-group');
         const conclusionGroup = document.getElementById('modal-f5-declaration-complete-conclusion-group');
         const durabilityGroup = document.getElementById('modal-f5-declaration-complete-durability-group');
+        const bpsOption = document.getElementById('modal-f5-declaration-complete-bps-option');
         
         function activateGate1() {
           if (tabGate1) {
@@ -14767,12 +15230,18 @@
             tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
             tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
           }
+          if (tabGate3) {
+            tabGate3.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate3.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
           if (gate1Title) gate1Title.style.display = '';
           if (gate2Div) gate2Div.style.display = 'none';
+          if (gate3Div) gate3Div.style.display = 'none';
           if (uploadForm1Split) uploadForm1Split.style.display = '';
           if (classificationGroup) classificationGroup.style.display = '';
           if (conclusionGroup) conclusionGroup.style.display = '';
           if (durabilityGroup) durabilityGroup.style.display = '';
+          if (bpsOption) bpsOption.style.display = '';
         }
         
         function activateGate2() {
@@ -14784,12 +15253,41 @@
             tabGate2.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
             tabGate2.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
           }
+          if (tabGate3) {
+            tabGate3.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate3.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
           if (gate1Title) gate1Title.style.display = 'none';
           if (gate2Div) gate2Div.style.display = '';
+          if (gate3Div) gate3Div.style.display = 'none';
           if (uploadForm1Split) uploadForm1Split.style.display = 'none';
           if (classificationGroup) classificationGroup.style.display = 'none';
           if (conclusionGroup) conclusionGroup.style.display = 'none';
           if (durabilityGroup) durabilityGroup.style.display = 'none';
+          if (bpsOption) bpsOption.style.display = '';
+        }
+        
+        function activateGate3() {
+          if (tabGate1) {
+            tabGate1.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate1.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (tabGate2) {
+            tabGate2.classList.remove('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate2.classList.add('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (tabGate3) {
+            tabGate3.classList.add('bg-cyan-700', 'text-white', 'border-cyan-800', 'shadow');
+            tabGate3.classList.remove('bg-cyan-200', 'text-cyan-900', 'border-cyan-400');
+          }
+          if (gate1Title) gate1Title.style.display = 'none';
+          if (gate2Div) gate2Div.style.display = 'none';
+          if (gate3Div) gate3Div.style.display = '';
+          if (uploadForm1Split) uploadForm1Split.style.display = 'none';
+          if (classificationGroup) classificationGroup.style.display = 'none';
+          if (conclusionGroup) conclusionGroup.style.display = 'none';
+          if (durabilityGroup) durabilityGroup.style.display = 'none';
+          if (bpsOption) bpsOption.style.display = 'none';
         }
         
         if (tabGate1) {
@@ -14797,6 +15295,9 @@
         }
         if (tabGate2) {
           tabGate2.addEventListener('click', activateGate2);
+        }
+        if (tabGate3) {
+          tabGate3.addEventListener('click', activateGate3);
         }
         
         // Xử lý radio button "Có test bền" để hiển thị date picker
@@ -14813,6 +15314,7 @@
       
       // Khởi tạo modal listeners cho modal xem chi tiết
       initModalListeners('f5-view-detail');
+      initModalListeners('f5-subtask-download');
       
       // Xử lý submit form
       const addSubtaskForm = document.getElementById('modal-f5-add-subtask-form');
