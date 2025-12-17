@@ -11864,6 +11864,52 @@
               }
             }
             
+            // Filter theo tháng dựa trên ngày tạo (createdAt)
+            if (F5_FILTER_MONTH) {
+              const createdAt = task.createdAt;
+              if (!createdAt) {
+                return; // Skip task nếu không có createdAt
+              }
+              // Parse createdAt để lấy tháng/năm
+              let createdAtDate = null;
+              try {
+                // Thử parse các định dạng khác nhau
+                const createdAtStr = String(createdAt).trim();
+                if (createdAtStr.includes('T')) {
+                  createdAtDate = new Date(createdAtStr);
+                } else if (createdAtStr.includes('-')) {
+                  // Format YYYY-MM-DD hoặc YYYY-MM-DD HH:mm
+                  const datePart = createdAtStr.split(' ')[0];
+                  createdAtDate = new Date(datePart + 'T00:00:00');
+                } else if (createdAtStr.includes('/')) {
+                  // Format DD/MM/YYYY hoặc DD/MM/YYYY HH:mm
+                  const parts = createdAtStr.split(' ');
+                  const datePart = parts[0];
+                  const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                  if (dateMatch) {
+                    const day = dateMatch[1].padStart(2, '0');
+                    const month = dateMatch[2].padStart(2, '0');
+                    const year = dateMatch[3];
+                    createdAtDate = new Date(`${year}-${month}-${day}T00:00:00`);
+                  }
+                }
+                
+                if (!createdAtDate || isNaN(createdAtDate.getTime())) {
+                  return; // Skip nếu không parse được
+                }
+                
+                // Format tháng/năm từ createdAt: YYYY-MM
+                const createdAtMonth = `${createdAtDate.getFullYear()}-${String(createdAtDate.getMonth() + 1).padStart(2, '0')}`;
+                
+                // So sánh với filter month
+                if (createdAtMonth !== F5_FILTER_MONTH) {
+                  return; // Skip task nếu không khớp tháng
+                }
+              } catch (e) {
+                return; // Skip nếu có lỗi parse
+              }
+            }
+            
             // Task row (cấp 2)
             const statusClass = 'text-gray-900';
             html += `
@@ -11911,52 +11957,7 @@
               task.subtasks.forEach((st) => {
                 // Không filter subtask theo PIC - chỉ filter theo task PIC
                 // Subtask sẽ hiển thị nếu task cha có PIC khớp
-                
-                // Filter theo tháng dựa trên ngày gửi (timesend)
-                if (F5_FILTER_MONTH) {
-                  const timesend = st.timesend;
-                  if (!timesend) {
-                    return; // Skip subtask nếu không có timesend
-                  }
-                  // Parse timesend để lấy tháng/năm
-                  let timesendDate = null;
-                  try {
-                    // Thử parse các định dạng khác nhau
-                    const timesendStr = String(timesend).trim();
-                    if (timesendStr.includes('T')) {
-                      timesendDate = new Date(timesendStr);
-                    } else if (timesendStr.includes('-')) {
-                      // Format YYYY-MM-DD hoặc YYYY-MM-DD HH:mm
-                      const datePart = timesendStr.split(' ')[0];
-                      timesendDate = new Date(datePart + 'T00:00:00');
-                    } else if (timesendStr.includes('/')) {
-                      // Format DD/MM/YYYY hoặc DD/MM/YYYY HH:mm
-                      const parts = timesendStr.split(' ');
-                      const datePart = parts[0];
-                      const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-                      if (dateMatch) {
-                        const day = dateMatch[1].padStart(2, '0');
-                        const month = dateMatch[2].padStart(2, '0');
-                        const year = dateMatch[3];
-                        timesendDate = new Date(`${year}-${month}-${day}T00:00:00`);
-                      }
-                    }
-                    
-                    if (!timesendDate || isNaN(timesendDate.getTime())) {
-                      return; // Skip nếu không parse được
-                    }
-                    
-                    // Format tháng/năm từ timesend: YYYY-MM
-                    const timesendMonth = `${timesendDate.getFullYear()}-${String(timesendDate.getMonth() + 1).padStart(2, '0')}`;
-                    
-                    // So sánh với filter month
-                    if (timesendMonth !== F5_FILTER_MONTH) {
-                      return; // Skip subtask nếu không khớp tháng
-                    }
-                  } catch (e) {
-                    return; // Skip nếu có lỗi parse
-                  }
-                }
+                // Không filter subtask theo tháng - chỉ filter task (cấp 2) theo tháng
                 
                 // Chuẩn hóa status để kiểm tra done hoặc cancelled
                 const normalizedSubtaskStatus = String(st.status || '').toLowerCase().trim();
