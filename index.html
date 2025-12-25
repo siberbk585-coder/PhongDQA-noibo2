@@ -17211,6 +17211,13 @@
             navBtn.classList.remove('active');
           });
           this.classList.add('active');
+          
+          // Khởi tạo form cụ thể khi chuyển sang
+          if (targetForm === 'form5' && typeof initForm5 === 'function') {
+            setTimeout(() => {
+              initForm5();
+            }, 100);
+          }
         });
       });
       
