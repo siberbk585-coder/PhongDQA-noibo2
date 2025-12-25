@@ -216,6 +216,16 @@
       background: rgba(234, 179, 8, 0.2);
       border-color: rgba(234, 179, 8, 0.3);
     }
+    /* Group riêng biệt cho Công cụ hỗ trợ */
+    #sidebar-nav .group-btn[data-group="tools-group"] {
+      background: rgba(34, 197, 94, 0.1);
+      color: #15803d;
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+    #sidebar-nav .group-btn[data-group="tools-group"]:hover {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
     #sidebar-nav .nav-btn {
       margin-bottom: 0.125rem;
       padding: 0.625rem 0.75rem;
@@ -350,14 +360,27 @@
         </div>
       </div>
       <nav class="flex flex-col gap-2">
-        <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form1">
-          <span class="text-lg">🔍</span>
-          <p class="text-sm font-semibold">Form 1 - So sánh CE</p>
-        </button>
-        <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form2">
-          <span class="text-lg">📊</span>
-          <p class="text-sm font-semibold">Form 2 - Rà soát CE</p>
-        </button>
+        <!-- Nhóm: Công cụ hỗ trợ -->
+        <div class="flex flex-col gap-1 mt-2">
+          <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="tools-group">
+            <span class="text-lg group-expand-icon">🛠️</span>
+            <p class="text-sm font-semibold">Công cụ hỗ trợ</p>
+          </button>
+          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="tools-group">
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form1">
+              <span class="text-base">🔍</span>
+              <p class="text-sm font-semibold">Form 1 - So sánh CE</p>
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form2">
+              <span class="text-base">📊</span>
+              <p class="text-sm font-semibold">Form 2 - Rà soát CE</p>
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form9">
+              <span class="text-base">🔍</span>
+              <p class="text-sm font-semibold">Form 9 - Ngân hàng lỗi</p>
+            </button>
+          </div>
+        </div>
         
         <!-- Nhóm: Quản lý công việc SPM -->
         <div class="flex flex-col gap-1 mt-2">
@@ -402,12 +425,6 @@
             </button>
           </div>
         </div>
-        
-        <!-- Form 9 - Ngân hàng lỗi -->
-        <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form9">
-          <span class="text-lg">🔍</span>
-          <p class="text-sm font-semibold">Form 9 - Ngân hàng lỗi</p>
-        </button>
       </nav>
     </div>
   </aside>
@@ -15754,6 +15771,90 @@
         });
       }
       
+      // Sắp xếp theo "Ngày ghi nhận" từ mới nhất đến cũ nhất
+      F9_FILTERED_DATA.sort((a, b) => {
+        const dateA = a['Ngày ghi nhận'] || '';
+        const dateB = b['Ngày ghi nhận'] || '';
+        
+        // Nếu cả hai đều không có ngày, giữ nguyên thứ tự
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1; // Không có ngày đặt xuống cuối
+        if (!dateB) return -1; // Không có ngày đặt xuống cuối
+        
+        // Parse date - hỗ trợ nhiều format
+        let dateAObj = null;
+        let dateBObj = null;
+        
+        try {
+          // Thử parse các format khác nhau
+          const dateAStr = String(dateA).trim();
+          const dateBStr = String(dateB).trim();
+          
+          // Format: YYYY-MM-DD HH:mm hoặc YYYY-MM-DD HH:mm:ss
+          if (dateAStr.includes('-')) {
+            // Có thể có giờ: "2025-12-25 11:01" hoặc chỉ ngày: "2025-12-25"
+            if (dateAStr.includes(' ')) {
+              // Có giờ: parse đầy đủ
+              const [datePart, timePart] = dateAStr.split(' ');
+              const [hours, minutes] = (timePart || '00:00').split(':');
+              dateAObj = new Date(`${datePart}T${hours || '00'}:${minutes || '00'}:00`);
+            } else {
+              // Chỉ có ngày
+              dateAObj = new Date(dateAStr + 'T00:00:00');
+            }
+          } else if (dateAStr.includes('/')) {
+            // Format: DD/MM/YYYY HH:mm hoặc DD/MM/YYYY
+            const parts = dateAStr.split(' ');
+            const datePart = parts[0];
+            const timePart = parts[1] || '00:00';
+            const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+            if (dateMatch) {
+              const day = dateMatch[1].padStart(2, '0');
+              const month = dateMatch[2].padStart(2, '0');
+              const year = dateMatch[3];
+              const [hours, minutes] = timePart.split(':');
+              dateAObj = new Date(`${year}-${month}-${day}T${hours || '00'}:${minutes || '00'}:00`);
+            }
+          }
+          
+          if (dateBStr.includes('-')) {
+            // Có thể có giờ: "2025-12-25 11:01" hoặc chỉ ngày: "2025-12-25"
+            if (dateBStr.includes(' ')) {
+              // Có giờ: parse đầy đủ
+              const [datePart, timePart] = dateBStr.split(' ');
+              const [hours, minutes] = (timePart || '00:00').split(':');
+              dateBObj = new Date(`${datePart}T${hours || '00'}:${minutes || '00'}:00`);
+            } else {
+              // Chỉ có ngày
+              dateBObj = new Date(dateBStr + 'T00:00:00');
+            }
+          } else if (dateBStr.includes('/')) {
+            // Format: DD/MM/YYYY HH:mm hoặc DD/MM/YYYY
+            const parts = dateBStr.split(' ');
+            const datePart = parts[0];
+            const timePart = parts[1] || '00:00';
+            const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+            if (dateMatch) {
+              const day = dateMatch[1].padStart(2, '0');
+              const month = dateMatch[2].padStart(2, '0');
+              const year = dateMatch[3];
+              const [hours, minutes] = timePart.split(':');
+              dateBObj = new Date(`${year}-${month}-${day}T${hours || '00'}:${minutes || '00'}:00`);
+            }
+          }
+          
+          // Nếu parse thành công, so sánh
+          if (dateAObj && dateBObj && !isNaN(dateAObj.getTime()) && !isNaN(dateBObj.getTime())) {
+            return dateBObj.getTime() - dateAObj.getTime(); // Mới nhất trước (giảm dần)
+          }
+        } catch (e) {
+          // Nếu parse lỗi, so sánh string
+        }
+        
+        // Fallback: so sánh string (mới nhất trước)
+        return String(dateB).localeCompare(String(dateA));
+      });
+      
       F9_CURRENT_PAGE = 1; // Reset về trang đầu
       renderF9Table();
     }
@@ -15777,7 +15878,8 @@
       tbody.innerHTML = pageData.map((item, index) => {
         const stt = start + index + 1;
         const ngayGhiNhan = item['Ngày ghi nhận'] || '';
-        const formattedDate = ngayGhiNhan ? ngayGhiNhan.split(' ')[0] : '';
+        // Hiển thị đầy đủ ngày giờ nếu có
+        const formattedDate = ngayGhiNhan ? ngayGhiNhan.trim() : '';
         const hasChiTietHangMuc = item['Chi tiết hạng mục NG'] && item['Chi tiết hạng mục NG'].trim();
         
         return `
@@ -17082,6 +17184,65 @@
       }
     }
 
+
+    // ===== SIDEBAR NAVIGATION - GROUP TOGGLE =====
+    
+    // Khởi tạo sidebar navigation và group toggle
+    function initSidebarNavigation() {
+      // Xử lý chuyển đổi form
+      const navButtons = document.querySelectorAll('.nav-btn[data-target]');
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetForm = this.getAttribute('data-target');
+          
+          // Ẩn tất cả form
+          document.querySelectorAll('section[id^="form"]').forEach(form => {
+            form.classList.add('hidden');
+          });
+          
+          // Hiển thị form được chọn
+          const targetElement = document.getElementById(targetForm);
+          if (targetElement) {
+            targetElement.classList.remove('hidden');
+          }
+          
+          // Cập nhật active state cho nav buttons
+          navButtons.forEach(navBtn => {
+            navBtn.classList.remove('active');
+          });
+          this.classList.add('active');
+        });
+      });
+      
+      // Xử lý toggle group
+      const groupButtons = document.querySelectorAll('.group-btn[data-group]');
+      groupButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const groupName = this.getAttribute('data-group');
+          const groupItems = document.querySelector(`.group-items[data-group="${groupName}"]`);
+          
+          if (groupItems) {
+            // Toggle collapse class
+            groupItems.classList.toggle('collapsed');
+            this.classList.toggle('collapsed');
+            
+            // Toggle expand icon rotation
+            const expandIcon = this.querySelector('.group-expand-icon');
+            if (expandIcon) {
+              expandIcon.style.transform = groupItems.classList.contains('collapsed') 
+                ? 'rotate(-90deg)' 
+                : 'rotate(0deg)';
+            }
+          }
+        });
+      });
+    }
+    
+    // Khởi tạo khi DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+      initSidebarNavigation();
+    });
 
   </script>
 
