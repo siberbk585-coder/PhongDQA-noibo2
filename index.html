@@ -700,7 +700,24 @@
               <option value="story">Story và Subtask</option>
               <option value="subtask">Chỉ Subtask</option>
             </select>
-            <input type="month" id="f3-filter-month" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer" placeholder="Lọc theo tháng">
+            
+            <!-- Bộ lọc thời gian cải tiến -->
+            <select id="f3-filter-date-preset" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none min-w-[180px]">
+              <option value="all">Tất cả thời gian</option>
+              <option value="today">Hôm nay</option>
+              <option value="this-week">Tuần này</option>
+              <option value="this-month" selected>Tháng này</option>
+              <option value="last-month">Tháng trước</option>
+              <option value="last-3-months">3 tháng gần nhất</option>
+              <option value="custom">Tùy chỉnh...</option>
+            </select>
+            
+            <!-- Khoảng thời gian tùy chỉnh (ẩn mặc định) -->
+            <div id="f3-custom-date-range" class="hidden flex items-center gap-2">
+              <input type="date" id="f3-filter-date-from" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Từ ngày">
+              <span class="text-[#6b6189] text-sm">đến</span>
+              <input type="date" id="f3-filter-date-to" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Đến ngày">
+            </div>
           </div>
         </div>
 
@@ -1426,11 +1443,58 @@
           <span>Đang tải...</span>
         </div>
 
-        <!-- Search -->
-        <div class="flex items-center gap-4">
-          <div class="relative flex-1 max-w-md">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">search</span>
-            <input id="f9-search" type="text" placeholder="Tìm kiếm..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <!-- Bộ lọc và Tìm kiếm -->
+        <div class="flex flex-col gap-4 rounded-lg bg-white p-4 shadow-sm border border-gray-200">
+          <!-- Dòng 1: Tìm kiếm và Bộ lọc thời gian -->
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="relative flex-1 min-w-[250px]">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">search</span>
+              <input id="f9-search" type="text" placeholder="Tìm kiếm..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            </div>
+            
+            <!-- Bộ lọc thời gian -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <select id="f9-filter-date-preset" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[180px]">
+                <option value="all">Tất cả thời gian</option>
+                <option value="today">Hôm nay</option>
+                <option value="this-week">Tuần này</option>
+                <option value="this-month" selected>Tháng này</option>
+                <option value="last-month">Tháng trước</option>
+                <option value="last-3-months">3 tháng gần nhất</option>
+                <option value="custom">Tùy chỉnh...</option>
+              </select>
+              
+              <!-- Khoảng thời gian tùy chỉnh (ẩn mặc định) -->
+              <div id="f9-custom-date-range" class="hidden flex items-center gap-2">
+                <input type="date" id="f9-filter-date-from" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Từ ngày">
+                <span class="text-gray-500 text-sm">đến</span>
+                <input type="date" id="f9-filter-date-to" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Đến ngày">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dòng 2: Bộ lọc theo các trường -->
+          <div class="flex flex-wrap items-center gap-3">
+            <select id="f9-filter-nha-cung-cap" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[180px]">
+              <option value="">Tất cả nhà cung cấp</option>
+            </select>
+            
+            <select id="f9-filter-nguoi-lap" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[150px]">
+              <option value="">Tất cả người lập</option>
+            </select>
+            
+            <select id="f9-filter-nguoi-kiem-tra" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[150px]">
+              <option value="">Tất cả người kiểm tra</option>
+            </select>
+            
+            <select id="f9-filter-pham-vi" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[120px]">
+              <option value="">Tất cả phạm vi</option>
+            </select>
+            
+            <button id="f9-reset-filters" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm hover:bg-gray-50 transition-colors text-gray-700">
+              <span class="material-symbols-outlined text-sm align-middle">refresh</span>
+              <span class="ml-1">Đặt lại</span>
+            </button>
           </div>
         </div>
 
@@ -1559,7 +1623,24 @@
               <option value="story">Story và Subtask</option>
               <option value="subtask">Chỉ Subtask</option>
             </select>
-            <input type="month" id="f10-filter-month" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer" placeholder="Lọc theo tháng">
+            
+            <!-- Bộ lọc thời gian cải tiến -->
+            <select id="f10-filter-date-preset" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none min-w-[180px]">
+              <option value="all">Tất cả thời gian</option>
+              <option value="today">Hôm nay</option>
+              <option value="this-week">Tuần này</option>
+              <option value="this-month" selected>Tháng này</option>
+              <option value="last-month">Tháng trước</option>
+              <option value="last-3-months">3 tháng gần nhất</option>
+              <option value="custom">Tùy chỉnh...</option>
+            </select>
+            
+            <!-- Khoảng thời gian tùy chỉnh (ẩn mặc định) -->
+            <div id="f10-custom-date-range" class="hidden flex items-center gap-2">
+              <input type="date" id="f10-filter-date-from" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Từ ngày">
+              <span class="text-[#6b6189] text-sm">đến</span>
+              <input type="date" id="f10-filter-date-to" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Đến ngày">
+            </div>
           </div>
         </div>
 
@@ -5489,6 +5570,16 @@
     let F3_ALL_DATA = []; // Lưu dữ liệu hierarchical đã transform (Epic -> Story -> Subtask)
     let F3_FILTERED_DATA = []; // Lưu dữ liệu sau khi filter/search
     
+    // Bộ lọc thời gian Form 3
+    const nowF3 = new Date();
+    const startOfMonthF3 = new Date(nowF3.getFullYear(), nowF3.getMonth(), 1);
+    const endOfMonthF3 = new Date(nowF3.getFullYear(), nowF3.getMonth() + 1, 0);
+    let F3_FILTER_DATE_RANGE = {
+      preset: 'this-month',
+      from: startOfMonthF3.toISOString().split('T')[0],
+      to: endOfMonthF3.toISOString().split('T')[0]
+    };
+    
     /**
      * LOGIC NHẬN VÀ HIỂN THỊ DỮ LIỆU FORM 3 - QUẢN LÝ DỰ ÁN
      * 
@@ -5999,8 +6090,9 @@
 
     // Hàm lọc dữ liệu (hierarchical)
     // Helper function để kiểm tra ngày có thuộc tháng được chọn không
-    function matchesMonthFilter(dateString, monthFilter) {
-      if (!monthFilter || !dateString) return true; // Không filter nếu không có giá trị
+    // Hàm kiểm tra date có nằm trong khoảng thời gian filter không
+    function matchesDateRangeFilter(dateString, dateRange) {
+      if (!dateRange || dateRange.preset === 'all' || !dateString) return true; // Không filter nếu không có giá trị hoặc preset là "all"
       
       try {
         // Parse dateString - hỗ trợ nhiều format
@@ -6014,26 +6106,166 @@
         const date = new Date(dateToParse);
         if (isNaN(date.getTime())) return true; // Nếu không parse được, không filter
         
+        const itemDateStr = date.toISOString().split('T')[0];
+        const filterFrom = dateRange.from;
+        const filterTo = dateRange.to;
+        
+        // Nếu có filter từ ngày và itemDate < filterFrom thì skip
+        if (filterFrom && itemDateStr < filterFrom) {
+          return false;
+        }
+        
+        // Nếu có filter đến ngày và itemDate > filterTo thì skip
+        if (filterTo && itemDateStr > filterTo) {
+          return false;
+        }
+        
+        return true;
+      } catch (e) {
+        return true; // Nếu có lỗi, không filter
+      }
+    }
+    
+    // Giữ lại hàm cũ để tương thích (deprecated)
+    function matchesMonthFilter(dateString, monthFilter) {
+      if (!monthFilter || !dateString) return true;
+      
+      try {
+        let dateToParse = dateString;
+        if (dateString.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/)) {
+          dateToParse = dateString.replace(' ', 'T');
+        } else if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          dateToParse = `${dateString}T00:00:00`;
+        }
+        
+        const date = new Date(dateToParse);
+        if (isNaN(date.getTime())) return true;
+        
         const itemYear = date.getFullYear();
         const itemMonth = String(date.getMonth() + 1).padStart(2, '0');
         const itemMonthStr = `${itemYear}-${itemMonth}`;
         
         return itemMonthStr === monthFilter;
       } catch (e) {
-        return true; // Nếu có lỗi, không filter
+        return true;
       }
     }
 
+    // Hàm tính toán khoảng thời gian từ preset cho Form 3
+    function calculateF3DateRangeFromPreset(preset) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let from, to;
+      
+      switch(preset) {
+        case 'today':
+          from = new Date(today);
+          to = new Date(today);
+          break;
+        case 'this-week':
+          const dayOfWeek = today.getDay();
+          const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+          from = new Date(today.getFullYear(), today.getMonth(), diff);
+          to = new Date(from);
+          to.setDate(to.getDate() + 6);
+          break;
+        case 'this-month':
+          from = new Date(today.getFullYear(), today.getMonth(), 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case 'last-month':
+          from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          to = new Date(today.getFullYear(), today.getMonth(), 0);
+          break;
+        case 'last-3-months':
+          from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case 'all':
+          from = null;
+          to = null;
+          break;
+        default:
+          return null;
+      }
+      
+      if (from && to) {
+        return {
+          from: from.toISOString().split('T')[0],
+          to: to.toISOString().split('T')[0]
+        };
+      }
+      return { from: null, to: null };
+    }
+    
+    function setupF3DateFilter() {
+      const presetSelect = document.getElementById('f3-filter-date-preset');
+      const customRangeDiv = document.getElementById('f3-custom-date-range');
+      const dateFromInput = document.getElementById('f3-filter-date-from');
+      const dateToInput = document.getElementById('f3-filter-date-to');
+      
+      if (!presetSelect) return;
+      
+      presetSelect.value = F3_FILTER_DATE_RANGE.preset || 'this-month';
+      
+      function toggleCustomRange() {
+        if (presetSelect.value === 'custom') {
+          customRangeDiv.classList.remove('hidden');
+          if (dateFromInput && dateToInput) {
+            dateFromInput.value = F3_FILTER_DATE_RANGE.from || '';
+            dateToInput.value = F3_FILTER_DATE_RANGE.to || '';
+          }
+        } else {
+          customRangeDiv.classList.add('hidden');
+        }
+      }
+      
+      toggleCustomRange();
+      
+      presetSelect.addEventListener('change', (e) => {
+        const preset = e.target.value;
+        
+        if (preset === 'custom') {
+          toggleCustomRange();
+        } else {
+          const range = calculateF3DateRangeFromPreset(preset);
+          if (range) {
+            F3_FILTER_DATE_RANGE = {
+              preset: preset,
+              from: range.from,
+              to: range.to
+            };
+          }
+          toggleCustomRange();
+          filterF3Data();
+        }
+      });
+      
+      if (dateFromInput && dateToInput) {
+        const updateCustomRange = () => {
+          if (presetSelect.value === 'custom') {
+            F3_FILTER_DATE_RANGE = {
+              preset: 'custom',
+              from: dateFromInput.value || null,
+              to: dateToInput.value || null
+            };
+            filterF3Data();
+          }
+        };
+        
+        dateFromInput.addEventListener('change', updateCustomRange);
+        dateToInput.addEventListener('change', updateCustomRange);
+      }
+    }
+    
     function filterF3Data() {
       const searchInput = document.getElementById('f3-search-input');
       const statusFilter = document.getElementById('f3-filter-status');
       const assigneeFilter = document.getElementById('f3-filter-assignee');
-      const monthFilter = document.getElementById('f3-filter-month');
       
       const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
       const statusValue = statusFilter ? statusFilter.value : '';
       const assigneeValue = assigneeFilter ? assigneeFilter.value : '';
-      const monthValue = monthFilter ? monthFilter.value : '';
 
       // Deep filter cho hierarchical data
       F3_FILTERED_DATA = F3_ALL_DATA.map(item => {
@@ -6048,7 +6280,7 @@
             (epic.note && epic.note.toLowerCase().includes(searchTerm))
           ) && (!statusValue || matchStatus(epic.status, statusValue))
           && (!assigneeValue || (epic.assignee && epic.assignee.trim() === assigneeValue))
-          && (!monthValue || matchesMonthFilter(epic.startDate, monthValue));
+          && matchesDateRangeFilter(epic.startDate, F3_FILTER_DATE_RANGE);
           
           // Filter stories
           const filteredStories = (epic.stories || []).map(story => {
@@ -6056,7 +6288,7 @@
               (story.story && story.story.toLowerCase().includes(searchTerm))
             ) && (!statusValue || (story.storyTask && matchStatus(story.storyTask.status, statusValue)))
             && (!assigneeValue || (story.assignee && story.assignee.trim() === assigneeValue))
-            && (!monthValue || matchesMonthFilter(story.startDate, monthValue));
+            && matchesDateRangeFilter(story.startDate, F3_FILTER_DATE_RANGE);
             
             // Filter subtasks
             const filteredSubtasks = (story.subtasks || []).filter(subtask => {
@@ -6067,7 +6299,7 @@
                 (subtask.note && subtask.note.toLowerCase().includes(searchTerm))
               ) && (!statusValue || matchStatus(subtask.status, statusValue))
               && (!assigneeValue || (subtask.assignee && subtask.assignee.trim() === assigneeValue))
-              && (!monthValue || matchesMonthFilter(subtask.startDate, monthValue));
+              && matchesDateRangeFilter(subtask.startDate, F3_FILTER_DATE_RANGE);
               
               return subtaskMatch;
             });
@@ -7937,15 +8169,8 @@
       }
 
       const monthFilter = document.getElementById('f3-filter-month');
-      if (monthFilter) {
-        // Set mặc định là tháng hiện tại
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        monthFilter.value = `${year}-${month}`;
-        
-        monthFilter.addEventListener('change', filterF3Data);
-      }
+      // Setup date filter (thay thế month filter)
+      setupF3DateFilter();
 
       // Event listener cho nút khai báo thay đổi (delegation)
       document.addEventListener('click', (e) => {
@@ -8000,6 +8225,16 @@
     let F10_EXCEL_FILE = null;
     let F10_ALL_DATA = []; // Lưu dữ liệu hierarchical đã transform (Epic -> Story -> Subtask)
     let F10_FILTERED_DATA = []; // Lưu dữ liệu sau khi filter/search
+    
+    // Bộ lọc thời gian Form 10
+    const nowF10 = new Date();
+    const startOfMonthF10 = new Date(nowF10.getFullYear(), nowF10.getMonth(), 1);
+    const endOfMonthF10 = new Date(nowF10.getFullYear(), nowF10.getMonth() + 1, 0);
+    let F10_FILTER_DATE_RANGE = {
+      preset: 'this-month',
+      from: startOfMonthF10.toISOString().split('T')[0],
+      to: endOfMonthF10.toISOString().split('T')[0]
+    };
     
     // Webhook URL
     const F10_WEBHOOK_URL_LOAD = 'https://iatzhxxuk.tino.page/webhook/quanlyjira';
@@ -9023,18 +9258,123 @@
     }
     
     // Hàm filter dữ liệu
+    // Hàm tính toán khoảng thời gian từ preset cho Form 10
+    function calculateF10DateRangeFromPreset(preset) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let from, to;
+      
+      switch(preset) {
+        case 'today':
+          from = new Date(today);
+          to = new Date(today);
+          break;
+        case 'this-week':
+          const dayOfWeek = today.getDay();
+          const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+          from = new Date(today.getFullYear(), today.getMonth(), diff);
+          to = new Date(from);
+          to.setDate(to.getDate() + 6);
+          break;
+        case 'this-month':
+          from = new Date(today.getFullYear(), today.getMonth(), 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case 'last-month':
+          from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          to = new Date(today.getFullYear(), today.getMonth(), 0);
+          break;
+        case 'last-3-months':
+          from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case 'all':
+          from = null;
+          to = null;
+          break;
+        default:
+          return null;
+      }
+      
+      if (from && to) {
+        return {
+          from: from.toISOString().split('T')[0],
+          to: to.toISOString().split('T')[0]
+        };
+      }
+      return { from: null, to: null };
+    }
+    
+    function setupF10DateFilter() {
+      const presetSelect = document.getElementById('f10-filter-date-preset');
+      const customRangeDiv = document.getElementById('f10-custom-date-range');
+      const dateFromInput = document.getElementById('f10-filter-date-from');
+      const dateToInput = document.getElementById('f10-filter-date-to');
+      
+      if (!presetSelect) return;
+      
+      presetSelect.value = F10_FILTER_DATE_RANGE.preset || 'this-month';
+      
+      function toggleCustomRange() {
+        if (presetSelect.value === 'custom') {
+          customRangeDiv.classList.remove('hidden');
+          if (dateFromInput && dateToInput) {
+            dateFromInput.value = F10_FILTER_DATE_RANGE.from || '';
+            dateToInput.value = F10_FILTER_DATE_RANGE.to || '';
+          }
+        } else {
+          customRangeDiv.classList.add('hidden');
+        }
+      }
+      
+      toggleCustomRange();
+      
+      presetSelect.addEventListener('change', (e) => {
+        const preset = e.target.value;
+        
+        if (preset === 'custom') {
+          toggleCustomRange();
+        } else {
+          const range = calculateF10DateRangeFromPreset(preset);
+          if (range) {
+            F10_FILTER_DATE_RANGE = {
+              preset: preset,
+              from: range.from,
+              to: range.to
+            };
+          }
+          toggleCustomRange();
+          filterF10Data();
+        }
+      });
+      
+      if (dateFromInput && dateToInput) {
+        const updateCustomRange = () => {
+          if (presetSelect.value === 'custom') {
+            F10_FILTER_DATE_RANGE = {
+              preset: 'custom',
+              from: dateFromInput.value || null,
+              to: dateToInput.value || null
+            };
+            filterF10Data();
+          }
+        };
+        
+        dateFromInput.addEventListener('change', updateCustomRange);
+        dateToInput.addEventListener('change', updateCustomRange);
+      }
+    }
+    
     function filterF10Data() {
       const searchInput = document.getElementById('f10-search-input');
       const statusFilter = document.getElementById('f10-filter-status');
       const assigneeFilter = document.getElementById('f10-filter-assignee');
-      const monthFilter = document.getElementById('f10-filter-month');
       
       const searchText = (searchInput ? searchInput.value : '').toLowerCase().trim();
       const statusValue = statusFilter ? statusFilter.value : '';
       const assigneeValue = assigneeFilter ? assigneeFilter.value : '';
-      const monthValue = monthFilter ? monthFilter.value : '';
       
-      if (!searchText && !statusValue && !assigneeValue && !monthValue) {
+      if (!searchText && !statusValue && !assigneeValue && (F10_FILTER_DATE_RANGE.preset === 'all' || !F10_FILTER_DATE_RANGE)) {
         F10_FILTERED_DATA = F10_ALL_DATA.map(item => ({ ...item }));
         renderF10Table(F10_FILTERED_DATA);
         return;
@@ -9057,11 +9397,10 @@
               const matchesAssignee = !assigneeValue || 
                 (subtask.assignee && subtask.assignee === assigneeValue);
               
-              const matchesMonth = !monthValue || 
-                (subtask.startDate && subtask.startDate.startsWith(monthValue)) ||
-                (subtask.dueDate && subtask.dueDate.startsWith(monthValue));
+              const matchesDateRange = matchesDateRangeFilter(subtask.startDate, F10_FILTER_DATE_RANGE) ||
+                matchesDateRangeFilter(subtask.dueDate, F10_FILTER_DATE_RANGE);
               
-              return matchesSearch && matchesStatus && matchesAssignee && matchesMonth;
+              return matchesSearch && matchesStatus && matchesAssignee && matchesDateRange;
             });
             
             // Story được hiển thị nếu:
@@ -9082,12 +9421,11 @@
               (story.assignee && story.assignee === assigneeValue) ||
               filteredSubtasks.length > 0;
             
-            const storyMatchesMonth = !monthValue || 
-              (story.startDate && story.startDate.startsWith(monthValue)) ||
-              (story.dueDate && story.dueDate.startsWith(monthValue)) ||
+            const storyMatchesDateRange = matchesDateRangeFilter(story.startDate, F10_FILTER_DATE_RANGE) ||
+              matchesDateRangeFilter(story.dueDate, F10_FILTER_DATE_RANGE) ||
               filteredSubtasks.length > 0;
             
-            if (storyMatchesSearch && storyMatchesStatus && storyMatchesAssignee && storyMatchesMonth) {
+            if (storyMatchesSearch && storyMatchesStatus && storyMatchesAssignee && storyMatchesDateRange) {
               return { ...story, subtasks: filteredSubtasks };
             }
             return null;
@@ -9112,12 +9450,11 @@
             (epic.assignee && epic.assignee === assigneeValue) ||
             filteredStories.length > 0;
           
-          const epicMatchesMonth = !monthValue || 
-            (epic.startDate && epic.startDate.startsWith(monthValue)) ||
-            (epic.dueDate && epic.dueDate.startsWith(monthValue)) ||
+          const epicMatchesDateRange = matchesDateRangeFilter(epic.startDate, F10_FILTER_DATE_RANGE) ||
+            matchesDateRangeFilter(epic.dueDate, F10_FILTER_DATE_RANGE) ||
             filteredStories.length > 0;
           
-          if (epicMatchesSearch && epicMatchesStatus && epicMatchesAssignee && epicMatchesMonth) {
+          if (epicMatchesSearch && epicMatchesStatus && epicMatchesAssignee && epicMatchesDateRange) {
             return { ...epic, stories: filteredStories };
           }
           return null;
@@ -9172,9 +9509,8 @@
         });
       }
       
-      if (monthFilter) {
-        monthFilter.addEventListener('change', filterF10Data);
-      }
+      // Setup date filter (thay thế month filter)
+      setupF10DateFilter();
       
       // Khởi tạo modal listeners
       initModalListeners('f10-add-story');
@@ -18281,6 +18617,20 @@
     let F9_CURRENT_PAGE = 1;
     let F9_PAGE_SIZE = 20;
     
+    // Bộ lọc Form 9
+    const nowF9 = new Date();
+    const startOfMonthF9 = new Date(nowF9.getFullYear(), nowF9.getMonth(), 1);
+    const endOfMonthF9 = new Date(nowF9.getFullYear(), nowF9.getMonth() + 1, 0);
+    let F9_FILTER_DATE_RANGE = {
+      preset: 'this-month',
+      from: startOfMonthF9.toISOString().split('T')[0],
+      to: endOfMonthF9.toISOString().split('T')[0]
+    };
+    let F9_FILTER_NHA_CUNG_CAP = '';
+    let F9_FILTER_NGUOI_LAP = '';
+    let F9_FILTER_NGUOI_KIEM_TRA = '';
+    let F9_FILTER_PHAM_VI = '';
+    
     // Khởi tạo Form 9
     function initForm9() {
       console.log('[Form 9] Initializing...');
@@ -18328,7 +18678,281 @@
       initModalListeners('f9-view-detail');
       initModalListeners('f9-hang-muc-ng');
       
+      // Setup filters
+      setupF9DateFilter();
+      setupF9DropdownFilters();
+      
+      // Reset filters button
+      const resetBtn = document.getElementById('f9-reset-filters');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          resetF9Filters();
+        });
+      }
+      
       console.log('[Form 9] Initialized');
+    }
+    
+    // Hàm tính toán khoảng thời gian từ preset (tương tự Form 5)
+    function calculateF9DateRangeFromPreset(preset) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let from, to;
+      
+      switch(preset) {
+        case 'today':
+          from = new Date(today);
+          to = new Date(today);
+          break;
+        case 'this-week':
+          const dayOfWeek = today.getDay();
+          const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Thứ 2
+          from = new Date(today.getFullYear(), today.getMonth(), diff);
+          to = new Date(from);
+          to.setDate(to.getDate() + 6); // Chủ nhật
+          break;
+        case 'this-month':
+          from = new Date(today.getFullYear(), today.getMonth(), 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case 'last-month':
+          from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          to = new Date(today.getFullYear(), today.getMonth(), 0);
+          break;
+        case 'last-3-months':
+          from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case 'all':
+          from = null;
+          to = null;
+          break;
+        default:
+          return null;
+      }
+      
+      if (from && to) {
+        return {
+          from: from.toISOString().split('T')[0],
+          to: to.toISOString().split('T')[0]
+        };
+      }
+      return { from: null, to: null };
+    }
+    
+    function setupF9DateFilter() {
+      const presetSelect = document.getElementById('f9-filter-date-preset');
+      const customRangeDiv = document.getElementById('f9-custom-date-range');
+      const dateFromInput = document.getElementById('f9-filter-date-from');
+      const dateToInput = document.getElementById('f9-filter-date-to');
+      
+      if (!presetSelect) return;
+      
+      // Set giá trị mặc định
+      presetSelect.value = F9_FILTER_DATE_RANGE.preset || 'this-month';
+      
+      // Hiển thị/ẩn custom range dựa trên preset
+      function toggleCustomRange() {
+        if (presetSelect.value === 'custom') {
+          customRangeDiv.classList.remove('hidden');
+          if (dateFromInput && dateToInput) {
+            dateFromInput.value = F9_FILTER_DATE_RANGE.from || '';
+            dateToInput.value = F9_FILTER_DATE_RANGE.to || '';
+          }
+        } else {
+          customRangeDiv.classList.add('hidden');
+        }
+      }
+      
+      toggleCustomRange();
+      
+      // Event listener: khi thay đổi preset
+      presetSelect.addEventListener('change', (e) => {
+        const preset = e.target.value;
+        
+        if (preset === 'custom') {
+          toggleCustomRange();
+        } else {
+          const range = calculateF9DateRangeFromPreset(preset);
+          if (range) {
+            F9_FILTER_DATE_RANGE = {
+              preset: preset,
+              from: range.from,
+              to: range.to
+            };
+          }
+          toggleCustomRange();
+          filterF9Data();
+        }
+      });
+      
+      // Event listener: khi thay đổi custom date range
+      if (dateFromInput && dateToInput) {
+        const updateCustomRange = () => {
+          if (presetSelect.value === 'custom') {
+            F9_FILTER_DATE_RANGE = {
+              preset: 'custom',
+              from: dateFromInput.value || null,
+              to: dateToInput.value || null
+            };
+            filterF9Data();
+          }
+        };
+        
+        dateFromInput.addEventListener('change', updateCustomRange);
+        dateToInput.addEventListener('change', updateCustomRange);
+      }
+    }
+    
+    // Populate dropdown filters từ dữ liệu
+    function populateF9DropdownFilters() {
+      if (!F9_ALL_DATA || F9_ALL_DATA.length === 0) return;
+      
+      // Lấy danh sách unique values cho mỗi trường
+      const nhaCungCapSet = new Set();
+      const nguoiLapSet = new Set();
+      const nguoiKiemTraSet = new Set();
+      const phamViSet = new Set();
+      
+      F9_ALL_DATA.forEach(item => {
+        if (item['Nhà cung cấp']) nhaCungCapSet.add(item['Nhà cung cấp']);
+        if (item['Người lập']) nguoiLapSet.add(item['Người lập']);
+        if (item['Người kiểm tra']) nguoiKiemTraSet.add(item['Người kiểm tra']);
+        if (item['Phạm vi']) phamViSet.add(item['Phạm vi']);
+      });
+      
+      // Populate dropdowns
+      const nhaCungCapSelect = document.getElementById('f9-filter-nha-cung-cap');
+      const nguoiLapSelect = document.getElementById('f9-filter-nguoi-lap');
+      const nguoiKiemTraSelect = document.getElementById('f9-filter-nguoi-kiem-tra');
+      const phamViSelect = document.getElementById('f9-filter-pham-vi');
+      
+      if (nhaCungCapSelect) {
+        const currentValue = nhaCungCapSelect.value;
+        nhaCungCapSelect.innerHTML = '<option value="">Tất cả nhà cung cấp</option>';
+        Array.from(nhaCungCapSet).sort().forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          nhaCungCapSelect.appendChild(option);
+        });
+        nhaCungCapSelect.value = currentValue;
+      }
+      
+      if (nguoiLapSelect) {
+        const currentValue = nguoiLapSelect.value;
+        nguoiLapSelect.innerHTML = '<option value="">Tất cả người lập</option>';
+        Array.from(nguoiLapSet).sort().forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          nguoiLapSelect.appendChild(option);
+        });
+        nguoiLapSelect.value = currentValue;
+      }
+      
+      if (nguoiKiemTraSelect) {
+        const currentValue = nguoiKiemTraSelect.value;
+        nguoiKiemTraSelect.innerHTML = '<option value="">Tất cả người kiểm tra</option>';
+        Array.from(nguoiKiemTraSet).sort().forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          nguoiKiemTraSelect.appendChild(option);
+        });
+        nguoiKiemTraSelect.value = currentValue;
+      }
+      
+      if (phamViSelect) {
+        const currentValue = phamViSelect.value;
+        phamViSelect.innerHTML = '<option value="">Tất cả phạm vi</option>';
+        Array.from(phamViSet).sort().forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          phamViSelect.appendChild(option);
+        });
+        phamViSelect.value = currentValue;
+      }
+    }
+    
+    function setupF9DropdownFilters() {
+      const nhaCungCapSelect = document.getElementById('f9-filter-nha-cung-cap');
+      const nguoiLapSelect = document.getElementById('f9-filter-nguoi-lap');
+      const nguoiKiemTraSelect = document.getElementById('f9-filter-nguoi-kiem-tra');
+      const phamViSelect = document.getElementById('f9-filter-pham-vi');
+      
+      if (nhaCungCapSelect) {
+        nhaCungCapSelect.addEventListener('change', (e) => {
+          F9_FILTER_NHA_CUNG_CAP = e.target.value.trim();
+          filterF9Data();
+        });
+      }
+      
+      if (nguoiLapSelect) {
+        nguoiLapSelect.addEventListener('change', (e) => {
+          F9_FILTER_NGUOI_LAP = e.target.value.trim();
+          filterF9Data();
+        });
+      }
+      
+      if (nguoiKiemTraSelect) {
+        nguoiKiemTraSelect.addEventListener('change', (e) => {
+          F9_FILTER_NGUOI_KIEM_TRA = e.target.value.trim();
+          filterF9Data();
+        });
+      }
+      
+      if (phamViSelect) {
+        phamViSelect.addEventListener('change', (e) => {
+          F9_FILTER_PHAM_VI = e.target.value.trim();
+          filterF9Data();
+        });
+      }
+    }
+    
+    function resetF9Filters() {
+      // Reset date filter về tháng này
+      const nowF9 = new Date();
+      const startOfMonthF9 = new Date(nowF9.getFullYear(), nowF9.getMonth(), 1);
+      const endOfMonthF9 = new Date(nowF9.getFullYear(), nowF9.getMonth() + 1, 0);
+      F9_FILTER_DATE_RANGE = {
+        preset: 'this-month',
+        from: startOfMonthF9.toISOString().split('T')[0],
+        to: endOfMonthF9.toISOString().split('T')[0]
+      };
+      
+      // Reset các filter khác
+      F9_FILTER_NHA_CUNG_CAP = '';
+      F9_FILTER_NGUOI_LAP = '';
+      F9_FILTER_NGUOI_KIEM_TRA = '';
+      F9_FILTER_PHAM_VI = '';
+      
+      // Reset UI
+      const presetSelect = document.getElementById('f9-filter-date-preset');
+      const dateFromInput = document.getElementById('f9-filter-date-from');
+      const dateToInput = document.getElementById('f9-filter-date-to');
+      const nhaCungCapSelect = document.getElementById('f9-filter-nha-cung-cap');
+      const nguoiLapSelect = document.getElementById('f9-filter-nguoi-lap');
+      const nguoiKiemTraSelect = document.getElementById('f9-filter-nguoi-kiem-tra');
+      const phamViSelect = document.getElementById('f9-filter-pham-vi');
+      const searchInput = document.getElementById('f9-search');
+      
+      if (presetSelect) presetSelect.value = 'this-month';
+      if (dateFromInput) dateFromInput.value = '';
+      if (dateToInput) dateToInput.value = '';
+      if (nhaCungCapSelect) nhaCungCapSelect.value = '';
+      if (nguoiLapSelect) nguoiLapSelect.value = '';
+      if (nguoiKiemTraSelect) nguoiKiemTraSelect.value = '';
+      if (phamViSelect) phamViSelect.value = '';
+      if (searchInput) searchInput.value = '';
+      
+      // Ẩn custom date range
+      const customRangeDiv = document.getElementById('f9-custom-date-range');
+      if (customRangeDiv) customRangeDiv.classList.add('hidden');
+      
+      // Apply filters
+      filterF9Data();
     }
     
     // Load dữ liệu từ webhook hoặc file upload
@@ -18371,6 +18995,9 @@
           return;
         }
         
+        // Populate dropdown filters sau khi load dữ liệu
+        populateF9DropdownFilters();
+        
         // Apply filters
         filterF9Data();
         
@@ -18392,11 +19019,12 @@
     function filterF9Data() {
       const search = document.getElementById('f9-search')?.value.toLowerCase() || '';
       
-      if (!search) {
-        F9_FILTERED_DATA = F9_ALL_DATA;
-      } else {
-        F9_FILTERED_DATA = F9_ALL_DATA.filter(item => {
-          // Tìm kiếm trong tất cả các trường quan trọng
+      // Bắt đầu với tất cả dữ liệu
+      let filtered = F9_ALL_DATA;
+      
+      // Filter theo tìm kiếm text
+      if (search) {
+        filtered = filtered.filter(item => {
           const searchText = [
             item['Linh kiện'] || '',
             item['Mã linh kiện'] || '',
@@ -18410,6 +19038,86 @@
           return searchText.includes(search);
         });
       }
+      
+      // Filter theo nhà cung cấp
+      if (F9_FILTER_NHA_CUNG_CAP) {
+        filtered = filtered.filter(item => {
+          return item['Nhà cung cấp'] && item['Nhà cung cấp'].trim() === F9_FILTER_NHA_CUNG_CAP;
+        });
+      }
+      
+      // Filter theo người lập
+      if (F9_FILTER_NGUOI_LAP) {
+        filtered = filtered.filter(item => {
+          return item['Người lập'] && item['Người lập'].trim() === F9_FILTER_NGUOI_LAP;
+        });
+      }
+      
+      // Filter theo người kiểm tra
+      if (F9_FILTER_NGUOI_KIEM_TRA) {
+        filtered = filtered.filter(item => {
+          return item['Người kiểm tra'] && item['Người kiểm tra'].trim() === F9_FILTER_NGUOI_KIEM_TRA;
+        });
+      }
+      
+      // Filter theo phạm vi
+      if (F9_FILTER_PHAM_VI) {
+        filtered = filtered.filter(item => {
+          return item['Phạm vi'] && item['Phạm vi'].trim() === F9_FILTER_PHAM_VI;
+        });
+      }
+      
+      // Filter theo khoảng thời gian (Ngày ghi nhận)
+      if (F9_FILTER_DATE_RANGE && F9_FILTER_DATE_RANGE.preset !== 'all') {
+        filtered = filtered.filter(item => {
+          const ngayGhiNhan = item['Ngày ghi nhận'] || '';
+          if (!ngayGhiNhan) return false;
+          
+          // Parse ngày ghi nhận
+          let ngayGhiNhanDate = null;
+          try {
+            const dateStr = String(ngayGhiNhan).trim();
+            if (dateStr.includes('-')) {
+              const datePart = dateStr.split(' ')[0];
+              ngayGhiNhanDate = new Date(datePart + 'T00:00:00');
+            } else if (dateStr.includes('/')) {
+              const parts = dateStr.split(' ');
+              const datePart = parts[0];
+              const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+              if (dateMatch) {
+                const day = dateMatch[1].padStart(2, '0');
+                const month = dateMatch[2].padStart(2, '0');
+                const year = dateMatch[3];
+                ngayGhiNhanDate = new Date(`${year}-${month}-${day}T00:00:00`);
+              }
+            }
+            
+            if (!ngayGhiNhanDate || isNaN(ngayGhiNhanDate.getTime())) {
+              return false;
+            }
+            
+            const taskDateStr = ngayGhiNhanDate.toISOString().split('T')[0];
+            const filterFrom = F9_FILTER_DATE_RANGE.from;
+            const filterTo = F9_FILTER_DATE_RANGE.to;
+            
+            // Nếu có filter từ ngày và taskDate < filterFrom thì skip
+            if (filterFrom && taskDateStr < filterFrom) {
+              return false;
+            }
+            
+            // Nếu có filter đến ngày và taskDate > filterTo thì skip
+            if (filterTo && taskDateStr > filterTo) {
+              return false;
+            }
+            
+            return true;
+          } catch (e) {
+            return false;
+          }
+        });
+      }
+      
+      F9_FILTERED_DATA = filtered;
       
       // Sắp xếp theo "Ngày ghi nhận" từ mới nhất đến cũ nhất
       F9_FILTERED_DATA.sort((a, b) => {
