@@ -226,6 +226,16 @@
       background: rgba(34, 197, 94, 0.2);
       border-color: rgba(34, 197, 94, 0.3);
     }
+    /* Group riêng biệt cho Hệ thống KOI */
+    #sidebar-nav .group-btn[data-group="koi-group"] {
+      background: rgba(59, 130, 246, 0.1);
+      color: #1e40af;
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+    #sidebar-nav .group-btn[data-group="koi-group"]:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
     #sidebar-nav .nav-btn {
       margin-bottom: 0.125rem;
       padding: 0.625rem 0.75rem;
@@ -443,6 +453,19 @@
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form12">
               <span class="text-base">🎉</span>
               <p class="text-sm font-semibold">12 - Calendar View</p>
+            </button>
+          </div>
+        </div>
+        <!-- Nhóm: Hệ thống KOI -->
+        <div class="flex flex-col gap-1 mt-2">
+          <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="koi-group">
+            <span class="text-lg group-expand-icon">🔷</span>
+            <p class="text-sm font-semibold">Hệ thống KOI</p>
+          </button>
+          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="koi-group">
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form13">
+              <span class="text-base">📋</span>
+              <p class="text-sm font-semibold">13 - List trích xuất phê duyệt</p>
             </button>
           </div>
         </div>
@@ -1909,6 +1932,86 @@
           <div id="f12-calendar-body" class="grid grid-cols-7 grid-rows-5 flex-1">
             <!-- Calendar cells will be rendered here -->
             <div class="text-center py-8 text-gray-500">Đang tải dữ liệu...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form 13 - List trích xuất phê duyệt (KOI) -->
+    <section id="form13" class="w-full hidden">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-text-light-primary">13 - List trích xuất phê duyệt</h2>
+          <div class="flex items-center gap-3">
+            <button id="form13-refresh" class="flex items-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-blue-600 transition-colors">
+              <span class="material-symbols-outlined text-lg">refresh</span>
+              <span>Tải lại</span>
+            </button>
+            <button id="form13-export" class="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>Xuất Excel</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bộ lọc -->
+        <div class="mb-4 flex flex-wrap gap-3">
+          <select id="form13-filter-status" class="px-3 py-2 border border-border-light rounded-lg text-sm">
+            <option value="">Tất cả trạng thái</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Approved">Approved</option>
+            <option value="Refused">Refused</option>
+          </select>
+          <input type="text" id="form13-search" placeholder="Tìm kiếm..." class="flex-1 min-w-[200px] px-3 py-2 border border-border-light rounded-lg text-sm">
+        </div>
+
+        <!-- Bảng dữ liệu -->
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-sidebar border-b border-border-light">
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">STT</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Mã phê duyệt</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Tên phê duyệt</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Trạng thái</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Người yêu cầu</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Ngày yêu cầu</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Tên sản phẩm</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Mã sản phẩm</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Loại linh kiện</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Hạn mong muốn</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Link KOI</th>
+              </tr>
+            </thead>
+            <tbody id="form13-table-body">
+              <tr>
+                <td colspan="11" class="px-4 py-8 text-center text-text-light-secondary">
+                  <div class="flex flex-col items-center gap-2">
+                    <span class="spinner"></span>
+                    <span>Đang tải dữ liệu...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Phân trang -->
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-text-light-secondary">Hiển thị:</span>
+            <select id="form13-page-size" class="px-2 py-1 border border-border-light rounded text-sm">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span class="text-sm text-text-light-secondary">dòng</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="form13-prev" class="px-3 py-1 border border-border-light rounded text-sm hover:bg-sidebar-hover disabled:opacity-50 disabled:cursor-not-allowed">Trước</button>
+            <span id="form13-page-info" class="px-3 py-1 text-sm text-text-light-secondary">Trang 1 / 1</span>
+            <button id="form13-next" class="px-3 py-1 border border-border-light rounded text-sm hover:bg-sidebar-hover disabled:opacity-50 disabled:cursor-not-allowed">Sau</button>
           </div>
         </div>
       </div>
@@ -19646,6 +19749,336 @@
           }, 100);
         });
       });
+    });
+
+    // ===== FORM 13 - LIST TÁC VỤ THỬ NGHIỆM (KOI) =====
+    let FORM13_ALL_DATA = [];
+    let FORM13_FILTERED_DATA = [];
+    let FORM13_PAGE = 1;
+    let FORM13_PAGE_SIZE = 20;
+    const FORM13_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/bangdulieuodoo';
+
+    function getForm13StatusColor(status) {
+      const colors = {
+        'Submitted': 'bg-yellow-100 text-yellow-800',
+        'Approved': 'bg-green-100 text-green-800',
+        'Refused': 'bg-red-100 text-red-800'
+      };
+      return colors[status] || 'bg-gray-100 text-gray-800';
+    }
+
+    function formatForm13Date(dateString) {
+      if (!dateString) return '';
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN');
+      } catch {
+        return dateString;
+      }
+    }
+
+    function renderForm13Table() {
+      const tbody = document.getElementById('form13-table-body');
+      if (!tbody) {
+        console.error('Form13 table body not found!');
+        return;
+      }
+
+      console.log('Rendering Form13 table with data length:', FORM13_FILTERED_DATA.length);
+
+      if (FORM13_FILTERED_DATA.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="11" class="px-4 py-8 text-center text-text-light-secondary">
+              Không có dữ liệu (Tổng: ${FORM13_ALL_DATA.length} bản ghi)
+            </td>
+          </tr>
+        `;
+        updateForm13Pagination();
+        return;
+      }
+
+      const start = (FORM13_PAGE - 1) * FORM13_PAGE_SIZE;
+      const end = start + FORM13_PAGE_SIZE;
+      const pageData = FORM13_FILTERED_DATA.slice(start, end);
+
+      tbody.innerHTML = pageData.map((row, index) => {
+        const stt = start + index + 1;
+        return `
+          <tr class="border-b border-border-light hover:bg-sidebar transition-colors">
+            <td class="px-4 py-3 text-sm">${stt}</td>
+            <td class="px-4 py-3 text-sm font-medium">${row.ma_phe_duyet || ''}</td>
+            <td class="px-4 py-3 text-sm">${row.ten_phe_duyet || ''}</td>
+            <td class="px-4 py-3 text-sm">
+              <span class="px-2 py-1 rounded-full text-xs font-medium ${getForm13StatusColor(row.trang_thai)}">
+                ${row.trang_thai || ''}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm">${row.requester_name || ''}</td>
+            <td class="px-4 py-3 text-sm">${formatForm13Date(row.request_date)}</td>
+            <td class="px-4 py-3 text-sm">${row.ten_san_pham || ''}</td>
+            <td class="px-4 py-3 text-sm">${row.ma_san_pham || ''}</td>
+            <td class="px-4 py-3 text-sm">${row.loai_linh_kien || ''}</td>
+            <td class="px-4 py-3 text-sm">${row.han_mong_muon || ''}</td>
+            <td class="px-4 py-3 text-sm">
+              ${row.link_koi ? `<a href="${row.link_koi}" target="_blank" class="text-primary-blue hover:underline">Xem</a>` : ''}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      updateForm13Pagination();
+    }
+
+    function updateForm13Pagination() {
+      const totalPages = Math.ceil(FORM13_FILTERED_DATA.length / FORM13_PAGE_SIZE);
+      const pageInfo = document.getElementById('form13-page-info');
+      const prevBtn = document.getElementById('form13-prev');
+      const nextBtn = document.getElementById('form13-next');
+
+      if (pageInfo) {
+        pageInfo.textContent = `Trang ${FORM13_PAGE} / ${totalPages || 1}`;
+      }
+      if (prevBtn) {
+        prevBtn.disabled = FORM13_PAGE <= 1;
+      }
+      if (nextBtn) {
+        nextBtn.disabled = FORM13_PAGE >= totalPages;
+      }
+    }
+
+    function filterForm13Data() {
+      const statusFilter = document.getElementById('form13-filter-status')?.value || '';
+      const searchText = (document.getElementById('form13-search')?.value || '').toLowerCase();
+
+      FORM13_FILTERED_DATA = FORM13_ALL_DATA.filter(row => {
+        const matchStatus = !statusFilter || row.trang_thai === statusFilter;
+        const matchSearch = !searchText || 
+          (row.ma_phe_duyet && row.ma_phe_duyet.toLowerCase().includes(searchText)) ||
+          (row.ten_phe_duyet && row.ten_phe_duyet.toLowerCase().includes(searchText)) ||
+          (row.requester_name && row.requester_name.toLowerCase().includes(searchText)) ||
+          (row.ten_san_pham && row.ten_san_pham.toLowerCase().includes(searchText)) ||
+          (row.ma_san_pham && row.ma_san_pham.toLowerCase().includes(searchText));
+        
+        return matchStatus && matchSearch;
+      });
+
+      FORM13_PAGE = 1;
+      renderForm13Table();
+    }
+
+    async function fetchForm13Data() {
+      const tbody = document.getElementById('form13-table-body');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="11" class="px-4 py-8 text-center text-text-light-secondary">
+              <div class="flex flex-col items-center gap-2">
+                <span class="spinner"></span>
+                <span>Đang tải dữ liệu...</span>
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      try {
+        const response = await fetch(FORM13_WEBHOOK_URL);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const text = await response.text();
+        const trimmedText = text.trim();
+        const isArrayResponse = trimmedText.startsWith('[');
+        const isObjectResponse = trimmedText.startsWith('{');
+        
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error('Không thể parse dữ liệu JSON: ' + e.message);
+        }
+        
+        // Xử lý nhiều trường hợp dữ liệu trả về
+        if (Array.isArray(data)) {
+          FORM13_ALL_DATA = data;
+        } else if (data && Array.isArray(data.data)) {
+          FORM13_ALL_DATA = data.data;
+        } else if (data && Array.isArray(data.items)) {
+          FORM13_ALL_DATA = data.items;
+        } else if (data && Array.isArray(data.records)) {
+          FORM13_ALL_DATA = data.records;
+        } else if (data && Array.isArray(data.result)) {
+          FORM13_ALL_DATA = data.result;
+        } else if (data && typeof data === 'object' && data !== null) {
+          const hasId = 'Id' in data;
+          const hasOdooId = 'odoo_id' in data;
+          const hasMaPheDuyet = 'ma_phe_duyet' in data;
+          const isSingleRecord = hasId || hasOdooId || hasMaPheDuyet;
+          
+          if (isSingleRecord) {
+            FORM13_ALL_DATA = [data];
+          } else {
+            const values = Object.values(data);
+            const keys = Object.keys(data);
+            
+            const allNumericKeys = keys.every(k => !isNaN(parseInt(k)) || k === '0' || k === '1');
+            if (allNumericKeys && keys.length > 0) {
+              FORM13_ALL_DATA = values.filter(v => v && typeof v === 'object');
+            }
+            
+            if (FORM13_ALL_DATA.length === 0) {
+              for (const value of values) {
+                if (Array.isArray(value)) {
+                  FORM13_ALL_DATA = value;
+                  break;
+                }
+              }
+            }
+            
+            if (FORM13_ALL_DATA.length === 0) {
+              for (const key of keys) {
+                const value = data[key];
+                if (value && typeof value === 'object' && !Array.isArray(value)) {
+                  if (Array.isArray(value.data)) {
+                    FORM13_ALL_DATA = value.data;
+                    break;
+                  } else if (Array.isArray(value.items)) {
+                    FORM13_ALL_DATA = value.items;
+                    break;
+                  } else if (Array.isArray(value.records)) {
+                    FORM13_ALL_DATA = value.records;
+                    break;
+                  }
+                }
+              }
+            }
+            
+            if (FORM13_ALL_DATA.length === 0 && values.length > 0) {
+              const allObjects = values.filter(v => v && typeof v === 'object' && !Array.isArray(v));
+              if (allObjects.length > 0) {
+                const numericKeys = keys.filter(k => !isNaN(k));
+                if (numericKeys.length > 0 || allObjects.length === values.length) {
+                  FORM13_ALL_DATA = allObjects;
+                }
+              }
+              
+              if (FORM13_ALL_DATA.length === 0) {
+                const objectValues = values.filter(v => 
+                  v && 
+                  typeof v === 'object' && 
+                  !Array.isArray(v) &&
+                  Object.keys(v).length > 0
+                );
+                if (objectValues.length > 0) {
+                  FORM13_ALL_DATA = objectValues;
+                }
+              }
+            }
+          }
+        } else {
+          FORM13_ALL_DATA = [];
+        }
+        
+        if (!Array.isArray(FORM13_ALL_DATA)) {
+          FORM13_ALL_DATA = [];
+        }
+        
+        FORM13_FILTERED_DATA = [...FORM13_ALL_DATA];
+        FORM13_PAGE = 1;
+        
+        renderForm13Table();
+        showToast(`Đã tải ${FORM13_ALL_DATA.length} bản ghi`, 'success');
+      } catch (error) {
+        console.error('Error fetching Form13 data:', error);
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="11" class="px-4 py-8 text-center text-red-500">
+                Lỗi khi tải dữ liệu: ${error.message}
+                <br><small>Vui lòng mở Console (F12) để xem chi tiết</small>
+              </td>
+            </tr>
+          `;
+        }
+        showToast('Lỗi khi tải dữ liệu', 'error');
+      }
+    }
+
+    function exportForm13ToExcel() {
+      if (FORM13_FILTERED_DATA.length === 0) {
+        showToast('Không có dữ liệu để xuất', 'warning');
+        return;
+      }
+
+      const headers = [
+        'STT', 'Mã phê duyệt', 'Tên phê duyệt', 'Trạng thái', 'Người yêu cầu',
+        'Ngày yêu cầu', 'Tên sản phẩm', 'Mã sản phẩm', 'Loại linh kiện',
+        'Hạn mong muốn', 'Link KOI', 'Email người yêu cầu', 'Mục đích yêu cầu',
+        'Nhà cung cấp', 'Số lượng mẫu', 'Ghi chú'
+      ];
+
+      const data = FORM13_FILTERED_DATA.map((row, index) => [
+        index + 1,
+        row.ma_phe_duyet || '',
+        row.ten_phe_duyet || '',
+        row.trang_thai || '',
+        row.requester_name || '',
+        formatForm13Date(row.request_date),
+        row.ten_san_pham || '',
+        row.ma_san_pham || '',
+        row.loai_linh_kien || '',
+        row.han_mong_muon || '',
+        row.link_koi || '',
+        row.requester_email || '',
+        row.muc_dich_yeu_cau || '',
+        row.nha_cung_cap || '',
+        row.so_luong_mau || '',
+        row.ghi_chu || ''
+      ]);
+
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'List trích xuất phê duyệt');
+      
+      const fileName = `ListTrichXuatPheDuyet_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      showToast('Đã xuất file Excel thành công', 'success');
+    }
+
+    function initForm13Table() {
+      // Event listeners
+      document.getElementById('form13-refresh')?.addEventListener('click', fetchForm13Data);
+      document.getElementById('form13-export')?.addEventListener('click', exportForm13ToExcel);
+      document.getElementById('form13-filter-status')?.addEventListener('change', filterForm13Data);
+      document.getElementById('form13-search')?.addEventListener('input', filterForm13Data);
+      document.getElementById('form13-page-size')?.addEventListener('change', function() {
+        FORM13_PAGE_SIZE = parseInt(this.value);
+        FORM13_PAGE = 1;
+        renderForm13Table();
+      });
+      document.getElementById('form13-prev')?.addEventListener('click', function() {
+        if (FORM13_PAGE > 1) {
+          FORM13_PAGE--;
+          renderForm13Table();
+        }
+      });
+      document.getElementById('form13-next')?.addEventListener('click', function() {
+        const totalPages = Math.ceil(FORM13_FILTERED_DATA.length / FORM13_PAGE_SIZE);
+        if (FORM13_PAGE < totalPages) {
+          FORM13_PAGE++;
+          renderForm13Table();
+        }
+      });
+
+      // Load data on init
+      fetchForm13Data();
+    }
+
+    // Khởi tạo Form13 khi DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+      initForm13Table();
     });
 
   </script>
