@@ -9572,8 +9572,115 @@
     
     // Hàm export Excel Form 10
     function exportF10ToExcel() {
-      // Placeholder - sẽ implement sau
-      showToast('Form 10: Chức năng xuất Excel đang được phát triển', 'info');
+      const dataToExport = F10_FILTERED_DATA.length > 0 ? F10_FILTERED_DATA : F10_ALL_DATA;
+      
+      if (!dataToExport || !Array.isArray(dataToExport) || dataToExport.length === 0) {
+        showToast('Không có dữ liệu để xuất', 'warning');
+        return;
+      }
+
+      // Headers cho Excel
+      const headers = [
+        'Cấp',
+        'Tên công việc',
+        'Người thực hiện',
+        'Trạng thái',
+        'Ngày bắt đầu',
+        'Hạn hoàn thành',
+        'Ngày hoàn thành',
+        'Mã Jira/KOI',
+        'Link Jira',
+        'Ghi chú'
+      ];
+
+      // Flatten hierarchical data thành mảng phẳng
+      const rows = [];
+      
+      dataToExport.forEach((item) => {
+        if (!item.epics || !Array.isArray(item.epics)) return;
+        
+        item.epics.forEach((epic) => {
+          // Epic row
+          rows.push([
+            'Epic',
+            epic.epic || '-',
+            epic.assignee || '-',
+            epic.status || '-',
+            formatF10Date(epic.startDate),
+            formatF10Date(epic.dueDate),
+            formatF10Date(epic.finishDate),
+            epic.jiraKey || '-',
+            epic.jiraLink || '-',
+            epic.note || '-'
+          ]);
+          
+          // Story rows
+          if (epic.stories && Array.isArray(epic.stories)) {
+            epic.stories.forEach((story) => {
+              rows.push([
+                'Story',
+                story.story || '-',
+                story.assignee || '-',
+                story.status || '-',
+                formatF10Date(story.startDate),
+                formatF10Date(story.dueDate),
+                formatF10Date(story.finishDate),
+                story.jiraKey || '-',
+                story.jiraLink || '-',
+                story.note || '-'
+              ]);
+              
+              // Subtask rows
+              if (story.subtasks && Array.isArray(story.subtasks)) {
+                story.subtasks.forEach((subtask) => {
+                  rows.push([
+                    'Subtask',
+                    subtask.subtask || '-',
+                    subtask.assignee || '-',
+                    subtask.status || '-',
+                    formatF10Date(subtask.startDate),
+                    formatF10Date(subtask.dueDate),
+                    formatF10Date(subtask.finishDate),
+                    subtask.jiraKey || '-',
+                    subtask.jiraLink || '-',
+                    subtask.note || '-'
+                  ]);
+                });
+              }
+            });
+          }
+        });
+      });
+
+      if (rows.length === 0) {
+        showToast('Không có dữ liệu để xuất', 'warning');
+        return;
+      }
+
+      // Tạo worksheet
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Quản lý dự án');
+      
+      // Điều chỉnh độ rộng cột
+      const colWidths = [
+        { wch: 10 },  // Cấp
+        { wch: 40 },  // Tên công việc
+        { wch: 20 },  // Người thực hiện
+        { wch: 15 },  // Trạng thái
+        { wch: 15 },  // Ngày bắt đầu
+        { wch: 15 },  // Hạn hoàn thành
+        { wch: 15 },  // Ngày hoàn thành
+        { wch: 15 },  // Mã Jira/KOI
+        { wch: 30 },  // Link Jira
+        { wch: 40 }   // Ghi chú
+      ];
+      ws['!cols'] = colWidths;
+      
+      // Xuất file
+      const fileName = `QuanLyDuAn_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      showToast(`Đã xuất ${rows.length} dòng dữ liệu ra file Excel`, 'success');
     }
     
     // Khởi tạo Form 10
