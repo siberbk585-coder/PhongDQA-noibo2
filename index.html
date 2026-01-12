@@ -756,7 +756,7 @@
               <div class="col-span-1 flex items-center">Ngày bắt đầu</div>
               <div class="col-span-1 flex items-center">Hạn HT</div>
               <div class="col-span-1 flex items-center">Ngày hoàn thành</div>
-              <div class="col-span-1 flex items-center">Mã Jira/KOI</div>
+              <div class="col-span-1 flex items-center">Mã Jira</div>
               <div class="col-span-1 flex items-center">Ghi chú</div>
             </div>
             <!-- Table Body (Scrollable) -->
@@ -1634,6 +1634,7 @@
             <select id="f10-filter-status" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
               <option value="">Tất cả trạng thái</option>
               <option value="done">Done</option>
+              <option value="in review">In Review</option>
               <option value="in progress">In Progress</option>
               <option value="to do">To Do</option>
             </select>
@@ -1679,7 +1680,7 @@
               <div class="col-span-1 flex items-center">Ngày bắt đầu</div>
               <div class="col-span-1 flex items-center">Hạn HT</div>
               <div class="col-span-1 flex items-center">Ngày hoàn thành</div>
-              <div class="col-span-1 flex items-center">Mã Jira/KOI</div>
+              <div class="col-span-1 flex items-center">Mã Jira</div>
               <div class="col-span-1 flex items-center">Ghi chú</div>
             </div>
             <!-- Table Body (Scrollable) -->
@@ -3198,11 +3199,6 @@
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Story Code *</label>
-              <input type="text" id="modal-f10-add-story-code" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tự động sinh..."/>
-            </div>
-            
-            <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Người thực hiện *</label>
               <select id="modal-f10-add-story-assignee" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Chọn người thực hiện</option>
@@ -3239,13 +3235,13 @@
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Mã Jira *</label>
-              <input type="text" id="modal-f10-add-story-jira-key" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập Mã Jira..."/>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Mã Jira Epic</label>
+              <input type="text" id="modal-f10-add-story-epic-jira-key" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tự động lấy từ Epic..."/>
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Link jira</label>
-              <input type="text" id="modal-f10-add-story-jira-link" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập link jira..."/>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Link jira Epic</label>
+              <input type="text" id="modal-f10-add-story-epic-jira-link" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tự động lấy từ Epic..."/>
             </div>
             
             <div>
@@ -3264,7 +3260,7 @@
         
         <div class="mt-6 flex justify-end gap-3 border-t border-gray-200 pt-4">
           <button type="button" id="modal-f10-add-story-cancel" class="modal-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
-          <button type="submit" id="modal-f10-add-story-submit" class="modal-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Thêm Story</button>
+          <button type="submit" form="modal-f10-add-story-form" id="modal-f10-add-story-submit" class="modal-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Thêm Story</button>
         </div>
       </div>
     </div>
@@ -3299,11 +3295,6 @@
             <div class="md:col-span-2">
               <label class="block text-sm font-medium text-gray-700 mb-2">Tên Sub-task *</label>
               <input type="text" id="modal-f10-add-subtask-name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập tên Sub-task..."/>
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Task Code *</label>
-              <input type="text" id="modal-f10-add-subtask-task-code" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tự động sinh..."/>
             </div>
             
             <div>
@@ -3350,13 +3341,13 @@
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Mã Jira *</label>
-              <input type="text" id="modal-f10-add-subtask-jira-key" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập Mã Jira..."/>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Mã Jira Story</label>
+              <input type="text" id="modal-f10-add-subtask-story-jira-key" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tự động lấy từ Story..."/>
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Link jira</label>
-              <input type="text" id="modal-f10-add-subtask-jira-link" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập link jira..."/>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Link jira Story</label>
+              <input type="text" id="modal-f10-add-subtask-story-jira-link" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tự động lấy từ Story..."/>
             </div>
             
             <div class="md:col-span-2">
@@ -3368,7 +3359,7 @@
         
         <div class="mt-6 flex justify-end gap-3 border-t border-gray-200 pt-4">
           <button type="button" id="modal-f10-add-subtask-cancel" class="modal-cancel-btn h-11 rounded-full border border-gray-300 bg-white px-6 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50">Hủy</button>
-          <button type="submit" id="modal-f10-add-subtask-submit" class="modal-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Thêm Sub-task</button>
+          <button type="submit" form="modal-f10-add-subtask-form" id="modal-f10-add-subtask-submit" class="modal-submit-btn h-11 rounded-full bg-primary-blue px-6 text-sm font-bold text-white shadow-sm hover:shadow-md">Thêm Sub-task</button>
         </div>
       </div>
     </div>
@@ -8341,6 +8332,7 @@
     
     // Webhook URL
     const F10_WEBHOOK_URL_LOAD = 'https://iatzhxxuk.tino.page/webhook/quanlyjira';
+    const F10_WEBHOOK_URL_ADD_TASK = 'https://iatzhxxuk.tino.page/webhook/Themtacvujira';
     const F10_WEBHOOK_URL_UPLOAD = 'https://mockup-webhook-url.com/webhook/form10uploadduanjira';
     const F10_WEBHOOK_URL_DECLARATION = 'https://mockup-webhook-url.com/webhook/form10khaibaoduanjira';
     
@@ -8401,9 +8393,9 @@
         // Bỏ qua các trường không cần thiết: CreatedAt, UpdatedAt, created, updated, labels
         const { CreatedAt, UpdatedAt, created, updated, labels, ...cleanRecord } = record;
         
-        // Nhận diện Epic: issueType === 'Epic' HOẶC recordType === 'epic'
-        const isEpic = record.issueType === 'Epic' || 
-                      (record.recordType && record.recordType.toLowerCase() === 'epic');
+        // Nhận diện Epic: recordType === 'epic' HOẶC issueType === 'Epic'
+        const recordTypeLower = record.recordType ? record.recordType.toLowerCase() : '';
+        const isEpic = recordTypeLower === 'epic' || record.issueType === 'Epic';
         
         if (isEpic) {
           const epic = {
@@ -8429,8 +8421,8 @@
             stories: []
           };
           epicMap.set(record.issueKey, epic);
-        } else if (record.issueType === 'Story' || (record.recordType && record.recordType.toLowerCase() === 'story')) {
-          // Nhận diện Story: issueType === 'Story' HOẶC recordType === 'story'
+        } else if (recordTypeLower === 'story' || record.issueType === 'Story') {
+          // Nhận diện Story: recordType === 'story' HOẶC issueType === 'Story'
           const story = {
             story: record.summary || '',
             storyKey: record.issueKey || '',
@@ -8454,8 +8446,8 @@
             subtasks: []
           };
           storyMap.set(record.issueKey, story);
-        } else if (record.issueType === 'Sub-task' || (record.recordType && record.recordType.toLowerCase() === 'subtask')) {
-          // Nhận diện Sub-task: issueType === 'Sub-task' HOẶC recordType === 'subtask'
+        } else if (recordTypeLower === 'subtask' || recordTypeLower === 'sub-task' || record.issueType === 'Sub-task') {
+          // Nhận diện Sub-task: recordType === 'subtask' HOẶC 'sub-task' HOẶC issueType === 'Sub-task'
           subtaskList.push({
             subtask: record.summary || '',
             subtaskKey: record.issueKey || '',
@@ -8606,11 +8598,13 @@
       
       // Dựa vào statusCategory và status
       if (categoryLower === 'done' || statusLower === 'done' || statusLower.includes('done')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">Done</span>';
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Done</span>';
+      } else if (statusLower.includes('in review') || statusLower.includes('inreview')) {
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">In Review</span>';
       } else if (categoryLower === 'indeterminate' || statusLower.includes('in progress') || statusLower.includes('inprogress')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">In Progress</span>';
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">In Progress</span>';
       } else if (categoryLower === 'new' || statusLower === 'to do' || statusLower.includes('todo')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">To Do</span>';
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">To Do</span>';
       }
       
       // Fallback: hiển thị giá trị gốc
@@ -8781,7 +8775,7 @@
                 <span class="text-blue-700 text-sm f10-epic-name break-words">${escapeHtml(epic.epic || '-')}</span>
               </div>
               <div class="col-span-1 flex items-center">
-                <button type="button" class="f10-add-story-btn hidden px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">Thêm Story</button>
+                <button type="button" class="f10-add-story-btn px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">Thêm Story</button>
               </div>
               <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(epic.assignee || '-')}</div>
               <div class="col-span-1 flex items-center">${getF10StatusBadge(epic.status, epic.statusCategory)}</div>
@@ -8810,7 +8804,7 @@
                     <span class="text-purple-700 text-sm f10-story-name break-words">${escapeHtml(story.story || '-')}</span>
                   </div>
                   <div class="col-span-1 flex items-center">
-                    <button type="button" class="f10-add-subtask-btn hidden px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">Thêm Subtask</button>
+                    <button type="button" class="f10-add-subtask-btn px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">Thêm Subtask</button>
                   </div>
                   <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(story.assignee || '-')}</div>
                   <div class="col-span-1 flex items-center">${getF10StatusBadge(story.status, story.statusCategory)}</div>
@@ -8947,8 +8941,9 @@
     function openF10AddStoryModal(epicName) {
       const epicNameEl = document.getElementById('modal-f10-add-story-epic-name');
       const epicIdEl = document.getElementById('modal-f10-add-story-epic-id');
-      const storyCodeEl = document.getElementById('modal-f10-add-story-code');
       const statusEl = document.getElementById('modal-f10-add-story-status');
+      const epicJiraKeyEl = document.getElementById('modal-f10-add-story-epic-jira-key');
+      const epicJiraLinkEl = document.getElementById('modal-f10-add-story-epic-jira-link');
       
       if (epicNameEl) epicNameEl.textContent = epicName || '';
       if (epicIdEl) epicIdEl.value = epicName || '';
@@ -8956,10 +8951,23 @@
       // Reset form
       document.getElementById('modal-f10-add-story-form').reset();
       
-      // Tự động sinh Story Code
-      if (storyCodeEl) {
-        storyCodeEl.value = generateF10StoryCode();
+      // Tìm Epic và lấy thông tin Jira
+      let epicJiraKey = '';
+      let epicJiraLink = '';
+      if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
+        const dataItem = F10_ALL_DATA[0];
+        if (dataItem.epics && Array.isArray(dataItem.epics)) {
+          const epic = dataItem.epics.find(e => normalizeF10Key(e.epic) === normalizeF10Key(epicName));
+          if (epic) {
+            epicJiraKey = epic.jiraKey || epic.epicKey || '';
+            epicJiraLink = epic.jiraLink || epic.url || '';
+          }
+        }
       }
+      
+      // Điền thông tin Jira của Epic vào các trường readonly
+      if (epicJiraKeyEl) epicJiraKeyEl.value = epicJiraKey;
+      if (epicJiraLinkEl) epicJiraLinkEl.value = epicJiraLink;
       
       // Set mặc định trạng thái là "To Do"
       if (statusEl) {
@@ -9005,8 +9013,9 @@
       const epicNameEl = document.getElementById('modal-f10-add-subtask-epic-name');
       const epicIdEl = document.getElementById('modal-f10-add-subtask-epic-id');
       const storyIdEl = document.getElementById('modal-f10-add-subtask-story-id');
-      const taskCodeEl = document.getElementById('modal-f10-add-subtask-task-code');
       const statusEl = document.getElementById('modal-f10-add-subtask-status');
+      const storyJiraKeyEl = document.getElementById('modal-f10-add-subtask-story-jira-key');
+      const storyJiraLinkEl = document.getElementById('modal-f10-add-subtask-story-jira-link');
       
       if (storyNameEl) storyNameEl.textContent = storyName || '';
       if (epicNameEl) epicNameEl.textContent = epicName || '';
@@ -9016,10 +9025,28 @@
       // Reset form
       document.getElementById('modal-f10-add-subtask-form').reset();
       
-      // Tự động sinh Task Code
-      if (taskCodeEl) {
-        taskCodeEl.value = generateF10TaskCode();
+      // Tìm Story và lấy thông tin Jira
+      let storyJiraKey = '';
+      let storyJiraLink = '';
+      if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
+        const dataItem = F10_ALL_DATA[0];
+        if (dataItem.epics && Array.isArray(dataItem.epics)) {
+          // Tìm Epic
+          const epic = dataItem.epics.find(e => normalizeF10Key(e.epic) === normalizeF10Key(epicName));
+          if (epic && epic.stories && Array.isArray(epic.stories)) {
+            // Tìm Story trong Epic
+            const story = epic.stories.find(s => normalizeF10Key(s.story) === normalizeF10Key(storyName));
+            if (story) {
+              storyJiraKey = story.jiraKey || story.storyKey || '';
+              storyJiraLink = story.jiraLink || story.url || '';
+            }
+          }
+        }
       }
+      
+      // Điền thông tin Jira của Story vào các trường readonly
+      if (storyJiraKeyEl) storyJiraKeyEl.value = storyJiraKey;
+      if (storyJiraLinkEl) storyJiraLinkEl.value = storyJiraLink;
       
       // Set mặc định trạng thái là "To Do"
       if (statusEl) {
@@ -9038,45 +9065,46 @@
       const form = document.getElementById('modal-f10-add-story-form');
       if (!form) return;
 
+      // Tránh gửi nhiều lần
+      if (form._isSubmitting) {
+        return;
+      }
+      form._isSubmitting = true;
+
       const epicNameFromModal = document.getElementById('modal-f10-add-story-epic-id')?.value || '';
       const storyName = document.getElementById('modal-f10-add-story-name')?.value.trim() || '';
       
       // Validation các trường bắt buộc
-      const storyCode = document.getElementById('modal-f10-add-story-code')?.value.trim() || '';
       const assignee = document.getElementById('modal-f10-add-story-assignee')?.value.trim() || '';
       const startDate = document.getElementById('modal-f10-add-story-start-date')?.value || '';
       const dueDate = document.getElementById('modal-f10-add-story-due-date')?.value || '';
-      const jiraKey = document.getElementById('modal-f10-add-story-jira-key')?.value.trim() || '';
-      const jiraLink = document.getElementById('modal-f10-add-story-jira-link')?.value.trim() || '';
       
       if (!storyName) {
+        form._isSubmitting = false;
         showToast('Vui lòng nhập tên Story', 'error');
         return;
       }
-      if (!storyCode) {
-        showToast('Story Code không được để trống', 'error');
-        return;
-      }
       if (!assignee) {
+        form._isSubmitting = false;
         showToast('Vui lòng chọn người thực hiện', 'error');
         return;
       }
       if (!startDate) {
+        form._isSubmitting = false;
         showToast('Vui lòng chọn ngày bắt đầu', 'error');
         return;
       }
       if (!dueDate) {
+        form._isSubmitting = false;
         showToast('Vui lòng chọn hạn hoàn thành', 'error');
         return;
       }
-      if (!jiraKey) {
-        showToast('Vui lòng nhập Mã Jira', 'error');
-        return;
-      }
 
-      // Tìm Epic bằng name trong F10_ALL_DATA
+      // Tìm Epic bằng name trong F10_ALL_DATA và lấy thông tin Jira
       let epicName = epicNameFromModal;
       let epicKey = '';
+      let epicJiraKey = '';
+      let epicJiraLink = '';
       if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
         const dataItem = F10_ALL_DATA[0];
         if (dataItem.epics && Array.isArray(dataItem.epics)) {
@@ -9084,18 +9112,20 @@
           if (epic) {
             epicName = epic.epic || epicNameFromModal;
             epicKey = epic.epicKey || epic.epic || '';
+            epicJiraKey = epic.jiraKey || epic.epicKey || '';
+            epicJiraLink = epic.jiraLink || epic.url || '';
           }
         }
       }
 
-      // Lấy dữ liệu từ form
+      // Lấy dữ liệu từ form - sử dụng Jira của Epic
       const status = 'To Do'; // Mặc định To Do
       
       const storyData = {
         issueType: 'Story',
         summary: storyName,
-        issueKey: jiraKey,
-        url: jiraLink || '',
+        issueKey: epicJiraKey, // Lấy từ Epic
+        url: epicJiraLink || '', // Lấy từ Epic
         assignee: assignee,
         status: status,
         statusCategory: 'new',
@@ -9129,6 +9159,7 @@
         console.error('[Form 10] Error submitting story to server:', error);
         showToast('Lỗi khi thêm Story: ' + (error.message || 'Vui lòng thử lại'), 'error');
       } finally {
+        form._isSubmitting = false;
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Thêm Story';
@@ -9141,11 +9172,18 @@
       const form = document.getElementById('modal-f10-add-subtask-form');
       if (!form) return;
 
+      // Tránh gửi nhiều lần
+      if (form._isSubmitting) {
+        return;
+      }
+      form._isSubmitting = true;
+
       const epicNameFromModal = document.getElementById('modal-f10-add-subtask-epic-id')?.value || '';
       const storyNameFromModal = document.getElementById('modal-f10-add-subtask-story-id')?.value || '';
       const subtaskName = document.getElementById('modal-f10-add-subtask-name')?.value.trim() || '';
       
       if (!subtaskName) {
+        form._isSubmitting = false;
         showToast('Vui lòng nhập tên Sub-task', 'error');
         return;
       }
@@ -9185,33 +9223,41 @@
       }
 
       // Validation các trường bắt buộc
-      const taskCode = document.getElementById('modal-f10-add-subtask-task-code')?.value.trim() || '';
       const assignee = document.getElementById('modal-f10-add-subtask-assignee')?.value.trim() || '';
       const status = document.getElementById('modal-f10-add-subtask-status')?.value || '';
       const startDateInput = document.getElementById('modal-f10-add-subtask-start-date')?.value || '';
       const dueDateInput = document.getElementById('modal-f10-add-subtask-due-date')?.value || '';
-      const jiraKey = document.getElementById('modal-f10-add-subtask-jira-key')?.value.trim() || '';
-      const jiraLink = document.getElementById('modal-f10-add-subtask-jira-link')?.value.trim() || '';
       
-      if (!taskCode) {
-        showToast('Task Code không được để trống', 'error');
-        return;
-      }
       if (!assignee) {
+        form._isSubmitting = false;
         showToast('Vui lòng chọn người thực hiện', 'error');
         return;
       }
       if (!startDateInput) {
+        form._isSubmitting = false;
         showToast('Vui lòng chọn ngày bắt đầu', 'error');
         return;
       }
       if (!dueDateInput) {
+        form._isSubmitting = false;
         showToast('Vui lòng chọn hạn hoàn thành', 'error');
         return;
       }
-      if (!jiraKey) {
-        showToast('Vui lòng nhập Mã Jira', 'error');
-        return;
+
+      // Lấy thông tin Jira từ Epic
+      let epicJiraKey = '';
+      let epicJiraLink = '';
+      if (epicData) {
+        epicJiraKey = epicData.jiraKey || epicData.epicKey || '';
+        epicJiraLink = epicData.jiraLink || epicData.url || '';
+      }
+
+      // Lấy thông tin Jira từ Story
+      let storyJiraKey = '';
+      let storyJiraLink = '';
+      if (storyData) {
+        storyJiraKey = storyData.jiraKey || storyData.storyKey || '';
+        storyJiraLink = storyData.jiraLink || storyData.url || '';
       }
 
       const subtaskData = {
@@ -9219,15 +9265,26 @@
         recordType: 'subtask',
         level: '1',
         summary: subtaskName,
-        issueKey: jiraKey,
-        url: jiraLink || '',
+        // Thông tin Sub-task
+        issueKey: '', // Mã Jira của Sub-task (có thể để trống nếu chưa có)
+        url: '', // Link Jira của Sub-task (có thể để trống nếu chưa có)
+        // Thông tin Epic cha
+        epicJiraKey: epicJiraKey, // Mã Jira của Epic cha
+        epicJiraLink: epicJiraLink || '', // Link Jira của Epic cha
+        epicName: epicName, // Tên Epic cha
+        epicKey: epicKey || epicName, // Key của Epic cha
+        // Thông tin Story cha
+        storyJiraKey: storyJiraKey, // Mã Jira của Story cha
+        storyJiraLink: storyJiraLink || '', // Link Jira của Story cha
+        storyName: storyName, // Tên Story cha
+        storyKey: storyKey || storyName, // Key của Story cha
+        // Thông tin khác
         assignee: assignee,
         status: status,
         statusCategory: 'new',
         startDate: startDateInput,
         endDate: dueDateInput,
         descriptionPreview: document.getElementById('modal-f10-add-subtask-note')?.value.trim() || '',
-        workKey: storyKey || storyName,
         parentKey: storyKey || storyName,
         parentSummary: storyName
       };
@@ -9255,6 +9312,7 @@
         console.error('[Form 10] Error submitting subtask to server:', error);
         showToast('Lỗi khi thêm Sub-task: ' + (error.message || 'Vui lòng thử lại'), 'error');
       } finally {
+        form._isSubmitting = false;
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Thêm Sub-task';
@@ -9264,7 +9322,7 @@
     
     // Hàm gửi Story lên server Form 10
     async function submitF10StoryToServer(storyData) {
-      const WEBHOOK_URL = F10_WEBHOOK_URL_LOAD; // Dùng chung webhook với GET
+      const WEBHOOK_URL = F10_WEBHOOK_URL_ADD_TASK;
       
       console.log('[Form 10] Sending story to:', WEBHOOK_URL);
       console.log('[Form 10] Story data:', storyData);
@@ -9290,7 +9348,7 @@
     
     // Hàm gửi Sub-task lên server Form 10
     async function submitF10SubtaskToServer(subtaskData) {
-      const WEBHOOK_URL = F10_WEBHOOK_URL_LOAD; // Dùng chung webhook với GET
+      const WEBHOOK_URL = F10_WEBHOOK_URL_ADD_TASK;
       
       console.log('[Form 10] Sending subtask to:', WEBHOOK_URL);
       console.log('[Form 10] Subtask data:', subtaskData);
@@ -9588,7 +9646,7 @@
         'Ngày bắt đầu',
         'Hạn hoàn thành',
         'Ngày hoàn thành',
-        'Mã Jira/KOI',
+        'Mã Jira',
         'Link Jira',
         'Ghi chú'
       ];
@@ -9671,7 +9729,7 @@
         { wch: 15 },  // Ngày bắt đầu
         { wch: 15 },  // Hạn hoàn thành
         { wch: 15 },  // Ngày hoàn thành
-        { wch: 15 },  // Mã Jira/KOI
+        { wch: 15 },  // Mã Jira
         { wch: 30 },  // Link Jira
         { wch: 40 }   // Ghi chú
       ];
@@ -9726,20 +9784,46 @@
       initModalListeners('f10-add-story');
       initModalListeners('f10-add-subtask');
       
-      // Event listener cho nút submit thêm Story
-      const f10AddStorySubmitBtn = document.getElementById('modal-f10-add-story-submit');
-      if (f10AddStorySubmitBtn) {
-        f10AddStorySubmitBtn.addEventListener('click', (e) => {
+      // Event listener cho form submit thêm Story (tránh gửi 2 lần)
+      const f10AddStoryForm = document.getElementById('modal-f10-add-story-form');
+      if (f10AddStoryForm && !f10AddStoryForm._submitListenerAttached) {
+        f10AddStoryForm._submitListenerAttached = true;
+        f10AddStoryForm.addEventListener('submit', (e) => {
           e.preventDefault();
+          e.stopPropagation();
           handleF10AddStorySubmit();
         });
       }
       
-      // Event listener cho nút submit thêm Sub-task
+      // Event listener cho nút submit thêm Story (backup)
+      const f10AddStorySubmitBtn = document.getElementById('modal-f10-add-story-submit');
+      if (f10AddStorySubmitBtn && !f10AddStorySubmitBtn._clickListenerAttached) {
+        f10AddStorySubmitBtn._clickListenerAttached = true;
+        f10AddStorySubmitBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleF10AddStorySubmit();
+        });
+      }
+      
+      // Event listener cho form submit thêm Sub-task (tránh gửi 2 lần)
+      const f10AddSubtaskForm = document.getElementById('modal-f10-add-subtask-form');
+      if (f10AddSubtaskForm && !f10AddSubtaskForm._submitListenerAttached) {
+        f10AddSubtaskForm._submitListenerAttached = true;
+        f10AddSubtaskForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleF10AddSubtaskSubmit();
+        });
+      }
+      
+      // Event listener cho nút submit thêm Sub-task (backup)
       const f10AddSubtaskSubmitBtn = document.getElementById('modal-f10-add-subtask-submit');
-      if (f10AddSubtaskSubmitBtn) {
+      if (f10AddSubtaskSubmitBtn && !f10AddSubtaskSubmitBtn._clickListenerAttached) {
+        f10AddSubtaskSubmitBtn._clickListenerAttached = true;
         f10AddSubtaskSubmitBtn.addEventListener('click', (e) => {
           e.preventDefault();
+          e.stopPropagation();
           handleF10AddSubtaskSubmit();
         });
       }
