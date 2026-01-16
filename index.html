@@ -939,6 +939,10 @@
               <option>Lê Thị Thảo</option>
               <option>Vũ Thị Thanh Hiền</option>
             </select>
+            <div>
+              <input name="linkKOI" type="text" placeholder="Link KOI (Nếu có)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              <p class="text-xs text-gray-500 mt-1">Copy trực tiếp link từ luồng phê duyệt KOI</p>
+            </div>
             <textarea name="notes" rows="2" placeholder="Ghi chú (Điểm thay đổi, lý do yêu cầu gấp...)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2"></textarea>
           </div>
         </div>
@@ -11734,7 +11738,8 @@
         changeReq: formData.notes || '',
         appliedModel: formData.appliedModel || '',
         evaluator: formData.evaluator || '',
-        attachments: formData.attachments || ''
+        attachments: formData.attachments || '',
+        linkKOI: formData.linkKOI || ''
       };
       
       return {
@@ -11763,6 +11768,7 @@
         TaskAltCode: '', // Đã xóa khỏi UI, để rỗng
         TaskAppliedModel: String(formData.appliedModel || '').trim(),
         TaskAttachments: String(formData.attachments || '').trim(),
+        TaskLinkKOI: String(formData.linkKOI || '').trim(),
         
         // Nhóm Task* (Form 5)
         TaskCode: taskCode,
@@ -12441,6 +12447,7 @@
           evaluator: String(data.evaluator || '').trim(),
           tester: String(data.tester || '').trim(),
           appliedModel: String(data.appliedModel || '').trim(),
+          linkKOI: String(data.linkKOI || '').trim(),
           Score: String(componentStdStr), Odoojira: '', Assignee: String(data.pic || '').trim()
         };
 
@@ -12465,6 +12472,7 @@
         // Cập nhật formData với attachments
         const formDataWithAttachments = {
           ...data,
+          linkKOI: String(data.linkKOI || '').trim(), // Đảm bảo linkKOI luôn có
           attachments: attachmentsStr
         };
         
@@ -12812,6 +12820,7 @@
           TaskNotes: taskX.form4Data?.changeReq || '',
           TaskAppliedModel: taskX.form4Data?.appliedModel || '',
           TaskAttachments: taskX.form4Data?.attachments || '',
+          TaskLinkKOI: taskX.form4Data?.linkKOI || '',
           TaskCode: taskX.taskCode || '',
           TaskName: taskX.taskName || '',
           TaskDescription: taskX.description || '',
@@ -13013,7 +13022,8 @@
           qtySamples: form4Data.qtySamples || '',
           changeReq: form4Data.changeReq || '',
           evaluator: form4Data.evaluator || '',
-          attachments: form4Data.attachments || ''
+          attachments: form4Data.attachments || '',
+          linkKOI: form4Data.linkKOI || ''
         },
         subtasks: [] // Khởi tạo mảng subtasks rỗng
       };
@@ -17155,6 +17165,7 @@
         TaskDueDate: result.task.dueDate || null,
         TaskDescription: result.task.description || '',
         TaskAttachments: result.task.form4Data?.attachments || '', // File đính kèm từ task
+        TaskLinkKOI: result.task.form4Data?.linkKOI || '',
         project_code: projectCode || null,
         TaskForm4Data: result.task.form4Data ? JSON.stringify(result.task.form4Data) : null
       };
@@ -17677,6 +17688,7 @@
         TaskDueDate: result.task.dueDate || null,
         TaskDescription: result.task.description || '',
         TaskAttachments: result.task.form4Data?.attachments || '',
+        TaskLinkKOI: result.task.form4Data?.linkKOI || '',
         project_code: projectCode || null,
         TaskForm4Data: result.task.form4Data ? JSON.stringify(result.task.form4Data) : null
       };
@@ -18195,6 +18207,14 @@
                         <p class="text-base text-gray-900 mt-1">${form4Data.attachments}</p>
                       </div>
                     ` : ''}
+                    ${form4Data.linkKOI ? `
+                      <div class="md:col-span-2">
+                        <label class="text-xs font-semibold text-gray-500 uppercase">Link KOI</label>
+                        <p class="text-base text-gray-900 mt-1">
+                          <a href="${form4Data.linkKOI}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${form4Data.linkKOI}</a>
+                        </p>
+                      </div>
+                    ` : ''}
                     ${form4Data.changeReq ? `
                       <div class="md:col-span-2">
                         <label class="text-xs font-semibold text-gray-500 uppercase">Ghi chú</label>
@@ -18541,6 +18561,7 @@
         TaskNotes: task.form4Data?.changeReq || '',
         TaskAppliedModel: task.form4Data?.appliedModel || '',
         TaskAttachments: task.form4Data?.attachments || '',
+        TaskLinkKOI: task.form4Data?.linkKOI || '',
         TaskCode: task.taskCode || '',
         TaskName: task.taskName || '',
         TaskDescription: task.description || '',
