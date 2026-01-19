@@ -19989,6 +19989,15 @@
       }
     }
 
+    function sortForm13DataByDate(data) {
+      return [...data].sort((a, b) => {
+        const dateA = a.request_date ? new Date(a.request_date) : new Date(0);
+        const dateB = b.request_date ? new Date(b.request_date) : new Date(0);
+        // Sắp xếp từ mới đến cũ (descending)
+        return dateB - dateA;
+      });
+    }
+
     function renderForm13Table() {
       const tbody = document.getElementById('form13-table-body');
       if (!tbody) {
@@ -20074,6 +20083,9 @@
         
         return matchStatus && matchSearch;
       });
+
+      // Sắp xếp lại dữ liệu đã lọc theo ngày yêu cầu từ mới đến cũ
+      FORM13_FILTERED_DATA = sortForm13DataByDate(FORM13_FILTERED_DATA);
 
       FORM13_PAGE = 1;
       renderForm13Table();
@@ -20197,6 +20209,8 @@
           FORM13_ALL_DATA = [];
         }
         
+        // Sắp xếp dữ liệu theo ngày yêu cầu từ mới đến cũ
+        FORM13_ALL_DATA = sortForm13DataByDate(FORM13_ALL_DATA);
         FORM13_FILTERED_DATA = [...FORM13_ALL_DATA];
         FORM13_PAGE = 1;
         
@@ -20297,5 +20311,3 @@
 
 </body>
 </html>
-
-
