@@ -393,11 +393,11 @@
         
         <!-- Nhóm: Quản lý công việc SPM -->
         <div class="flex flex-col gap-1 mt-2">
-          <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="spm-group">
+          <button class="group-btn collapsed flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="spm-group">
             <span class="text-lg group-expand-icon">🏮</span>
             <p class="text-sm font-semibold">Quản lý công việc SPM</p>
           </button>
-          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="spm-group">
+          <div class="group-items collapsed flex flex-col gap-1 ml-4 mt-1" data-group="spm-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form3">
               <span class="text-base">🧨</span>
               <p class="text-sm font-semibold">3 - Quản lý dự án</p>
@@ -874,12 +874,18 @@
             <input type="hidden" name="componentStandard" id="f4-componentStandard" value="0" />
             <select required name="requestPurpose" id="f4-requestPurpose" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2">
               <option value="">Mục đích yêu cầu *</option>
-              <option value="Đánh giá SP mới">Đánh giá sản phẩm mới</option>
+              <option value="Đánh giá SP mới" selected>Đánh giá sản phẩm mới</option>
               <option value="Đánh giá Sản phẩm SOP">Đánh giá sản phẩm SOP(Chức năng đang được phát triển lại, không chọn)</option>
             </select>
             <div id="f4-purposeDescription" class="text-gray-600 text-sm md:col-span-2"></div>
-            <div id="f4-projectCodeContainer" class="hidden md:col-span-2">
-              <input type="text" id="f4-projectCode" name="projectCode" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Mã dự án" disabled />
+            <div id="f4-projectCodeContainer" class="md:col-span-2">
+              <div class="flex gap-2">
+                <input type="text" id="f4-projectCode" readonly placeholder="Mã dự án *" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" onclick="document.getElementById('f4-projectCodeModal').classList.remove('hidden')"/>
+                <input type="hidden" id="f4-projectCodeValue" name="projectCode" required/>
+                <button type="button" onclick="document.getElementById('f4-projectCodeModal').classList.remove('hidden')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm whitespace-nowrap">
+                  Chọn dự án
+                </button>
+              </div>
             </div>
             <div id="f4-nccChangeFields" class="hidden md:col-span-2">
               <input type="text" id="f4-appliedModel" name="appliedModel" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Model áp dụng *" disabled />
@@ -980,6 +986,69 @@
         </button>
       </form>
     </section>
+
+    <!-- Modal chọn mã dự án - Form 4 -->
+    <div id="f4-projectCodeModal" class="modal-container fixed inset-0 z-50 hidden items-center justify-center p-4" style="display: none;">
+      <div id="f4-projectCodeModal-overlay" class="modal-overlay fixed inset-0 bg-black/50" onclick="document.getElementById('f4-projectCodeModal').classList.add('hidden')"></div>
+      <div id="f4-projectCodeModal-content" class="modal-content relative z-50 flex items-center justify-center w-full h-full">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[85vh] overflow-hidden flex flex-col">
+          <!-- Modal Header -->
+          <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
+            <h3 class="text-xl font-semibold text-gray-800">Chọn mã dự án</h3>
+            <button id="f4-projectCodeModal-close" class="text-gray-500 hover:text-gray-700 transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Modal Body -->
+          <div class="p-6 overflow-y-auto flex-1">
+            <div class="mb-4">
+              <input type="text" id="f4-projectCodeSearch" placeholder="Tìm kiếm dự án..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            </div>
+            <div id="f4-projectCodeList" class="space-y-2 max-h-[60vh] overflow-y-auto">
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="T90-Anh">T90-Anh</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="M25">M25</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Dự án cải tiến chất lượng sản phẩm">Dự án cải tiến chất lượng sản phẩm</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Dự án phát triển NCC linh kiện mới">Dự án phát triển NCC linh kiện mới</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Dự án cải tiến lỗi thị trường">Dự án cải tiến lỗi thị trường</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Bình chứa HCV (BC05)">Bình chứa HCV (BC05)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="HCV 351">HCV 351</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Waterfall 3 in 1">Waterfall 3 in 1</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Vòi đôi">Vòi đôi</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Module thông hơi">Module thông hơi</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Bộ điện phân Alkaline Mini">Bộ điện phân Alkaline Mini</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Lọc tổng">Lọc tổng</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Lọc RO công nghiệp">Lọc RO công nghiệp</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="SA5">SA5</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="SA6">SA6</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="SA4">SA4</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Cút nối chặt">Cút nối chặt</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="ST V4 (Café)">ST V4 (Café)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="ST V5 (Soda)">ST V5 (Soda)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="ST V7 (Nóng nhanh)">ST V7 (Nóng nhanh)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Đường nước ngâm cụm lọc thô">Đường nước ngâm cụm lọc thô</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Máy UDS U12.M25.6 (U V1)">Máy UDS U12.M25.6 (U V1)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="STD M25 V8 (ST V6 Ngăn đá)">STD M25 V8 (ST V6 Ngăn đá)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Lọc tổng trao đổi ion (P02S)">Lọc tổng trao đổi ion (P02S)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Lọc tổng mini để gầm (P015)">Lọc tổng mini để gầm (P015)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="U12.M25.6 + VTM + Nóng lạnh (U V2)">U12.M25.6 + VTM + Nóng lạnh (U V2)</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Module nóng siêu nhanh">Module nóng siêu nhanh</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Module làm đá">Module làm đá</div>
+              <div class="project-option p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-colors" data-value="Vòi thông minh">Vòi thông minh</div>
+            </div>
+          </div>
+          
+          <!-- Modal Footer -->
+          <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+            <button type="button" id="f4-projectCodeModal-cancel" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+              Hủy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Form 5 - Quản lý Tác vụ Sản phẩm Mới -->
     <section id="form5" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
@@ -1155,29 +1224,6 @@
           </div>
         </div>
 
-        <!-- Tasks sắp hết hạn -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-6 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Tác vụ sắp hết hạn (7 ngày tới)</h3>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tên tác vụ</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Dự án</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Người thực hiện</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Hạn chót</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Còn lại</th>
-                </tr>
-              </thead>
-              <tbody id="f6-due-tasks-body" class="divide-y divide-gray-200">
-                <!-- Dữ liệu sẽ được render bằng JavaScript -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
         <!-- Bảng chi tiết Dự án -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-6 border-b border-gray-200 flex items-center justify-between">
@@ -1197,11 +1243,33 @@
                   <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tên dự án</th>
                   <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Số tác vụ</th>
                   <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Số subtask</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tiến độ</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Người phụ trách</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase" style="min-width: 200px;">Tiến độ</th>
                 </tr>
               </thead>
               <tbody id="f6-projects-table-body" class="divide-y divide-gray-200">
+                <!-- Dữ liệu sẽ được render bằng JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tasks sắp hết hạn -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Tác vụ sắp hết hạn (7 ngày tới)</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tên tác vụ</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Dự án</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Người thực hiện</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Hạn chót</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Còn lại</th>
+                </tr>
+              </thead>
+              <tbody id="f6-due-tasks-body" class="divide-y divide-gray-200">
                 <!-- Dữ liệu sẽ được render bằng JavaScript -->
               </tbody>
             </table>
@@ -12052,6 +12120,9 @@
 
       // Setup form submit
       setupF4FormSubmit();
+
+      // Setup project code modal
+      setupF4ProjectCodeModal();
     }
 
     function setF4RequestCode() {
@@ -12087,14 +12158,14 @@
         const isSanPhamMoi = val === "Đánh giá SP mới";
         const isSanPhamSOP = val === "Đánh giá Sản phẩm SOP";
 
-        // Project code container - hiển thị cho "Đánh giá sản phẩm mới"
+        // Project code container - luôn hiển thị
         const projContainer = document.getElementById('f4-projectCodeContainer');
         const projInput = document.getElementById('f4-projectCode');
         if (projContainer && projInput) {
-          projContainer.classList.toggle('hidden', !isSanPhamMoi);
-          projInput.disabled = !isSanPhamMoi;
-          projInput.required = isSanPhamMoi;
-          if (!isSanPhamMoi) projInput.value = '';
+          // Luôn hiển thị và enable trường mã dự án, bắt buộc phải chọn
+          projContainer.classList.remove('hidden');
+          projInput.disabled = false;
+          projInput.required = true;
         }
 
         // NCC change fields - không còn logic này nữa
@@ -12536,6 +12607,93 @@
         } catch(err) {
           alert("Gửi thất bại: "+err);
           if (btn) { btn.innerHTML=originalLabel; btn.disabled=false; }
+        }
+      });
+    }
+
+    function setupF4ProjectCodeModal() {
+      const modal = document.getElementById('f4-projectCodeModal');
+      const modalOverlay = document.getElementById('f4-projectCodeModal-overlay');
+      const modalClose = document.getElementById('f4-projectCodeModal-close');
+      const modalCancel = document.getElementById('f4-projectCodeModal-cancel');
+      const projectInput = document.getElementById('f4-projectCode');
+      const projectValueInput = document.getElementById('f4-projectCodeValue');
+      const projectOptions = document.querySelectorAll('.project-option');
+      const searchInput = document.getElementById('f4-projectCodeSearch');
+
+      // Hàm đóng modal
+      const closeModal = () => {
+        if (modal) modal.classList.add('hidden');
+      };
+
+      // Hàm mở modal
+      const openModal = () => {
+        if (modal) modal.classList.remove('hidden');
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+        }
+        // Reset filter khi mở modal
+        filterProjects('');
+      };
+
+      // Hàm chọn dự án
+      const selectProject = (value, text) => {
+        if (projectInput) {
+          projectInput.value = text;
+        }
+        if (projectValueInput) {
+          projectValueInput.value = value;
+        }
+        closeModal();
+      };
+
+      // Hàm lọc dự án
+      const filterProjects = (searchTerm) => {
+        const term = searchTerm.toLowerCase().trim();
+        projectOptions.forEach(option => {
+          const text = option.textContent.toLowerCase();
+          if (text.includes(term)) {
+            option.style.display = 'block';
+          } else {
+            option.style.display = 'none';
+          }
+        });
+      };
+
+      // Event listeners
+      if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeModal);
+      }
+
+      if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+      }
+
+      if (modalCancel) {
+        modalCancel.addEventListener('click', closeModal);
+      }
+
+      // Click vào option để chọn
+      projectOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          const value = option.getAttribute('data-value');
+          const text = option.textContent.trim();
+          selectProject(value, text);
+        });
+      });
+
+      // Tìm kiếm
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          filterProjects(e.target.value);
+        });
+      }
+
+      // Đóng modal bằng phím ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeModal();
         }
       });
     }
@@ -14537,13 +14695,12 @@
         const searchLower = F6_SEARCH_TEXT.toLowerCase();
         filteredProjects = projectDetails.filter(p => 
           (p.projectCode || '').toLowerCase().includes(searchLower) ||
-          (p.projectName || '').toLowerCase().includes(searchLower) ||
-          (p.pic || '').toLowerCase().includes(searchLower)
+          (p.projectName || '').toLowerCase().includes(searchLower)
         );
       }
 
       if (filteredProjects.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500 text-sm">Không có dữ liệu phù hợp</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500 text-sm">Không có dữ liệu phù hợp</td></tr>';
         return;
       }
 
@@ -14564,7 +14721,7 @@
             <td class="px-6 py-3 text-sm text-gray-900">${escapeHtml(project.projectName)}</td>
             <td class="px-6 py-3 text-sm text-gray-700 text-center">${project.taskCount}</td>
             <td class="px-6 py-3 text-sm text-gray-700 text-center">${project.subtaskCount}</td>
-            <td class="px-6 py-3">
+            <td class="px-6 py-3" style="min-width: 200px;">
               <div class="flex items-center gap-2">
                 <div class="flex-1 bg-gray-200 rounded-full h-2">
                   <div class="${progressColor} h-2 rounded-full" style="width: ${project.progress}%"></div>
@@ -14572,7 +14729,6 @@
                 <span class="text-sm font-semibold text-gray-700 w-12 text-right">${project.progress}%</span>
               </div>
             </td>
-            <td class="px-6 py-3 text-sm text-gray-700 cursor-pointer hover:text-blue-600" onclick="openF6PersonDetailModal('${escapeHtml(project.pic)}')">${escapeHtml(project.pic || '-')}</td>
           </tr>
         `;
       });
