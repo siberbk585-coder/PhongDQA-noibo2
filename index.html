@@ -1119,7 +1119,7 @@
                   <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Tên tác vụ</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Người yêu cầu</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Người nhận tác vụ</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Phòng ban</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Link KOI</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Ngày gửi</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Ngày hết hạn</th>
                   <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-600">Ngày hoàn thành</th>
@@ -13208,6 +13208,7 @@
         priority: 'Trung bình',
         expanded: false,
         checked: false,
+        TaskLinkKOI: form4Data.linkKOI || '', // Link KOI luôn lấy từ TaskLinkKOI
         // Thông tin chi tiết từ Form 4
         form4Data: {
           itemCode: form4Data.itemCode || '',
@@ -13337,7 +13338,11 @@
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const responseText = await response.text();
+        let responseText = await response.text();
+        // Bỏ prefix @ nếu có (một số API trả về @[...])
+        if (responseText.trim().startsWith('@')) {
+          responseText = responseText.trim().substring(1);
+        }
         console.log('[Form 5] Raw response text length:', responseText.length);
         console.log('[Form 5] Raw response text (first 500 chars):', responseText.substring(0, 500));
         console.log('[Form 5] Raw response text (last 500 chars):', responseText.substring(Math.max(0, responseText.length - 500)));
@@ -13372,9 +13377,16 @@
         // Tuy nhiên, code dưới đây sẽ ưu tiên data từ API nếu nó là Array hợp lệ.
         
         if (Array.isArray(data)) {
-          // Trường hợp 1: API trả về array trực tiếp
-          records = data;
-          console.log('[Form 5] Data is array, using directly. Length:', records.length);
+          // Trường hợp 1: API trả về [ { data: [...] } ] - lấy data[0].data
+          const first = data[0];
+          if (first && first !== null && typeof first === 'object' && Array.isArray(first.data)) {
+            records = first.data;
+            console.log('[Form 5] Data is array with data[0].data, using. Length:', records.length);
+          } else {
+            // Trường hợp 2: API trả về array records trực tiếp
+            records = data;
+            console.log('[Form 5] Data is array, using directly. Length:', records.length);
+          }
         } else if (data && typeof data === 'object') {
           // ... (các check khác giữ nguyên)
           if (Array.isArray(data.data)) {
@@ -13560,6 +13572,9 @@
           const taskId = taskRecord.Id;
           const taskRequestCode = String(taskRecord.TaskRequestCode || '').trim();
           
+          // Helper lấy TaskLinkKOI - hỗ trợ nhiều tên trường (TaskLinkKOI, task_link_koi, taskLinkKOI...)
+          const getTaskLinkKOIFromRecord = (r) => (r && (r.TaskLinkKOI || r.task_link_koi || r.taskLinkKOI || r.Task_Link_KOI || '')) || '';
+          
           // Lấy subtasks theo parent_id (ID của task này)
           // Thử match với parent_id dạng string và number
           const taskIdKey = String(taskId);
@@ -13661,6 +13676,13 @@
             }
           }
           
+          // Đảm bảo form4Data.linkKOI có giá trị từ TaskLinkKOI nếu chưa có (TaskForm4Data có thể thiếu field này)
+          const linkKOIFromRecord = getTaskLinkKOIFromRecord(taskRecord);
+          if (linkKOIFromRecord && String(linkKOIFromRecord).trim()) {
+            form4Data = form4Data || {};
+            form4Data.linkKOI = form4Data.linkKOI || linkKOIFromRecord;
+          }
+          
           // Tạo form4Data từ các trường Task* nếu TaskForm4Data null
           if (!form4Data || Object.keys(form4Data).length === 0) {
             form4Data = {
@@ -13682,7 +13704,8 @@
               pic: taskRecord.TaskPIC || '',
               changeReq: taskRecord.TaskNotes || '',
               appliedModel: taskRecord.TaskAppliedModel || '',
-              attachments: taskRecord.TaskAttachments || ''
+              attachments: taskRecord.TaskAttachments || '',
+              linkKOI: getTaskLinkKOIFromRecord(taskRecord) || ''
             };
           }
           
@@ -13705,6 +13728,16 @@
             expanded: taskSubtasks.length > 0, // Mở rộng nếu có subtasks
             checked: taskStatus === 'done',
             vendor: taskRecord.TaskVendor || '', // Thêm TaskVendor từ webhook
+            TaskLinkKOI: (() => {
+              const fromTask = getTaskLinkKOIFromRecord(taskRecord);
+              if (fromTask && String(fromTask).trim()) return String(fromTask).trim();
+              // Fallback: lấy từ subtask đầu tiên có TaskLinkKOI (một số API lưu ở subtask)
+              for (const st of sortedSubtasks) {
+                const fromSub = getTaskLinkKOIFromRecord(st);
+                if (fromSub && String(fromSub).trim()) return String(fromSub).trim();
+              }
+              return '';
+            })(),
             form4Data: form4Data,
             subtasks: taskSubtasks
           };
@@ -14016,7 +14049,7 @@
           'Mã dự án': project.projectCode || '',
           'Người yêu cầu': '-',
           'Người nhận tác vụ': project.pic || '',
-          'Phòng ban': '-',
+          'Link KOI': '-',
           'Ngày gửi': formatF5Date(project.createdAt) || '',
           'Ngày hết hạn': formatF5Date(project.dueDate) || '',
           'Ngày hoàn thành': formatF5Date(project.finishDate) || '',
@@ -14035,7 +14068,7 @@
               'Mã dự án': project.projectCode || '',
               'Người yêu cầu': task.requester || '-',
               'Người nhận tác vụ': task.pic || '-',
-              'Phòng ban': task.department || '-',
+              'Link KOI': (task.TaskLinkKOI || '').trim() || '-',
               'Ngày gửi': formatF5Date(task.createdAt) || '',
               'Ngày hết hạn': formatF5Date(task.dueDate) || '',
               'Ngày hoàn thành': formatF5Date(task.finishDate) || '',
@@ -14054,7 +14087,7 @@
                   'Mã dự án': project.projectCode || '',
                   'Người yêu cầu': task.requester || '-',
                   'Người nhận tác vụ': subtask.pic || '-',
-                  'Phòng ban': task.department || '-',
+                  'Link KOI': (task.TaskLinkKOI || '').trim() || '-',
                   'Ngày gửi': formatF5Date(subtask.timesend) || '',
                   'Ngày hết hạn': formatF5Date(subtask.dueDate) || '',
                   'Ngày hoàn thành': formatF5Date(subtask.finishDate) || '',
@@ -14101,7 +14134,7 @@
           { wch: 15 }, // Mã dự án
           { wch: 20 }, // Người yêu cầu
           { wch: 20 }, // Người nhận tác vụ
-          { wch: 15 }, // Phòng ban
+          { wch: 30 }, // Link KOI
           { wch: 15 }, // Ngày gửi
           { wch: 15 }, // Ngày hết hạn
           { wch: 15 }, // Ngày hoàn thành
@@ -16185,7 +16218,13 @@
                   ${task.requesterEmail ? `<div class="text-xs text-gray-500 mt-0.5">${task.requesterEmail}</div>` : ''}
                 </td>
                 <td class="px-4 py-4 text-sm text-gray-900">${task.pic || '-'}</td>
-                <td class="px-4 py-4 text-sm text-gray-900">${task.department || '-'}</td>
+                <td class="px-4 py-4 text-sm text-gray-600">${(function() {
+                      const linkKOI = task.TaskLinkKOI || '';
+                      if (linkKOI && String(linkKOI).trim()) {
+                        return `<a href="${String(linkKOI).trim()}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline">Xem</a>`;
+                      }
+                      return '-';
+                    })()}</td>
                 <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(task.createdAt)}</td>
                 <td class="px-4 py-4 text-sm text-gray-600">${formatF5Date(task.dueDate)}</td>
                 <td class="px-4 py-4 text-sm text-gray-600">-</td>
@@ -16288,7 +16327,13 @@
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-500 text-center">-</td>
                     <td class="px-4 py-3 text-sm text-gray-700">${st.pic || '-'}</td>
-                    <td class="px-4 py-3 text-sm text-gray-500 text-center">-</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">${(function() {
+                      const linkKOI = task.TaskLinkKOI || '';
+                      if (linkKOI && String(linkKOI).trim()) {
+                        return `<a href="${String(linkKOI).trim()}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline">Xem</a>`;
+                      }
+                      return '-';
+                    })()}</td>
                     <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.timesend) || '-'}</td>
                     <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.deadline || st.dueDate) || '-'}</td>
                     <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">${formatF5Date(st.finishTime || st.Subtaskfinishtime) || '-'}</td>
@@ -16948,7 +16993,7 @@
         const requesterName = String(row['Requester Name'] || '').trim();
         const requesterEmail = String(row['Requester Email'] || '').trim();
         const pic = String(row['PIC'] || row['Task PIC'] || '').trim();
-        const department = String(row['Department'] || row['Task Department'] || '').trim();
+        const linkKOI = String(row['Link KOI'] || row['Task Link KOI'] || '').trim();
         const createdAt = row['Created At'] || row['Task Created At'] || new Date().toISOString().split('T')[0];
         const dueDate = row['Due Date'] || row['Task Due Date'] || '';
         const status = String(row['Status'] || row['Task Status'] || 'pending').trim().toLowerCase();
@@ -17002,7 +17047,7 @@
             requesterName: requesterName || '',
             requesterEmail: requesterEmail || '',
             pic: pic || '',
-            department: department || '',
+            TaskLinkKOI: linkKOI || '',
             createdAt: formatDateForF5(createdAt),
             dueDate: formatDateForF5(dueDate),
             status: status || 'pending',
@@ -17088,7 +17133,7 @@
           ['- Requester Name', 'Tên người yêu cầu'],
           ['- Requester Email', 'Email người yêu cầu'],
           ['- PIC', 'Người phụ trách'],
-          ['- Department', 'Phòng ban'],
+          ['- Link KOI', 'Link KOI (link luồng phê duyệt)'],
           ['- Created At', 'Ngày tạo (format: YYYY-MM-DD)'],
           ['- Due Date', 'Ngày hết hạn (format: YYYY-MM-DD)'],
           ['- Status', 'Trạng thái (pending/in_progress/done)'],
@@ -18889,8 +18934,14 @@
                     ${task.requesterEmail ? `<p class="text-xs text-gray-500 mt-0.5">${task.requesterEmail}</p>` : ''}
                   </div>
                   <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Phòng ban</label>
-                    <p class="text-base text-gray-900 mt-1">${task.department || '-'}</p>
+                    <label class="text-xs font-semibold text-gray-500 uppercase">Link KOI</label>
+                    <p class="text-base text-gray-900 mt-1">${(function() {
+                      const linkKOI = task.TaskLinkKOI || '';
+                      if (linkKOI && String(linkKOI).trim()) {
+                        return `<a href="${String(linkKOI).trim()}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${String(linkKOI).trim()}</a>`;
+                      }
+                      return '-';
+                    })()}</p>
                   </div>
                   <div>
                     <label class="text-xs font-semibold text-gray-500 uppercase">Nhà cung cấp</label>
@@ -18960,14 +19011,6 @@
                       <div class="md:col-span-2">
                         <label class="text-xs font-semibold text-gray-500 uppercase">File đính kèm</label>
                         <p class="text-base text-gray-900 mt-1">${form4Data.attachments}</p>
-                      </div>
-                    ` : ''}
-                    ${form4Data.linkKOI ? `
-                      <div class="md:col-span-2">
-                        <label class="text-xs font-semibold text-gray-500 uppercase">Link KOI</label>
-                        <p class="text-base text-gray-900 mt-1">
-                          <a href="${form4Data.linkKOI}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${form4Data.linkKOI}</a>
-                        </p>
                       </div>
                     ` : ''}
                     ${form4Data.changeReq ? `
