@@ -102,15 +102,7 @@
     }
       .spinner{border:2px solid #e5e7eb;border-top:2px solid #3b82f6;border-radius:50%;width:16px;height:16px;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
       @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-      /* Christmas decorations */
-      .christmas-tree{display:inline-block;animation:sway 2s ease-in-out infinite;transform-origin:center bottom}
-      .christmas-star{display:inline-block;animation:twinkle 1.5s ease-in-out infinite}
-      .snowflake{display:inline-block;animation:float 3s ease-in-out infinite;opacity:0.8}
-      @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-      @keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.2)}}
-      @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
     .header-container{background:linear-gradient(135deg,#2563eb 0%,#60a5fa 100%);position:relative;overflow:hidden}
-    .header-container::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");opacity:.4}
     .modal{position:fixed;inset:0;background:rgba(15,23,42,0.35);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
     .modal.open{display:flex}
     .section-title{display:flex;align-items:center;gap:8px}
@@ -120,6 +112,7 @@
     .submit-btn:active{transform:translateY(0);opacity:.95}
     .modal.open{display:flex}
     .toast{position:fixed;right:16px;bottom:16px;background:#0b1324;color:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);opacity:0;transform:translateY(10px);transition:.2s;z-index:999999 !important}
+    .table-zebra tbody tr:nth-child(even){ background-color:#f8fafc; }
     .toast.show{opacity:1;transform:translateY(0)}
     /* Sidebar effects for groups */
     .group-btn{ 
@@ -298,6 +291,7 @@
     
     /* Specific modal styles */
     #modal-f2-declaration:not(.hidden),
+    #modal-phu-upload:not(.hidden),
     #modal-f5-add-subtask:not(.hidden) {
       display: block !important;
       visibility: visible !important;
@@ -312,6 +306,7 @@
     
     /* Overlay styles */
     #modal-f2-declaration-overlay,
+    #modal-phu-upload-overlay,
     #modal-f5-add-subtask-overlay {
       pointer-events: auto;
       display: block !important;
@@ -321,6 +316,8 @@
     /* Override Tailwind hidden class */
     #modal-f2-declaration[style*="display: block"],
     #modal-f2-declaration[style*="display: flex"],
+    #modal-phu-upload[style*="display: block"],
+    #modal-phu-upload[style*="display: flex"],
     #modal-f5-add-subtask[style*="display: block"],
     #modal-f5-add-subtask[style*="display: flex"] {
       display: block !important;
@@ -361,7 +358,7 @@
   <aside id="sidebar-nav" class="flex h-full w-64 flex-shrink-0 flex-col justify-between p-4 border-r border-border-light">
     <div class="flex flex-col gap-6">
       <div class="flex items-center gap-3 px-2">
-        <img src="https://cdn-icons-png.flaticon.com/512/13374/13374464.png" alt="🎊" class="christmas-tree w-16 h-16 object-contain" />
+        <span class="material-symbols-outlined text-blue-500 text-2xl">analytics</span>
         <div class="flex flex-col relative">
           <h1 class="text-text-light-primary text-base font-bold leading-normal flex items-center gap-2">
             Cổng Tác Vụ DQA
@@ -372,43 +369,31 @@
         <!-- Nhóm: Công cụ hỗ trợ -->
         <div class="flex flex-col gap-1">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="tools-group">
-            <span class="text-lg group-expand-icon">🧧</span>
+            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
             <p class="text-sm font-semibold">Công cụ hỗ trợ</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="tools-group">
-            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form1">
-              <span class="text-base">🍊</span>
-              <p class="text-sm font-semibold">1 - So sánh CE</p>
-            </button>
-            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form2">
-              <span class="text-base">🌸</span>
-              <p class="text-sm font-semibold">2 - Rà soát CE</p>
-            </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form9">
-              <span class="text-base">🥟</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">bug_report</span>
               <p class="text-sm font-semibold">9 - Ngân hàng lỗi</p>
             </button>
           </div>
         </div>
         
-        <!-- Nhóm: Quản lý công việc SPM -->
+        <!-- Nhóm: Rà soát TCKT -->
         <div class="flex flex-col gap-1 mt-2">
-          <button class="group-btn collapsed flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="spm-group">
-            <span class="text-lg group-expand-icon">🏮</span>
-            <p class="text-sm font-semibold">Quản lý công việc SPM</p>
+          <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="spm-group">
+            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
+            <p class="text-sm font-semibold">Rà soát TCKT</p>
           </button>
-          <div class="group-items collapsed flex flex-col gap-1 ml-4 mt-1" data-group="spm-group">
-            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form3">
-              <span class="text-base">🧨</span>
-              <p class="text-sm font-semibold">3 - Quản lý dự án</p>
+          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="spm-group">
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form1">
+              <span class="material-symbols-outlined text-lg text-gray-500">compare_arrows</span>
+              <p class="text-sm font-semibold">1 - So sánh CE</p>
             </button>
-            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form7">
-              <span class="text-base">🎉</span>
-              <p class="text-sm font-semibold">7 - Dashboard Dữ liệu Excel</p>
-            </button>
-            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form8">
-              <span class="text-base">📜</span>
-              <p class="text-sm font-semibold">8 - Calendar View</p>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form2">
+              <span class="material-symbols-outlined text-lg text-gray-500">fact_check</span>
+              <p class="text-sm font-semibold">2 - Quản lý tác vụ rà soát</p>
             </button>
           </div>
         </div>
@@ -416,20 +401,20 @@
         <!-- Nhóm: Tác vụ chuyển tiếp SOP -->
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="sop-group">
-            <span class="text-lg group-expand-icon">🎊</span>
+            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
             <p class="text-sm font-semibold">Tác vụ chuyển tiếp SOP</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="sop-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form4">
-              <span class="text-base">🧧</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">note_add</span>
               <p class="text-sm font-semibold">4 - Phiếu nhập tác vụ</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form5">
-              <span class="text-base">🏮</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">inventory_2</span>
               <p class="text-sm font-semibold">5 - Quản lý Tác vụ Sản phẩm Mới</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form6">
-              <span class="text-base">🎊</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">analytics</span>
               <p class="text-sm font-semibold">6 - Dashboard Thống kê</p>
             </button>
           </div>
@@ -438,20 +423,20 @@
         <!-- Nhóm: Hệ thống jira -->
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="jira-group">
-            <span class="text-lg group-expand-icon">🎋</span>
+            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
             <p class="text-sm font-semibold">Hệ thống jira</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="jira-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form10">
-              <span class="text-base">🌺</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">folder_special</span>
               <p class="text-sm font-semibold">10 - Quản lý dự án</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form11">
-              <span class="text-base">🥮</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">dashboard</span>
               <p class="text-sm font-semibold">11 - Dashboard Dữ liệu Excel</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form12">
-              <span class="text-base">🎉</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">calendar_month</span>
               <p class="text-sm font-semibold">12 - Calendar View</p>
             </button>
           </div>
@@ -459,12 +444,12 @@
         <!-- Nhóm: Hệ thống KOI -->
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="koi-group">
-            <span class="text-lg group-expand-icon">🔷</span>
+            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
             <p class="text-sm font-semibold">Hệ thống KOI</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="koi-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form13">
-              <span class="text-base">📋</span>
+              <span class="material-symbols-outlined text-lg text-gray-500">list</span>
               <p class="text-sm font-semibold">13 - List trích xuất phê duyệt</p>
             </button>
           </div>
@@ -490,6 +475,10 @@
     <section id="form1" class="w-full max-w-7xl bg-white p-6 rounded-lg shadow-md">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-semibold text-blue-800">Form 1 - So sánh CE</h2>
+        <button id="btn-open-modal-phu" type="button" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100 text-sm font-medium">
+          <span class="material-symbols-outlined text-lg">upload_file</span>
+          Tải file (modal phụ)
+        </button>
       </div>
 
       <!-- A. Upload file -->
@@ -555,262 +544,60 @@
       </div>
     </section>
 
-    <!-- Form 2 - Rà soát CE -->
-    <section id="form2" class="w-full max-w-none bg-white p-6 rounded-lg shadow-md hidden">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-blue-800">Form 2 - Rà soát CE</h2>
-      </div>
-
-      <!-- Nút tải dữ liệu và Khai báo -->
-      <div class="flex items-center justify-between mb-4 gap-3">
-        <div class="flex items-center gap-3">
-          <button id="f2-load-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-            </svg>
-            Tải dữ liệu
-          </button>
-          <button id="f2-declaration-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            Khai báo
-          </button>
-        </div>
-        <div id="f2-loading" class="hidden flex items-center gap-2 text-blue-600">
-          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span>Đang tải...</span>
-        </div>
-      </div>
-
-      <!-- Bộ lọc -->
-      <div class="mt-4 mb-4 flex flex-col md:flex-row gap-4 items-end">
-        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Lọc theo PIC cụm</label>
-            <select id="f2-filter-pic" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Tất cả</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Lọc theo Dự án</label>
-            <select id="f2-filter-project" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Tất cả</option>
-            </select>
-          </div>
-        </div>
-        <button id="f2-reset-filter" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition whitespace-nowrap">
-          Xóa bộ lọc
-        </button>
-        <button id="f2-export-excel" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 whitespace-nowrap">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-          Xuất Excel
+    <!-- Form 2 - Quản lý tác vụ rà soát (tương tự Form 4 noibo) -->
+    <section id="form2" class="w-full bg-white p-6 rounded-lg shadow-md hidden flex flex-col self-stretch min-h-0">
+      <div class="flex items-center justify-between mb-4 flex-shrink-0">
+        <h2 class="text-2xl font-bold text-blue-800">Form 2 · Quản lý tác vụ rà soát</h2>
+        <button id="f2-load-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-blue-300 rounded-lg text-primary-blue font-medium hover:bg-blue-50 transition-colors shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">refresh</span>
+          <span>Tải dữ liệu</span>
         </button>
       </div>
-
-      <!-- Bảng rà soát CE -->
-      <div class="mt-4 border border-gray-200 rounded-lg shadow-md overflow-x-auto">
-        <table class="min-w-[2000px] w-full text-sm border-collapse">
+      <div id="f2-loading" class="hidden flex items-center justify-center gap-2 text-primary py-4 flex-shrink-0">
+        <span class="spinner"></span>
+        <span>Đang tải...</span>
+      </div>
+      <div class="flex flex-wrap gap-3 py-3 flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-medium text-gray-700">Người nhận rà soát:</label>
+          <select id="f2-filter-nguoi-nhan" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-w-[160px]">
+            <option value="">Tất cả</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-medium text-gray-700">Tháng:</label>
+          <select id="f2-filter-thang" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-w-[140px]">
+            <option value="">Tất cả</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-4 overflow-auto flex-1 min-h-0 border border-gray-200 rounded-lg">
+        <table class="w-full text-sm table-zebra" style="table-layout: fixed; width: 100%;">
           <thead class="bg-gradient-to-r from-blue-100 to-blue-50 sticky top-0">
             <tr class="text-left text-gray-700">
-              <th class="px-3 py-3 min-w-[140px] border border-gray-300">PIC cụm</th>
-              <th class="px-3 py-3 min-w-[180px] border border-gray-300">Dự án</th>
-              <th class="px-3 py-3 min-w-[140px] border border-gray-300">Ngày giao</th>
-              <th class="px-3 py-3 min-w-[140px] border border-gray-300">Mã SAP</th>
-              <th class="px-3 py-3 min-w-[200px] border border-gray-300">Cụm linh kiện</th>
-              <th class="px-3 py-3 min-w-[280px] border border-gray-300">Tên linh kiện</th>
-              <th class="px-3 py-3 min-w-[160px] border border-gray-300">Rà soát TCKT&CE</th>
-              <th class="px-3 py-3 min-w-[180px] border border-gray-300">Ngày cập nhật gần nhất</th>
-              <th class="px-3 py-3 min-w-[180px] bg-blue-100 text-blue-800 border border-gray-300">Tỷ lệ hoàn thiện bổ sung</th>
+              <th class="px-3 py-2 w-[8%]">Trả kết quả</th>
+              <th class="px-3 py-2 w-[22%]">Linh kiện rà soát</th>
+              <th class="px-3 py-2 w-[10%]">Tình trạng</th>
+              <th class="px-3 py-2 w-[9%]">Ngày gửi</th>
+              <th class="px-3 py-2 w-[8%]">Ngày trả</th>
+              <th class="px-3 py-2 w-[10%]">Người gửi</th>
+              <th class="px-3 py-2 w-[10%]">Người nhận rà soát</th>
+              <th class="px-3 py-2 w-[8%]">File ban đầu</th>
+              <th class="px-3 py-2 w-[8%]">File phản hồi</th>
+              <th class="px-3 py-2 w-[8%]">Link Jira</th>
+              <th class="px-3 py-2 w-[8%]">Ghi chú</th>
+              <th class="px-3 py-2 w-[8%]">Tỷ lệ sửa đổi</th>
             </tr>
           </thead>
-          <tbody id="f2-table-body" class="divide-y divide-gray-200">
-            <tr><td class="px-3 py-4 text-center text-gray-500" colspan="9">Chưa có dữ liệu</td></tr>
+          <tbody id="f2-table-body" class="divide-y divide-gray-100">
+            <tr><td class="px-3 py-3 text-center text-gray-500" colspan="12">Chưa có dữ liệu. Nhấn "Tải dữ liệu" để lấy từ webhook.</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- Form 3 - Quản lý dự án -->
-    <section id="form3" class="w-full bg-white/50 p-6 lg:p-10 rounded-lg shadow-md hidden flex flex-col" style="min-height: calc(100vh - 120px);">
-      <div class="mx-auto flex w-full flex-col gap-6 flex-1">
-        <!-- Page Heading -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-[#131118]">Quản lý dự án</h2>
-            <p class="text-[#6b6189] text-sm mt-1">Theo dõi tiến độ và phân cấp công việc Epic → Story → Subtask</p>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <button id="f3-load-data-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e5e7eb] rounded-full text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
-              <span class="material-symbols-outlined text-[18px]">refresh</span>
-              <span>Tải dữ liệu</span>
-            </button>
-            <button id="f3-export-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e5e7eb] rounded-full text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
-              <span class="material-symbols-outlined text-[18px]">table_view</span>
-              <span>Xuất Excel</span>
-            </button>
-          </div>
-      </div>
 
-        <!-- Upload Section -->
-        <div class="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 p-6 shadow-sm hidden">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-800">Upload File Excel</h3>
-            <span class="text-xs text-gray-500">Hỗ trợ .xlsx, .xls</span>
-          </div>
-          
-          <div id="f3-drop-zone" class="relative border-2 border-dashed border-blue-300 rounded-lg p-8 text-center bg-white hover:border-blue-500 transition-colors cursor-pointer">
-            <input type="file" id="f3-excel-file" accept=".xlsx,.xls" class="hidden">
-            <div id="f3-drop-content" class="flex flex-col items-center gap-3">
-              <span class="material-symbols-outlined text-5xl text-blue-500">cloud_upload</span>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Kéo thả file Excel vào đây</p>
-                <p class="text-xs text-gray-500 mt-1">hoặc click để chọn file</p>
-            </div>
-          </div>
-            <div id="f3-file-info" class="hidden flex items-center justify-between gap-3 mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
-              <div class="flex items-center gap-3 flex-1">
-                <span class="material-symbols-outlined text-green-600">description</span>
-                <div class="flex-1 text-left">
-                  <p id="f3-file-name" class="text-sm font-medium text-gray-900"></p>
-                  <p id="f3-file-size" class="text-xs text-gray-500"></p>
-        </div>
-      </div>
-              <button id="f3-file-remove" class="text-red-500 hover:text-red-700 transition">
-                <span class="material-symbols-outlined">close</span>
-        </button>
-            </div>
-      </div>
-
-          <div class="flex items-center justify-center gap-3 mt-4">
-            <button id="f3-submit-btn" class="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-              <span class="material-symbols-outlined">upload</span>
-              <span>Tải lên server</span>
-            </button>
-            </div>
-          </div>
-
-        <!-- Search and Filter -->
-        <div class="flex flex-col lg:flex-row gap-3 pt-2">
-          <!-- Search Input -->
-          <div class="relative w-full lg:max-w-md">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span class="material-symbols-outlined text-[#6b6189]">search</span>
-            </div>
-            <input id="f3-search-input" type="text" placeholder="Tìm theo tên, Jira Key, Assignee..." class="block w-full pl-10 pr-3 py-2.5 border-none rounded-full leading-5 bg-white text-[#131118] placeholder-[#9ca3af] focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary/20 shadow-sm ring-1 ring-[#e5e7eb]">
-          </div>
-          <!-- Filters -->
-          <div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
-            <select id="f3-filter-status" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
-              <option value="">Tất cả trạng thái</option>
-              <option value="hoàn thành">Hoàn thành</option>
-              <option value="đang triển khai">Đang triển khai</option>
-              <option value="chưa triển khai">Chưa triển khai</option>
-              <option value="hủy tác vụ">Hủy tác vụ</option>
-              <option value="cancelled">Đã hủy</option>
-            </select>
-            <select id="f3-filter-assignee" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
-              <option value="">Tất cả thành viên</option>
-              <!-- Options sẽ được populate bằng JavaScript -->
-            </select>
-            <select id="f3-filter-level" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
-              <option value="all">Tất cả cấp</option>
-              <option value="story">Story và Subtask</option>
-              <option value="subtask">Chỉ Subtask</option>
-            </select>
-            
-            <!-- Bộ lọc thời gian cải tiến -->
-            <select id="f3-filter-date-preset" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none min-w-[180px]">
-              <option value="all">Tất cả thời gian</option>
-              <option value="today">Hôm nay</option>
-              <option value="this-week">Tuần này</option>
-              <option value="this-month" selected>Tháng này</option>
-              <option value="last-month">Tháng trước</option>
-              <option value="last-3-months">3 tháng gần nhất</option>
-              <option value="custom">Tùy chỉnh...</option>
-            </select>
-            
-            <!-- Khoảng thời gian tùy chỉnh (ẩn mặc định) -->
-            <div id="f3-custom-date-range" class="hidden flex items-center gap-2">
-              <input type="date" id="f3-filter-date-from" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Từ ngày">
-              <span class="text-[#6b6189] text-sm">đến</span>
-              <input type="date" id="f3-filter-date-to" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Đến ngày">
-            </div>
-          </div>
-        </div>
-
-        <!-- Hierarchical Data Table -->
-        <div class="overflow-hidden rounded-lg bg-white shadow-sm border border-[#f1f0f4] flex-1 flex flex-col">
-          <div class="overflow-x-auto overflow-y-auto flex-1" style="min-height: 0;">
-            <!-- Table Header -->
-            <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-[#fafafa] border-b border-[#f1f0f4] text-xs font-semibold text-[#6b6189] uppercase tracking-wider sticky top-0 z-10">
-              <div class="col-span-3 flex items-center">Tên công việc</div>
-              <div class="col-span-1 flex items-center">Thay đổi</div>
-              <div class="col-span-2 flex items-center">Người thực hiện</div>
-              <div class="col-span-1 flex items-center">Trạng thái</div>
-              <div class="col-span-1 flex items-center">Ngày bắt đầu</div>
-              <div class="col-span-1 flex items-center">Hạn HT</div>
-              <div class="col-span-1 flex items-center">Ngày hoàn thành</div>
-              <div class="col-span-1 flex items-center">Mã Jira</div>
-              <div class="col-span-1 flex items-center">Ghi chú</div>
-            </div>
-            <!-- Table Body (Scrollable) -->
-            <div class="custom-scrollbar-f3">
-              <div id="f3-table-body" class="divide-y divide-[#f1f0f4]">
-                <div class="px-6 py-8 text-center text-[#6b6189]">
-                  <div class="flex flex-col items-center gap-2">
-                    <span class="material-symbols-outlined text-4xl text-gray-300">table_chart</span>
-                    <p>Chưa có dữ liệu. Vui lòng tải dữ liệu hoặc upload file Excel.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Loading Indicator -->
-        <div id="f3-loading" class="hidden flex items-center justify-center gap-2 text-primary py-4">
-          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span>Đang tải...</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Custom scrollbar styles for Form 3 only - scoped to prevent affecting other forms -->
-    <style>
-        /* Form 3 specific scrollbar - scoped to #form3 only */
-        #form3 .custom-scrollbar-f3::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        #form3 .custom-scrollbar-f3::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        #form3 .custom-scrollbar-f3::-webkit-scrollbar-thumb {
-            background-color: #e5e7eb;
-            border-radius: 9999px;
-            border: 2px solid transparent;
-            background-clip: content-box;
-        }
-        #form3 .custom-scrollbar-f3::-webkit-scrollbar-thumb:hover {
-            background-color: #d1d5db;
-        }
-        /* Form 3 specific no-scrollbar - only applies within form3 */
-        #form3 .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        #form3 .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        <style>
         /* Form 10 specific scrollbar - scoped to #form10 only */
         #form10 .custom-scrollbar-f10::-webkit-scrollbar {
             width: 8px;
@@ -1274,236 +1061,6 @@
                 <!-- Dữ liệu sẽ được render bằng JavaScript -->
               </tbody>
             </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Form 7 - Dashboard Dữ liệu Excel -->
-    <section id="form7" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
-      <div class="mx-auto flex w-full flex-col gap-6">
-        <!-- Page Heading -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex flex-col gap-1">
-            <p class="text-4xl font-black leading-tight tracking-tighter text-gray-900">Dashboard Dữ liệu Excel</p>
-            <p class="text-base font-normal text-gray-600">Thống kê và phân tích dữ liệu từ Excel.</p>
-          </div>
-          <button id="f7-refresh-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
-            <span class="material-symbols-outlined text-lg">refresh</span>
-            <span>Tải lại</span>
-          </button>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-blue-600 text-sm font-medium mb-1">Tổng Epic</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-epics">0</p>
-              </div>
-              <div class="p-3 bg-blue-200 rounded-lg">
-                <span class="material-symbols-outlined text-blue-700 text-2xl">folder</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-purple-600 text-sm font-medium mb-1">Tổng Story</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-stories">0</p>
-              </div>
-              <div class="p-3 bg-purple-200 rounded-lg">
-                <span class="material-symbols-outlined text-purple-700 text-2xl">description</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-green-50 to-green-100 border border-green-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-green-600 text-sm font-medium mb-1">Tổng Subtask</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-subtasks">0</p>
-              </div>
-              <div class="p-3 bg-green-200 rounded-lg">
-                <span class="material-symbols-outlined text-green-700 text-2xl">task</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-orange-600 text-sm font-medium mb-1">Tỷ lệ Hoàn thành</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f7-stat-completion">0%</p>
-              </div>
-              <div class="p-3 bg-orange-200 rounded-lg">
-                <span class="material-symbols-outlined text-orange-700 text-2xl">trending_up</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ASSIGNEE FOCUS SECTION -->
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-3xl text-blue-600">people</span>
-            <h2 class="text-2xl font-bold text-gray-900">Dashboard Phân tích theo Người thực hiện</h2>
-          </div>
-        </div>
-
-        <!-- Main Content Row: Assignee Progress + Status Table -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-          <!-- Assignee Progress Overview - Biểu đồ cột (2/3 width) -->
-          <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-blue-600">trending_up</span>
-              <h3 class="text-lg font-semibold text-gray-900">Tiến độ hoàn thành theo Người thực hiện</h3>
-            </div>
-            <div id="f7-assignee-progress" class="w-full">
-              <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
-            </div>
-          </div>
-
-          <!-- Status Breakdown Table - Gọn lại (1/3 width) -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
-            <div class="p-3 border-b border-gray-200 flex-shrink-0">
-              <h3 class="text-sm font-semibold text-gray-900">Chi tiết theo Trạng thái</h3>
-            </div>
-            <div class="overflow-x-auto overflow-y-auto flex-1" style="max-height: calc(200px + 3rem);">
-              <table class="w-full text-xs">
-                <thead class="bg-gray-50 sticky top-0">
-                  <tr>
-                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">Trạng thái</th>
-                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">SL</th>
-                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">%</th>
-                  </tr>
-                </thead>
-                <tbody id="f7-status-table-body" class="divide-y divide-gray-200">
-                  <tr>
-                    <td colspan="3" class="px-2 py-3 text-center text-gray-500 text-xs">Chưa có dữ liệu</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Phân bổ Task và Task đến hạn - Grid 2 cột -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <!-- Phân bổ Task - Biểu đồ tròn (1/2 width) -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-indigo-600">pie_chart</span>
-              <h3 class="text-lg font-semibold text-gray-900">Phân bổ Task theo Người thực hiện</h3>
-            </div>
-            <div id="f7-chart-assignee" class="min-h-[300px] flex items-center justify-center">
-              <p class="text-gray-500 text-center">Chưa có dữ liệu</p>
-            </div>
-          </div>
-
-          <!-- Task đến hạn (1/2 width) -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-red-600">schedule</span>
-              <h3 class="text-lg font-semibold text-gray-900">Các Task đến hạn</h3>
-            </div>
-            <div id="f7-due-tasks" class="min-h-[300px]">
-              <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Assignee Details -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="material-symbols-outlined text-green-600">person</span>
-            <h3 class="text-lg font-semibold text-gray-900">Chi tiết theo từng Người thực hiện</h3>
-          </div>
-          <div id="f7-assignee-tags" class="flex flex-wrap gap-2 mb-4">
-            <!-- Tags sẽ được render ở đây -->
-          </div>
-          <div id="f7-assignee-details" class="min-h-[200px]">
-            <p class="text-gray-500 text-center py-8">Vui lòng chọn người thực hiện để xem chi tiết</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Form 8 - Calendar View -->
-    <section id="form8" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
-      <div class="mx-auto flex w-full flex-col gap-6">
-        <!-- Page Heading -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-gray-900">Form 8 - Calendar View</h2>
-            <p class="text-sm text-gray-600">Xem công việc theo lịch tháng/tuần</p>
-          </div>
-          <button id="f8-refresh-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
-            <span class="material-symbols-outlined text-lg">refresh</span>
-            <span>Tải lại</span>
-          </button>
-        </div>
-
-        <!-- Search and Filters -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
-          <div class="relative w-full md:max-w-md">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">search</span>
-            <input id="f8-search" class="w-full form-input rounded-full border border-gray-300 bg-white h-12 pl-12 pr-4 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Tìm công việc..." type="text"/>
-          </div>
-          <div class="flex items-center gap-2">
-            <button id="f8-filter-assignee" class="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 h-10 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-100">
-              <span class="material-symbols-outlined text-lg">filter_list</span>
-              <span>Người phụ trách</span>
-              <span class="material-symbols-outlined text-lg">expand_more</span>
-            </button>
-            <button id="f8-filter-status" class="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 h-10 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-100">
-              <span>Trạng thái</span>
-              <span class="material-symbols-outlined text-lg">expand_more</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Calendar Controls -->
-        <div class="flex flex-wrap items-center justify-between gap-4 pb-6">
-          <div class="flex items-center gap-4">
-            <h1 id="f8-month-title" class="text-gray-900 text-3xl font-bold">Tháng 9 2024</h1>
-            <div class="flex items-center gap-1">
-              <button id="f8-prev-month" class="p-2 text-gray-500 rounded-full hover:bg-gray-200">
-                <span class="material-symbols-outlined">chevron_left</span>
-              </button>
-              <button id="f8-next-month" class="p-2 text-gray-500 rounded-full hover:bg-gray-200">
-                <span class="material-symbols-outlined">chevron_right</span>
-              </button>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-1 rounded-full bg-gray-200 p-1 text-sm font-semibold">
-              <button id="f8-view-month" class="px-3 py-1 rounded-full bg-white text-primary shadow-sm">Tháng</button>
-              <button id="f8-view-week" class="px-3 py-1 rounded-full text-gray-600">Tuần</button>
-            </div>
-            <button id="f8-today" class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-white text-gray-900 gap-2 text-sm font-bold px-4 border border-gray-300 shadow-sm">
-              Hôm nay
-            </button>
-            <button id="f8-new-task" class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-primary text-white gap-2 text-sm font-bold px-4 shadow-sm">
-              <span class="material-symbols-outlined text-lg">add</span>
-              Công việc mới
-            </button>
-          </div>
-        </div>
-
-        <!-- Calendar Container -->
-        <div class="flex flex-1 flex-col overflow-auto bg-white rounded-lg border border-gray-200 shadow-sm">
-          <div id="f8-calendar-header" class="grid grid-cols-7 text-center">
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">CN</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T2</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T3</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T4</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T5</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T6</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T7</p>
-          </div>
-          <div id="f8-calendar-body" class="grid grid-cols-7 grid-rows-5 flex-1">
-            <!-- Calendar cells will be rendered here -->
-            <div class="text-center py-8 text-gray-500">Đang tải dữ liệu...</div>
           </div>
         </div>
       </div>
@@ -2100,10 +1657,10 @@
   <div id="modal-f2-declaration" class="modal-container modal-f2-declaration fixed inset-0 z-50 hidden items-center justify-center p-4" style="display: none;">
     <div id="modal-f2-declaration-overlay" class="modal-overlay modal-f2-declaration-overlay fixed inset-0 bg-black/50"></div>
     <div id="modal-f2-declaration-content" class="modal-content modal-f2-declaration-content relative z-50 flex items-center justify-center w-full h-full">
-      <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+      <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col pointer-events-auto">
       <!-- Modal Header -->
       <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-green-100">
-        <h3 class="text-xl font-semibold text-gray-800">Khai báo - So sánh CE</h3>
+        <h3 class="text-xl font-semibold text-gray-800">Khai báo - CE sau rà soát</h3>
         <button id="modal-f2-declaration-close" class="modal-close modal-f2-declaration-close text-gray-500 hover:text-gray-700 transition">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -2113,34 +1670,16 @@
       
       <!-- Modal Body -->
       <div id="modal-f2-declaration-body" class="modal-body modal-f2-declaration-body p-6 overflow-y-auto flex-1">
-        <!-- Upload file -->
+        <!-- Upload file CE sau rà soát -->
         <div class="mb-6">
-          <h4 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">Upload file</h4>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- CE gốc -->
-            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-              <label class="block text-sm font-medium text-gray-700 mb-2">1. CE gốc</label>
-              <div class="flex flex-col gap-2">
-                <input type="file" id="f2-ce-original" accept=".xlsx,.xls,.csv" class="hidden">
-                <button id="f2-ce-original-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE gốc</button>
-                <div class="flex items-center gap-2">
-                  <span id="f2-ce-original-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
-                  <button id="f2-ce-original-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- CE sau rà soát -->
-            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-              <label class="block text-sm font-medium text-gray-700 mb-2">2. CE sau rà soát</label>
-              <div class="flex flex-col gap-2">
-                <input type="file" id="f2-ce-review" accept=".xlsx,.xls,.csv" class="hidden">
-                <button id="f2-ce-review-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE sau rà soát</button>
-                <div class="flex items-center gap-2">
-                  <span id="f2-ce-review-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
-                  <button id="f2-ce-review-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
-                </div>
+          <h4 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-4">CE sau rà soát</h4>
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div class="flex flex-col gap-2">
+              <input type="file" id="f2-ce-review" accept=".xlsx,.xls,.csv" class="hidden">
+              <button id="f2-ce-review-btn" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file CE sau rà soát</button>
+              <div class="flex items-center gap-2">
+                <span id="f2-ce-review-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                <button id="f2-ce-review-remove" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
               </div>
             </div>
           </div>
@@ -2169,6 +1708,62 @@
   <!-- ============================================ -->
   <!-- END MODAL SYSTEM - FORM 2: DECLARATION -->
   <!-- ============================================ -->
+
+  <!-- ============================================ -->
+  <!-- MODAL PHỤ - TẢI FILE XLSX (tách khỏi Form 1) -->
+  <!-- ============================================ -->
+  <div id="modal-phu-upload" class="modal-container modal-phu-upload fixed inset-0 z-50 hidden items-center justify-center p-4" style="display: none;">
+    <div id="modal-phu-upload-overlay" class="modal-overlay modal-phu-upload-overlay fixed inset-0 bg-black/50"></div>
+    <div id="modal-phu-upload-content" class="modal-content modal-phu-upload-content relative z-50 flex items-center justify-center w-full h-full">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden flex flex-col pointer-events-auto">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
+          <h3 class="text-xl font-semibold text-gray-800">Tải file Excel</h3>
+          <button id="modal-phu-upload-close" class="modal-close modal-phu-upload-close text-gray-500 hover:text-gray-700 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="modal-phu-upload-body" class="modal-body p-6 overflow-y-auto flex-1">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Chọn file Excel (.xlsx)</label>
+            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <input type="file" id="modal-phu-file-input" accept=".xlsx,.xls" class="hidden">
+              <button id="modal-phu-file-btn" type="button" class="w-full px-4 py-2 rounded-lg border border-blue-300 text-primary-blue bg-blue-50 hover:bg-blue-100">Chọn file</button>
+              <div class="flex items-center gap-2 mt-2">
+                <span id="modal-phu-file-name" class="text-sm text-gray-500 flex-1">Chưa chọn file</span>
+                <button id="modal-phu-file-remove" type="button" class="text-red-500 hover:text-red-700 text-sm hidden">✕</button>
+              </div>
+            </div>
+          </div>
+          <div id="modal-phu-result" class="hidden mt-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Kết quả</h4>
+            <div id="modal-phu-result-content" class="border border-gray-200 rounded-lg bg-gray-50 p-4 text-sm"></div>
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+          <button id="modal-phu-upload-close-btn" class="modal-close-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">Đóng</button>
+          <button id="modal-phu-upload-submit" class="modal-submit px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">Gửi lên server</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================ -->
+  <!-- END MODAL PHỤ - TẢI FILE XLSX -->
+  <!-- ============================================ -->
+
+  <!-- Modal: Xem Ghi chú (Form 2 rà soát) -->
+  <div id="f2-ghi-chu-modal" class="modal" aria-hidden="true" role="dialog">
+    <div class="w-full max-w-lg bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+      <div class="px-4 py-3 bg-gradient-to-b from-blue-50 to-white border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-base font-semibold text-gray-800">Ghi chú</h3>
+        <button id="f2-ghi-chu-modal-close" class="px-3 py-1 rounded-lg bg-slate-100 text-gray-800 hover:bg-slate-200">Đóng</button>
+      </div>
+      <div class="p-4">
+        <div id="f2-ghi-chu-content" class="whitespace-pre-wrap text-sm text-gray-700 bg-gray-50 rounded-lg p-4 min-h-[80px] max-h-[50vh] overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================ -->
   <!-- MODAL SYSTEM - FORM 5: ADD SUBTASK (Thêm tác vụ con) -->
@@ -2388,7 +1983,7 @@
         <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
           <div class="flex items-start justify-between mb-3">
             <div class="flex-1">
-              <h3 class="text-sm font-semibold text-blue-900 mb-2">📋 Hướng dẫn format file Excel:</h3>
+              <h3 class="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-lg">description</span> Hướng dẫn format file Excel:</h3>
               <ul class="text-xs text-blue-800 space-y-1 list-disc list-inside">
                 <li>Sheet đầu tiên sẽ được đọc</li>
                 <li>Cột bắt buộc: <strong>Project Code</strong>, <strong>Task Request Code</strong>, <strong>Task Name</strong></li>
@@ -4625,449 +4220,226 @@
       return `rgb(${r}, ${g}, ${b})`;
     }
 
-    // Biến lưu dữ liệu gốc để filter
-    let F2_ORIGINAL_DATA = [];
+    // Form 2 - Quản lý tác vụ rà soát (tương tự Form 4 noibo)
+    const F2_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/RasoatTCKT';
+    let F2_DATA = [];
+    let F2_CE_REVIEW_FILE = null;
+    let F2_DECLARATION_ROW = null; // Dữ liệu hàng đang khai báo (gửi kèm file)
 
-    // Hàm populate filter dropdowns
-    function populateF2Filters(data) {
-      if (!data || !Array.isArray(data)) return;
-      
-      const picFilter = document.getElementById('f2-filter-pic');
-      const projectFilter = document.getElementById('f2-filter-project');
-      
-      if (!picFilter || !projectFilter) return;
-      
-      // Lưu giá trị đã chọn
-      const selectedPic = picFilter.value;
-      const selectedProject = projectFilter.value;
-      
-      // Clear existing options (giữ lại option "Tất cả")
-      picFilter.innerHTML = '<option value="">Tất cả</option>';
-      projectFilter.innerHTML = '<option value="">Tất cả</option>';
-      
-      // Lấy danh sách unique PIC cụm và Dự án
-      const picSet = new Set();
-      const projectSet = new Set();
-      
-      data.forEach(row => {
-        const pic = row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '';
-        const project = row.project || row['Dự án'] || row.du_an || '';
-        
-        if (pic) picSet.add(pic);
-        if (project) projectSet.add(project);
-      });
-      
-      // Populate PIC filter
-      const sortedPics = Array.from(picSet).sort();
-      sortedPics.forEach(pic => {
-        const option = document.createElement('option');
-        option.value = pic;
-        option.textContent = pic;
-        if (pic === selectedPic) option.selected = true;
-        picFilter.appendChild(option);
-      });
-      
-      // Populate Project filter
-      const sortedProjects = Array.from(projectSet).sort();
-      sortedProjects.forEach(project => {
-        const option = document.createElement('option');
-        option.value = project;
-        option.textContent = project;
-        if (project === selectedProject) option.selected = true;
-        projectFilter.appendChild(option);
-      });
+    function getF2StatusBadge(val) {
+      if (!val || !String(val).trim()) return '-';
+      const v = String(val).trim().toLowerCase();
+      const base = 'inline-block rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap';
+      if (v.includes('đang rà soát') || v.includes('dang ra soat')) return `<span class="${base} bg-blue-100 text-blue-800 border border-blue-200">Đang rà soát</span>`;
+      if (v.includes('đã phản hồi') || v.includes('da phan hoi')) return `<span class="${base} bg-purple-100 text-purple-800 border border-purple-200">Đã phản hồi</span>`;
+      if (v.includes('đang trao đổi') || v.includes('dang trao doi')) return `<span class="${base} bg-yellow-100 text-yellow-800 border border-yellow-200">Đang trao đổi lại</span>`;
+      if (v.includes('hoàn thành') || v.includes('hoan thanh')) return `<span class="${base} bg-green-100 text-green-800 border border-green-200">Hoàn thành</span>`;
+      return `<span class="${base} bg-gray-100 text-gray-700 border border-gray-200">${String(val).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>`;
     }
 
-    // Hàm filter dữ liệu
-    function filterF2Data(data) {
-      if (!data || !Array.isArray(data)) return [];
-      
-      const picFilter = document.getElementById('f2-filter-pic');
-      const projectFilter = document.getElementById('f2-filter-project');
-      
-      const selectedPic = picFilter ? picFilter.value : '';
-      const selectedProject = projectFilter ? projectFilter.value : '';
-      
-      return data.filter(row => {
-        const pic = row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '';
-        const project = row.project || row['Dự án'] || row.du_an || '';
-        
-        const picMatch = !selectedPic || pic === selectedPic;
-        const projectMatch = !selectedProject || project === selectedProject;
-        
-        return picMatch && projectMatch;
-      });
+    function getF2NgayGuiVal(row) {
+      const v = row['Ngày gửi'] ?? row.ngayGui ?? row.thoiGianGui ?? '';
+      const d = new Date(String(v).replace(/\//g, '-'));
+      return isNaN(d.getTime()) ? null : d;
+    }
+    function getF2NguoiNhanVal(row) {
+      return String(row['Người nhận rà soát'] ?? row.nguoiNhanRasoat ?? row.nguoi_nhan_rasoat ?? '').trim();
     }
 
-    // Hàm xuất dữ liệu ra Excel
-    function exportF2ToExcel() {
-      // Lấy dữ liệu đã filter
-      const filteredData = filterF2Data(F2_ORIGINAL_DATA);
-      
-      if (!filteredData || filteredData.length === 0) {
-        showToast('Không có dữ liệu để xuất', 'error');
-        return;
-      }
-
-      try {
-        // Chuẩn bị dữ liệu cho Excel
-        const excelData = filteredData.map((row, index) => {
-          // Lấy giá trị tỷ lệ hoàn thiện bổ sung
-          const completionRate = row.completion_rate || row.completion || 
-                                 row['Tỷ lệ hoàn thiện bổ sung'] || row['Tỷ lệ hoàn thiện'] ||
-                                 row.completion_rate_supplement || row.completion_supplement ||
-                                 row.rate || row.percent || row.percentage || 
-                                 row.ty_le_hoan_thien_bo_sung || row.ty_le_hoan_thien || '0%';
-
-          return {
-            'STT': index + 1,
-            'PIC cụm': row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '',
-            'Dự án': row.project || row['Dự án'] || row.du_an || '',
-            'Ngày giao': row.delivery_date || row['Ngày giao'] || row.ngay_giao || row.date || '',
-            'Mã SAP': row.sap_code || row['Mã SAP'] || row.ma_sap || row.sap || '',
-            'Cụm linh kiện': row.component_cluster || row['Cụm linh kiện'] || row.cum_linh_kien || row.cluster || '',
-            'Tên linh kiện': row.component_name || row['Tên linh kiện'] || row.ten_linh_kien || row.name || '',
-            'Rà soát TCKT&CE': row.review || row['Rà soát TCKT&CE'] || row.ra_soat || row.ra_soat_tckt_ce || '',
-            'Ngày cập nhật gần nhất': row.last_update || row['Ngày cập nhật gần nhất'] || row.ngay_cap_nhat || row.updated_at || '',
-            'Tỷ lệ hoàn thiện bổ sung': String(completionRate)
-          };
-        });
-
-        // Tạo worksheet từ dữ liệu
-        const ws = XLSX.utils.json_to_sheet(excelData);
-        
-        // Điều chỉnh độ rộng cột (tùy chọn)
-        const colWidths = [
-          { wch: 8 },   // STT
-          { wch: 15 },  // PIC cụm
-          { wch: 20 },  // Dự án
-          { wch: 12 },  // Ngày giao
-          { wch: 12 },  // Mã SAP
-          { wch: 25 },  // Cụm linh kiện
-          { wch: 35 },  // Tên linh kiện
-          { wch: 18 },  // Rà soát TCKT&CE
-          { wch: 22 },  // Ngày cập nhật gần nhất
-          { wch: 25 }   // Tỷ lệ hoàn thiện bổ sung
-        ];
-        ws['!cols'] = colWidths;
-
-        // Tạo workbook
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Rà soát CE');
-
-        // Tạo tên file với timestamp
-        const now = new Date();
-        const dateStr = now.getFullYear() + '-' + 
-                       String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                       String(now.getDate()).padStart(2, '0') + '_' +
-                       String(now.getHours()).padStart(2, '0') + '-' +
-                       String(now.getMinutes()).padStart(2, '0') + '-' +
-                       String(now.getSeconds()).padStart(2, '0');
-        const filename = `Ra_soat_CE_${dateStr}.xlsx`;
-
-        // Xuất file
-        XLSX.writeFile(wb, filename);
-        
-        showToast(`Đã xuất ${filteredData.length} bản ghi ra file Excel`, 'success');
-        
-      } catch (error) {
-        console.error('[Form 2] Error exporting to Excel:', error);
-        showToast('Lỗi khi xuất file Excel: ' + error.message, 'error');
-      }
-    }
-
-    // Hàm render dữ liệu vào bảng Form 2
-    function renderForm2Table(data) {
-      // Lưu dữ liệu gốc
-      F2_ORIGINAL_DATA = data || [];
-      
-      // Populate filters
-      populateF2Filters(F2_ORIGINAL_DATA);
-      
-      // Filter dữ liệu
-      const filteredData = filterF2Data(F2_ORIGINAL_DATA);
-      
+    function renderF2Table(data) {
       const tbody = document.getElementById('f2-table-body');
       if (!tbody) return;
-      
-      if (!filteredData || !Array.isArray(filteredData) || filteredData.length === 0) {
-        tbody.innerHTML = '<tr><td class="px-3 py-4 text-center text-gray-500 border border-gray-300" colspan="9">Không có dữ liệu phù hợp với bộ lọc</td></tr>';
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td class="px-3 py-3 text-center text-gray-500" colspan="12">Không có dữ liệu</td></tr>';
         return;
       }
-      
-      let html = '';
-      filteredData.forEach((row, index) => {
-        // Lấy giá trị tỷ lệ hoàn thiện bổ sung - hỗ trợ nhiều tên field khác nhau
-        const completionRate = row.completion_rate || row.completion || 
-                               row['Tỷ lệ hoàn thiện bổ sung'] || row['Tỷ lệ hoàn thiện'] ||
-                               row.completion_rate_supplement || row.completion_supplement ||
-                               row.rate || row.percent || row.percentage || 
-                               row.ty_le_hoan_thien_bo_sung || row.ty_le_hoan_thien || '0%';
-        const completionPercent = parseFloat(String(completionRate).replace('%', '')) || 0;
-        const completionColor = getCompletionColor(completionPercent);
-        
-        // Hỗ trợ nhiều tên field khác nhau cho từng cột
-        html += `
-          <tr class="hover:bg-gray-50">
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.pic_cluster || row['PIC cụm'] || row.pic_cum || row.pic || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.project || row['Dự án'] || row.du_an || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.delivery_date || row['Ngày giao'] || row.ngay_giao || row.date || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.sap_code || row['Mã SAP'] || row.ma_sap || row.sap || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.component_cluster || row['Cụm linh kiện'] || row.cum_linh_kien || row.cluster || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.component_name || row['Tên linh kiện'] || row.ten_linh_kien || row.name || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.review || row['Rà soát TCKT&CE'] || row.ra_soat || row.ra_soat_tckt_ce || '')}</td>
-            <td class="px-3 py-4 border border-gray-300">${escapeHtml(row.last_update || row['Ngày cập nhật gần nhất'] || row.ngay_cap_nhat || row.updated_at || '')}</td>
-            <td class="px-3 py-4 border border-gray-300 text-center">${escapeHtml(String(completionRate))}</td>
-          </tr>
-        `;
-      });
-      
-      tbody.innerHTML = html;
+      const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const parseNgayGui = (row) => { const d = getF2NgayGuiVal(row); return d ? d.getTime() : 0; };
+      const sorted = [...data].sort((a, b) => parseNgayGui(b) - parseNgayGui(a));
+      tbody.innerHTML = sorted.map(row => {
+        const id = esc(row.Id ?? row.id ?? '');
+        const ngayGui = esc(row['Ngày gửi'] ?? row.ngayGui ?? row.thoiGianGui ?? '');
+        const nguoiGui = esc(row['Người gửi'] ?? row.nguoiYeuCau ?? row.nguoi_yeu_cau ?? '');
+        const nguoiNhan = esc(row['Người nhận rà soát'] ?? row.nguoiNhanRasoat ?? row.nguoi_nhan_rasoat ?? '');
+        const fileUrl = (row['File ban đầu'] ?? row.fileBanDau ?? row.fileName ?? '').trim();
+        const fileCell = fileUrl ? `<a href="${esc(fileUrl)}" target="_blank" rel="noopener" class="text-primary-blue hover:underline">Xem file</a>` : '-';
+        const ngayTra = esc(row['Ngày trả'] ?? row.ngayTra ?? '');
+        const linhKien = esc(row['Linh kiện rà soát'] ?? row.linhKienRasoat ?? row.data ?? '').replace(/\n/g, '<br>');
+        const jiraUrl = (row['Link Jira'] ?? row.linkJira ?? '').trim();
+        const jiraCell = jiraUrl ? `<a href="${esc(jiraUrl)}" target="_blank" rel="noopener" class="text-primary-blue hover:underline">Nhấn để mở</a>` : '-';
+        const filePhanHoiUrl = (row['File phản hồi'] ?? row.filePhanHoi ?? '').trim();
+        const filePhanHoiCell = filePhanHoiUrl ? `<a href="${esc(filePhanHoiUrl)}" target="_blank" rel="noopener" class="text-primary-blue hover:underline">Xem file</a>` : '-';
+        const tinhTrangRaw = row['Tình trạng'] ?? row.tinhTrang ?? '';
+        const tinhTrangCell = getF2StatusBadge(tinhTrangRaw);
+        const ghiChu = String(row['Ghi chú'] ?? row.ghiChu ?? row.note ?? '').trim();
+        const ghiChuCell = ghiChu ? `<button type="button" class="f2-ghi-chu-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-600 hover:bg-gray-50" data-f2-ghi-chu="${esc(ghiChu)}">Xem</button>` : '-';
+        const tyLeCell = `<button type="button" class="f2-ty-le-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-600 hover:bg-gray-50" data-f2-id="${id}">Xem</button>`;
+        const traKetQuaCell = `<button type="button" class="f2-khai-bao-btn px-2 py-1 text-xs rounded border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100" data-f2-id="${id}">Khai báo</button>`;
+        return `<tr><td class="px-3 py-2">${traKetQuaCell}</td><td class="px-3 py-2 text-sm">${linhKien || '-'}</td><td class="px-3 py-2">${tinhTrangCell}</td><td class="px-3 py-2">${ngayGui}</td><td class="px-3 py-2">${ngayTra || '-'}</td><td class="px-3 py-2">${nguoiGui}</td><td class="px-3 py-2">${nguoiNhan}</td><td class="px-3 py-2">${fileCell}</td><td class="px-3 py-2">${filePhanHoiCell}</td><td class="px-3 py-2">${jiraCell}</td><td class="px-3 py-2">${ghiChuCell}</td><td class="px-3 py-2">${tyLeCell}</td></tr>`;
+      }).join('');
     }
 
-    // Hàm fetch dữ liệu từ webhook cho Form 2
-    async function fetchForm2Data() {
-      const loadBtn = document.getElementById('f2-load-btn');
+    function populateF2Filters() {
+      const selNguoi = document.getElementById('f2-filter-nguoi-nhan');
+      const selThang = document.getElementById('f2-filter-thang');
+      if (!selNguoi || !selThang) return;
+      const curNguoi = selNguoi.value;
+      const curThang = selThang.value;
+      const nguoiSet = new Set();
+      const thangSet = new Map();
+      F2_DATA.forEach(row => {
+        const n = getF2NguoiNhanVal(row);
+        if (n) nguoiSet.add(n);
+        const d = getF2NgayGuiVal(row);
+        if (d) {
+          const key = `${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+          const label = `Tháng ${d.getMonth() + 1}/${d.getFullYear()}`;
+          if (!thangSet.has(key)) thangSet.set(key, label);
+        }
+      });
+      const escOpt = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      selNguoi.innerHTML = '<option value="">Tất cả</option>' + [...nguoiSet].sort().map(n => `<option value="${escOpt(n)}">${escOpt(n)}</option>`).join('');
+      selThang.innerHTML = '<option value="">Tất cả</option>' + [...thangSet.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+      if (curNguoi) selNguoi.value = curNguoi;
+      if (curThang) selThang.value = curThang;
+    }
+
+    function applyF2Filters() {
+      const nguoi = (document.getElementById('f2-filter-nguoi-nhan')?.value || '').trim();
+      const thang = (document.getElementById('f2-filter-thang')?.value || '').trim();
+      let filtered = F2_DATA;
+      if (nguoi) filtered = filtered.filter(row => getF2NguoiNhanVal(row) === nguoi);
+      if (thang) {
+        const [m, y] = thang.split('/').map(Number);
+        filtered = filtered.filter(row => {
+          const d = getF2NgayGuiVal(row);
+          return d && d.getMonth() + 1 === m && d.getFullYear() === y;
+        });
+      }
+      renderF2Table(filtered);
+    }
+
+    async function loadF2RasoatData() {
       const loadingDiv = document.getElementById('f2-loading');
+      const loadBtn = document.getElementById('f2-load-btn');
       const tbody = document.getElementById('f2-table-body');
-      
-      const webhookUrl = 'https://iatzhxxuk.tino.page/webhook/0a37d9a8-8be4-4311-93cf-923e7e874128';
-      
       try {
-        // Hiển thị loading
-        if (loadBtn) loadBtn.disabled = true;
         if (loadingDiv) loadingDiv.classList.remove('hidden');
-        if (tbody) {
-          tbody.innerHTML = '<tr><td class="px-3 py-4 text-center text-gray-500 border border-gray-300" colspan="9">Đang tải dữ liệu...</td></tr>';
-        }
-        
-        console.log('[Form 2] Fetching data from:', webhookUrl);
-        
-        // Gọi API với query parameters (có thể thêm filter, page, limit, etc.)
-        const params = new URLSearchParams({
-          // Có thể thêm các query params ở đây nếu cần
-          // format: 'json',
-          // limit: '100',
-          // offset: '0'
-        });
-        
-        const url = `${webhookUrl}?${params.toString()}`;
-        console.log('[Form 2] Full URL:', url);
-        
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        console.log('[Form 2] Response status:', response.status, response.statusText);
-        console.log('[Form 2] Response headers:', Object.fromEntries(response.headers.entries()));
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const responseText = await response.text();
-        console.log('[Form 2] Response text:', responseText);
-        
-        let data;
+        if (loadBtn) loadBtn.disabled = true;
+        if (tbody) tbody.innerHTML = '<tr><td class="px-3 py-3 text-center text-gray-500" colspan="12">Đang tải...</td></tr>';
+        const resp = await fetch(F2_WEBHOOK_URL, { method: 'GET', headers: { 'Accept': 'application/json' } });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const raw = await resp.text();
+        let data = [];
         try {
-          data = JSON.parse(responseText);
-        } catch (e) {
-          console.error('[Form 2] JSON parse error:', e);
-          // Nếu không phải JSON, thử xử lý như text
-          throw new Error('Response is not valid JSON');
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) data = parsed;
+          else if (parsed && Array.isArray(parsed.records)) data = parsed.records;
+          else if (parsed && Array.isArray(parsed.data)) data = parsed.data;
+          else if (parsed && typeof parsed === 'object') data = [parsed];
+        } catch (_) { data = []; }
+        F2_DATA = data;
+        if (!tbody) return;
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td class="px-3 py-3 text-center text-gray-500" colspan="12">Không có dữ liệu</td></tr>';
+          if (typeof showToast === 'function') showToast('Không có dữ liệu rà soát.', 'info');
+          populateF2Filters();
+        } else {
+          populateF2Filters();
+          applyF2Filters();
+          if (typeof showToast === 'function') showToast(`Đã tải ${data.length} yêu cầu rà soát.`, 'success');
         }
-        
-        console.log('[Form 2] Parsed data:', data);
-        
-        // Xử lý dữ liệu trả về - có thể là array trực tiếp hoặc object chứa array
-        let tableData = [];
-        if (Array.isArray(data)) {
-          tableData = data;
-        } else if (data && Array.isArray(data.data)) {
-          tableData = data.data;
-        } else if (data && Array.isArray(data.results)) {
-          tableData = data.results;
-        } else if (data && Array.isArray(data.items)) {
-          tableData = data.items;
-        } else if (data && typeof data === 'object') {
-          // Nếu là object đơn, thử chuyển thành array 1 phần tử
-          tableData = [data];
-        }
-        
-        console.log('[Form 2] Table data:', tableData);
-        
-        // Render dữ liệu vào bảng
-        renderForm2Table(tableData);
-        
-        // Thông báo thành công
-        showToast(`Đã tải ${tableData.length} bản ghi`, 'success');
-        
-      } catch (error) {
-        console.error('[Form 2] Error fetching data:', error);
-        if (tbody) {
-          tbody.innerHTML = `<tr><td class="px-3 py-4 text-center text-red-500 border border-gray-300" colspan="9">Lỗi: ${escapeHtml(error.message)}</td></tr>`;
-        }
-        showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
+      } catch (err) {
+        console.error('[Form 2] Lỗi tải dữ liệu rà soát:', err);
+        if (tbody) tbody.innerHTML = `<tr><td class="px-3 py-3 text-center text-red-500" colspan="12">Lỗi: ${String(err.message || err).replace(/</g, '&lt;')}</td></tr>`;
+        if (typeof showToast === 'function') showToast('Lỗi tải dữ liệu: ' + (err.message || err), 'error');
       } finally {
-        // Ẩn loading
-        if (loadBtn) loadBtn.disabled = false;
         if (loadingDiv) loadingDiv.classList.add('hidden');
+        if (loadBtn) loadBtn.disabled = false;
       }
     }
 
-    // Event listener cho nút tải dữ liệu Form 2
+    // Form 2 - Event listeners và Modal handlers
     document.addEventListener('DOMContentLoaded', function() {
       const f2LoadBtn = document.getElementById('f2-load-btn');
-      if (f2LoadBtn) {
-        f2LoadBtn.addEventListener('click', function() {
-          fetchForm2Data();
-        });
-      }
-      
-      // Tự động load dữ liệu khi chuyển sang Form 2 (tùy chọn)
-      const navButtons = document.querySelectorAll('.nav-btn[data-target="form2"]');
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          // Có thể tự động load hoặc không
-          // fetchForm2Data();
-        });
+      if (f2LoadBtn) f2LoadBtn.addEventListener('click', loadF2RasoatData);
+      document.getElementById('f2-filter-nguoi-nhan')?.addEventListener('change', applyF2Filters);
+      document.getElementById('f2-filter-thang')?.addEventListener('change', applyF2Filters);
+
+      document.getElementById('f2-table-body')?.addEventListener('click', (e) => {
+        const ghiChuBtn = e.target.closest('.f2-ghi-chu-btn');
+        const khaiBaoBtn = e.target.closest('.f2-khai-bao-btn');
+        if (ghiChuBtn) {
+          e.preventDefault();
+          const content = ghiChuBtn.dataset.f2GhiChu || '';
+          const el = document.getElementById('f2-ghi-chu-content');
+          const modal = document.getElementById('f2-ghi-chu-modal');
+          if (el) el.textContent = content;
+          if (modal) modal.classList.add('open');
+        }
+        if (khaiBaoBtn) {
+          e.preventDefault();
+          const rowId = khaiBaoBtn.dataset.f2Id || '';
+          const row = F2_DATA.find(r => String(r.Id ?? r.id ?? '') === rowId);
+          if (typeof openF2DeclarationModal === 'function') openF2DeclarationModal(row);
+        }
       });
+      const f2GhiChuModal = document.getElementById('f2-ghi-chu-modal');
+      const f2GhiChuModalClose = document.getElementById('f2-ghi-chu-modal-close');
+      if (f2GhiChuModalClose) f2GhiChuModalClose.addEventListener('click', () => f2GhiChuModal?.classList.remove('open'));
+      f2GhiChuModal?.addEventListener('click', (e) => { if (e.target === f2GhiChuModal) f2GhiChuModal.classList.remove('open'); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && f2GhiChuModal?.classList.contains('open')) f2GhiChuModal.classList.remove('open'); });
 
-      // Xử lý filter cho Form 2
-      const picFilter = document.getElementById('f2-filter-pic');
-      const projectFilter = document.getElementById('f2-filter-project');
-      const resetFilterBtn = document.getElementById('f2-reset-filter');
-      
-      if (picFilter) {
-        picFilter.addEventListener('change', function() {
-          if (F2_ORIGINAL_DATA && F2_ORIGINAL_DATA.length > 0) {
-            renderForm2Table(F2_ORIGINAL_DATA);
-          }
-        });
-      }
-      
-      if (projectFilter) {
-        projectFilter.addEventListener('change', function() {
-          if (F2_ORIGINAL_DATA && F2_ORIGINAL_DATA.length > 0) {
-            renderForm2Table(F2_ORIGINAL_DATA);
-          }
-        });
-      }
-      
-      if (resetFilterBtn) {
-        resetFilterBtn.addEventListener('click', function() {
-          if (picFilter) picFilter.value = '';
-          if (projectFilter) projectFilter.value = '';
-          if (F2_ORIGINAL_DATA && F2_ORIGINAL_DATA.length > 0) {
-            renderForm2Table(F2_ORIGINAL_DATA);
-          }
-        });
-      }
-
-      // Nút xuất Excel
-      const exportExcelBtn = document.getElementById('f2-export-excel');
-      if (exportExcelBtn) {
-        exportExcelBtn.addEventListener('click', function() {
-          exportF2ToExcel();
-        });
-      }
-
-      // ===== FORM 2 - XỬ LÝ MODAL KHAI BÁO (SO SÁNH CE) =====
-      
-      // Biến lưu trữ file
-      let F2_CE_ORIGINAL_FILE = null;
-      let F2_CE_REVIEW_FILE = null;
-      
-      // Khởi tạo tất cả modal listeners
       initAllModalListeners();
-      
-      // Nút mở modal Khai báo
-      const f2DeclarationBtn = document.getElementById('f2-declaration-btn');
-      if (f2DeclarationBtn) {
-        f2DeclarationBtn.addEventListener('click', function() {
-          openF2DeclarationModal();
-        });
-      }
-      
-      // Xử lý upload file CE gốc
-      const f2CeOriginalBtn = document.getElementById('f2-ce-original-btn');
-      const f2CeOriginal = document.getElementById('f2-ce-original');
-      const f2CeOriginalRemove = document.getElementById('f2-ce-original-remove');
-      
-      if (f2CeOriginalBtn && f2CeOriginal) {
-        f2CeOriginalBtn.addEventListener('click', function() {
-          f2CeOriginal.click();
-        });
-      }
-      
-      if (f2CeOriginal) {
-        f2CeOriginal.addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (file) {
-            F2_CE_ORIGINAL_FILE = file;
-            document.getElementById('f2-ce-original-name').textContent = file.name;
-            document.getElementById('f2-ce-original-name').className = 'text-sm text-green-600 flex-1 font-medium';
-            if (f2CeOriginalRemove) f2CeOriginalRemove.classList.remove('hidden');
-            showToast('Đã chọn file CE gốc: ' + file.name);
-          }
-        });
-      }
-      
-      if (f2CeOriginalRemove) {
-        f2CeOriginalRemove.addEventListener('click', function() {
-          if (f2CeOriginal) f2CeOriginal.value = '';
-          F2_CE_ORIGINAL_FILE = null;
-          document.getElementById('f2-ce-original-name').textContent = 'Chưa chọn file';
-          document.getElementById('f2-ce-original-name').className = 'text-sm text-gray-500 flex-1';
-          this.classList.add('hidden');
-        });
-      }
-      
-      // Xử lý upload file CE sau rà soát
+
+      // Setup modal f2-declaration: file upload + submit (chỉ CE sau rà soát)
       const f2CeReviewBtn = document.getElementById('f2-ce-review-btn');
       const f2CeReview = document.getElementById('f2-ce-review');
       const f2CeReviewRemove = document.getElementById('f2-ce-review-remove');
-      
-      if (f2CeReviewBtn && f2CeReview) {
-        f2CeReviewBtn.addEventListener('click', function() {
-          f2CeReview.click();
-        });
-      }
-      
-      if (f2CeReview) {
-        f2CeReview.addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (file) {
-            F2_CE_REVIEW_FILE = file;
-            document.getElementById('f2-ce-review-name').textContent = file.name;
-            document.getElementById('f2-ce-review-name').className = 'text-sm text-green-600 flex-1 font-medium';
-            if (f2CeReviewRemove) f2CeReviewRemove.classList.remove('hidden');
-            showToast('Đã chọn file CE sau rà soát: ' + file.name);
-          }
-        });
-      }
-      
-      if (f2CeReviewRemove) {
-        f2CeReviewRemove.addEventListener('click', function() {
-          if (f2CeReview) f2CeReview.value = '';
-          F2_CE_REVIEW_FILE = null;
-          document.getElementById('f2-ce-review-name').textContent = 'Chưa chọn file';
-          document.getElementById('f2-ce-review-name').className = 'text-sm text-gray-500 flex-1';
-          this.classList.add('hidden');
-        });
-      }
-      
-      // Gửi dữ liệu so sánh CE
       const f2DeclarationSubmitBtn = document.getElementById('modal-f2-declaration-submit');
-      if (f2DeclarationSubmitBtn) {
-        f2DeclarationSubmitBtn.addEventListener('click', async function() {
-          await submitF2Declaration();
-        });
-      }
+      if (f2CeReviewBtn && f2CeReview) f2CeReviewBtn.addEventListener('click', () => f2CeReview.click());
+      if (f2CeReview) f2CeReview.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          F2_CE_REVIEW_FILE = file;
+          const nameEl = document.getElementById('f2-ce-review-name');
+          if (nameEl) { nameEl.textContent = file.name; nameEl.className = 'text-sm text-green-600 flex-1 font-medium'; }
+          if (f2CeReviewRemove) f2CeReviewRemove.classList.remove('hidden');
+        }
+      });
+      if (f2CeReviewRemove) f2CeReviewRemove.addEventListener('click', () => {
+        if (f2CeReview) f2CeReview.value = '';
+        F2_CE_REVIEW_FILE = null;
+        const nameEl = document.getElementById('f2-ce-review-name');
+        if (nameEl) { nameEl.textContent = 'Chưa chọn file'; nameEl.className = 'text-sm text-gray-500 flex-1'; }
+        f2CeReviewRemove.classList.add('hidden');
+      });
+      if (f2DeclarationSubmitBtn) f2DeclarationSubmitBtn.addEventListener('click', () => submitF2Declaration());
+
+      // Modal phụ - Tải file xlsx (tách khỏi Form 1)
+      const btnOpenModalPhu = document.getElementById('btn-open-modal-phu');
+      const modalPhuFileBtn = document.getElementById('modal-phu-file-btn');
+      const modalPhuFileInput = document.getElementById('modal-phu-file-input');
+      const modalPhuFileRemove = document.getElementById('modal-phu-file-remove');
+      const modalPhuSubmitBtn = document.getElementById('modal-phu-upload-submit');
+      if (btnOpenModalPhu) btnOpenModalPhu.addEventListener('click', () => openModalPhuUpload());
+      if (modalPhuFileBtn && modalPhuFileInput) modalPhuFileBtn.addEventListener('click', () => modalPhuFileInput.click());
+      if (modalPhuFileInput) modalPhuFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const nameEl = document.getElementById('modal-phu-file-name');
+        const removeBtn = document.getElementById('modal-phu-file-remove');
+        if (file) {
+          if (nameEl) { nameEl.textContent = file.name; nameEl.className = 'text-sm text-green-600 flex-1 font-medium'; }
+          if (removeBtn) removeBtn.classList.remove('hidden');
+        }
+      });
+      if (modalPhuFileRemove) modalPhuFileRemove.addEventListener('click', () => {
+        if (modalPhuFileInput) modalPhuFileInput.value = '';
+        const nameEl = document.getElementById('modal-phu-file-name');
+        if (nameEl) { nameEl.textContent = 'Chưa chọn file'; nameEl.className = 'text-sm text-gray-500 flex-1'; }
+        modalPhuFileRemove.classList.add('hidden');
+      });
+      if (modalPhuSubmitBtn) modalPhuSubmitBtn.addEventListener('click', () => submitModalPhuUpload());
     });
 
     // ============================================
@@ -5137,6 +4509,16 @@
      * Format: 'modal-{form}-{purpose}'
      */
     const MODAL_REGISTRY = {
+      'phu-upload': {
+        id: 'modal-phu-upload',
+        overlayId: 'modal-phu-upload-overlay',
+        contentId: 'modal-phu-upload-content',
+        closeBtnIds: ['modal-phu-upload-close', 'modal-phu-upload-close-btn'],
+        cancelBtnId: null,
+        submitBtnId: 'modal-phu-upload-submit',
+        formId: null,
+        bodyId: 'modal-phu-upload-body'
+      },
       'f2-declaration': {
         id: 'modal-f2-declaration',
         overlayId: 'modal-f2-declaration-overlay',
@@ -5610,24 +4992,18 @@
     // ============================================
 
     // Hàm mở modal Khai báo Form 2 - Sử dụng hệ thống modal tập trung
-    function openF2DeclarationModal() {
-      // Sử dụng hệ thống modal tập trung
+    function openF2DeclarationModal(rowData) {
+      F2_DECLARATION_ROW = rowData || null; // Lưu dữ liệu hàng để gửi kèm file
       const success = openModal('f2-declaration', (modal, config) => {
-        // Callback trước khi mở modal - Reset form
-      F2_CE_ORIGINAL_FILE = null;
+        // Callback trước khi mở modal - Reset form (chỉ CE sau rà soát)
       F2_CE_REVIEW_FILE = null;
-      if (document.getElementById('f2-ce-original')) document.getElementById('f2-ce-original').value = '';
       if (document.getElementById('f2-ce-review')) document.getElementById('f2-ce-review').value = '';
-      if (document.getElementById('f2-ce-original-name')) {
-        document.getElementById('f2-ce-original-name').textContent = 'Chưa chọn file';
-        document.getElementById('f2-ce-original-name').className = 'text-sm text-gray-500 flex-1';
-      }
       if (document.getElementById('f2-ce-review-name')) {
         document.getElementById('f2-ce-review-name').textContent = 'Chưa chọn file';
         document.getElementById('f2-ce-review-name').className = 'text-sm text-gray-500 flex-1';
       }
-      const removeBtns = document.querySelectorAll('#f2-ce-original-remove, #f2-ce-review-remove');
-      removeBtns.forEach(btn => btn.classList.add('hidden'));
+      const removeBtn = document.getElementById('f2-ce-review-remove');
+      if (removeBtn) removeBtn.classList.add('hidden');
       
       // Ẩn kết quả
       const resultDiv = document.getElementById('f2-declaration-result');
@@ -5644,37 +5020,124 @@
       closeModal('f2-declaration');
     }
 
-    // Hàm submit form so sánh CE Form 2
-    async function submitF2Declaration() {
-      // Lấy file trực tiếp từ input element thay vì dùng biến
-      const f2CeOriginalInput = document.getElementById('f2-ce-original');
-      const f2CeReviewInput = document.getElementById('f2-ce-review');
-      
-      // Kiểm tra dữ liệu bắt buộc
-      if (!f2CeOriginalInput || !f2CeOriginalInput.files || !f2CeOriginalInput.files[0]) {
-        showToast('Vui lòng chọn file CE gốc', 'error');
+    // ===== MODAL PHỤ - TẢI FILE XLSX (tách khỏi Form 1) =====
+    const MODAL_PHU_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/ModalPhuUpload';
+
+    function openModalPhuUpload() {
+      const success = openModal('phu-upload', (modal, config) => {
+        const fileInput = document.getElementById('modal-phu-file-input');
+        const fileName = document.getElementById('modal-phu-file-name');
+        const removeBtn = document.getElementById('modal-phu-file-remove');
+        const resultDiv = document.getElementById('modal-phu-result');
+        const submitBtn = document.getElementById('modal-phu-upload-submit');
+        if (fileInput) fileInput.value = '';
+        if (fileName) { fileName.textContent = 'Chưa chọn file'; fileName.className = 'text-sm text-gray-500 flex-1'; }
+        if (removeBtn) removeBtn.classList.add('hidden');
+        if (resultDiv) resultDiv.classList.add('hidden');
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Gửi lên server'; }
+      });
+      if (!success) console.error('[Modal phụ] Failed to open modal');
+    }
+
+    async function submitModalPhuUpload() {
+      const fileInput = document.getElementById('modal-phu-file-input');
+      if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+        if (typeof showToast === 'function') showToast('Vui lòng chọn file Excel (.xlsx)', 'error');
         return;
       }
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
 
+      const submitBtn = document.getElementById('modal-phu-upload-submit');
+      const resultDiv = document.getElementById('modal-phu-result');
+      const resultContent = document.getElementById('modal-phu-result-content');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Đang gửi...'; }
+      if (resultDiv) resultDiv.classList.add('hidden');
+
+      try {
+        const response = await fetch(MODAL_PHU_WEBHOOK_URL, { method: 'POST', body: formData });
+        let responseText = '';
+        try { responseText = await response.text(); } catch (_) {}
+        let result = null;
+        if (responseText) {
+          try { result = JSON.parse(responseText); } catch (_) {
+            result = { success: response.ok, body: responseText };
+          }
+        } else {
+          result = { success: response.ok, status: response.status, message: response.ok ? 'Gửi thành công' : `HTTP ${response.status}` };
+        }
+        if (resultDiv && resultContent) {
+          resultDiv.classList.remove('hidden');
+          if (response.ok) {
+            resultContent.innerHTML = `
+              <div class="flex items-center gap-3 p-4 rounded-lg border border-green-200 bg-green-50 text-green-800">
+                <span class="material-symbols-outlined text-2xl text-green-600">check_circle</span>
+                <div>
+                  <p class="font-semibold">Đã gửi thành công</p>
+                  <p class="text-sm mt-0.5">File Excel đã được gửi lên server.</p>
+                </div>
+              </div>
+            `;
+          } else {
+            resultContent.innerHTML = `
+              <div class="flex items-center gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+                <span class="material-symbols-outlined text-2xl text-red-600">error</span>
+                <div>
+                  <p class="font-semibold">Gửi không thành công</p>
+                  <p class="text-sm mt-0.5">Mã lỗi: HTTP ${response.status}. Vui lòng thử lại sau.</p>
+                </div>
+              </div>
+            `;
+          }
+        }
+        if (typeof showToast === 'function') {
+          showToast(response.ok ? 'Đã gửi file thành công' : `Gửi không thành công: HTTP ${response.status}`, response.ok ? 'success' : 'error');
+        }
+      } catch (error) {
+        console.error('[Modal phụ] Error:', error);
+        if (resultDiv && resultContent) {
+          resultDiv.classList.remove('hidden');
+          resultContent.innerHTML = `
+            <div class="flex items-center gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+              <span class="material-symbols-outlined text-2xl text-red-600">error</span>
+              <div>
+                <p class="font-semibold">Đã xảy ra lỗi</p>
+                <p class="text-sm mt-0.5">${escapeHtml(error.message)}</p>
+              </div>
+            </div>
+          `;
+        }
+        if (typeof showToast === 'function') showToast('Lỗi: ' + error.message, 'error');
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Gửi lên server'; }
+      }
+    }
+
+    // Hàm submit form CE sau rà soát Form 2
+    async function submitF2Declaration() {
+      const f2CeReviewInput = document.getElementById('f2-ce-review');
+      
+      // Kiểm tra dữ liệu bắt buộc - chỉ CE sau rà soát
       if (!f2CeReviewInput || !f2CeReviewInput.files || !f2CeReviewInput.files[0]) {
         showToast('Vui lòng chọn file CE sau rà soát', 'error');
         return;
       }
 
-      const ceOriginalFile = f2CeOriginalInput.files[0];
       const ceReviewFile = f2CeReviewInput.files[0];
 
-      // Chuẩn bị FormData để gửi
+      // Chuẩn bị FormData: file + đầy đủ dữ liệu hàng
       const formData = new FormData();
-      formData.append('ce_original', ceOriginalFile);
       formData.append('ce_review', ceReviewFile);
+      if (F2_DECLARATION_ROW && typeof F2_DECLARATION_ROW === 'object') {
+        formData.append('row_data', JSON.stringify(F2_DECLARATION_ROW));
+      }
 
       // Log dữ liệu gửi đi
       console.log('[Form 2 Declaration] Sending data:', {
-        ce_original_file: ceOriginalFile?.name || 'N/A',
         ce_review_file: ceReviewFile?.name || 'N/A',
-        ce_original_size: ceOriginalFile?.size || 0,
-        ce_review_size: ceReviewFile?.size || 0
+        ce_review_size: ceReviewFile?.size || 0,
+        row_data: F2_DECLARATION_ROW || 'N/A'
       });
 
       // Disable button và hiển thị loading
@@ -5689,7 +5152,7 @@
 
       try {
         // Gửi dữ liệu lên webhook cho Form 2
-        const serverUrl = 'https://iatzhxxuk.tino.page/webhook/2b3f8c7b-8485-4c42-a46f-fb4a6019bf6d';
+        const serverUrl = 'https://iatzhxxuk.tino.page/webhook/Phanhoirasoat';
         
         console.log('[Form 2 Declaration] Sending to:', serverUrl);
         
@@ -5734,12 +5197,30 @@
           };
         }
 
-        // Hiển thị kết quả
+        // Hiển thị kết quả dạng thông báo thân thiện
         if (resultDiv && resultContent) {
           resultDiv.classList.remove('hidden');
-          resultContent.innerHTML = `
-            <pre class="bg-white p-4 rounded border border-gray-300 text-xs overflow-auto max-h-60 whitespace-pre-wrap">${escapeHtml(JSON.stringify(result, null, 2))}</pre>
-          `;
+          if (response.ok) {
+            resultContent.innerHTML = `
+              <div class="flex items-center gap-3 p-4 rounded-lg border border-green-200 bg-green-50 text-green-800">
+                <span class="material-symbols-outlined text-2xl text-green-600">check_circle</span>
+                <div>
+                  <p class="font-semibold">Đã gửi thành công</p>
+                  <p class="text-sm mt-0.5">File CE sau rà soát đã được gửi lên server.</p>
+                </div>
+              </div>
+            `;
+          } else {
+            resultContent.innerHTML = `
+              <div class="flex items-center gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+                <span class="material-symbols-outlined text-2xl text-red-600">error</span>
+                <div>
+                  <p class="font-semibold">Gửi không thành công</p>
+                  <p class="text-sm mt-0.5">Mã lỗi: HTTP ${response.status}. Vui lòng thử lại sau.</p>
+                </div>
+              </div>
+            `;
+          }
         }
         
         if (response.ok) {
@@ -5752,9 +5233,12 @@
         if (resultDiv && resultContent) {
           resultDiv.classList.remove('hidden');
           resultContent.innerHTML = `
-            <div class="text-red-600 p-4 rounded border border-red-300 bg-red-50">
-              <p class="font-semibold">Lỗi:</p>
-              <p>${escapeHtml(error.message)}</p>
+            <div class="flex items-center gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+              <span class="material-symbols-outlined text-2xl text-red-600">error</span>
+              <div>
+                <p class="font-semibold">Đã xảy ra lỗi</p>
+                <p class="text-sm mt-0.5">${escapeHtml(error.message)}</p>
+              </div>
             </div>
           `;
         }
@@ -12420,7 +11904,7 @@
                 <img id="f4-preview-${idx}" class="w-16 h-16 object-cover rounded-lg border" src="#" alt="Preview">
               </div>` :
               `<div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span class="text-2xl">📎</span>
+                <span class="material-symbols-outlined text-2xl text-blue-600">attach_file</span>
               </div>`}
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
