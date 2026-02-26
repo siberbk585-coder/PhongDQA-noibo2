@@ -366,20 +366,6 @@
         </div>
       </div>
       <nav class="flex flex-col gap-2">
-        <!-- Nhóm: Công cụ hỗ trợ -->
-        <div class="flex flex-col gap-1">
-          <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="tools-group">
-            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
-            <p class="text-sm font-semibold">Công cụ hỗ trợ</p>
-          </button>
-          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="tools-group">
-            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form9">
-              <span class="material-symbols-outlined text-lg text-gray-500">bug_report</span>
-              <p class="text-sm font-semibold">9 - Ngân hàng lỗi</p>
-            </button>
-          </div>
-        </div>
-        
         <!-- Nhóm: Rà soát TCKT -->
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="spm-group">
@@ -394,6 +380,10 @@
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form2">
               <span class="material-symbols-outlined text-lg text-gray-500">fact_check</span>
               <p class="text-sm font-semibold">2 - Quản lý tác vụ rà soát</p>
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form3">
+              <span class="material-symbols-outlined text-lg text-gray-500">analytics</span>
+              <p class="text-sm font-semibold">3 - KPI rà soát TCKT</p>
             </button>
           </div>
         </div>
@@ -416,6 +406,20 @@
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form6">
               <span class="material-symbols-outlined text-lg text-gray-500">analytics</span>
               <p class="text-sm font-semibold">6 - Dashboard Thống kê</p>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Nhóm: Công cụ hỗ trợ -->
+        <div class="flex flex-col gap-1 mt-2">
+          <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="tools-group">
+            <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
+            <p class="text-sm font-semibold">Công cụ hỗ trợ</p>
+          </button>
+          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="tools-group">
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form9">
+              <span class="material-symbols-outlined text-lg text-gray-500">bug_report</span>
+              <p class="text-sm font-semibold">9 - Ngân hàng lỗi</p>
             </button>
           </div>
         </div>
@@ -586,7 +590,7 @@
               <th class="px-3 py-2 w-[8%]">File phản hồi</th>
               <th class="px-3 py-2 w-[8%]">Link Jira</th>
               <th class="px-3 py-2 w-[8%]">Ghi chú</th>
-              <th class="px-3 py-2 w-[8%]">Tỷ lệ sửa đổi</th>
+              <th class="px-3 py-2 w-[8%]">Chi tiết sửa đổi</th>
             </tr>
           </thead>
           <tbody id="f2-table-body" class="divide-y divide-gray-100">
@@ -596,6 +600,57 @@
       </div>
     </section>
 
+    <!-- Form 3 - KPI theo Người nhận rà soát -->
+    <section id="form3" class="w-full bg-white p-6 rounded-lg shadow-md hidden flex flex-col min-h-0">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4 flex-shrink-0">
+        <div>
+          <h2 class="text-2xl font-bold text-blue-800">Form 3 - KPI Thống kê rà soát</h2>
+          <p class="text-sm text-gray-500 mt-0.5">Theo Người nhận rà soát</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="f3-filter-month" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-w-[140px]">
+            <option value="">Chọn tháng</option>
+          </select>
+          <button id="f3-load-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-blue-300 rounded-lg text-primary-blue font-medium hover:bg-blue-50 transition-colors shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
+            <span>Tải dữ liệu</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="f3-loading" class="hidden flex items-center justify-center gap-2 text-primary py-4 flex-shrink-0">
+        <span class="spinner"></span>
+        <span>Đang tải...</span>
+      </div>
+
+      <div id="f3-content" class="flex-1 overflow-auto min-h-0 space-y-4">
+        <!-- KPI Summary Cards -->
+        <div id="f3-kpi-cards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 flex-shrink-0"></div>
+
+        <!-- Bảng KPI theo Người nhận rà soát -->
+        <div class="flex-shrink-0">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">KPI theo Người nhận rà soát</h3>
+          <div class="overflow-auto border border-gray-200 rounded-lg" style="max-height: 450px;">
+            <table class="w-full text-sm table-zebra">
+              <thead class="bg-gray-100 sticky top-0 z-10">
+                <tr>
+                  <th class="px-3 py-2 text-left font-semibold text-gray-700">Người nhận rà soát</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Yêu cầu</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Tổng giờ xử lý</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Linh kiện</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Hạng mục gốc</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Hạng mục đổi</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Tỷ lệ đổi</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Giờ TB/yêu cầu</th>
+                  <th class="px-3 py-2 text-right font-semibold text-gray-700">Giờ TB/linh kiện</th>
+                </tr>
+              </thead>
+              <tbody id="f3-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
 
         <style>
         /* Form 10 specific scrollbar - scoped to #form10 only */
@@ -1751,6 +1806,22 @@
   <!-- ============================================ -->
   <!-- END MODAL PHỤ - TẢI FILE XLSX -->
   <!-- ============================================ -->
+
+  <!-- Modal: Chi tiết sửa đổi (Form 2 rà soát - Kết quả rà soát, tham khảo Form 1) -->
+  <div id="f2-chi-tiet-modal" class="modal" aria-hidden="true" role="dialog" style="z-index: 9999;">
+    <div class="w-full bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden" style="width:98vw; max-width:1800px">
+      <div class="px-4 py-3 bg-gradient-to-b from-blue-50 to-white border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-base font-semibold text-gray-800">Chi tiết sửa đổi</h3>
+        <button id="f2-chi-tiet-modal-close" class="px-3 py-1 rounded-lg bg-slate-100 text-gray-800 hover:bg-slate-200">Đóng</button>
+      </div>
+      <div class="p-4 overflow-auto" style="max-height:80vh">
+        <div class="border border-gray-200 rounded-lg bg-gray-50 p-4">
+          <div id="f2-chi-tiet-summary" class="mb-4"></div>
+          <div id="f2-chi-tiet-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal: Xem Ghi chú (Form 2 rà soát) -->
   <div id="f2-ghi-chu-modal" class="modal" aria-hidden="true" role="dialog">
@@ -4272,7 +4343,7 @@
         const tinhTrangRaw = row['Tình trạng'] ?? row.tinhTrang ?? '';
         const tinhTrangCell = getF2StatusBadge(tinhTrangRaw);
         const ghiChu = String(row['Ghi chú'] ?? row.ghiChu ?? row.note ?? '').trim();
-        const ghiChuCell = ghiChu ? `<button type="button" class="f2-ghi-chu-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-600 hover:bg-gray-50" data-f2-ghi-chu="${esc(ghiChu)}">Xem</button>` : '-';
+        const ghiChuCell = ghiChu ? `<span class="text-sm text-gray-700 whitespace-pre-wrap break-words block">${esc(ghiChu).replace(/\n/g, '<br>')}</span>` : '-';
         const tyLeCell = `<button type="button" class="f2-ty-le-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-600 hover:bg-gray-50" data-f2-id="${id}">Xem</button>`;
         const traKetQuaCell = `<button type="button" class="f2-khai-bao-btn px-2 py-1 text-xs rounded border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100" data-f2-id="${id}">Khai báo</button>`;
         return `<tr><td class="px-3 py-2">${traKetQuaCell}</td><td class="px-3 py-2 text-sm">${linhKien || '-'}</td><td class="px-3 py-2">${tinhTrangCell}</td><td class="px-3 py-2">${ngayGui}</td><td class="px-3 py-2">${ngayTra || '-'}</td><td class="px-3 py-2">${nguoiGui}</td><td class="px-3 py-2">${nguoiNhan}</td><td class="px-3 py-2">${fileCell}</td><td class="px-3 py-2">${filePhanHoiCell}</td><td class="px-3 py-2">${jiraCell}</td><td class="px-3 py-2">${ghiChuCell}</td><td class="px-3 py-2">${tyLeCell}</td></tr>`;
@@ -4359,30 +4430,337 @@
       }
     }
 
+    // ===== FORM 3 - KPI THEO NGƯỜI NHẬN RÀ SOÁT =====
+    const F3_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/thongkerasoattckt';
+    let F3_DATA = { kpi_monthly_totals: [], kpi_monthly: [] };
+
+    function f3Esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function f3FmtHours(v) { const n = Number(v); return isNaN(n) ? '-' : n.toFixed(2); }
+    function f3FmtNum(v) { const n = Number(v); return isNaN(n) ? '-' : String(n); }
+
+    function f3GetChangeRateBadge(percentStr, rateNum) {
+      const r = rateNum != null ? Number(rateNum) : NaN;
+      let cls = 'bg-gray-100 text-gray-700 border-gray-200';
+      if (!isNaN(r)) {
+        if (r < 0.05) cls = 'bg-green-50 text-green-700 border-green-200';
+        else if (r <= 0.10) cls = 'bg-yellow-50 text-yellow-700 border-yellow-200';
+        else cls = 'bg-orange-50 text-orange-700 border-orange-200';
+      }
+      return `<span class="inline-flex px-2 py-0.5 rounded text-xs font-medium border ${cls}">${f3Esc(percentStr || '-')}</span>`;
+    }
+
+    function f3PopulateMonthFilter() {
+      const sel = document.getElementById('f3-filter-month');
+      if (!sel) return;
+      const totals = F3_DATA.kpi_monthly_totals || [];
+      const months = [...new Set(totals.map(t => t.month).filter(Boolean))].sort().reverse();
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">Chọn tháng</option>' + months.map(m => `<option value="${f3Esc(m)}">${f3Esc(m)}</option>`).join('');
+      sel.value = cur || (months[0] || '');
+    }
+
+    function f3RenderKpiCards() {
+      const container = document.getElementById('f3-kpi-cards');
+      if (!container) return;
+      const month = document.getElementById('f3-filter-month')?.value || '';
+      const totals = (F3_DATA.kpi_monthly_totals || []).find(t => t.month === month);
+      if (!totals) {
+        container.innerHTML = '<div class="col-span-6 text-gray-500 text-sm py-4">Chưa có dữ liệu cho tháng đã chọn.</div>';
+        return;
+      }
+      const cards = [
+        { label: 'Tổng yêu cầu', value: totals.total_requests, icon: 'assignment' },
+        { label: 'Tổng giờ', value: f3FmtHours(totals.total_hours), icon: 'schedule' },
+        { label: 'Linh kiện', value: totals.total_components, icon: 'widgets' },
+        { label: 'Hạng mục gốc', value: totals.total_base_items, icon: 'inventory' },
+        { label: 'Hạng mục thay đổi', value: totals.total_changed_items, icon: 'edit_note' },
+        { label: 'Tỷ lệ thay đổi', value: totals.change_rate_overall_percent || '-', icon: 'trending_up' }
+      ];
+      container.innerHTML = cards.map(c => `
+        <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+          <div class="flex items-center gap-1 text-gray-500 text-xs mb-0.5">
+            <span class="material-symbols-outlined text-sm">${c.icon}</span>
+            <span>${f3Esc(c.label)}</span>
+          </div>
+          <div class="text-lg font-bold text-gray-900">${f3Esc(c.value)}</div>
+        </div>
+      `).join('');
+    }
+
+    function f3RenderTable() {
+      const tbody = document.getElementById('f3-table-body');
+      if (!tbody) return;
+      const month = document.getElementById('f3-filter-month')?.value || '';
+      const rows = (F3_DATA.kpi_monthly || []).filter(r => r.month === month).sort((a, b) => (Number(b.total_hours) || 0) - (Number(a.total_hours) || 0));
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="px-3 py-6 text-center text-gray-500">Chưa có dữ liệu. Chọn tháng và tải dữ liệu.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows.map(r => `
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="px-3 py-2">
+            <div class="font-medium text-gray-800">${f3Esc(r.reviewer)}</div>
+            <div class="text-xs text-gray-500">${f3Esc(r.reviewer_email || '')}</div>
+          </td>
+          <td class="px-3 py-2 text-right">${f3FmtNum(r.total_requests)}</td>
+          <td class="px-3 py-2 text-right">${f3FmtHours(r.total_hours)}</td>
+          <td class="px-3 py-2 text-right">${f3FmtNum(r.total_components)}</td>
+          <td class="px-3 py-2 text-right">${f3FmtNum(r.total_base_items)}</td>
+          <td class="px-3 py-2 text-right">${f3FmtNum(r.total_changed_items)}</td>
+          <td class="px-3 py-2 text-right">${f3GetChangeRateBadge(r.change_rate_overall_percent, r.change_rate_overall)}</td>
+          <td class="px-3 py-2 text-right">${f3FmtHours(r.avg_hours_per_request)}</td>
+          <td class="px-3 py-2 text-right">${f3FmtHours(r.avg_hours_per_component)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function f3RenderAll() {
+      f3RenderKpiCards();
+      f3RenderTable();
+    }
+
+    async function loadF3ThongKeData() {
+      const loadingDiv = document.getElementById('f3-loading');
+      const loadBtn = document.getElementById('f3-load-btn');
+      try {
+        if (loadingDiv) loadingDiv.classList.remove('hidden');
+        if (loadBtn) loadBtn.disabled = true;
+        const resp = await fetch(F3_WEBHOOK_URL, { method: 'GET', headers: { 'Accept': 'application/json' } });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        let raw = await resp.text();
+        let parsed = {};
+        try {
+          const json = JSON.parse(raw);
+          if (Array.isArray(json) && json.length > 0) parsed = json[0];
+          else if (json && typeof json === 'object') parsed = json;
+        } catch (_) { throw new Error('Invalid JSON'); }
+        F3_DATA = {
+          kpi_monthly_totals: Array.isArray(parsed.kpi_monthly_totals) ? parsed.kpi_monthly_totals : [],
+          kpi_monthly: Array.isArray(parsed.kpi_monthly) ? parsed.kpi_monthly : []
+        };
+        f3PopulateMonthFilter();
+        f3RenderAll();
+        if (typeof showToast === 'function') showToast('Đã tải dữ liệu KPI.', 'success');
+      } catch (err) {
+        console.error('[Form 3] Lỗi tải KPI:', err);
+        if (typeof showToast === 'function') showToast('Lỗi: ' + (err.message || err), 'error');
+        F3_DATA = { kpi_monthly_totals: [], kpi_monthly: [] };
+        f3RenderAll();
+      } finally {
+        if (loadingDiv) loadingDiv.classList.add('hidden');
+        if (loadBtn) loadBtn.disabled = false;
+      }
+    }
+
     // Form 2 - Event listeners và Modal handlers
     document.addEventListener('DOMContentLoaded', function() {
       const f2LoadBtn = document.getElementById('f2-load-btn');
       if (f2LoadBtn) f2LoadBtn.addEventListener('click', loadF2RasoatData);
+
+      const f3LoadBtn = document.getElementById('f3-load-btn');
+      if (f3LoadBtn) f3LoadBtn.addEventListener('click', loadF3ThongKeData);
+      document.getElementById('f3-filter-month')?.addEventListener('change', f3RenderAll);
+
       document.getElementById('f2-filter-nguoi-nhan')?.addEventListener('change', applyF2Filters);
       document.getElementById('f2-filter-thang')?.addEventListener('change', applyF2Filters);
 
-      document.getElementById('f2-table-body')?.addEventListener('click', (e) => {
-        const ghiChuBtn = e.target.closest('.f2-ghi-chu-btn');
-        const khaiBaoBtn = e.target.closest('.f2-khai-bao-btn');
-        if (ghiChuBtn) {
-          e.preventDefault();
-          const content = ghiChuBtn.dataset.f2GhiChu || '';
-          const el = document.getElementById('f2-ghi-chu-content');
-          const modal = document.getElementById('f2-ghi-chu-modal');
-          if (el) el.textContent = content;
-          if (modal) modal.classList.add('open');
+      function openF2ChiTietModal(rowId) {
+        const modal = document.getElementById('f2-chi-tiet-modal');
+        const summaryEl = document.getElementById('f2-chi-tiet-summary');
+        const bodyEl = document.getElementById('f2-chi-tiet-body');
+        const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        if (!modal || !summaryEl || !bodyEl) {
+          if (typeof showToast === 'function') showToast('Lỗi: Không tìm thấy modal.', 'error');
+          return;
         }
+        const row = F2_DATA.find(r => {
+          const rid = String(r.Id ?? r.id ?? r.ID ?? '');
+          return rid === String(rowId) || rid === rowId;
+        });
+        if (!row) {
+          summaryEl.innerHTML = '';
+          bodyEl.innerHTML = '<p class="text-gray-500 text-sm py-4">Không tìm thấy dữ liệu chi tiết cho bản ghi này. Vui lòng tải lại dữ liệu.</p>';
+          modal.classList.add('open');
+          return;
+        }
+        const soHangMucBanDau = row['Số hạng mục ban đầu'] ?? row.soHangMucBanDau ?? row.so_hang_muc_ban_dau ?? '';
+        const soHangMucThayDoi = row['Số hạng mục thay đổi'] ?? row.soHangMucThayDoi ?? row.so_hang_muc_thay_doi ?? '';
+        const tongSoLinhKien = row['Tổng số linh kiện'] ?? row.tongSoLinhKien ?? row.tong_so_linh_kien ?? '';
+        const ketQuaRaw = row['Kết quả rà soát'] ?? row.ketQuaRaSoat ?? row.ket_qua_ra_soat ?? '';
+        let items = [];
+        try {
+          const parsed = typeof ketQuaRaw === 'string' ? JSON.parse(ketQuaRaw) : ketQuaRaw;
+          items = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.records) ? parsed.records : []);
+        } catch (_) { items = []; }
+        if (items.length === 0) {
+          summaryEl.innerHTML = '';
+          bodyEl.innerHTML = '<p class="text-gray-500 text-sm py-4">Chưa có dữ liệu kết quả rà soát.</p>';
+        } else {
+          const totalCodes = items.length;
+          const totalAdded = items.reduce((s, r) => s + Number(r.added_count || 0), 0);
+          const totalRemoved = items.reduce((s, r) => s + Number(r.removed_count || 0), 0);
+          const totalChanged = items.reduce((s, r) => s + Number(r.changed_count || 0), 0);
+          const totalUnchanged = items.reduce((s, r) => s + Number(r.unchanged_count || 0), 0);
+          summaryEl.innerHTML = `
+            <div class="overflow-auto mb-6 p-4 bg-white border-2 border-gray-300 rounded-xl shadow-sm">
+              <table class="min-w-[720px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-gray-50 text-gray-700">
+                  <tr>
+                    <th class="px-3 py-2 border">Số hạng mục ban đầu</th>
+                    <th class="px-3 py-2 border">Số hạng mục thay đổi</th>
+                    <th class="px-3 py-2 border">Tổng số linh kiện</th>
+                    <th class="px-3 py-2 border">Thêm mới</th>
+                    <th class="px-3 py-2 border">Bị xóa</th>
+                    <th class="px-3 py-2 border">Thay đổi</th>
+                    <th class="px-3 py-2 border">Không đổi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-center">
+                    <td class="px-3 py-2 border font-semibold text-blue-700">${esc(soHangMucBanDau) || totalCodes}</td>
+                    <td class="px-3 py-2 border font-semibold text-indigo-700">${esc(soHangMucThayDoi) || '-'}</td>
+                    <td class="px-3 py-2 border font-semibold text-sky-700">${esc(tongSoLinhKien) || totalCodes}</td>
+                    <td class="px-3 py-2 border font-semibold text-green-700">${totalAdded}</td>
+                    <td class="px-3 py-2 border font-semibold text-red-700">${totalRemoved}</td>
+                    <td class="px-3 py-2 border font-semibold text-yellow-700">${totalChanged}</td>
+                    <td class="px-3 py-2 border font-semibold text-gray-700">${totalUnchanged}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>`;
+          let html = '';
+          html += `<div class="mb-6 p-4 bg-gray-50 border-2 border-gray-300 rounded-xl">
+            <h4 class="text-base font-semibold text-gray-800 mb-4">Thống kê theo từng mã</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            ${items.map((r) => `
+              <div class="border-2 border-gray-300 rounded-xl overflow-hidden bg-white shadow-md shadow-gray-200">
+                <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-white flex items-center justify-between">
+                  <div>
+                    <div class="text-sm text-gray-500">Mã: <span class="font-medium text-gray-700">${esc(r.code || '')}</span></div>
+                    <div class="text-base font-semibold text-blue-800">${esc(r.name || '')}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[11px] text-gray-500">Tỷ lệ thay đổi</div>
+                    <div class="text-lg font-bold text-blue-700">${(Number(r.changed_count || 0) + Number(r.added_count || 0) + Number(r.removed_count || 0))}/${Number(r.unchanged_count || 0) + Number(r.changed_count || 0) + Number(r.added_count || 0) + Number(r.removed_count || 0) || 1}</div>
+                  </div>
+                </div>
+                <div class="p-4 space-y-3">
+                  <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-green-50 border border-green-200 rounded-md px-2 py-2">
+                      <div class="text-[11px] text-green-700">+ Thêm</div>
+                      <div class="text-lg font-bold text-green-700">${Number(r.added_count || 0)}</div>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-md px-2 py-2">
+                      <div class="text-[11px] text-red-700">- Xóa</div>
+                      <div class="text-lg font-bold text-red-700">${Number(r.removed_count || 0)}</div>
+                    </div>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-md px-2 py-2">
+                      <div class="text-[11px] text-yellow-700">Δ Đổi</div>
+                      <div class="text-lg font-bold text-yellow-700">${Number(r.changed_count || 0)}</div>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-md px-2 py-2">
+                      <div class="text-[11px] text-gray-700">= Không đổi</div>
+                      <div class="text-lg font-bold text-gray-700">${Number(r.unchanged_count || 0)}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+            </div>
+          </div>`;
+          html += `<div class="mb-6 p-4 bg-white border-2 border-gray-300 rounded-xl shadow-sm">
+            <h4 class="text-base font-semibold text-gray-800 mb-4">Bảng chi tiết</h4>
+            <div class="overflow-auto">
+            <table class="min-w-[860px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+              <thead class="bg-gray-50 text-gray-700">
+                <tr>
+                  <th class="px-3 py-2 border text-center">#</th>
+                  <th class="px-3 py-2 border">Mã</th>
+                  <th class="px-3 py-2 border">Tên</th>
+                  <th class="px-3 py-2 border text-center">+ Thêm</th>
+                  <th class="px-3 py-2 border text-center">- Xóa</th>
+                  <th class="px-3 py-2 border text-center">Δ Đổi</th>
+                  <th class="px-3 py-2 border text-center">= Không đổi</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${items.map((r, i) => `
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-3 py-2 border text-center">${i + 1}</td>
+                    <td class="px-3 py-2 border font-medium">${esc(r.code || '')}</td>
+                    <td class="px-3 py-2 border">${esc(r.name || '')}</td>
+                    <td class="px-3 py-2 border text-center text-green-700 font-medium">${Number(r.added_count || 0)}</td>
+                    <td class="px-3 py-2 border text-center text-red-700 font-medium">${Number(r.removed_count || 0)}</td>
+                    <td class="px-3 py-2 border text-center text-yellow-700 font-medium">${Number(r.changed_count || 0)}</td>
+                    <td class="px-3 py-2 border text-center text-gray-700 font-medium">${Number(r.unchanged_count || 0)}</td>
+                  </tr>
+              `).join('')}
+            </tbody>
+          </table>
+            </div>
+          </div>`;
+        html += `<div class="p-4 bg-white border-2 border-gray-300 rounded-xl shadow-sm">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Chi tiết thay đổi theo từng mã</h4>
+          <div class="space-y-6">
+            ${items.map((r, idx) => {
+                const addedItems = Array.isArray(r.added) ? r.added : [];
+                const removedItems = Array.isArray(r.removed) ? r.removed : [];
+                const changedItems = Array.isArray(r.changed) ? r.changed : [];
+                const hasDetails = addedItems.length > 0 || removedItems.length > 0 || changedItems.length > 0;
+                const detailsId = `f2-details-${idx}`;
+                if (!hasDetails) return '';
+                const renderAdd = typeof renderAddedItems === 'function' ? renderAddedItems(addedItems, idx) : '';
+                const renderRem = typeof renderRemovedItems === 'function' ? renderRemovedItems(removedItems, idx) : '';
+                const renderChg = typeof renderChangedItems === 'function' ? renderChangedItems(changedItems, idx) : '';
+                return `
+                  <div class="border-2 border-gray-300 rounded-xl overflow-hidden bg-white shadow-md shadow-gray-200">
+                    <button onclick="document.getElementById('${detailsId}').classList.toggle('hidden'); document.getElementById('icon-${detailsId}').classList.toggle('rotate-180');" class="w-full px-5 py-4 bg-gradient-to-r from-blue-50 to-white hover:from-blue-100 hover:to-blue-50 transition flex items-center justify-between text-left">
+                      <div>
+                        <div class="font-semibold text-blue-800 text-lg">${idx + 1}. ${esc(r.code || '')} - ${esc(r.name || '')}</div>
+                        <div class="text-sm text-gray-600 mt-1">
+                          ${addedItems.length > 0 ? `<span class="text-green-700 font-medium">+${addedItems.length} thêm</span>` : ''}
+                          ${removedItems.length > 0 ? `<span class="text-red-700 font-medium ml-2">-${removedItems.length} xóa</span>` : ''}
+                          ${changedItems.length > 0 ? `<span class="text-yellow-700 font-medium ml-2">Δ${changedItems.length} đổi</span>` : ''}
+                        </div>
+                      </div>
+                      <svg id="icon-${detailsId}" class="w-5 h-5 text-gray-500 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
+                    <div id="${detailsId}" class="border-t border-gray-200 bg-gray-50">
+                      <div class="p-5 space-y-5">
+                        ${renderAdd}${renderRem}${renderChg}
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).filter(h => h).join('')}
+            </div>
+          </div>`;
+          bodyEl.innerHTML = html || '<p class="text-gray-500 text-sm py-4">Không có chi tiết thay đổi.</p>';
+        }
+        if (modal) modal.classList.add('open');
+      }
+      function closeF2ChiTietModal() {
+        document.getElementById('f2-chi-tiet-modal')?.classList.remove('open');
+      }
+      const f2ChiTietModal = document.getElementById('f2-chi-tiet-modal');
+      if (f2ChiTietModal && f2ChiTietModal.parentElement !== document.body) {
+        document.body.appendChild(f2ChiTietModal);
+      }
+      document.getElementById('f2-chi-tiet-modal-close')?.addEventListener('click', closeF2ChiTietModal);
+      f2ChiTietModal?.addEventListener('click', (e) => { if (e.target === f2ChiTietModal) closeF2ChiTietModal(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && f2ChiTietModal?.classList.contains('open')) closeF2ChiTietModal(); });
+      document.getElementById('f2-table-body')?.addEventListener('click', (e) => {
+        const khaiBaoBtn = e.target.closest('.f2-khai-bao-btn');
+        const tyLeBtn = e.target.closest('.f2-ty-le-btn');
         if (khaiBaoBtn) {
           e.preventDefault();
           const rowId = khaiBaoBtn.dataset.f2Id || '';
           const row = F2_DATA.find(r => String(r.Id ?? r.id ?? '') === rowId);
           if (typeof openF2DeclarationModal === 'function') openF2DeclarationModal(row);
         }
+        if (tyLeBtn) { e.preventDefault(); openF2ChiTietModal(tyLeBtn.dataset.f2Id || ''); }
       });
       const f2GhiChuModal = document.getElementById('f2-ghi-chu-modal');
       const f2GhiChuModalClose = document.getElementById('f2-ghi-chu-modal-close');
@@ -5126,11 +5504,23 @@
 
       const ceReviewFile = f2CeReviewInput.files[0];
 
-      // Chuẩn bị FormData: file + đầy đủ dữ liệu hàng
+      // Chuẩn bị FormData: file + tên file + Thời gian gửi + từng trường dữ liệu hàng (tách riêng, không gộp row_data)
       const formData = new FormData();
       formData.append('ce_review', ceReviewFile);
+      formData.append('ce_review_file_name', ceReviewFile.name);
+      const now = new Date();
+      const thoiGianGui = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      formData.append('Thời gian gửi', thoiGianGui);
       if (F2_DECLARATION_ROW && typeof F2_DECLARATION_ROW === 'object') {
-        formData.append('row_data', JSON.stringify(F2_DECLARATION_ROW));
+        for (const [key, value] of Object.entries(F2_DECLARATION_ROW)) {
+          if (value === null || value === undefined) {
+            formData.append(key, '');
+          } else if (typeof value === 'object') {
+            formData.append(key, JSON.stringify(value));
+          } else {
+            formData.append(key, String(value));
+          }
+        }
       }
 
       // Log dữ liệu gửi đi
@@ -5210,6 +5600,8 @@
                 </div>
               </div>
             `;
+            // Tải lại bảng khi nhận phản hồi thành công từ webhook
+            if (typeof loadF2RasoatData === 'function') loadF2RasoatData();
           } else {
             resultContent.innerHTML = `
               <div class="flex items-center gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
