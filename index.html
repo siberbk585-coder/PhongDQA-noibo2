@@ -1836,6 +1836,43 @@
     </div>
   </div>
 
+  <!-- Modal: Đổi người nhận rà soát (Form 2) -->
+  <div id="f2-doi-nguoi-modal" class="modal" aria-hidden="true" role="dialog" style="z-index: 9999;">
+    <div class="w-full max-w-md bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+      <div class="px-4 py-3 bg-gradient-to-b from-blue-50 to-white border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-base font-semibold text-gray-800">Đổi người nhận rà soát</h3>
+        <button id="f2-doi-nguoi-modal-close" class="px-3 py-1 rounded-lg bg-slate-100 text-gray-800 hover:bg-slate-200">Đóng</button>
+      </div>
+      <div class="p-4">
+        <p class="text-sm text-gray-600 mb-3">Linh kiện: <span id="f2-doi-nguoi-linh-kien" class="font-medium text-gray-800"></span></p>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Chọn thành viên phòng DQA:</label>
+        <select id="f2-doi-nguoi-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white mb-4">
+          <option value="">-- Chọn người nhận rà soát --</option>
+          <option>Nguyễn Hữu Thịnh</option>
+          <option>Đỗ Quang Long</option>
+          <option>Nguyễn Thị Hiền</option>
+          <option>Vũ Thị Hằng</option>
+          <option>Phạm Thành Trung Kiên</option>
+          <option>Lê Ngọc Ánh</option>
+          <option>Hà Mỹ Linh</option>
+          <option>Bùi Đặng Quốc Huy</option>
+          <option>Phạm Thị Minh</option>
+          <option>Đào Tuấn Kỳ</option>
+          <option>Lê Văn Sơn</option>
+          <option>Lại Quốc Lộc</option>
+          <option>Thái Thị Giang</option>
+          <option>Lê Thị Thảo</option>
+          <option>Vũ Thị Thanh Hiền</option>
+          <option>Trần Hiếu Nghĩa</option>
+        </select>
+        <div class="flex gap-2 justify-end">
+          <button id="f2-doi-nguoi-modal-cancel" class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium">Hủy</button>
+          <button id="f2-doi-nguoi-modal-submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium">Gửi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ============================================ -->
   <!-- MODAL SYSTEM - FORM 5: ADD SUBTASK (Thêm tác vụ con) -->
   <!-- ============================================ -->
@@ -4296,6 +4333,8 @@
     let F2_DATA = [];
     let F2_CE_REVIEW_FILE = null;
     let F2_DECLARATION_ROW = null; // Dữ liệu hàng đang khai báo (gửi kèm file)
+    let F2_DOI_NGUOI_ROW = null; // Dữ liệu hàng đang đổi người nhận rà soát
+    const F2_DOI_NGUOI_WEBHOOK = 'https://iatzhxxuk.tino.page/webhook/thaydoinguoirasoat';
 
     function getF2StatusBadge(val) {
       if (!val || !String(val).trim()) return '-';
@@ -4346,7 +4385,8 @@
         const ghiChuCell = ghiChu ? `<span class="text-sm text-gray-700 whitespace-pre-wrap break-words block">${esc(ghiChu).replace(/\n/g, '<br>')}</span>` : '-';
         const tyLeCell = `<button type="button" class="f2-ty-le-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-600 hover:bg-gray-50" data-f2-id="${id}">Xem</button>`;
         const traKetQuaCell = `<button type="button" class="f2-khai-bao-btn px-2 py-1 text-xs rounded border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100" data-f2-id="${id}">Khai báo</button>`;
-        return `<tr><td class="px-3 py-2">${traKetQuaCell}</td><td class="px-3 py-2 text-sm">${linhKien || '-'}</td><td class="px-3 py-2">${tinhTrangCell}</td><td class="px-3 py-2">${ngayGui}</td><td class="px-3 py-2">${ngayTra || '-'}</td><td class="px-3 py-2">${nguoiGui}</td><td class="px-3 py-2">${nguoiNhan}</td><td class="px-3 py-2">${fileCell}</td><td class="px-3 py-2">${filePhanHoiCell}</td><td class="px-3 py-2">${jiraCell}</td><td class="px-3 py-2">${ghiChuCell}</td><td class="px-3 py-2">${tyLeCell}</td></tr>`;
+        const nguoiNhanCell = `<button type="button" class="f2-nguoi-nhan-btn text-left w-full px-2 py-1 text-sm text-primary-blue hover:underline hover:bg-blue-50 rounded cursor-pointer" data-f2-id="${id}" title="Nhấn để đổi người nhận rà soát">${nguoiNhan || '(Chưa gán)'}</button>`;
+        return `<tr><td class="px-3 py-2">${traKetQuaCell}</td><td class="px-3 py-2 text-sm">${linhKien || '-'}</td><td class="px-3 py-2">${tinhTrangCell}</td><td class="px-3 py-2">${ngayGui}</td><td class="px-3 py-2">${ngayTra || '-'}</td><td class="px-3 py-2">${nguoiGui}</td><td class="px-3 py-2">${nguoiNhanCell}</td><td class="px-3 py-2">${fileCell}</td><td class="px-3 py-2">${filePhanHoiCell}</td><td class="px-3 py-2">${jiraCell}</td><td class="px-3 py-2">${ghiChuCell}</td><td class="px-3 py-2">${tyLeCell}</td></tr>`;
       }).join('');
     }
 
@@ -4754,6 +4794,7 @@
       document.getElementById('f2-table-body')?.addEventListener('click', (e) => {
         const khaiBaoBtn = e.target.closest('.f2-khai-bao-btn');
         const tyLeBtn = e.target.closest('.f2-ty-le-btn');
+        const nguoiNhanBtn = e.target.closest('.f2-nguoi-nhan-btn');
         if (khaiBaoBtn) {
           e.preventDefault();
           const rowId = khaiBaoBtn.dataset.f2Id || '';
@@ -4761,12 +4802,78 @@
           if (typeof openF2DeclarationModal === 'function') openF2DeclarationModal(row);
         }
         if (tyLeBtn) { e.preventDefault(); openF2ChiTietModal(tyLeBtn.dataset.f2Id || ''); }
+        if (nguoiNhanBtn) {
+          e.preventDefault();
+          const rowId = nguoiNhanBtn.dataset.f2Id || '';
+          const row = F2_DATA.find(r => String(r.Id ?? r.id ?? r.ID ?? '') === rowId);
+          if (row && typeof openF2DoiNguoiModal === 'function') openF2DoiNguoiModal(row);
+        }
       });
       const f2GhiChuModal = document.getElementById('f2-ghi-chu-modal');
       const f2GhiChuModalClose = document.getElementById('f2-ghi-chu-modal-close');
       if (f2GhiChuModalClose) f2GhiChuModalClose.addEventListener('click', () => f2GhiChuModal?.classList.remove('open'));
       f2GhiChuModal?.addEventListener('click', (e) => { if (e.target === f2GhiChuModal) f2GhiChuModal.classList.remove('open'); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && f2GhiChuModal?.classList.contains('open')) f2GhiChuModal.classList.remove('open'); });
+
+      // Modal Đổi người nhận rà soát
+      function openF2DoiNguoiModal(row) {
+        F2_DOI_NGUOI_ROW = row || null;
+        const modal = document.getElementById('f2-doi-nguoi-modal');
+        const linhKienEl = document.getElementById('f2-doi-nguoi-linh-kien');
+        const selectEl = document.getElementById('f2-doi-nguoi-select');
+        if (!modal || !linhKienEl || !selectEl) return;
+        const linhKien = String(row?.['Linh kiện rà soát'] ?? row?.linhKienRasoat ?? row?.data ?? '').trim() || '-';
+        linhKienEl.textContent = linhKien;
+        selectEl.value = getF2NguoiNhanVal(row) || '';
+        modal.classList.add('open');
+      }
+      function closeF2DoiNguoiModal() {
+        F2_DOI_NGUOI_ROW = null;
+        document.getElementById('f2-doi-nguoi-modal')?.classList.remove('open');
+      }
+      async function submitF2DoiNguoi() {
+        const row = F2_DOI_NGUOI_ROW;
+        const selectEl = document.getElementById('f2-doi-nguoi-select');
+        const nguoiMoi = (selectEl?.value || '').trim();
+        if (!row) { closeF2DoiNguoiModal(); return; }
+        if (!nguoiMoi) {
+          if (typeof showToast === 'function') showToast('Vui lòng chọn người nhận rà soát.', 'error');
+          return;
+        }
+        const submitBtn = document.getElementById('f2-doi-nguoi-modal-submit');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Đang gửi...'; }
+        try {
+          const payload = { ...row, nguoiNhanMoi: nguoiMoi, 'Người nhận rà soát (mới)': nguoiMoi };
+          const resp = await fetch(F2_DOI_NGUOI_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const ok = resp.ok;
+          const text = await resp.text();
+          if (ok) {
+            if (typeof showToast === 'function') showToast('Đã gửi thay đổi người nhận rà soát.', 'success');
+            closeF2DoiNguoiModal();
+            loadF2RasoatData();
+          } else {
+            if (typeof showToast === 'function') showToast('Lỗi: ' + (text || resp.statusText), 'error');
+          }
+        } catch (err) {
+          console.error('[Form 2] Lỗi gửi đổi người nhận:', err);
+          if (typeof showToast === 'function') showToast('Lỗi: ' + (err.message || err), 'error');
+        } finally {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Gửi'; }
+        }
+      }
+      const f2DoiNguoiModal = document.getElementById('f2-doi-nguoi-modal');
+      if (f2DoiNguoiModal && f2DoiNguoiModal.parentElement !== document.body) {
+        document.body.appendChild(f2DoiNguoiModal);
+      }
+      document.getElementById('f2-doi-nguoi-modal-close')?.addEventListener('click', closeF2DoiNguoiModal);
+      document.getElementById('f2-doi-nguoi-modal-cancel')?.addEventListener('click', closeF2DoiNguoiModal);
+      document.getElementById('f2-doi-nguoi-modal-submit')?.addEventListener('click', submitF2DoiNguoi);
+      f2DoiNguoiModal?.addEventListener('click', (e) => { if (e.target === f2DoiNguoiModal) closeF2DoiNguoiModal(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && f2DoiNguoiModal?.classList.contains('open')) closeF2DoiNguoiModal(); });
 
       initAllModalListeners();
 
