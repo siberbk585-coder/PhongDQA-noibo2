@@ -105,6 +105,7 @@
     .header-container{background:linear-gradient(135deg,#2563eb 0%,#60a5fa 100%);position:relative;overflow:hidden}
     .modal{position:fixed;inset:0;background:rgba(15,23,42,0.35);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
     .modal.open{display:flex}
+    #fRasoat-confirm-modal{z-index:10001}
     .section-title{display:flex;align-items:center;gap:8px}
     .section-title .badge{background:rgba(90,169,255,.15);color:#1e40af;border:1px solid rgba(90,169,255,.35);padding:2px 8px;border-radius:9999px;font-size:12px;font-weight:600}
     .submit-btn{background:linear-gradient(135deg,#3b82f6 0%,#60a5fa 100%);box-shadow:0 4px 6px rgba(37,99,235,.1),0 1px 3px rgba(37,99,235,.08);transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease,filter .2s ease;border-radius:9999px;position:relative}
@@ -338,6 +339,28 @@
     /* END MODAL SYSTEM - CSS RULES */
     /* ============================================ */
     
+    /* Form Gửi yêu cầu rà soát TCKT (Nội bộ) - Resizable table panel */
+    #formRasoatTCKT { display: flex; flex-direction: column; min-height: calc(100vh - 120px); }
+    #formRasoatTCKT.hidden { display: none !important; }
+    #formRasoatTCKT .fRasoat-table-wrapper { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    #formRasoatTCKT .fRasoat-resize-handle {
+      height: 6px; cursor: ns-resize; background: linear-gradient(to bottom, transparent, #e5e7eb);
+      flex-shrink: 0; transition: background .15s;
+    }
+    #formRasoatTCKT .fRasoat-resize-handle:hover { background: linear-gradient(to bottom, transparent, #3b82f6); }
+    #formRasoatTCKT .fRasoat-resize-handle:active { background: #3b82f6; }
+    .fRasoat-autocomplete-wrap { position: relative; }
+    .fRasoat-autocomplete-list {
+      position: absolute; left: 0; right: 0; top: 100%; z-index: 50;
+      max-height: 200px; overflow-y: auto; background: white; border: 1px solid #e5e7eb;
+      border-radius: 0 0 0.5rem 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+      margin-top: -1px; display: none;
+    }
+    .fRasoat-autocomplete-list.show { display: block; }
+    .fRasoat-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; border-bottom: 1px solid #f3f4f6; }
+    .fRasoat-autocomplete-item:hover { background: #eff6ff; }
+    .fRasoat-autocomplete-item:last-child { border-bottom: none; }
+    
     /* Form 5 - Sticky Table Header */
     #f5-tasksTable thead {
       position: sticky;
@@ -384,6 +407,10 @@
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form3">
               <span class="material-symbols-outlined text-lg text-gray-500">analytics</span>
               <p class="text-sm font-semibold">3 - KPI rà soát TCKT</p>
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="formRasoatTCKT">
+              <span class="material-symbols-outlined text-lg text-gray-500">send</span>
+              <p class="text-sm font-semibold">Gửi yêu cầu rà soát (Nội bộ)</p>
             </button>
           </div>
         </div>
@@ -648,6 +675,103 @@
               <tbody id="f3-table-body"></tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Gửi yêu cầu rà soát TCKT (Nội bộ) - copy từ Form 3 Noibo -->
+    <section id="formRasoatTCKT" class="w-full bg-white p-6 rounded-lg shadow-md hidden flex flex-col self-stretch">
+      <div class="flex-shrink-0 mb-4">
+        <h2 class="text-2xl font-bold text-blue-800">Form Gửi yêu cầu rà soát TCKT (Nội bộ)</h2>
+        <p class="text-gray-500 text-sm mt-1">Tải file Temp từ BPS, điền thông tin và gửi yêu cầu rà soát</p>
+      </div>
+      <!-- Thông tin yêu cầu rà soát -->
+      <div class="flex-shrink-0 mb-4 p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">Người yêu cầu</label>
+            <select id="fRasoat-nguoi-yeu-cau" class="input-field w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="">Chọn người yêu cầu</option>
+              <option value="Hoàng Thùy Linh" data-email="linh.hoang1@karofi.vn">Hoàng Thùy Linh</option>
+              <option value="Khương Đức Tình" data-email="tinh.khuong@karofi.vn">Khương Đức Tình</option>
+              <option value="Đặng Thị Chín" data-email="chindt@karofi.vn">Đặng Thị Chín</option>
+              <option value="Hoàng Văn Thành" data-email="thanhhv@karofi.vn">Hoàng Văn Thành</option>
+              <option value="Nguyễn Thị Thủy" data-email="thuynt3@karofi.vn">Nguyễn Thị Thủy</option>
+              <option value="Trần Văn Hoàng" data-email="hoang.tran@karofi.vn">Trần Văn Hoàng</option>
+              <option value="Nguyễn Kim Cương" data-email="cuong.nguyen6@karofi.com">Nguyễn Kim Cương</option>
+              <option value="Trịnh Xuân Hạnh" data-email="hanhtx@karofi.vn">Trịnh Xuân Hạnh</option>
+              <option value="Đỗ Xuân Huy" data-email="huydx@karofi.vn">Đỗ Xuân Huy</option>
+              <option value="Giang Văn Toàn" data-email="toan.giang@karofi.vn">Giang Văn Toàn</option>
+              <option value="Vũ Ngọc Diệp" data-email="diep.vu@karofi.vn">Vũ Ngọc Diệp</option>
+              <option value="Bùi Ngọc Hùng" data-email="hung.bui@karofi.vn">Bùi Ngọc Hùng</option>
+              <option value="Nguyễn Mạnh Quang" data-email="quang.nguyen3@karofi.vn">Nguyễn Mạnh Quang</option>
+              <option value="Nguyễn Thế Việt" data-email="viet.nguyen@karofi.vn">Nguyễn Thế Việt</option>
+            </select>
+          </div>
+          <div class="space-y-1 fRasoat-autocomplete-wrap">
+            <label class="block text-sm font-medium text-gray-700">Email người yêu cầu</label>
+            <input id="fRasoat-email-yeu-cau" type="email" class="input-field w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="email@example.com" autocomplete="off"/>
+            <div id="fRasoat-ac-list-3" class="fRasoat-autocomplete-list"></div>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">Người nhận rà soát</label>
+            <select id="fRasoat-nguoi-nhan" class="input-field w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="">Chọn người nhận rà soát</option>
+              <option value="Nguyễn Hữu Thịnh" data-email="thinh.nguyen2@karofi.vn">Nguyễn Hữu Thịnh</option>
+              <option value="Nguyễn Văn Hiếu" data-email="hieu.nguyen2@karofi.vn">Nguyễn Văn Hiếu</option>
+              <option value="Đỗ Quang Long" data-email="long.do@karofi.vn">Đỗ Quang Long</option>
+              <option value="Nguyễn Thị Hiền" data-email="hien.nguyen1@karofi.vn">Nguyễn Thị Hiền</option>
+              <option value="Vũ Thị Hằng" data-email="hang.vu@karofi.vn">Vũ Thị Hằng</option>
+              <option value="Phạm Thành Trung Kiên" data-email="kien.pham1@karofi.vn">Phạm Thành Trung Kiên</option>
+              <option value="Nguyễn Văn Linh" data-email="linh.nguyen@karofi.vn">Nguyễn Văn Linh</option>
+              <option value="Đào Hoàng Dương" data-email="duong.dao@karofi.vn">Đào Hoàng Dương</option>
+              <option value="Lê Ngọc Ánh" data-email="anh.le1@karofi.vn">Lê Ngọc Ánh</option>
+              <option value="Hà Mỹ Linh" data-email="linh.ha@karofi.vn">Hà Mỹ Linh</option>
+              <option value="Bùi Đặng Quốc Huy" data-email="huy.bui@karofi.vn">Bùi Đặng Quốc Huy</option>
+              <option value="Phạm Thị Minh" data-email="minh.pham1@karofi.vn">Phạm Thị Minh</option>
+              <option value="Vũ Duy Minh" data-email="minh.vu@karofi.com">Vũ Duy Minh</option>
+              <option value="Đào Tuấn Kỳ" data-email="ky.dao@karofi.vn">Đào Tuấn Kỳ</option>
+              <option value="Lê Văn Sơn" data-email="son.le2@karofi.vn">Lê Văn Sơn</option>
+              <option value="Lại Quốc Lộc" data-email="loc.lai@karofi.vn">Lại Quốc Lộc</option>
+              <option value="Thái Thị Giang" data-email="giang.thai@karofi.vn">Thái Thị Giang</option>
+              <option value="Lê Thị Thảo" data-email="thao.le@karofi.vn">Lê Thị Thảo</option>
+              <option value="Vũ Thị Thanh Hiền" data-email="hien.vu2@karofi.vn">Vũ Thị Thanh Hiền</option>
+              <option value="Trần Hiếu Nghĩa" data-email="nghia.tran1@karofi.vn">Trần Hiếu Nghĩa</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">Email người nhận</label>
+            <input id="fRasoat-email-nguoi-nhan" type="text" class="input-field w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly placeholder="Tự động điền khi chọn người nhận"/>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">Thời gian gửi</label>
+            <input id="fRasoat-thoi-gian-gui" type="text" class="input-field w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly placeholder="YYYY/MM/DD HH:mm"/>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 mb-1 flex-shrink-0 flex-wrap">
+        <input type="file" id="fRasoat-temp-file" accept=".xlsx,.xls" class="hidden">
+        <button type="button" id="fRasoat-temp-upload-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-blue-300 rounded-lg text-primary-blue font-medium hover:bg-blue-50 transition-colors shadow-sm">
+          <span class="material-icons text-[20px]">upload_file</span>
+          <span>Tải lên file Temp</span>
+        </button>
+        <span id="fRasoat-temp-file-name" class="text-sm text-gray-500"></span>
+        <button type="button" id="fRasoat-send-direct-btn" class="flex items-center gap-2 px-4 py-2.5 bg-primary-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors shadow-sm">
+          <span class="material-icons text-[20px]">send</span>
+          <span>Gửi trực tiếp</span>
+        </button>
+      </div>
+      <div class="mb-3">
+        <span id="fRasoat-status-text" class="text-sm text-gray-500"></span>
+      </div>
+      <!-- Vùng hiển thị bảng theo nhóm - có thể kéo để thay đổi chiều cao -->
+      <div id="fRasoat-table-preview" class="fRasoat-table-wrapper mt-4 border border-gray-200 rounded-lg overflow-hidden flex flex-col flex-1 min-h-[300px]">
+        <div class="px-3 py-2 bg-gray-50 border-b border-gray-200 text-sm font-medium text-gray-700 flex-shrink-0">
+          File temp PHẢI được xuất trực tiếp từ hệ thống Code của BPS, không qua chỉnh sửa thêm trên file Excel.
+        </div>
+        <div id="fRasoat-resize-handle" class="fRasoat-resize-handle" title="Kéo để thay đổi chiều cao"></div>
+        <div id="fRasoat-table-content" class="p-4 overflow-auto space-y-6 flex-1 min-h-0">
+          <p class="text-gray-500 text-sm">Chưa có dữ liệu. Vui lòng tải lên file Excel.</p>
         </div>
       </div>
     </section>
@@ -3144,6 +3268,20 @@
   <!-- END MODAL SYSTEM - FORM 10: ADD SUBTASK -->
   <!-- ============================================ -->
 
+  <!-- Modal: Xác nhận gửi yêu cầu rà soát (Form Gửi yêu cầu rà soát Nội bộ) -->
+  <div id="fRasoat-confirm-modal" class="modal" aria-hidden="true" role="dialog">
+    <div class="w-full max-w-md bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+      <div class="p-6 text-center">
+        <p class="text-lg font-semibold text-gray-800 mb-2">Bạn có chắc chắn muốn gửi yêu cầu rà soát không?</p>
+        <p class="text-sm text-gray-500">Tác vụ sẽ được tạo trên Jira và sẽ không thể sửa</p>
+      </div>
+      <div class="px-6 py-4 border-t border-gray-200 flex justify-center gap-3">
+        <button id="fRasoat-confirm-cancel" class="px-4 py-2 rounded-lg bg-slate-100 text-gray-800 hover:bg-slate-200">Hủy</button>
+        <button id="fRasoat-confirm-send" class="px-4 py-2 rounded-lg text-white font-semibold bg-primary-blue hover:brightness-105">Xác nhận gửi</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ============================================ -->
   <!-- MODAL SYSTEM - FORM 9: VIEW ERROR DETAIL (Chi tiết lỗi) -->
   <!-- ============================================ -->
@@ -3418,6 +3556,9 @@
             if (targetForm === 'form12' && typeof initForm12 === 'function') {
               initForm12();
             }
+            if (targetForm === 'formRasoatTCKT' && typeof setRasoatThoiGianGui === 'function') {
+              setRasoatThoiGianGui();
+            }
           }
           
           console.log('[Navigation] Switched to:', targetForm);
@@ -3425,6 +3566,247 @@
       });
       
       console.log('[Navigation] Sidebar initialized with', navButtons.length, 'forms');
+      
+      // ===== Form Gửi yêu cầu rà soát TCKT (Nội bộ) =====
+      function setRasoatThoiGianGui() {
+        const el = document.getElementById('fRasoat-thoi-gian-gui');
+        if (!el) return;
+        const d = new Date();
+        el.value = d.getFullYear() + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0') + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      }
+      (function initRasoatNguoiYeuCau() {
+        const sel = document.getElementById('fRasoat-nguoi-yeu-cau');
+        const inpEmail = document.getElementById('fRasoat-email-yeu-cau');
+        if (!sel || !inpEmail) return;
+        const updateEmail = () => {
+          const opt = sel.selectedOptions && sel.selectedOptions[0];
+          inpEmail.value = (opt && opt.dataset && opt.dataset.email) || '';
+        };
+        sel.addEventListener('change', updateEmail);
+        updateEmail();
+      })();
+      let F_RASOAT_TEMP_JSON = null;
+      let F_RASOAT_TEMP_FILE = null;
+      const F_RASOAT_OUTPUT_FIELDS = [
+        { key: 'Code_1', excelKeys: ['Code_1', 'Code', 'code_1', 'code'] },
+        { key: 'Name 1', excelKeys: ['Name 1', 'Name1', 'name 1', 'name1'] },
+        { key: 'Index', excelKeys: ['Index', 'index'] },
+        { key: 'Standard', excelKeys: ['Standard', 'standard'] },
+        { key: 'Tool', excelKeys: ['Tool', 'tool'] },
+        { key: 'Type', excelKeys: ['Type', 'type'] },
+        { key: 'Document', excelKeys: ['Document', 'document'] },
+        { key: 'Available', excelKeys: ['Available', 'available'] }
+      ];
+      function extractRasoatFields(row) {
+        const norm = (k) => String(k || '').trim().toLowerCase().replace(/\s+/g, '');
+        const keyMap = {}; Object.keys(row || {}).forEach(k => { keyMap[norm(k)] = k; });
+        const out = {}; F_RASOAT_OUTPUT_FIELDS.forEach(({ key, excelKeys }) => {
+          let val = ''; for (const ek of excelKeys) { const orig = keyMap[norm(ek)]; if (orig !== undefined) { val = row[orig] ?? ''; break; } }
+          out[key] = val === null || val === undefined ? '' : String(val).trim();
+        }); return out;
+      }
+      const fRasoatTempUploadBtn = document.getElementById('fRasoat-temp-upload-btn');
+      const fRasoatTempFileInput = document.getElementById('fRasoat-temp-file');
+      const fRasoatTempFileName = document.getElementById('fRasoat-temp-file-name');
+      if (fRasoatTempUploadBtn && fRasoatTempFileInput) {
+        fRasoatTempUploadBtn.addEventListener('click', () => fRasoatTempFileInput.click());
+        fRasoatTempFileInput.addEventListener('change', function(e) {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          F_RASOAT_TEMP_FILE = file;
+          fRasoatTempFileName.textContent = file.name;
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            try {
+              const data = new Uint8Array(ev.target.result);
+              const workbook = XLSX.read(data, { type: 'array' });
+              const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+              const raw = XLSX.utils.sheet_to_json(firstSheet, { defval: '', blankrows: true });
+              const rows = raw.map(extractRasoatFields);
+              const KEY_FIELD = 'Code_1';
+              const groupsMap = new Map();
+              for (const r of rows) {
+                const key = String(r && r[KEY_FIELD] || '').trim() || '__NO_CODE__';
+                if (!groupsMap.has(key)) groupsMap.set(key, []);
+                groupsMap.get(key).push(r);
+              }
+              F_RASOAT_TEMP_JSON = Array.from(groupsMap.entries()).sort((a, b) => a[0].localeCompare(b[0])).map(([code, items]) => ({ code, name: items[0] && (items[0]['Name 1'] || items[0]['Name']) || '', count: items.length, items }));
+              const content = document.getElementById('fRasoat-table-content');
+              const headers = ['Code_1', 'Name 1', 'Index', 'Standard', 'Tool', 'Type', 'Document', 'Available'];
+              if (content) {
+                let html = '<div class="border border-gray-200 rounded-lg overflow-hidden mb-6"><div class="px-3 py-2 bg-gray-100 border-b border-gray-200 text-sm font-semibold text-gray-800">Tóm tắt · ' + F_RASOAT_TEMP_JSON.length + ' nhóm</div><div class="overflow-x-auto"><table class="min-w-full text-sm border-collapse table-zebra"><thead class="bg-gray-100"><tr><th class="px-3 py-2 text-left border border-gray-200">Code_1</th><th class="px-3 py-2 text-left border border-gray-200">Name 1</th><th class="px-3 py-2 text-left border border-gray-200">Số dòng</th><th class="px-3 py-2 text-left border border-gray-200">Số lỗi</th></tr></thead><tbody>';
+                F_RASOAT_TEMP_JSON.forEach(function(group) {
+                  const items = group.items || [];
+                  const nameCounts = new Map(); const orderOfFirstOccurrence = [];
+                  items.forEach(function(row) { const n = String(row['Name 1'] || '').trim(); if (!nameCounts.has(n)) orderOfFirstOccurrence.push(n); nameCounts.set(n, (nameCounts.get(n) || 0) + 1); });
+                  const maxCount = nameCounts.size ? Math.max.apply(null, Array.from(nameCounts.values())) : 0;
+                  const namesWithMaxCount = orderOfFirstOccurrence.filter(function(n) { return nameCounts.get(n) === maxCount; });
+                  const namesToHighlight = new Set();
+                  orderOfFirstOccurrence.forEach(function(n) { if (nameCounts.get(n) < maxCount) namesToHighlight.add(n); else if (namesWithMaxCount.length > 1 && namesWithMaxCount[1] === n) namesToHighlight.add(n); });
+                  const summaryName = String(group.name || '').trim();
+                  const isSummaryMinority = namesToHighlight.has(summaryName);
+                  const nameTdClass = isSummaryMinority ? 'px-3 py-2 border border-gray-200 bg-yellow-200' : 'px-3 py-2 border border-gray-200';
+                  const errorCount = items.filter(function(row) { return namesToHighlight.has(String(row['Name 1'] || '').trim()); }).length;
+                  html += '<tr><td class="px-3 py-2 border border-gray-200">' + (group.code === '__NO_CODE__' ? '(Không có Code)' : group.code).replace(/</g, '&lt;') + '</td><td class="' + nameTdClass + '">' + String(group.name || '').replace(/</g, '&lt;') + '</td><td class="px-3 py-2 border border-gray-200 font-semibold">' + group.count + '</td><td class="px-3 py-2 border border-gray-200 font-semibold">' + errorCount + '</td></tr>';
+                });
+                html += '</tbody></table></div></div>';
+                F_RASOAT_TEMP_JSON.forEach(function(group, gi) {
+                  const items = group.items || [];
+                  const nameCounts = new Map(); const orderOfFirstOccurrence = [];
+                  items.forEach(function(row) { const n = String(row['Name 1'] || '').trim(); if (!nameCounts.has(n)) orderOfFirstOccurrence.push(n); nameCounts.set(n, (nameCounts.get(n) || 0) + 1); });
+                  const maxCount = nameCounts.size ? Math.max.apply(null, Array.from(nameCounts.values())) : 0;
+                  const namesWithMaxCount = orderOfFirstOccurrence.filter(function(n) { return nameCounts.get(n) === maxCount; });
+                  const namesToHighlight = new Set();
+                  orderOfFirstOccurrence.forEach(function(n) { if (nameCounts.get(n) < maxCount) namesToHighlight.add(n); else if (namesWithMaxCount.length > 1 && namesWithMaxCount[1] === n) namesToHighlight.add(n); });
+                  html += '<div class="border border-gray-200 rounded-lg overflow-hidden"><div class="px-3 py-2 bg-blue-50 border-b border-blue-200 text-sm font-semibold text-blue-800">' + (group.code === '__NO_CODE__' ? '(Không có Code)' : group.code) + ' · ' + (group.name || '(Không có tên)') + ' · ' + group.count + ' dòng</div><div class="overflow-x-auto"><table class="min-w-full text-sm border-collapse table-zebra"><thead class="bg-gray-100"><tr>' + headers.map(function(h) { return '<th class="px-3 py-2 text-left border border-gray-200">' + h + '</th>'; }).join('') + '</tr></thead><tbody>';
+                  items.forEach(function(row) {
+                    const name1Val = String(row['Name 1'] || '').trim();
+                    const isMinority = namesToHighlight.has(name1Val);
+                    html += '<tr>'; headers.forEach(function(h) { const val = String(row[h] || '').replace(/</g, '&lt;'); const tdClass = (h === 'Name 1' && isMinority) ? 'px-3 py-2 border border-gray-200 bg-yellow-200' : 'px-3 py-2 border border-gray-200'; html += '<td class="' + tdClass + '">' + val + '</td>'; }); html += '</tr>';
+                  });
+                  html += '</tbody></table></div></div>';
+                });
+                content.innerHTML = html || '<p class="text-gray-500">Không có dữ liệu.</p>';
+              }
+              if (typeof showToast === 'function') showToast('Đã chuyển ' + rows.length + ' dòng → ' + F_RASOAT_TEMP_JSON.length + ' nhóm.', 'success'); else alert('Đã chuyển ' + rows.length + ' dòng → ' + F_RASOAT_TEMP_JSON.length + ' nhóm.');
+            } catch (err) {
+              F_RASOAT_TEMP_JSON = null;
+              const content = document.getElementById('fRasoat-table-content');
+              if (content) content.innerHTML = '<p class="p-4 text-red-600 font-medium">Lỗi đọc file Excel: ' + String(err.message || err).replace(/</g, '&lt;') + '</p>';
+              if (typeof showToast === 'function') showToast('Lỗi đọc file Excel.', 'error'); else alert('Lỗi đọc file Excel.');
+            }
+          };
+          reader.readAsArrayBuffer(file);
+          e.target.value = '';
+        });
+      }
+      (function initRasoatEmailNguoiNhan() {
+        const sel = document.getElementById('fRasoat-nguoi-nhan');
+        const inpEmail = document.getElementById('fRasoat-email-nguoi-nhan');
+        if (!sel || !inpEmail) return;
+        const updateEmail = () => { const opt = sel.selectedOptions && sel.selectedOptions[0]; inpEmail.value = opt && opt.dataset && opt.dataset.email || ''; };
+        sel.addEventListener('change', updateEmail);
+        updateEmail();
+      })();
+      const F_RASOAT_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/RasoatTCKT';
+      function buildRasoatTomTat() {
+        if (!F_RASOAT_TEMP_JSON || !F_RASOAT_TEMP_JSON.length) return [];
+        return F_RASOAT_TEMP_JSON.map(function(group) {
+          const items = group.items || [];
+          const nameCounts = new Map(); const orderOfFirstOccurrence = [];
+          items.forEach(function(row) { const n = String(row['Name 1'] || '').trim(); if (!nameCounts.has(n)) orderOfFirstOccurrence.push(n); nameCounts.set(n, (nameCounts.get(n) || 0) + 1); });
+          const maxCount = nameCounts.size ? Math.max.apply(null, Array.from(nameCounts.values())) : 0;
+          const namesWithMaxCount = orderOfFirstOccurrence.filter(function(n) { return nameCounts.get(n) === maxCount; });
+          const namesToHighlight = new Set();
+          orderOfFirstOccurrence.forEach(function(n) { if (nameCounts.get(n) < maxCount) namesToHighlight.add(n); else if (namesWithMaxCount.length > 1 && namesWithMaxCount[1] === n) namesToHighlight.add(n); });
+          const soLoi = items.filter(function(row) { return namesToHighlight.has(String(row['Name 1'] || '').trim()); }).length;
+          return { code: group.code, name: group.name || '', count: group.count, soLoi: soLoi };
+        });
+      }
+      const fRasoatConfirmModal = document.getElementById('fRasoat-confirm-modal');
+      const fRasoatConfirmCancel = document.getElementById('fRasoat-confirm-cancel');
+      const fRasoatConfirmSend = document.getElementById('fRasoat-confirm-send');
+      function closeRasoatConfirmModal() { if (fRasoatConfirmModal) { fRasoatConfirmModal.classList.remove('open'); fRasoatConfirmModal.style.display = ''; fRasoatConfirmModal.style.visibility = ''; fRasoatConfirmModal.setAttribute('aria-hidden', 'true'); } }
+      async function doRasoatSend() {
+        const nguoiYeuCau = (document.getElementById('fRasoat-nguoi-yeu-cau') && document.getElementById('fRasoat-nguoi-yeu-cau').value || '').trim();
+        const emailNguoiYeuCau = (document.getElementById('fRasoat-email-yeu-cau') && document.getElementById('fRasoat-email-yeu-cau').value || '').trim();
+        const nguoiNhanRasoat = (document.getElementById('fRasoat-nguoi-nhan') && document.getElementById('fRasoat-nguoi-nhan').value || '').trim();
+        const emailNguoiNhan = (document.getElementById('fRasoat-email-nguoi-nhan') && document.getElementById('fRasoat-email-nguoi-nhan').value || '').trim();
+        const thoiGianGui = (document.getElementById('fRasoat-thoi-gian-gui') && document.getElementById('fRasoat-thoi-gian-gui').value || '').trim();
+        const statusEl = document.getElementById('fRasoat-status-text');
+        if (statusEl) statusEl.textContent = 'Đang gửi yêu cầu, vui lòng chờ...';
+        const sendBtns = [document.getElementById('fRasoat-send-direct-btn')].filter(Boolean);
+        sendBtns.forEach(function(b){ b.disabled = true; var s = b.querySelector('span:last-child'); if(s) s.textContent = 'Đang gửi...'; });
+        closeRasoatConfirmModal();
+        try {
+          const formData = new FormData();
+          formData.append('nguoiYeuCau', nguoiYeuCau);
+          formData.append('emailNguoiYeuCau', emailNguoiYeuCau);
+          formData.append('nguoiNhanRasoat', nguoiNhanRasoat);
+          formData.append('emailNguoiNhan', emailNguoiNhan);
+          formData.append('thoiGianGui', thoiGianGui);
+          formData.append('fileName', F_RASOAT_TEMP_FILE && F_RASOAT_TEMP_FILE.name || '');
+          formData.append('data', JSON.stringify(buildRasoatTomTat()));
+          formData.append('file', F_RASOAT_TEMP_FILE);
+          console.log('[Form Rasoat] Sending to', F_RASOAT_WEBHOOK_URL);
+          const resp = await fetch(F_RASOAT_WEBHOOK_URL, { method: 'POST', body: formData });
+          if (resp.ok) {
+            console.log('[Form Rasoat] Send success');
+            if (statusEl) statusEl.textContent = 'Đã gửi yêu cầu rà soát thành công lúc ' + new Date().toLocaleString('vi-VN');
+            if (typeof showToast === 'function') showToast('Đã gửi yêu cầu rà soát thành công.', 'success'); else alert('Đã gửi yêu cầu rà soát thành công.');
+          } else {
+              const errText = await resp.text();
+              console.error('[Form Rasoat] HTTP error', resp.status, errText);
+              throw new Error('HTTP ' + resp.status + (errText ? ': ' + errText.slice(0, 100) : ''));
+            }
+        } catch (err) {
+          console.error('[Form Rasoat] Send failed:', err);
+          if (statusEl) statusEl.textContent = 'Gửi thất bại: ' + (err.message || err);
+          if (typeof showToast === 'function') showToast('Gửi thất bại: ' + (err.message || err), 'error'); else alert('Gửi thất bại: ' + (err.message || err));
+        } finally {
+          sendBtns.forEach(function(b){ b.disabled = false; var s = b.querySelector('span:last-child'); if(s) s.textContent = 'Gửi trực tiếp'; });
+        }
+      }
+      function rasoatValidateAndMaybeSend(skipModal) {
+        if (typeof setRasoatThoiGianGui === 'function') setRasoatThoiGianGui();
+        const nguoiYeuCau = (document.getElementById('fRasoat-nguoi-yeu-cau') && document.getElementById('fRasoat-nguoi-yeu-cau').value || '').trim();
+        const emailNguoiYeuCau = (document.getElementById('fRasoat-email-yeu-cau') && document.getElementById('fRasoat-email-yeu-cau').value || '').trim();
+        const nguoiNhanRasoat = (document.getElementById('fRasoat-nguoi-nhan') && document.getElementById('fRasoat-nguoi-nhan').value || '').trim();
+        const thoiGianGui = (document.getElementById('fRasoat-thoi-gian-gui') && document.getElementById('fRasoat-thoi-gian-gui').value || '').trim();
+        const statusEl = document.getElementById('fRasoat-status-text');
+        if (statusEl) statusEl.textContent = '';
+        const errors = [];
+        if (!nguoiYeuCau) errors.push('Người yêu cầu');
+        if (!emailNguoiYeuCau) errors.push('Email người yêu cầu');
+        if (!nguoiNhanRasoat) errors.push('Người nhận rà soát');
+        if (!thoiGianGui) errors.push('Thời gian gửi');
+        if (!F_RASOAT_TEMP_JSON || !F_RASOAT_TEMP_JSON.length) errors.push('Bảng tóm tắt (cần tải lên file Excel)');
+        if (!F_RASOAT_TEMP_FILE) errors.push('File Excel');
+        if (errors.length > 0) {
+          const msg = 'Vui lòng điền đầy đủ: ' + errors.join(', ');
+          console.warn('[Form Rasoat] Validation failed:', errors);
+          if (typeof showToast === 'function') showToast(msg, 'error'); else alert(msg);
+          return;
+        }
+        if (skipModal) { console.log('[Form Rasoat] Gửi trực tiếp (bỏ qua modal)'); doRasoatSend(); return; }
+        console.log('[Form Rasoat] Validation OK, opening confirm modal');
+        if (fRasoatConfirmModal) {
+          try {
+            fRasoatConfirmModal.classList.add('open');
+            fRasoatConfirmModal.style.display = 'flex';
+            fRasoatConfirmModal.style.visibility = 'visible';
+            fRasoatConfirmModal.setAttribute('aria-hidden', 'false');
+          } catch (e) {
+            console.warn('[Form Rasoat] Lỗi mở modal, gửi trực tiếp:', e);
+            doRasoatSend();
+          }
+        } else { doRasoatSend(); }
+      }
+      const fRasoatSendDirectBtn = document.getElementById('fRasoat-send-direct-btn');
+      if (fRasoatSendDirectBtn) fRasoatSendDirectBtn.addEventListener('click', function() { rasoatValidateAndMaybeSend(true); });
+      if (fRasoatConfirmCancel) fRasoatConfirmCancel.addEventListener('click', closeRasoatConfirmModal);
+      if (fRasoatConfirmSend) fRasoatConfirmSend.addEventListener('click', doRasoatSend);
+      if (fRasoatConfirmModal) {
+        fRasoatConfirmModal.addEventListener('click', function(e) { if (e.target === fRasoatConfirmModal) closeRasoatConfirmModal(); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && fRasoatConfirmModal.classList.contains('open')) closeRasoatConfirmModal(); });
+      }
+      (function initRasoatResize() {
+        const handle = document.getElementById('fRasoat-resize-handle');
+        const preview = document.getElementById('fRasoat-table-preview');
+        if (!handle || !preview) return;
+        var startY = 0, startH = 0;
+        handle.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          startY = e.clientY;
+          startH = preview.offsetHeight;
+          var onMove = function(ev) { var dy = ev.clientY - startY; var newH = Math.max(200, Math.min(window.innerHeight - 150, startH + dy)); preview.style.height = newH + 'px'; preview.style.flex = 'none'; };
+          var onUp = function() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); document.body.style.cursor = ''; document.body.style.userSelect = ''; };
+          document.body.style.cursor = 'ns-resize';
+          document.body.style.userSelect = 'none';
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onUp);
+        });
+      })();
       
       // Hiển thị Form 1 mặc định
       const form1 = document.getElementById('form1');
@@ -4471,12 +4853,27 @@
     }
 
     // ===== FORM 3 - KPI THEO NGƯỜI NHẬN RÀ SOÁT =====
-    const F3_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/thongkerasoattckt';
+    const F3_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/RasoatTCKT';
     let F3_DATA = { kpi_monthly_totals: [], kpi_monthly: [] };
 
     function f3Esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function f3FmtHours(v) { const n = Number(v); return isNaN(n) ? '-' : n.toFixed(2); }
     function f3FmtNum(v) { const n = Number(v); return isNaN(n) ? '-' : String(n); }
+    const F3_REVIEWER_EMAIL_MAP = {
+      'Nguyễn Hữu Thịnh':'thinh.nguyen2@karofi.vn','Nguyễn Văn Hiếu':'hieu.nguyen2@karofi.vn','Đỗ Quang Long':'long.do@karofi.vn',
+      'Nguyễn Thị Hiền':'hien.nguyen1@karofi.vn','Vũ Thị Hằng':'hang.vu@karofi.vn','Phạm Thành Trung Kiên':'kien.pham1@karofi.vn',
+      'Nguyễn Văn Linh':'linh.nguyen@karofi.vn','Đào Hoàng Dương':'duong.dao@karofi.vn','Lê Ngọc Ánh':'anh.le1@karofi.vn',
+      'Hà Mỹ Linh':'linh.ha@karofi.vn','Bùi Đặng Quốc Huy':'huy.bui@karofi.vn','Phạm Thị Minh':'minh.pham1@karofi.vn',
+      'Vũ Duy Minh':'minh.vu@karofi.com','Đào Tuấn Kỳ':'ky.dao@karofi.vn','Lê Văn Sơn':'son.le2@karofi.vn',
+      'Lại Quốc Lộc':'loc.lai@karofi.vn','Thái Thị Giang':'giang.thai@karofi.vn','Lê Thị Thảo':'thao.le@karofi.vn',
+      'Vũ Thị Thanh Hiền':'hien.vu2@karofi.vn','Trần Hiếu Nghĩa':'nghia.tran1@karofi.vn'
+    };
+    function f3GetReviewerDisplay(row) {
+      const name = String(row.reviewer ?? row['Người nhận rà soát'] ?? row.nguoi_nhan_rasoat ?? '').trim();
+      const apiEmail = String(row.reviewer_email ?? row['Email người nhận'] ?? row.email_nguoi_nhan ?? '').trim();
+      const correctEmail = F3_REVIEWER_EMAIL_MAP[name] || apiEmail;
+      return { name, email: correctEmail };
+    }
 
     function f3GetChangeRateBadge(percentStr, rateNum) {
       const r = rateNum != null ? Number(rateNum) : NaN;
@@ -4536,11 +4933,13 @@
         tbody.innerHTML = '<tr><td colspan="9" class="px-3 py-6 text-center text-gray-500">Chưa có dữ liệu. Chọn tháng và tải dữ liệu.</td></tr>';
         return;
       }
-      tbody.innerHTML = rows.map(r => `
+      tbody.innerHTML = rows.map(r => {
+        const { name, email } = f3GetReviewerDisplay(r);
+        return `
         <tr class="border-b border-gray-100 hover:bg-blue-50">
           <td class="px-3 py-2">
-            <div class="font-medium text-gray-800">${f3Esc(r.reviewer)}</div>
-            <div class="text-xs text-gray-500">${f3Esc(r.reviewer_email || '')}</div>
+            <div class="font-medium text-gray-800">${f3Esc(name)}</div>
+            <div class="text-xs text-gray-500">${f3Esc(email)}</div>
           </td>
           <td class="px-3 py-2 text-right">${f3FmtNum(r.total_requests)}</td>
           <td class="px-3 py-2 text-right">${f3FmtHours(r.total_hours)}</td>
@@ -4551,12 +4950,85 @@
           <td class="px-3 py-2 text-right">${f3FmtHours(r.avg_hours_per_request)}</td>
           <td class="px-3 py-2 text-right">${f3FmtHours(r.avg_hours_per_component)}</td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
     }
 
     function f3RenderAll() {
       f3RenderKpiCards();
       f3RenderTable();
+    }
+
+    function f3AggregateFromRaw(rawRows) {
+      const rows = Array.isArray(rawRows) ? rawRows : [];
+      const getMonth = (row) => {
+        const v = row['Ngày gửi'] ?? row.ngayGui ?? row.thoiGianGui ?? '';
+        const s = String(v).trim();
+        if (!s) return null;
+        const m = s.match(/(\d{4})[\/\-](\d{1,2})/);
+        return m ? m[1] + '-' + String(m[2]).padStart(2, '0') : null;
+      };
+      const getReviewer = (row) => String(row['Người nhận rà soát'] ?? row.nguoiNhanRasoat ?? row.nguoi_nhan_rasoat ?? '').trim();
+      const getBaseItems = (row) => { const n = Number(row['Số hạng mục ban đầu'] ?? row.soHangMucBanDau ?? row.so_hang_muc_ban_dau ?? 0); return isNaN(n) ? 0 : n; };
+      const getChangedItems = (row) => { const n = Number(row['Số hạng mục thay đổi'] ?? row.soHangMucThayDoi ?? row.so_hang_muc_thay_doi ?? 0); return isNaN(n) ? 0 : n; };
+      const countComponents = (row) => {
+        const txt = String(row['Linh kiện rà soát'] ?? row.linhKienRasoat ?? row.data ?? '').trim();
+        if (!txt) return 0;
+        const lines = txt.split(/\n/).filter(l => l.trim());
+        return lines.length > 0 ? lines.length : (txt.match(/\d+\)/g) || []).length || 1;
+      };
+      const byMonthReviewer = new Map();
+      for (const row of rows) {
+        const month = getMonth(row);
+        if (!month) continue;
+        const reviewer = getReviewer(row);
+        if (!reviewer) continue;
+        const key = month + '|' + reviewer;
+        if (!byMonthReviewer.has(key)) {
+          byMonthReviewer.set(key, { month, reviewer, total_requests: 0, total_hours: 0, total_components: 0, total_base_items: 0, total_changed_items: 0 });
+        }
+        const agg = byMonthReviewer.get(key);
+        agg.total_requests += 1;
+        agg.total_components += countComponents(row);
+        agg.total_base_items += getBaseItems(row);
+        agg.total_changed_items += getChangedItems(row);
+      }
+      const kpi_monthly = Array.from(byMonthReviewer.values()).map(r => {
+        const total = r.total_base_items || 0;
+        const changed = r.total_changed_items || 0;
+        const rate = total > 0 ? changed / total : 0;
+        const ratePct = total > 0 ? ((changed / total) * 100).toFixed(1) + '%' : '0.0%';
+        return {
+          ...r,
+          total_hours: r.total_hours || 0,
+          change_rate_overall: rate,
+          change_rate_overall_percent: ratePct,
+          avg_hours_per_request: r.total_requests > 0 ? (r.total_hours / r.total_requests) : 0,
+          avg_hours_per_component: r.total_components > 0 ? (r.total_hours / r.total_components) : 0
+        };
+      });
+      const byMonth = new Map();
+      for (const r of kpi_monthly) {
+        if (!byMonth.has(r.month)) byMonth.set(r.month, { total_requests: 0, total_hours: 0, total_components: 0, total_base_items: 0, total_changed_items: 0 });
+        const t = byMonth.get(r.month);
+        t.total_requests += r.total_requests;
+        t.total_hours += r.total_hours;
+        t.total_components += r.total_components;
+        t.total_base_items += r.total_base_items;
+        t.total_changed_items += r.total_changed_items;
+      }
+      const kpi_monthly_totals = Array.from(byMonth.entries()).map(([month, t]) => {
+        const rate = t.total_base_items > 0 ? (t.total_changed_items / t.total_base_items) : 0;
+        return {
+          month,
+          ...t,
+          change_rate_overall: rate,
+          change_rate_overall_percent: t.total_base_items > 0 ? ((t.total_changed_items / t.total_base_items) * 100).toFixed(1) + '%' : '0.0%',
+          avg_hours_per_request: t.total_requests > 0 ? (t.total_hours / t.total_requests) : 0,
+          avg_hours_per_component: t.total_components > 0 ? (t.total_hours / t.total_components) : 0
+        };
+      });
+      return { kpi_monthly_totals, kpi_monthly };
     }
 
     async function loadF3ThongKeData() {
@@ -4568,16 +5040,14 @@
         const resp = await fetch(F3_WEBHOOK_URL, { method: 'GET', headers: { 'Accept': 'application/json' } });
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         let raw = await resp.text();
-        let parsed = {};
+        let rawRows = [];
         try {
           const json = JSON.parse(raw);
-          if (Array.isArray(json) && json.length > 0) parsed = json[0];
-          else if (json && typeof json === 'object') parsed = json;
+          if (Array.isArray(json)) rawRows = json;
+          else if (json && typeof json === 'object' && Array.isArray(json.data)) rawRows = json.data;
+          else if (json && typeof json === 'object' && Array.isArray(json.data?.results)) rawRows = json.data.results;
         } catch (_) { throw new Error('Invalid JSON'); }
-        F3_DATA = {
-          kpi_monthly_totals: Array.isArray(parsed.kpi_monthly_totals) ? parsed.kpi_monthly_totals : [],
-          kpi_monthly: Array.isArray(parsed.kpi_monthly) ? parsed.kpi_monthly : []
-        };
+        F3_DATA = f3AggregateFromRaw(rawRows);
         f3PopulateMonthFilter();
         f3RenderAll();
         if (typeof showToast === 'function') showToast('Đã tải dữ liệu KPI.', 'success');
