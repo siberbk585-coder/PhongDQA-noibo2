@@ -4766,7 +4766,11 @@
         const ghiChu = String(row['Ghi chú'] ?? row.ghiChu ?? row.note ?? '').trim();
         const ghiChuCell = ghiChu ? `<span class="text-sm text-gray-700 whitespace-pre-wrap break-words block">${esc(ghiChu).replace(/\n/g, '<br>')}</span>` : '-';
         const tyLeCell = `<button type="button" class="f2-ty-le-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-600 hover:bg-gray-50" data-f2-id="${id}">Xem</button>`;
-        const traKetQuaCell = `<button type="button" class="f2-khai-bao-btn px-2 py-1 text-xs rounded border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100" data-f2-id="${id}">Khai báo</button>`;
+        const tinhTrangStr = String(tinhTrangRaw || '').toLowerCase();
+        const isHoanThanh = tinhTrangStr.includes('hoàn thành') || tinhTrangStr.includes('hoan thanh');
+        const traKetQuaCell = isHoanThanh
+          ? `<button type="button" class="f2-khai-bao-btn px-2 py-1 text-xs rounded border border-gray-300 text-gray-500 bg-gray-200 cursor-not-allowed opacity-60 pointer-events-none" disabled title="Không thể khai báo khi đã Hoàn thành">Khai báo</button>`
+          : `<button type="button" class="f2-khai-bao-btn px-2 py-1 text-xs rounded border border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100" data-f2-id="${id}">Khai báo</button>`;
         const nguoiNhanCell = `<button type="button" class="f2-nguoi-nhan-btn text-left w-full px-2 py-1 text-sm text-primary-blue hover:underline hover:bg-blue-50 rounded cursor-pointer" data-f2-id="${id}" title="Nhấn để đổi người nhận rà soát">${nguoiNhan || '(Chưa gán)'}</button>`;
         return `<tr><td class="px-3 py-2">${traKetQuaCell}</td><td class="px-3 py-2 text-sm">${linhKien || '-'}</td><td class="px-3 py-2">${tinhTrangCell}</td><td class="px-3 py-2">${ngayGui}</td><td class="px-3 py-2">${ngayTra || '-'}</td><td class="px-3 py-2">${nguoiGui}</td><td class="px-3 py-2">${nguoiNhanCell}</td><td class="px-3 py-2">${fileCell}</td><td class="px-3 py-2">${filePhanHoiCell}</td><td class="px-3 py-2">${jiraCell}</td><td class="px-3 py-2">${ghiChuCell}</td><td class="px-3 py-2">${tyLeCell}</td></tr>`;
       }).join('');
@@ -5267,8 +5271,11 @@
         const nguoiNhanBtn = e.target.closest('.f2-nguoi-nhan-btn');
         if (khaiBaoBtn) {
           e.preventDefault();
+          if (khaiBaoBtn.disabled) return;
           const rowId = khaiBaoBtn.dataset.f2Id || '';
           const row = F2_DATA.find(r => String(r.Id ?? r.id ?? '') === rowId);
+          const tinhTrang = String(row?.['Tình trạng'] ?? row?.tinhTrang ?? '').toLowerCase();
+          if (tinhTrang.includes('hoàn thành') || tinhTrang.includes('hoan thanh')) return;
           if (typeof openF2DeclarationModal === 'function') openF2DeclarationModal(row);
         }
         if (tyLeBtn) { e.preventDefault(); openF2ChiTietModal(tyLeBtn.dataset.f2Id || ''); }
