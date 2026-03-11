@@ -802,6 +802,13 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        /* Form 4 - Trường bắt buộc chưa điền: bôi vàng */
+        #form4 .f4-field-empty,
+        #form4 .f4-field-empty input,
+        #form4 .f4-field-empty select {
+            background-color: #fef9c3 !important;
+            border-color: #eab308 !important;
+        }
     </style>
 
     <!-- Form 4 - Phiếu nhập tác vụ -->
@@ -910,6 +917,11 @@
               <option>Lại Quốc Lộc</option>
               <option>Lê Thị Thảo</option>
               <option>Vũ Thị Thanh Hiền</option>
+            </select>
+            <select required name="Loai" id="f4-loai" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Loại tác vụ *</option>
+              <option value="Sản phẩm">Sản phẩm</option>
+              <option value="Linh kiện">Linh kiện</option>
             </select>
             <div>
               <input name="linkKOI" type="text" placeholder="Link KOI (Nếu có)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
@@ -12293,6 +12305,7 @@
         requestDate: normalizedRequestDate,
         requestCode: formData.requestCode || '',
         deptRequest: formData.department || '',
+        Loai: formData.Loai || '',
         itemName: formData.productName || '',
         itemCode: formData.productCode || '',
         componentType: formData.componentType || '',
@@ -12322,6 +12335,7 @@
         TaskDeptRequest: String(formData.department || '').trim(),
         TaskItemName: String(formData.productName || '').trim(),
         TaskItemCode: String(formData.productCode || '').trim(),
+        TaskLoai: String(formData.Loai || '').trim(),
         TaskComponentType: String(formData.componentType || '').trim(),
         TaskComponentStandard: componentStd,
         TaskPurpose: String(formData.requestPurpose || '').trim(),
@@ -12972,8 +12986,78 @@
       const form = document.getElementById('f4-testRequestForm');
       if (!form) return;
 
+      // Hàm xóa bôi vàng khi người dùng điền
+      function setupF4FieldHighlightRemoval() {
+        const requiredSelectors = [
+          '#f4-senderName', 'input[name="senderEmail"]', 'select[name="department"]',
+          '#f4-productName', 'input[name="productCode"]', '#f4-requestPurpose',
+          '#f4-projectCodeContainer', 'input[name="supplier"]', 'input[name="numSamples"]',
+          '#f4-desiredCompletionDate', 'select[name="personReceived"]', '#f4-loai'
+        ];
+        requiredSelectors.forEach(sel => {
+          const el = form.querySelector(sel);
+          if (!el) return;
+          const isProjectContainer = sel === '#f4-projectCodeContainer';
+          const checkValid = () => {
+            let valid = false;
+            if (isProjectContainer) {
+              valid = !!document.getElementById('f4-projectCodeValue')?.value?.trim();
+            } else {
+              const v = el.value;
+              valid = (v !== null && v !== undefined && String(v).trim() !== '');
+            }
+            if (valid) el.classList.remove('f4-field-empty');
+          };
+          if (isProjectContainer) {
+            form.querySelector('#f4-projectCode')?.addEventListener('click', checkValid);
+            document.querySelectorAll('.project-option').forEach(opt => opt.addEventListener('click', () => setTimeout(checkValid, 50)));
+          } else {
+            el.addEventListener('input', checkValid);
+            el.addEventListener('change', checkValid);
+          }
+        });
+      }
+      setupF4FieldHighlightRemoval();
+
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        // Xóa bôi vàng cũ, kiểm tra và bôi vàng trường chưa điền
+        form.querySelectorAll('.f4-field-empty').forEach(el => el.classList.remove('f4-field-empty'));
+        const requiredFields = [
+          { el: form.querySelector('#f4-senderName'), isContainer: false },
+          { el: form.querySelector('input[name="senderEmail"]'), isContainer: false },
+          { el: form.querySelector('select[name="department"]'), isContainer: false },
+          { el: form.querySelector('#f4-productName'), isContainer: false },
+          { el: form.querySelector('input[name="productCode"]'), isContainer: false },
+          { el: form.querySelector('#f4-requestPurpose'), isContainer: false },
+          { el: form.querySelector('#f4-projectCodeContainer'), isContainer: true },
+          { el: form.querySelector('input[name="supplier"]'), isContainer: false },
+          { el: form.querySelector('input[name="numSamples"]'), isContainer: false },
+          { el: form.querySelector('#f4-desiredCompletionDate'), isContainer: false },
+          { el: form.querySelector('select[name="personReceived"]'), isContainer: false },
+          { el: form.querySelector('#f4-loai'), isContainer: false }
+        ];
+        const emptyFields = [];
+        requiredFields.forEach(({ el, isContainer }) => {
+          if (!el) return;
+          let empty = false;
+          if (isContainer) {
+            empty = !document.getElementById('f4-projectCodeValue')?.value?.trim();
+          } else {
+            const v = el.value;
+            empty = (v === null || v === undefined || String(v).trim() === '');
+          }
+          if (empty) {
+            el.classList.add('f4-field-empty');
+            emptyFields.push(el);
+          }
+        });
+        if (emptyFields.length > 0) {
+          emptyFields[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
         const confirmed = window.confirm('Bạn có chắc muốn gửi lên hệ thống không?.');
         if (!confirmed) return;
 
@@ -12999,6 +13083,7 @@
           requestDate: String(normalizedRequestDate || '').trim(),
           requestCode: String(document.getElementById('f4-requestCode')?.value || '').trim(),
           deptRequest: String(data.department || '').trim(),
+          Loai: String(data.Loai || '').trim(),
           itemName: String(data.productName || '').trim(),
           itemCode: String(data.productCode || '').trim(),
           componentType: String(data.componentType || '').trim(),
@@ -13467,6 +13552,7 @@
           TaskDeptRequest: taskX.department || '',
           TaskItemName: taskX.taskName || '',
           TaskItemCode: taskX.form4Data?.itemCode || '',
+          TaskLoai: taskX.form4Data?.Loai || '',
           TaskComponentType: taskX.form4Data?.componentType || '',
           TaskComponentStandard: taskX.form4Data?.componentStandard || '',
           TaskPurpose: taskX.form4Data?.purpose || '',
@@ -13671,6 +13757,7 @@
         TaskLinkKOI: form4Data.linkKOI || '', // Link KOI luôn lấy từ TaskLinkKOI
         // Thông tin chi tiết từ Form 4
         form4Data: {
+          Loai: form4Data.Loai || '',
           itemCode: form4Data.itemCode || '',
           componentType: form4Data.componentType || '',
           componentStandard: form4Data.componentStandard || '',
@@ -14151,6 +14238,7 @@
               requestDate: taskRecord.TaskRequestDate || '',
               requestCode: taskRecord.TaskRequestCode || '',
               deptRequest: taskRecord.TaskDeptRequest || '',
+              Loai: taskRecord.TaskLoai || '',
               itemName: taskRecord.TaskItemName || '',
               itemCode: taskRecord.TaskItemCode || '',
               componentType: taskRecord.TaskComponentType || '',
@@ -18414,6 +18502,7 @@
         TaskName: result.task.taskName || '',
         TaskItemName: result.task.taskName || '',
         TaskItemCode: result.task.form4Data?.itemCode || '',
+        TaskLoai: result.task.form4Data?.Loai || '',
         TaskRequesterName: result.task.requesterName || '',
         TaskRequesterEmail: result.task.requesterEmail || '',
         TaskRequestDate: result.task.createdAt || '',
@@ -18448,15 +18537,28 @@
         // Gửi lên webhook để submit declaration
         const endpoint = 'https://iatzhxxuk.tino.page/webhook/form5-declaration-submit';
         
-        // Tạo FormData để gửi file đính kèm
+        // Tạo FormData - tách riêng từng trường thay vì gộp vào một JSON
         const formData = new FormData();
-        formData.append('data', JSON.stringify(formattedData));
+        const appendToFormData = (obj, prefix = '') => {
+          Object.entries(obj).forEach(([key, value]) => {
+            const fullKey = prefix ? `${prefix}.${key}` : key;
+            if (value === null || value === undefined) {
+              formData.append(fullKey, '');
+            } else if (typeof value === 'object' && value !== null && !Array.isArray(value) && key === 'taskData') {
+              // taskData: tách từng trường con với prefix taskData.
+              appendToFormData(value, 'taskData');
+            } else {
+              formData.append(fullKey, typeof value === 'object' ? JSON.stringify(value) : String(value));
+            }
+          });
+        };
+        appendToFormData(formattedData);
         if (attachmentFile) {
           formData.append('attachment', attachmentFile);
         }
         
         // Gửi FormData với file đính kèm
-        console.log('[Form 5] Sending declaration with attachment');
+        console.log('[Form 5] Sending declaration with attachment (data tách riêng)');
         const response = await fetch(endpoint, {
           method: 'POST',
           body: formData
@@ -18937,6 +19039,7 @@
         TaskName: result.task.taskName || '',
         TaskItemName: result.task.taskName || '',
         TaskItemCode: result.task.form4Data?.itemCode || '',
+        TaskLoai: result.task.form4Data?.Loai || '',
         TaskRequesterName: result.task.requesterName || '',
         TaskRequesterEmail: result.task.requesterEmail || '',
         TaskRequestDate: result.task.createdAt || '',
@@ -19804,6 +19907,7 @@
       const taskDataForDB = {
         TaskRequestCode: task.taskCode || '',
         TaskRequesterName: task.requesterName || '',
+        TaskLoai: task.form4Data?.Loai || '',
         TaskRequesterEmail: task.requesterEmail || '',
         TaskRequestDate: task.createdAt || '',
         TaskDeptRequest: task.department || '',
