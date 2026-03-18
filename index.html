@@ -256,6 +256,16 @@
       background: rgba(59, 130, 246, 0.1);
       color: #1e40af;
     }
+
+    /* Form 14 - Sticky columns (freeze left) */
+    .f14-sticky {
+      position: sticky;
+      background: white;
+      z-index: 2;
+    }
+    .f14-sticky-header {
+      z-index: 3;
+    }
     #sidebar-nav nav {
       gap: 0.375rem;
     }
@@ -448,6 +458,10 @@
               <span class="material-symbols-outlined text-lg text-gray-500">bug_report</span>
               <p class="text-sm font-semibold">9 - Ngân hàng lỗi</p>
             </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form14">
+              <span class="material-symbols-outlined text-lg text-gray-500">build</span>
+              <p class="text-sm font-semibold">14 - Thu thập dữ liệu báo cáo</p>
+            </button>
           </div>
         </div>
         
@@ -455,7 +469,7 @@
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="jira-group">
             <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
-            <p class="text-sm font-semibold">Hệ thống jira</p>
+            <p class="text-sm font-semibold">Hệ thống jira (đang xây dựng)</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="jira-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form10">
@@ -476,7 +490,7 @@
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="koi-group">
             <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
-            <p class="text-sm font-semibold">Hệ thống KOI</p>
+            <p class="text-sm font-semibold">Hệ thống KOI (đang xây dựng)</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="koi-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form13">
@@ -1377,6 +1391,117 @@
             <button id="f9-prev-page" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Trước</button>
             <span class="px-3 py-2 text-sm font-medium">Trang <span id="f9-current-page">1</span> / <span id="f9-total-pages">1</span></span>
             <button id="f9-next-page" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Sau</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form 14 - Thu thập dữ liệu báo cáo -->
+    <section id="form14" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
+      <div class="mx-auto flex w-full flex-col gap-6">
+        <!-- Page Heading -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-bold text-blue-800">Form 14 - Thu thập dữ liệu báo cáo</h2>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="f14-load-btn" type="button" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+              <span class="material-symbols-outlined text-lg">refresh</span>
+              <span>Tải dữ liệu</span>
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="f14-root"
+          data-source-url="https://iatzhxxuk.tino.page/webhook/laydulieubaocaocho4M"
+          class="rounded-xl border border-gray-200 bg-white shadow-sm"
+        >
+          <!-- Toolbar -->
+          <div class="p-4 border-b border-gray-200 bg-white">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="relative w-full sm:w-[320px]">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">search</span>
+                  <input id="f14-search" type="text" placeholder="Tìm theo Mã LK / Tên LK / PIC / KQ..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+                <select id="f14-filter-model" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[180px]">
+                  <option value="">Tất cả Model</option>
+                </select>
+                <div class="text-sm text-gray-600 whitespace-nowrap">
+                  Tổng: <span id="f14-total" class="font-semibold text-gray-900">0</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="f14-export-btn" type="button" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                  <span class="material-symbols-outlined text-lg">table_view</span>
+                  <span>Xuất Excel</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading / Error -->
+          <div id="f14-loading" class="hidden p-4 flex items-center gap-2 text-blue-700 bg-blue-50 border-b border-blue-100">
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Đang tải dữ liệu...</span>
+          </div>
+          <div id="f14-error" class="hidden p-4 text-sm text-red-700 bg-red-50 border-b border-red-100"></div>
+
+          <!-- Table -->
+          <!-- Table (scrollable both axis) -->
+          <div id="f14-table-wrap" class="overflow-auto max-h-[70vh]">
+            <table class="min-w-full text-sm border-collapse">
+              <thead class="bg-gradient-to-r from-blue-100 to-blue-50 sticky top-0">
+                <tr>
+                  <th class="f14-sticky f14-sticky-header px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[120px]" data-f14-sticky="1">Mã LK</th>
+                  <th class="f14-sticky f14-sticky-header px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[220px]" data-f14-sticky="2">Tên LK</th>
+                  <th class="f14-sticky f14-sticky-header px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[160px]" data-f14-sticky="3">Model</th>
+                  <th class="f14-sticky f14-sticky-header px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[200px]" data-f14-sticky="4">Phân cụm</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[160px]">PIC</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[160px]">Người đánh giá</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[150px]">Báo cáo QA (R)</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[150px]">Ngày phát hiện</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[200px]">Kết quả đánh giá</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[260px]">Tên báo cáo</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[140px]">Số lượng mẫu</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[260px]">Rủi ro</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[260px]">Bug</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[260px]">Ghi chú</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[220px]">Mục đích đánh giá</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[120px]">Số lần đánh giá</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[120px]">Mã KOI</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[140px]">TCKT</th>
+                  <th class="px-3 py-3 text-left border border-gray-300 font-semibold text-gray-700 min-w-[140px]">CE</th>
+                </tr>
+              </thead>
+              <tbody id="f14-table-body" class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td colspan="19" class="px-3 py-8 text-center text-gray-500">Chưa có dữ liệu. Bấm “Tải dữ liệu”.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="p-4 border-t border-gray-200 bg-white/95 backdrop-blur-sm sticky bottom-0 z-10">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div class="text-sm text-gray-600">
+                Hiển thị <span id="f14-page-info" class="font-medium text-gray-900">0-0</span> / <span id="f14-total-items" class="font-medium text-gray-900">0</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="f14-prev-page" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Trước</button>
+                <div id="f14-page-strip" class="max-w-[70vw] sm:max-w-[520px] overflow-x-hidden">
+                  <div class="flex flex-wrap items-center gap-1 py-1 pr-2">
+                    <!-- Page buttons render by JS -->
+                  </div>
+                </div>
+                <button id="f14-next-page" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Sau</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -3586,6 +3711,9 @@
             }
             if (targetForm === 'form12' && typeof initForm12 === 'function') {
               initForm12();
+            }
+            if (targetForm === 'form14' && typeof initForm14 === 'function') {
+              initForm14();
             }
             if (targetForm === 'formRasoatTCKT' && typeof setRasoatThoiGianGui === 'function') {
               setRasoatThoiGianGui();
@@ -12283,6 +12411,430 @@
           setTimeout(() => {
             initForm12();
           }, 100);
+        });
+      });
+    });
+
+    // ===== FORM 14 - HIỂN THỊ DỮ LIỆU BÁO CÁO (4M) =====
+    let F14_ALL_DATA = [];
+    let F14_FILTERED_DATA = [];
+    let F14_INITIALIZED = false;
+    const F14_PAGE_SIZE = 50;
+    let F14_CURRENT_PAGE = 1;
+    let F14_MODEL_FILTER = '';
+
+    function f14Get(obj, key) {
+      if (!obj) return null;
+      return Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : null;
+    }
+
+    function f14NormText(v) {
+      if (v === null || v === undefined) return '';
+      return String(v);
+    }
+
+    function f14PickQaR(row) {
+      const qa = f14Get(row, 'Báo cáo QA');
+      if (qa && typeof qa === 'object') {
+        const r = qa.R ?? qa.r ?? null;
+        return r ? String(r) : '';
+      }
+      return '';
+    }
+
+    function f14FormatCell(text) {
+      const t = f14NormText(text).trim();
+      return t || '-';
+    }
+
+    function f14GetActiveRows() {
+      return (F14_FILTERED_DATA && F14_FILTERED_DATA.length > 0) ? F14_FILTERED_DATA : F14_ALL_DATA;
+    }
+
+    function f14GetTotalPages(totalItems) {
+      if (!totalItems || totalItems <= 0) return 0;
+      return Math.ceil(totalItems / F14_PAGE_SIZE);
+    }
+
+    function f14GetFilteredByControls() {
+      const q = (document.getElementById('f14-search')?.value || '').trim().toLowerCase();
+      const modelVal = (document.getElementById('f14-filter-model')?.value || '').trim().toLowerCase();
+
+      if (!q && !modelVal) return F14_ALL_DATA;
+
+      const matchText = (row) => {
+        if (!q) return true;
+        const fields = [
+          f14Get(row, 'Mã LK'),
+          f14Get(row, 'Tên LK'),
+          f14Get(row, 'PIC'),
+          f14Get(row, 'Người đánh giá'),
+          f14Get(row, 'Kết quả đánh giá'),
+          f14PickQaR(row),
+          f14Get(row, 'Tên báo cáo'),
+          f14Get(row, 'Model'),
+          f14Get(row, 'Phân cụm'),
+        ];
+        return fields.some(v => f14NormText(v).toLowerCase().includes(q));
+      };
+
+      const matchModel = (row) => {
+        if (!modelVal) return true;
+        return f14NormText(f14Get(row, 'Model')).toLowerCase() === modelVal;
+      };
+
+      return F14_ALL_DATA.filter(row => matchText(row) && matchModel(row));
+    }
+
+    function renderF14Pagination(totalItems) {
+      const prevBtn = document.getElementById('f14-prev-page');
+      const nextBtn = document.getElementById('f14-next-page');
+      const stripWrap = document.getElementById('f14-page-strip');
+      const strip = stripWrap?.querySelector('div');
+
+      const totalPages = f14GetTotalPages(totalItems);
+      if (totalPages === 0) {
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = true;
+        if (strip) strip.innerHTML = '';
+        return;
+      }
+
+      if (F14_CURRENT_PAGE < 1) F14_CURRENT_PAGE = 1;
+      if (F14_CURRENT_PAGE > totalPages) F14_CURRENT_PAGE = totalPages;
+
+      if (prevBtn) prevBtn.disabled = F14_CURRENT_PAGE <= 1;
+      if (nextBtn) nextBtn.disabled = F14_CURRENT_PAGE >= totalPages;
+
+      if (!strip) return;
+
+      // Render tất cả trang (có thanh kéo ngang)
+      let html = '';
+      for (let p = 1; p <= totalPages; p++) {
+        const isActive = p === F14_CURRENT_PAGE;
+        html += `
+          <button
+            type="button"
+            class="f14-page-btn px-3 py-2 border rounded-lg text-sm ${isActive ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}"
+            data-page="${p}"
+            aria-current="${isActive ? 'page' : 'false'}"
+          >${p}</button>
+        `;
+      }
+      strip.innerHTML = html;
+
+      strip.querySelectorAll('.f14-page-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = Number(btn.getAttribute('data-page'));
+          if (!Number.isFinite(p)) return;
+          F14_CURRENT_PAGE = p;
+          renderF14();
+        });
+      });
+    }
+
+    function f14ApplyStickyOffsets() {
+      const wrap = document.getElementById('f14-table-wrap');
+      const table = wrap?.querySelector('table');
+      if (!wrap || !table) return;
+
+      const ths = Array.from(table.querySelectorAll('thead th[data-f14-sticky]'));
+      if (ths.length === 0) return;
+
+      // Compute left offsets based on actual rendered widths
+      const lefts = [];
+      let acc = 0;
+      for (let i = 0; i < ths.length; i++) {
+        lefts[i] = acc;
+        acc += ths[i].getBoundingClientRect().width;
+      }
+
+      ths.forEach((th, idx) => {
+        th.style.left = `${lefts[idx]}px`;
+      });
+
+      // Apply to body cells by column index (1..4)
+      for (let col = 1; col <= ths.length; col++) {
+        table.querySelectorAll(`tbody td[data-f14-sticky="${col}"]`).forEach(td => {
+          td.style.left = `${lefts[col - 1]}px`;
+        });
+      }
+    }
+
+    function renderF14Table(rows, totalItems) {
+      const tbody = document.getElementById('f14-table-body');
+      const totalEl = document.getElementById('f14-total');
+      const pageInfoEl = document.getElementById('f14-page-info');
+      const totalItemsEl = document.getElementById('f14-total-items');
+      const exportBtn = document.getElementById('f14-export-btn');
+      if (!tbody) return;
+
+      if (totalEl) totalEl.textContent = String(totalItems ?? rows.length);
+      if (totalItemsEl) totalItemsEl.textContent = String(totalItems ?? rows.length);
+      if (exportBtn) exportBtn.disabled = !(totalItems && totalItems > 0);
+
+      if (!rows || rows.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="19" class="px-3 py-8 text-center text-gray-500">Không có dữ liệu.</td>
+          </tr>
+        `;
+        if (pageInfoEl) pageInfoEl.textContent = '0-0';
+        return;
+      }
+
+      const html = rows.map(row => {
+        const pic = f14FormatCell(f14Get(row, 'PIC'));
+        const reviewer = f14FormatCell(f14Get(row, 'Người đánh giá'));
+        const maLk = f14FormatCell(f14Get(row, 'Mã LK'));
+        const tenLk = f14FormatCell(f14Get(row, 'Tên LK'));
+        const model = f14FormatCell(f14Get(row, 'Model'));
+        const qaR = f14FormatCell(f14PickQaR(row));
+        const ngay = f14FormatCell(f14Get(row, 'Ngày phát hiện vấn đề'));
+        const ketQua = f14FormatCell(f14Get(row, 'Kết quả đánh giá'));
+        const tenBaoCao = f14FormatCell(f14Get(row, 'Tên báo cáo'));
+        const soLuongMau = f14FormatCell(f14Get(row, 'Số lượng mẫu đánh giá'));
+        const ruiRo = f14FormatCell(f14Get(row, 'Rủi ro'));
+        const bug = f14FormatCell(f14Get(row, 'Bug'));
+        const ghiChu = f14FormatCell(f14Get(row, 'Ghi chú'));
+        const mucDich = f14FormatCell(f14Get(row, 'Mục đích đánh giá'));
+        const phanCum = f14FormatCell(f14Get(row, 'Phân cụm'));
+        const soLanDanhGia = f14FormatCell(f14Get(row, 'Số lần đánh giá'));
+        const maKoi = f14FormatCell(f14Get(row, 'Mã KOI'));
+        const tckt = f14FormatCell(f14Get(row, 'TCKT'));
+        const ce = f14FormatCell(f14Get(row, 'CE'));
+
+        return `
+          <tr class="hover:bg-blue-50/30">
+            <td class="f14-sticky px-3 py-2 border border-gray-200 align-top" data-f14-sticky="1">${maLk}</td>
+            <td class="f14-sticky px-3 py-2 border border-gray-200 align-top" data-f14-sticky="2">${tenLk}</td>
+            <td class="f14-sticky px-3 py-2 border border-gray-200 align-top" data-f14-sticky="3">${model}</td>
+            <td class="f14-sticky px-3 py-2 border border-gray-200 align-top" data-f14-sticky="4">${phanCum}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${pic}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${reviewer}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${qaR}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-nowrap">${ngay}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${ketQua}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${tenBaoCao}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${soLuongMau}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-pre-wrap">${ruiRo}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-pre-wrap">${bug}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-pre-wrap">${ghiChu}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-pre-wrap">${mucDich}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${soLanDanhGia}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top">${maKoi}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-pre-wrap">${tckt}</td>
+            <td class="px-3 py-2 border border-gray-200 align-top whitespace-pre-wrap">${ce}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = html;
+
+      // Page info
+      const start = (F14_CURRENT_PAGE - 1) * F14_PAGE_SIZE + 1;
+      const end = start + rows.length - 1;
+      if (pageInfoEl) pageInfoEl.textContent = `${start}-${end}`;
+
+      // Apply sticky offsets after DOM update
+      setTimeout(f14ApplyStickyOffsets, 0);
+    }
+
+
+    function renderF14() {
+      const active = f14GetFilteredByControls();
+      const totalItems = active.length;
+      const totalPages = f14GetTotalPages(totalItems);
+      if (totalPages === 0) {
+        F14_CURRENT_PAGE = 1;
+        renderF14Pagination(0);
+        renderF14Table([], 0);
+        return;
+      }
+
+      if (F14_CURRENT_PAGE < 1) F14_CURRENT_PAGE = 1;
+      if (F14_CURRENT_PAGE > totalPages) F14_CURRENT_PAGE = totalPages;
+
+      const startIdx = (F14_CURRENT_PAGE - 1) * F14_PAGE_SIZE;
+      const pageRows = active.slice(startIdx, startIdx + F14_PAGE_SIZE);
+      renderF14Pagination(totalItems);
+      renderF14Table(pageRows, totalItems);
+    }
+
+    function filterF14Data() {
+      F14_CURRENT_PAGE = 1;
+      renderF14();
+    }
+
+    function f14PopulateModelFilter(data) {
+      const sel = document.getElementById('f14-filter-model');
+      if (!sel) return;
+
+      const current = sel.value || '';
+      const models = Array.from(new Set(
+        (Array.isArray(data) ? data : [])
+          .map(row => f14NormText(f14Get(row, 'Model')).trim())
+          .filter(Boolean)
+      )).sort((a, b) => a.localeCompare(b, 'vi'));
+
+      sel.innerHTML = `<option value="">Tất cả Model</option>` + models.map(m => {
+        const safe = m.replace(/"/g, '&quot;');
+        return `<option value="${safe}">${m}</option>`;
+      }).join('');
+
+      // restore selection if possible
+      if (current && models.includes(current)) sel.value = current;
+    }
+
+    function exportF14ToExcel() {
+      const rows = f14GetFilteredByControls();
+      if (!rows || rows.length === 0) {
+        if (typeof showToast === 'function') showToast('Không có dữ liệu để xuất', 'warning'); else alert('Không có dữ liệu để xuất');
+        return;
+      }
+
+      const headers = [
+        'Mã LK', 'Tên LK', 'Model', 'Phân cụm', 'PIC', 'Người đánh giá', 'Báo cáo QA (R)',
+        'Ngày phát hiện vấn đề', 'Kết quả đánh giá', 'Tên báo cáo', 'Số lượng mẫu đánh giá',
+        'Rủi ro', 'Bug', 'Ghi chú', 'Mục đích đánh giá',
+        'Số lần đánh giá', 'Mã KOI', 'TCKT', 'CE'
+      ];
+
+      const aoa = rows.map(r => ([
+        f14NormText(f14Get(r, 'Mã LK')),
+        f14NormText(f14Get(r, 'Tên LK')),
+        f14NormText(f14Get(r, 'Model')),
+        f14NormText(f14Get(r, 'Phân cụm')),
+        f14NormText(f14Get(r, 'PIC')),
+        f14NormText(f14Get(r, 'Người đánh giá')),
+        f14PickQaR(r),
+        f14NormText(f14Get(r, 'Ngày phát hiện vấn đề')),
+        f14NormText(f14Get(r, 'Kết quả đánh giá')),
+        f14NormText(f14Get(r, 'Tên báo cáo')),
+        f14NormText(f14Get(r, 'Số lượng mẫu đánh giá')),
+        f14NormText(f14Get(r, 'Rủi ro')),
+        f14NormText(f14Get(r, 'Bug')),
+        f14NormText(f14Get(r, 'Ghi chú')),
+        f14NormText(f14Get(r, 'Mục đích đánh giá')),
+        f14NormText(f14Get(r, 'Số lần đánh giá')),
+        f14NormText(f14Get(r, 'Mã KOI')),
+        f14NormText(f14Get(r, 'TCKT')),
+        f14NormText(f14Get(r, 'CE')),
+      ]));
+
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...aoa]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'BaoCao4M');
+
+      // Auto widths
+      ws['!cols'] = headers.map(h => ({ wch: Math.min(60, Math.max(12, h.length + 2)) }));
+
+      const fileName = `BaoCao4M_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      if (typeof showToast === 'function') showToast(`Đã xuất ${rows.length} dòng ra Excel`, 'success');
+    }
+
+    async function loadF14Data() {
+      const root = document.getElementById('f14-root');
+      const url = root?.getAttribute('data-source-url');
+      const loadingEl = document.getElementById('f14-loading');
+      const errorEl = document.getElementById('f14-error');
+      const loadBtn = document.getElementById('f14-load-btn');
+
+      if (!url) {
+        if (errorEl) {
+          errorEl.classList.remove('hidden');
+          errorEl.textContent = 'Thiếu cấu hình data-source-url cho Form 14.';
+        }
+        return;
+      }
+
+      try {
+        if (errorEl) errorEl.classList.add('hidden');
+        if (loadingEl) loadingEl.classList.remove('hidden');
+        if (loadBtn) loadBtn.disabled = true;
+
+        const res = await fetch(url, { method: 'GET' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error('Dữ liệu trả về không phải mảng JSON.');
+        }
+
+        F14_ALL_DATA = data;
+        F14_FILTERED_DATA = [];
+        F14_CURRENT_PAGE = 1;
+        f14PopulateModelFilter(F14_ALL_DATA);
+        renderF14();
+        filterF14Data();
+      } catch (err) {
+        console.error('[Form 14] Load error:', err);
+        if (errorEl) {
+          errorEl.classList.remove('hidden');
+          errorEl.textContent = 'Lỗi tải dữ liệu: ' + (err?.message || String(err));
+        }
+        F14_ALL_DATA = [];
+        F14_FILTERED_DATA = [];
+        F14_CURRENT_PAGE = 1;
+        renderF14();
+      } finally {
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (loadBtn) loadBtn.disabled = false;
+      }
+    }
+
+    function initForm14() {
+      if (F14_INITIALIZED) return;
+      F14_INITIALIZED = true;
+
+      const loadBtn = document.getElementById('f14-load-btn');
+      const searchInput = document.getElementById('f14-search');
+      const modelFilter = document.getElementById('f14-filter-model');
+      const exportBtn = document.getElementById('f14-export-btn');
+      const prevBtn = document.getElementById('f14-prev-page');
+      const nextBtn = document.getElementById('f14-next-page');
+
+      if (loadBtn) loadBtn.addEventListener('click', loadF14Data);
+      if (searchInput) searchInput.addEventListener('input', filterF14Data);
+      if (modelFilter) modelFilter.addEventListener('change', filterF14Data);
+      if (exportBtn) exportBtn.addEventListener('click', exportF14ToExcel);
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          if (F14_CURRENT_PAGE > 1) {
+            F14_CURRENT_PAGE--;
+            renderF14();
+          }
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          F14_CURRENT_PAGE++;
+          renderF14();
+        });
+      }
+
+      // Render trạng thái rỗng ban đầu
+      renderF14();
+
+      // Recompute sticky offsets on resize
+      let f14ResizeT = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(f14ResizeT);
+        f14ResizeT = setTimeout(() => {
+          f14ApplyStickyOffsets();
+        }, 120);
+      });
+    }
+
+    // Khởi tạo Form 14 khi DOM ready (đề phòng trường hợp không click qua sidebar handler)
+    document.addEventListener('DOMContentLoaded', function() {
+      const navButtons = document.querySelectorAll('.nav-btn[data-target="form14"]');
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          setTimeout(() => {
+            initForm14();
+          }, 50);
         });
       });
     });
