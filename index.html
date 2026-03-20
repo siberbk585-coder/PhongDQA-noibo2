@@ -656,6 +656,10 @@
             <span class="material-symbols-outlined text-[18px]">refresh</span>
             <span>Tải dữ liệu</span>
           </button>
+          <button id="f3-kpi-export-btn" class="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">table_view</span>
+            <span>Xuất Excel</span>
+          </button>
         </div>
       </div>
 
@@ -5122,6 +5126,48 @@
       f3RenderTable();
     }
 
+    function exportF3KpiToExcel() {
+      const month = document.getElementById('f3-filter-month')?.value || '';
+      const rows = (F3_DATA.kpi_monthly || []).filter(r => r.month === month).sort((a, b) => (Number(b.total_hours) || 0) - (Number(a.total_hours) || 0));
+      if (rows.length === 0) {
+        if (typeof showToast === 'function') showToast('Chưa có dữ liệu để xuất. Vui lòng chọn tháng và tải dữ liệu.', 'warning');
+        return;
+      }
+      const exportData = rows.map(r => {
+        const { name, email } = f3GetReviewerDisplay(r);
+        return {
+          'Người nhận rà soát': name,
+          'Email': email,
+          'Yêu cầu': r.total_requests ?? '',
+          'Tổng giờ xử lý': f3FmtHours(r.total_hours),
+          'Linh kiện': r.total_components ?? '',
+          'Hạng mục gốc': r.total_base_items ?? '',
+          'Hạng mục đổi': r.total_changed_items ?? '',
+          'Tỷ lệ đổi': r.change_rate_overall_percent ?? '-',
+          'Giờ TB/yêu cầu': f3FmtHours(r.avg_hours_per_request),
+          'Giờ TB/linh kiện': f3FmtHours(r.avg_hours_per_component)
+        };
+      });
+      try {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        const colWidths = [
+          { wch: 25 }, { wch: 30 }, { wch: 10 }, { wch: 14 }, { wch: 10 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 16 }
+        ];
+        ws['!cols'] = colWidths;
+        XLSX.utils.book_append_sheet(wb, ws, 'KPI theo tháng');
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const timeStr = now.toTimeString().slice(0, 5).replace(/:/g, '');
+        const fileName = `Form3_KPI_Rasoat_${month || 'all'}_${dateStr}_${timeStr}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+        if (typeof showToast === 'function') showToast(`Đã xuất ${rows.length} dòng KPI thành công!`, 'success');
+      } catch (err) {
+        console.error('[Form 3 KPI] Lỗi xuất Excel:', err);
+        if (typeof showToast === 'function') showToast('Lỗi xuất Excel: ' + (err.message || err), 'error');
+      }
+    }
+
     function f3AggregateFromRaw(rawRows) {
       const rows = Array.isArray(rawRows) ? rawRows : [];
       const getMonth = (row) => {
@@ -5140,6 +5186,29 @@
         const lines = txt.split(/\n/).filter(l => l.trim());
         return lines.length > 0 ? lines.length : (txt.match(/\d+\)/g) || []).length || 1;
       };
+      /** Tính số giờ xử lý từ Ngày gửi đến Ngày trả. Hỗ trợ: Số giờ xử lý, Thời gian xử lý (giờ), hoặc parse từ Ngày gửi/Ngày trả */
+      const getHoursFromRow = (row) => {
+        const hoursField = row['Số giờ xử lý'] ?? row['Thời gian xử lý (giờ)'] ?? row.soGioXuLy ?? row.thoiGianXuLy ?? row.so_gio_xu_ly ?? row.thoi_gian_xu_ly;
+        if (hoursField != null && hoursField !== '') {
+          const n = Number(hoursField);
+          if (!isNaN(n) && n >= 0) return n;
+        }
+        const ngayGui = String(row['Ngày gửi'] ?? row.ngayGui ?? row.thoiGianGui ?? '').trim();
+        const ngayTra = String(row['Ngày trả'] ?? row.ngayTra ?? row.ngay_tra ?? '').trim();
+        if (!ngayGui || !ngayTra) return 0;
+        const parseDate = (s) => {
+          const cleaned = s.replace(/\//g, '-').replace(/\s+/g, ' ');
+          let d = new Date(cleaned);
+          if (isNaN(d.getTime()) && /^\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2}/.test(cleaned)) {
+            d = new Date(cleaned.replace(' ', 'T'));
+          }
+          return isNaN(d.getTime()) ? null : d;
+        };
+        const d1 = parseDate(ngayGui);
+        const d2 = parseDate(ngayTra);
+        if (!d1 || !d2 || d2 < d1) return 0;
+        return (d2.getTime() - d1.getTime()) / (1000 * 60 * 60);
+      };
       const byMonthReviewer = new Map();
       for (const row of rows) {
         const month = getMonth(row);
@@ -5152,6 +5221,7 @@
         }
         const agg = byMonthReviewer.get(key);
         agg.total_requests += 1;
+        agg.total_hours += getHoursFromRow(row);
         agg.total_components += countComponents(row);
         agg.total_base_items += getBaseItems(row);
         agg.total_changed_items += getChangedItems(row);
@@ -5232,6 +5302,8 @@
 
       const f3LoadBtn = document.getElementById('f3-load-btn');
       if (f3LoadBtn) f3LoadBtn.addEventListener('click', loadF3ThongKeData);
+      const f3KpiExportBtn = document.getElementById('f3-kpi-export-btn');
+      if (f3KpiExportBtn) f3KpiExportBtn.addEventListener('click', exportF3KpiToExcel);
       document.getElementById('f3-filter-month')?.addEventListener('change', f3RenderAll);
 
       document.getElementById('f2-filter-nguoi-nhan')?.addEventListener('change', applyF2Filters);
