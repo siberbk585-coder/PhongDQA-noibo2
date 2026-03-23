@@ -1065,6 +1065,10 @@
               <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">search</span>
               <input id="f5-searchInput" class="h-10 w-full rounded-full border-gray-300 bg-gray-50 pl-10 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Tìm kiếm tác vụ..." type="text"/>
             </div>
+            <div class="relative w-56 min-w-[200px]">
+              <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-[20px]">tag</span>
+              <input id="f5-search-task-code-input" class="h-10 w-full rounded-full border-gray-300 bg-gray-50 pl-10 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Mã tác vụ..." type="text" title="Lọc theo mã tác vụ / mã tác vụ con"/>
+            </div>
             <select id="f5-filter-pic" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[200px]">
               <option value="">Tất cả người nhận</option>
               <!-- Options sẽ được populate bằng JavaScript -->
@@ -1225,10 +1229,14 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-6 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-900">Chi tiết Dự án</h3>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
               <div class="relative">
                 <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
                 <input id="f6-search-input" class="h-9 w-64 rounded-lg border-gray-300 bg-gray-50 pl-9 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Tìm kiếm..." type="text"/>
+              </div>
+              <div class="relative">
+                <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">tag</span>
+                <input id="f6-search-task-code-input" class="h-9 w-56 rounded-lg border-gray-300 bg-gray-50 pl-9 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Mã tác vụ..." type="text" title="Lọc dự án theo mã tác vụ"/>
               </div>
             </div>
           </div>
@@ -14484,6 +14492,7 @@
     // Biến lưu trữ dữ liệu projects - sẽ được load từ API
     let F5_PROJECTS = [];
     let F5_FILTER_PIC = ''; // Filter theo người nhận tác vụ
+    let F5_SEARCH_TASK_CODE = ''; // Lọc theo mã tác vụ (task / subtask)
     // Filter theo khoảng thời gian dựa trên ngày tạo (createdAt)
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -15228,6 +15237,26 @@
       return allTasks;
     }
 
+    function f5GetSubtaskCodeString(st) {
+      if (!st) return '';
+      const c = st.subtaskCode != null ? st.subtaskCode : (st.TaskCode != null ? st.TaskCode : (st.taskCode != null ? st.taskCode : ''));
+      return String(c).trim();
+    }
+
+    function f5TaskMatchesTaskCodeFilter(task, codeLower) {
+      if (!codeLower) return true;
+      const taskCode = String(task.taskCode != null ? task.taskCode : '').trim().toLowerCase();
+      if (taskCode.includes(codeLower)) return true;
+      const subtasks = task.subtasks || [];
+      return subtasks.some(st => f5GetSubtaskCodeString(st).toLowerCase().includes(codeLower));
+    }
+
+    function f5ProjectHasTaskCodeMatch(project, codeLower) {
+      if (!codeLower) return true;
+      const tasks = project.tasks || [];
+      return tasks.some(task => f5TaskMatchesTaskCodeFilter(task, codeLower));
+    }
+
     // Hàm flatten dữ liệu Form 5 để xuất Excel
     function flattenF5DataForExport() {
       const flatData = [];
@@ -15433,6 +15462,15 @@
       
       // Setup Date filter
       setupF5DateFilter();
+
+      const searchTaskCodeInput = document.getElementById('f5-search-task-code-input');
+      if (searchTaskCodeInput && !searchTaskCodeInput.dataset.f5TaskCodeListener) {
+        searchTaskCodeInput.dataset.f5TaskCodeListener = '1';
+        searchTaskCodeInput.addEventListener('input', (e) => {
+          F5_SEARCH_TASK_CODE = (e.target && e.target.value != null ? e.target.value : '').trim();
+          renderF5TasksTable();
+        });
+      }
     }
     
     // Hàm tính toán khoảng thời gian từ preset
@@ -15598,6 +15636,7 @@
     
     let F6_ALL_DATA = [];
     let F6_SEARCH_TEXT = '';
+    let F6_SEARCH_TASK_CODE = '';
 
     // Hàm tính toán thống kê từ dữ liệu Form 5
     function calculateF6Stats(projects) {
@@ -15719,13 +15758,22 @@
           ? Math.round((projectCompletedSubtasks / projectActiveSubtasks) * 100) 
           : 0;
 
+        const taskCodes = [];
+        if (project.tasks && Array.isArray(project.tasks)) {
+          project.tasks.forEach(t => {
+            const c = (t && t.taskCode != null ? String(t.taskCode) : '').trim();
+            if (c) taskCodes.push(c);
+          });
+        }
+
         projectDetails.push({
           projectCode: project.projectCode || '',
           projectName: project.projectName || project.name || '',
           taskCount: projectTaskCount,
           subtaskCount: projectSubtaskCount,
           progress: projectProgress,
-          pic: project.pic || ''
+          pic: project.pic || '',
+          taskCodes
         });
       });
 
@@ -15965,13 +16013,19 @@
       const tbody = document.getElementById('f6-projects-table-body');
       if (!tbody) return;
 
-      // Filter theo search text
+      // Filter theo search text (mã/tên dự án) và mã tác vụ
       let filteredProjects = projectDetails;
       if (F6_SEARCH_TEXT) {
         const searchLower = F6_SEARCH_TEXT.toLowerCase();
-        filteredProjects = projectDetails.filter(p => 
+        filteredProjects = filteredProjects.filter(p => 
           (p.projectCode || '').toLowerCase().includes(searchLower) ||
           (p.projectName || '').toLowerCase().includes(searchLower)
+        );
+      }
+      if (F6_SEARCH_TASK_CODE) {
+        const codeLower = F6_SEARCH_TASK_CODE.toLowerCase();
+        filteredProjects = filteredProjects.filter(p =>
+          (p.taskCodes || []).some(tc => (tc || '').toLowerCase().includes(codeLower))
         );
       }
 
@@ -16197,18 +16251,30 @@
     function initForm6() {
       const refreshBtn = document.getElementById('f6-refresh-btn');
       const searchInput = document.getElementById('f6-search-input');
+      const searchTaskCodeInput = document.getElementById('f6-search-task-code-input');
       
       if (refreshBtn) {
         refreshBtn.addEventListener('click', loadF6Dashboard);
       }
 
+      function f6ReapplyProjectTableFilter() {
+        if (F6_ALL_DATA.length > 0) {
+          const stats = calculateF6Stats(F6_ALL_DATA);
+          renderF6ProjectsTable(stats.projectDetails);
+        }
+      }
+
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
           F6_SEARCH_TEXT = e.target.value.trim();
-          if (F6_ALL_DATA.length > 0) {
-            const stats = calculateF6Stats(F6_ALL_DATA);
-            renderF6ProjectsTable(stats.projectDetails);
-          }
+          f6ReapplyProjectTableFilter();
+        });
+      }
+
+      if (searchTaskCodeInput) {
+        searchTaskCodeInput.addEventListener('input', (e) => {
+          F6_SEARCH_TASK_CODE = e.target.value.trim();
+          f6ReapplyProjectTableFilter();
         });
       }
 
@@ -17289,6 +17355,14 @@
             return; // Skip project nếu không có task nào có PIC khớp
           }
         }
+
+        if (F5_SEARCH_TASK_CODE) {
+          const codeLower = F5_SEARCH_TASK_CODE.toLowerCase();
+          if (!f5ProjectHasTaskCodeMatch(project, codeLower)) {
+            return;
+          }
+        }
+
         // Project row (cấp 1)
         const projectStatusClass = 'text-gray-900';
         const projectTasks = project.tasks || [];
@@ -17388,6 +17462,13 @@
                 }
               } catch (e) {
                 return; // Skip nếu có lỗi parse
+              }
+            }
+
+            if (F5_SEARCH_TASK_CODE) {
+              const codeLower = F5_SEARCH_TASK_CODE.toLowerCase();
+              if (!f5TaskMatchesTaskCodeFilter(task, codeLower)) {
+                return;
               }
             }
             
