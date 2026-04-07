@@ -436,6 +436,10 @@
               <span class="material-symbols-outlined text-lg text-gray-500">note_add</span>
               <p class="text-sm font-semibold">4 - Phiếu nhập tác vụ</p>
             </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form41">
+              <span class="material-symbols-outlined text-lg text-gray-500">assignment</span>
+              <p class="text-sm font-semibold">4.1 - Phiếu nhập tác vụ SOP</p>
+            </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form5">
               <span class="material-symbols-outlined text-lg text-gray-500">inventory_2</span>
               <p class="text-sm font-semibold">5 - Quản lý Tác vụ Sản phẩm Mới</p>
@@ -471,7 +475,7 @@
             <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
             <p class="text-sm font-semibold">Hệ thống jira (đang xây dựng)</p>
           </button>
-          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="jira-group">
+          <div class="group-items flex flex-col gap-1 ml-4 mt-1 collapsed" data-group="jira-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form10">
               <span class="material-symbols-outlined text-lg text-gray-500">folder_special</span>
               <p class="text-sm font-semibold">10 - Quản lý dự án</p>
@@ -740,6 +744,7 @@
               <option value="Đỗ Quang Long" data-email="long.do@karofi.vn">Đỗ Quang Long</option>
               <option value="Nguyễn Thị Hiền" data-email="hien.nguyen1@karofi.vn">Nguyễn Thị Hiền</option>
               <option value="Vũ Thị Hằng" data-email="hang.vu@karofi.vn">Vũ Thị Hằng</option>
+              <option value="Bùi Thị Linh" data-email="linh.bui@karofi.vn">Bùi Thị Linh</option>
               <option value="Phạm Thành Trung Kiên" data-email="kien.pham1@karofi.vn">Phạm Thành Trung Kiên</option>
               <option value="Nguyễn Văn Linh" data-email="linh.nguyen@karofi.vn">Nguyễn Văn Linh</option>
               <option value="Đào Hoàng Dương" data-email="duong.dao@karofi.vn">Đào Hoàng Dương</option>
@@ -829,13 +834,17 @@
         }
     </style>
 
-    <!-- Form 4 - Phiếu nhập tác vụ -->
+    <!-- Form 4 - Phiếu nhập tác vụ (SPM) -->
     <section id="form4" class="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md hidden">
       <div class="mb-6">
         <h2 class="text-xl font-semibold text-blue-800">Form 4 - Phiếu nhập tác vụ</h2>
         <p class="text-sm text-gray-600 mt-2">Vui lòng điền đầy đủ các mục bắt buộc cho sản phẩm/linh kiện cần thử nghiệm.</p>
       </div>
       <form id="f4-testRequestForm" class="space-y-6" autocomplete="off">
+        <!-- Mục đích yêu cầu (SPM): cố định -->
+        <input type="hidden" required name="requestPurpose" id="f4-requestPurpose" value="Đánh giá SP mới" />
+        <div id="f4-purposeDescription" class="text-gray-600 text-sm"></div>
+
         <!-- A. General Information -->
         <div class="border border-gray-200 rounded-lg p-4 bg-blue-50">
           <h3 class="text-lg font-semibold text-blue-800 mb-3">A. Thông tin chung</h3>
@@ -863,89 +872,87 @@
             <input required name="productCode" type="text" placeholder="Mã sản phẩm/linh kiện *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
             <input type="hidden" name="componentType" id="f4-componentType" value="" />
             <input type="hidden" name="componentStandard" id="f4-componentStandard" value="0" />
-            <select required name="requestPurpose" id="f4-requestPurpose" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2">
-              <option value="">Mục đích yêu cầu *</option>
-              <option value="Đánh giá SP mới" selected>Đánh giá sản phẩm mới</option>
-              <option value="Đánh giá Sản phẩm SOP">Đánh giá sản phẩm SOP(Chức năng đang được phát triển lại, không chọn)</option>
-            </select>
-            <div id="f4-purposeDescription" class="text-gray-600 text-sm md:col-span-2"></div>
-            <div id="f4-projectCodeContainer" class="md:col-span-2">
-              <div class="flex gap-2">
-                <input type="text" id="f4-projectCode" readonly placeholder="Mã dự án *" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" onclick="document.getElementById('f4-projectCodeModal').classList.remove('hidden')"/>
-                <input type="hidden" id="f4-projectCodeValue" name="projectCode" required/>
-                <button type="button" onclick="document.getElementById('f4-projectCodeModal').classList.remove('hidden')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm whitespace-nowrap">
-                  Chọn dự án
-                </button>
+            <div id="f4-purpose-fields" class="contents">
+              <div id="f4-projectCodeContainer" class="md:col-span-2">
+                <div class="flex gap-2">
+                  <input type="text" id="f4-projectCode" readonly placeholder="Mã dự án *" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" onclick="document.getElementById('f4-projectCodeModal').classList.remove('hidden')"/>
+                  <input type="hidden" id="f4-projectCodeValue" name="projectCode" required/>
+                  <button type="button" onclick="document.getElementById('f4-projectCodeModal').classList.remove('hidden')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm whitespace-nowrap">
+                    Chọn dự án
+                  </button>
+                </div>
               </div>
+              <div id="f4-nccChangeFields" class="hidden md:col-span-2">
+                <input type="text" id="f4-appliedModel" name="appliedModel" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Model áp dụng *" disabled />
+              </div>
+              <input name="supplier" required type="text" placeholder="Nhà cung cấp *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              <input name="numSamples" type="number" min="0" placeholder="Số lượng mẫu giao *" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              <input id="f4-desiredCompletionDate" name="desiredCompletionDate" type="text" placeholder="Hạn mong muốn" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              <input type="hidden" name="desiredCompletionDateTime" id="f4-desiredCompletionDateTime" />
+              <select name="personReceived" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Đầu mối nhận mẫu *</option>
+                <option>Vũ Duy Minh</option>
+                <option>Nguyễn Văn Linh</option>
+                <option>Nguyễn Văn Hiếu</option>
+                <option>Đào Hoàng Dương</option>
+              </select>
+              <select name="pic" id="f4-pic" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">PIC (Người phụ trách)</option>
+                <option>Nguyễn Hữu Thịnh</option>
+                <option>Nguyễn Văn Hiếu</option>
+                <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
+                <option>Nguyễn Văn Linh</option>
+                <option>Đào Hoàng Dương</option>
+                <option>Bùi Đặng Quốc Huy</option>
+                <option>Đào Tuấn Kỳ</option>
+                <option>Thái Thị Giang</option>
+                <option>Trần Hiếu Nghĩa</option>
+              </select>
+              <select name="evaluator" id="f4-evaluator" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Người nhận đánh giá</option>
+                <option>Đỗ Quang Long</option>
+                <option>Nguyễn Thị Hiền</option>
+                <option>Phạm Thành Trung Kiên</option>
+                <option>Lê Ngọc Ánh</option>
+                <option>Hà Mỹ Linh</option>
+                <option>Phạm Thị Minh</option>
+                <option>Lê Văn Sơn</option>
+                <option>Lại Quốc Lộc</option>
+                <option>Lê Thị Thảo</option>
+                <option>Vũ Thị Thanh Hiền</option>
+                <option>Nguyễn Hữu Thịnh</option>
+                <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
+                <option>Bùi Đặng Quốc Huy</option>
+                <option>Đào Tuấn Kỳ</option>
+                <option>Thái Thị Giang</option>
+                <option>Trần Hiếu Nghĩa</option>
+              </select>
+              <select name="tester" id="f4-tester" class="hidden w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Người thử nghiệm</option>
+                <option>Đỗ Quang Long</option>
+                <option>Nguyễn Thị Hiền</option>
+                <option>Phạm Thành Trung Kiên</option>
+                <option>Lê Ngọc Ánh</option>
+                <option>Hà Mỹ Linh</option>
+                <option>Phạm Thị Minh</option>
+                <option>Lê Văn Sơn</option>
+                <option>Lại Quốc Lộc</option>
+                <option>Lê Thị Thảo</option>
+                <option>Vũ Thị Thanh Hiền</option>
+              </select>
+              <select required name="Loai" id="f4-loai" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Loại tác vụ *</option>
+                <option value="Sản phẩm">Sản phẩm</option>
+                <option value="Linh kiện">Linh kiện</option>
+              </select>
+              <div>
+                <input name="linkKOI" type="text" placeholder="Link KOI (Nếu có)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                <p class="text-xs text-gray-500 mt-1">Copy trực tiếp link từ luồng phê duyệt KOI</p>
+              </div>
+              <textarea name="notes" rows="2" placeholder="Ghi chú (Điểm thay đổi, lý do yêu cầu gấp...)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2"></textarea>
             </div>
-            <div id="f4-nccChangeFields" class="hidden md:col-span-2">
-              <input type="text" id="f4-appliedModel" name="appliedModel" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Model áp dụng *" disabled />
-            </div>
-            <input name="supplier" required type="text" placeholder="Nhà cung cấp *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            <input name="numSamples" type="number" min="0" placeholder="Số lượng mẫu giao *" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            <input id="f4-desiredCompletionDate" name="desiredCompletionDate" type="text" placeholder="Hạn mong muốn" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            <input type="hidden" name="desiredCompletionDateTime" id="f4-desiredCompletionDateTime" />
-            <select name="personReceived" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Đầu mối nhận mẫu *</option>
-              <option>Vũ Duy Minh</option>
-              <option>Nguyễn Văn Linh</option>
-              <option>Nguyễn Văn Hiếu</option>
-              <option>Đào Hoàng Dương</option>
-            </select>
-            <select name="pic" id="f4-pic" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">PIC (Người phụ trách)</option>
-              <option>Nguyễn Hữu Thịnh</option>
-              <option>Nguyễn Văn Hiếu</option>
-              <option>Vũ Thị Hằng</option>
-              <option>Nguyễn Văn Linh</option>
-              <option>Đào Hoàng Dương</option>
-              <option>Bùi Đặng Quốc Huy</option>
-              <option>Đào Tuấn Kỳ</option>
-              <option>Thái Thị Giang</option>
-              <option>Trần Hiếu Nghĩa</option>
-            </select>
-            <select name="evaluator" id="f4-evaluator" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Người nhận đánh giá</option>
-              <option>Đỗ Quang Long</option>
-              <option>Nguyễn Thị Hiền</option>
-              <option>Phạm Thành Trung Kiên</option>
-              <option>Lê Ngọc Ánh</option>
-              <option>Hà Mỹ Linh</option>
-              <option>Phạm Thị Minh</option>
-              <option>Lê Văn Sơn</option>
-              <option>Lại Quốc Lộc</option>
-              <option>Lê Thị Thảo</option>
-              <option>Vũ Thị Thanh Hiền</option>
-              <option>Nguyễn Hữu Thịnh</option>
-              <option>Vũ Thị Hằng</option>
-              <option>Bùi Đặng Quốc Huy</option>
-              <option>Đào Tuấn Kỳ</option>
-              <option>Thái Thị Giang</option>
-              <option>Trần Hiếu Nghĩa</option>
-            </select>
-            <select name="tester" id="f4-tester" class="hidden w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Người thử nghiệm</option>
-              <option>Đỗ Quang Long</option>
-              <option>Nguyễn Thị Hiền</option>
-              <option>Phạm Thành Trung Kiên</option>
-              <option>Lê Ngọc Ánh</option>
-              <option>Hà Mỹ Linh</option>
-              <option>Phạm Thị Minh</option>
-              <option>Lê Văn Sơn</option>
-              <option>Lại Quốc Lộc</option>
-              <option>Lê Thị Thảo</option>
-              <option>Vũ Thị Thanh Hiền</option>
-            </select>
-            <select required name="Loai" id="f4-loai" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Loại tác vụ *</option>
-              <option value="Sản phẩm">Sản phẩm</option>
-              <option value="Linh kiện">Linh kiện</option>
-            </select>
-            <div>
-              <input name="linkKOI" type="text" placeholder="Link KOI (Nếu có)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-              <p class="text-xs text-gray-500 mt-1">Copy trực tiếp link từ luồng phê duyệt KOI</p>
-            </div>
-            <textarea name="notes" rows="2" placeholder="Ghi chú (Điểm thay đổi, lý do yêu cầu gấp...)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2"></textarea>
           </div>
         </div>
         <!-- C. Attachments -->
@@ -981,6 +988,103 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
         </button>
       </form>
+    </section>
+
+    <!-- Form 4.1 - Phiếu nhập tác vụ SOP -->
+    <section id="form41" class="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md hidden">
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold text-blue-800">Form 4.1 - Phiếu nhập tác vụ SOP</h2>
+        <p class="text-sm text-gray-600 mt-2">Phiếu giao việc cho sản phẩm SOP. Dữ liệu sẽ gửi lên endpoint SOP riêng.</p>
+      </div>
+      <div id="f4-sop-create-task-section">
+        <form id="f4-sop-create-task-form" class="space-y-6">
+          <!-- A. Thông tin chung -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-blue-50">
+            <h3 class="text-lg font-semibold text-blue-800 mb-3">A. Thông tin chung</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Người yêu cầu <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-rq-by" required type="text" placeholder="Nhập tên người yêu cầu" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email người yêu cầu</label>
+                <input id="f4-sop-create-rq-by-email" type="email" placeholder="(tuỳ chọn)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian yêu cầu</label>
+                <input id="f4-sop-create-rq-time" readonly type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600"/>
+                <p class="text-gray-500 text-xs mt-1">Cố định theo thời gian hệ thống</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- B. Thông tin tác vụ SOP -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-green-50">
+            <h3 class="text-lg font-semibold text-blue-800 mb-3">B. Thông tin tác vụ SOP</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tên tác vụ <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-task-name" required type="text" placeholder="Nhập tên tác vụ" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mã linh kiện <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-component-code" required type="text" placeholder="Nhập mã linh kiện" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nhà cung cấp <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-vendor" required type="text" placeholder="Nhập tên nhà cung cấp" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Người được giao <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <select id="f4-sop-create-assignee" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">— Chọn người —</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Deadline <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-deadline" required type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Link KOI <span class="text-gray-400 text-xs">(không bắt buộc nếu không có luồng KOI)</span></label>
+                <input id="f4-sop-create-odoo-jira" type="text" placeholder="VD: https://office.karofi.com/odoo/action-1053/45975" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Loại tác vụ <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <select id="f4-sop-create-task-type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">— Chọn loại tác vụ —</option>
+                  <option value="Sản phẩm">Sản phẩm</option>
+                  <option value="Linh kiện">Linh kiện</option>
+                  <option value="Tác vụ khác">Tác vụ khác</option>
+                </select>
+                <p id="f4-sop-create-task-type-note" class="text-gray-500 text-xs mt-1"></p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mục đích đánh giá <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <select id="f4-sop-create-purpose" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">— Chọn mục đích đánh giá —</option>
+                  <option value="Đánh giá SP mới">Đánh giá SP mới</option>
+                  <option value="Đánh giá Sản phẩm SOP">Đánh giá Sản phẩm SOP</option>
+                  <option value="Tác vụ khác">Tác vụ khác</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Công chuẩn <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-man-hour" required type="text" min="0" placeholder="VD: 12,5" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                <p class="text-gray-500 text-xs mt-1">Sử dụng dấu phẩy (,) cho số thập phân. VD: 12,5</p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Đầu ra công việc <span class="text-gray-400 text-xs">(bắt buộc)</span></label>
+                <input id="f4-sop-create-output" required type="text" placeholder="Mô tả đầu ra" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center gap-3">
+            <button type="submit" class="submit-btn px-6 py-2 text-white font-semibold transition">Giao việc</button>
+            <button type="button" id="f4-sop-create-reset" class="px-4 py-2 rounded-lg bg-slate-100 text-gray-800 hover:bg-slate-200">Làm mới</button>
+          </div>
+        </form>
+      </div>
     </section>
 
     <!-- Modal chọn mã dự án - Form 4 -->
@@ -1941,11 +2045,12 @@
                 <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Loại linh kiện</th>
                 <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Hạn mong muốn</th>
                 <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Link KOI</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-text-light-secondary uppercase">Item</th>
               </tr>
             </thead>
             <tbody id="form13-table-body">
               <tr>
-                <td colspan="11" class="px-4 py-8 text-center text-text-light-secondary">
+                <td colspan="12" class="px-4 py-8 text-center text-text-light-secondary">
                   <div class="flex flex-col items-center gap-2">
                     <span class="spinner"></span>
                     <span>Đang tải dữ liệu...</span>
@@ -1979,6 +2084,64 @@
     </div>
   </main>
   </div>
+
+  <!-- ============================================ -->
+  <!-- MODAL SYSTEM - FORM 13: ITEM LIST DETAILS -->
+  <!-- ============================================ -->
+  <div id="modal-form13-items" class="modal-container fixed inset-0 z-50 hidden items-center justify-center p-4" style="display: none;">
+    <div id="modal-form13-items-overlay" class="modal-overlay fixed inset-0 bg-black/20"></div>
+    <div class="modal-content relative w-full h-full flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl mx-4 max-h-[90vh] overflow-hidden flex flex-col pointer-events-auto">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
+          <div class="min-w-0">
+            <h3 class="text-xl font-semibold text-gray-800">Chi tiết item</h3>
+            <p id="modal-form13-items-subtitle" class="text-sm text-gray-600 truncate"></p>
+          </div>
+          <button id="modal-form13-items-close" class="text-gray-500 hover:text-gray-700 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="p-6 overflow-auto flex-1">
+          <div class="overflow-x-auto border border-gray-200 rounded-lg">
+            <table class="min-w-full border-collapse">
+              <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">#</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Task</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Tên sản phẩm</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Mã sản phẩm</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Loại linh kiện</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Mục đích</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Nhà cung cấp</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Số lượng</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Hạn mong muốn</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Ghi chú</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">TT thử nghiệm</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">YC đặc biệt</th>
+                  <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Tác vụ</th>
+                </tr>
+              </thead>
+              <tbody id="modal-form13-items-tbody">
+                <tr>
+                  <td colspan="13" class="px-3 py-6 text-center text-gray-500">Chưa có dữ liệu</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+          <button id="modal-form13-items-close-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+            Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================ -->
+  <!-- END MODAL SYSTEM - FORM 13 -->
+  <!-- ============================================ -->
 
   <!-- ============================================ -->
   <!-- MODAL SYSTEM - FORM 2: DECLARATION (Khai báo) -->
@@ -2126,6 +2289,7 @@
           <option>Đỗ Quang Long</option>
           <option>Nguyễn Thị Hiền</option>
           <option>Vũ Thị Hằng</option>
+          <option>Bùi Thị Linh</option>
           <option>Phạm Thành Trung Kiên</option>
           <option>Lê Ngọc Ánh</option>
           <option>Hà Mỹ Linh</option>
@@ -2181,6 +2345,7 @@
                 <option>Đỗ Quang Long</option>
                 <option>Nguyễn Thị Hiền</option>
                 <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
                 <option>Phạm Thành Trung Kiên</option>
                 <option>Lê Ngọc Ánh</option>
                 <option>Hà Mỹ Linh</option>
@@ -3083,6 +3248,7 @@
                 <option>Vũ Thị Thanh Hiền</option>
                 <option>Nguyễn Hữu Thịnh</option>
                 <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
                 <option>Bùi Đặng Quốc Huy</option>
                 <option>Đào Tuấn Kỳ</option>
                 <option>Thái Thị Giang</option>
@@ -3187,6 +3353,7 @@
                 <option>Vũ Thị Thanh Hiền</option>
                 <option>Nguyễn Hữu Thịnh</option>
                 <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
                 <option>Bùi Đặng Quốc Huy</option>
                 <option>Đào Tuấn Kỳ</option>
                 <option>Thái Thị Giang</option>
@@ -3283,6 +3450,7 @@
                 <option>Vũ Thị Thanh Hiền</option>
                 <option>Nguyễn Hữu Thịnh</option>
                 <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
                 <option>Bùi Đặng Quốc Huy</option>
                 <option>Đào Tuấn Kỳ</option>
                 <option>Thái Thị Giang</option>
@@ -3382,6 +3550,7 @@
                 <option>Vũ Thị Thanh Hiền</option>
                 <option>Nguyễn Hữu Thịnh</option>
                 <option>Vũ Thị Hằng</option>
+                <option>Bùi Thị Linh</option>
                 <option>Bùi Đặng Quốc Huy</option>
                 <option>Đào Tuấn Kỳ</option>
                 <option>Thái Thị Giang</option>
@@ -3608,7 +3777,7 @@
     const FORM1_NAMES = [
       "Bùi Đặng Quốc Huy","Đào Tuấn Kỳ","Đỗ Quang Long","Hà Mỹ Linh","Lại Quốc Lộc",
       "Lê Ngọc Ánh","Lê Thị Thanh Nhàn","Lê Thị Thảo","Lê Văn Sơn","Nguyễn Hữu Thịnh","Nguyễn Thị Hiền",
-      "Phạm Thành Trung Kiên","Phạm Thị Minh","Thái Thị Giang","Trần Hiếu Nghĩa","Vũ Thị Hằng","Vũ Thị Thanh Hiền"
+      "Phạm Thành Trung Kiên","Phạm Thị Minh","Thái Thị Giang","Trần Hiếu Nghĩa","Bùi Thị Linh","Vũ Thị Hằng","Vũ Thị Thanh Hiền"
     ];
 
     // Hàm điền danh sách vào select
@@ -3709,6 +3878,9 @@
             // Khởi tạo Form 4 nếu chưa được khởi tạo
             if (targetForm === 'form4' && typeof initForm4 === 'function' && !f4Initialized) {
               initForm4();
+            }
+            if (targetForm === 'form41' && typeof initForm41 === 'function' && !f41Initialized) {
+              initForm41();
             }
             if (targetForm === 'form5' && typeof initForm5 === 'function') {
               initForm5();
@@ -5037,7 +5209,7 @@
     function f3FmtNum(v) { const n = Number(v); return isNaN(n) ? '-' : String(n); }
     const F3_REVIEWER_EMAIL_MAP = {
       'Nguyễn Hữu Thịnh':'thinh.nguyen2@karofi.vn','Nguyễn Văn Hiếu':'hieu.nguyen2@karofi.vn','Đỗ Quang Long':'long.do@karofi.vn',
-      'Nguyễn Thị Hiền':'hien.nguyen1@karofi.vn','Vũ Thị Hằng':'hang.vu@karofi.vn','Phạm Thành Trung Kiên':'kien.pham1@karofi.vn',
+      'Nguyễn Thị Hiền':'hien.nguyen1@karofi.vn','Vũ Thị Hằng':'hang.vu@karofi.vn','Bùi Thị Linh':'linh.bui@karofi.vn','Phạm Thành Trung Kiên':'kien.pham1@karofi.vn',
       'Nguyễn Văn Linh':'linh.nguyen@karofi.vn','Đào Hoàng Dương':'duong.dao@karofi.vn','Lê Ngọc Ánh':'anh.le1@karofi.vn',
       'Hà Mỹ Linh':'linh.ha@karofi.vn','Bùi Đặng Quốc Huy':'huy.bui@karofi.vn','Phạm Thị Minh':'minh.pham1@karofi.vn',
       'Vũ Duy Minh':'minh.vu@karofi.com','Đào Tuấn Kỳ':'ky.dao@karofi.vn','Lê Văn Sơn':'son.le2@karofi.vn',
@@ -12925,6 +13097,37 @@
     // Endpoints
     const F4_FORM_SUBMIT_ENDPOINT = "https://iatzhxxuk.tino.page/webhook/form4-submit";
     const F4_FILE_UPLOAD_ENDPOINT = F4_FORM_SUBMIT_ENDPOINT;
+
+    // SOP (copy từ Cổng 1.html - Form 3)
+    const F4_SOP_FORM3_ENDPOINT = "https://iatzhxxuk.tino.page/webhook/form3guitacvu";
+    const F4_SOP_FORM3_ASSIGNEES = (() => {
+      // Copy đúng logic từ Cổng 1.html: base list + thêm 3 tên
+      const base = [
+        "Bùi Đặng Quốc Huy","Đào Hoàng Dương","Đào Tuấn Kỳ","Đỗ Quang Long","Hà Mỹ Linh","Lại Quốc Lộc",
+        "Lê Ngọc Ánh","Lê Thị Thảo","Lê Văn Sơn","Nguyễn Hữu Thịnh","Nguyễn Thị Hiền",
+        "Phạm Thành Trung Kiên","Phạm Thị Minh","Thái Thị Giang","Trần Hiếu Nghĩa","Bùi Thị Linh","Vũ Thị Hằng","Vũ Thị Thanh Hiền"
+      ];
+      const add = ["Đào Hoàng Dương","Nguyễn Văn Linh","Nguyễn Văn Hiếu"];
+      const out = base.slice();
+      add.forEach(n => { if (out.indexOf(n) === -1) out.push(n); });
+      return out;
+    })();
+
+    let f41Initialized = false;
+
+    function initForm41() {
+      if (f41Initialized) return;
+      f41Initialized = true;
+      // Reuse SOP create-task setup
+      setupF4SopCreateTaskInline();
+      // Nếu có dữ liệu pending từ Form 13 thì điền lại
+      try {
+        const pending = window.__FORM13_LAST_PREFILL || null;
+        if (pending && pending.parentRow && pending.item) {
+          form13PrefillForm4SopFromItem(pending.parentRow, pending.item);
+        }
+      } catch(_) {}
+    }
     
     // NocoDB endpoints (cần cập nhật theo URL thực tế)
     const NOCODB_API_BASE = "https://your-nocodb-instance.com/api/v1/db/data/noco"; // TODO: Cập nhật URL thực tế
@@ -13288,6 +13491,167 @@
 
       // Setup project code modal
       setupF4ProjectCodeModal();
+
+      // Setup SOP create-task inline (copy từ Cổng 1.html)
+      setupF4SopCreateTaskInline();
+    }
+
+    function setupF4SopCreateTaskInline() {
+      const section = document.getElementById('f4-sop-create-task-section');
+      const form = document.getElementById('f4-sop-create-task-form');
+      if (!form) return;
+      // Panel inline đã hiển thị trực tiếp, không cần nút scroll
+
+      const assigneeSel = document.getElementById('f4-sop-create-assignee');
+      if (assigneeSel && assigneeSel.options.length <= 1) {
+        (F4_SOP_FORM3_ASSIGNEES || []).forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          assigneeSel.appendChild(opt);
+        });
+      }
+
+      const setRqTime = () => {
+        const el = document.getElementById('f4-sop-create-rq-time');
+        if (!el) return;
+        el.value = f4SopFormatYyyyMmDdHHmm(new Date());
+      };
+
+      // Notes cho loại tác vụ (copy ý từ Cổng 1.html)
+      (function initTypeNote() {
+        const sel = document.getElementById('f4-sop-create-task-type');
+        const note = document.getElementById('f4-sop-create-task-type-note');
+        if (!sel || !note) return;
+        const notes = {
+          'Sản phẩm': 'Tác vụ đánh giá SP máy, có mẫu đánh giá',
+          'Linh kiện': 'Tác vụ đánh giá linh kiện, có mẫu đánh giá',
+          'Tác vụ khác': 'Các tác vụ giấy tờ, bổ sung báo cáo, đào tạo, các tác vụ nhỏ lẻ'
+        };
+        const update = () => {
+          const v = sel.value;
+          if (v && notes[v]) { note.textContent = notes[v]; note.style.display = 'block'; }
+          else { note.textContent = ''; note.style.display = 'none'; }
+        };
+        sel.addEventListener('change', update);
+        update();
+      })();
+
+      // Tự động đổi '.' -> ',' cho công chuẩn (copy ý từ Cổng 1.html)
+      const mh = document.getElementById('f4-sop-create-man-hour');
+      mh?.addEventListener('input', (e) => {
+        const t = e.target;
+        if (!t || typeof t.value !== 'string') return;
+        if (t.value.includes('.')) {
+          t.value = t.value.replace(/\./g, ',');
+          if (typeof showToast === 'function') showToast('Đã tự động chuyển dấu chấm (.) thành dấu phẩy (,)', 'info');
+        }
+      });
+
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const requester = (document.getElementById('f4-sop-create-rq-by')?.value || '').trim();
+        const requesterEmail = (document.getElementById('f4-sop-create-rq-by-email')?.value || '').trim();
+        const taskName = (document.getElementById('f4-sop-create-task-name')?.value || '').trim();
+        const rqTime = (document.getElementById('f4-sop-create-rq-time')?.value || '').trim();
+        let manHourRaw = (document.getElementById('f4-sop-create-man-hour')?.value || '').trim();
+        const output = (document.getElementById('f4-sop-create-output')?.value || '').trim();
+        const assignee = (document.getElementById('f4-sop-create-assignee')?.value || '').trim();
+        const deadline = (document.getElementById('f4-sop-create-deadline')?.value || '').trim();
+        const odooJira = (document.getElementById('f4-sop-create-odoo-jira')?.value || '').trim();
+        const vendor = (document.getElementById('f4-sop-create-vendor')?.value || '').trim();
+        const taskType = (document.getElementById('f4-sop-create-task-type')?.value || '').trim();
+        const purpose = (document.getElementById('f4-sop-create-purpose')?.value || '').trim();
+        const componentCode = (document.getElementById('f4-sop-create-component-code')?.value || '').trim();
+
+        if (!requester || !taskName || !componentCode || !output || !manHourRaw || !assignee || !deadline || !vendor || !taskType || !purpose) {
+          if (typeof showToast === 'function') showToast('Vui lòng điền đủ tất cả các trường bắt buộc.', 'error');
+          return;
+        }
+
+        if (odooJira && !/^https:\/\/office\.karofi\.com\/.+/.test(odooJira)) {
+          if (typeof showToast === 'function') showToast('Link KOI phải có định dạng https://office.karofi.com/...', 'error');
+          return;
+        }
+
+        manHourRaw = manHourRaw.replace(/\./g, ',');
+        if (!/^\d+(,\d{1,2})?$/.test(manHourRaw)) {
+          if (typeof showToast === 'function') showToast('Công chuẩn tối đa 2 chữ số thập phân. Dùng dấu phẩy (,)', 'error');
+          return;
+        }
+
+        const btn = form.querySelector('button[type="submit"]');
+        const prev = btn ? btn.textContent : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = "<span class='spinner mr-2'></span>Đang gửi..."; }
+
+        // Generate Reqcode: QA.NB.DDMM-XXXXXX
+        const reqcode = (() => {
+          const d = new Date();
+          const pad = (n) => String(n).padStart(2, '0');
+          const ddmm = pad(d.getDate()) + pad(d.getMonth() + 1);
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          let rand = '';
+          for (let i = 0; i < 6; i++) rand += chars[Math.floor(Math.random() * chars.length)];
+          return `QA.NB.${ddmm}-${rand}`;
+        })();
+
+        const mapped = {
+          requesterName: requester,
+          requesterEmail: requesterEmail,
+          requestDate: rqTime || f4SopFormatYyyyMmDdHHmm(new Date()),
+          itemName: taskName,
+          code: componentCode,
+          Score: manHourRaw,
+          changeReq: output,
+          Assignee: assignee,
+          desiredDate: deadline ? f4SopFormatDdMmYyyy(deadline) : '',
+          Odoojira: odooJira,
+          vendor: vendor,
+          taskType: taskType,
+          purpose: purpose,
+          deptRequest: 'DQA',
+          Reqcode: reqcode
+        };
+
+        const fd = new FormData();
+        Object.entries(mapped).forEach(([k, v]) => fd.append(k, v));
+        fd.append('action', 'form3_submit');
+        fd.append('timestamp_iso', new Date().toISOString());
+
+        try {
+          await fetch(F4_SOP_FORM3_ENDPOINT, { method: 'POST', body: fd, mode: 'no-cors' });
+          if (typeof showToast === 'function') showToast('Đã giao việc và gửi dữ liệu.', 'success');
+          form.reset();
+          setRqTime();
+        } catch (err) {
+          console.error('[SOP CreateTask] submit error:', err);
+          if (typeof showToast === 'function') showToast('Gửi thất bại. Vui lòng thử lại.', 'error');
+        } finally {
+          if (btn) { btn.disabled = false; btn.textContent = prev || 'Giao việc'; }
+        }
+      };
+
+      document.getElementById('f4-sop-create-reset')?.addEventListener('click', () => {
+        form.reset();
+        setRqTime();
+      });
+
+      setRqTime();
+    }
+
+    function f4SopFormatYyyyMmDdHHmm(input) {
+      const d = input instanceof Date ? input : new Date(input);
+      if (isNaN(d.getTime())) return '';
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function f4SopFormatDdMmYyyy(yyyyMmDd) {
+      const s = String(yyyyMmDd || '').trim();
+      const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) return '';
+      return `${m[3]}/${m[2]}/${m[1]}`;
     }
 
     function setF4RequestCode() {
@@ -13313,21 +13677,23 @@
         "Đánh giá Sản phẩm SOP": "Liên quan đến sản phẩm/linh kiện đã SOP, cần kiểm tra chất lượng và đảm bảo phù hợp với tiêu chuẩn kỹ thuật.",
       };
 
-      purposeSelect.addEventListener('change', (e) => {
-        const val = e.target.value || "";
-        const desc = purposeDescriptions[val] || "";
-        const descEl = document.getElementById('f4-purposeDescription');
-        if (descEl) descEl.textContent = desc;
+      function setActivePurpose(val) {
+        const v = val || '';
+        purposeSelect.value = v;
 
-        // Kiểm tra dựa trên value thay vì text
-        const isSanPhamMoi = val === "Đánh giá SP mới";
-        const isSanPhamSOP = val === "Đánh giá Sản phẩm SOP";
+        const desc = purposeDescriptions[v] || "";
+        const descEl = document.getElementById('f4-purposeDescription');
+
+        const isSanPhamMoi = v === "Đánh giá SP mới";
+        if (descEl) {
+          descEl.textContent = desc;
+          descEl.classList.remove('hidden');
+        }
 
         // Project code container - luôn hiển thị
         const projContainer = document.getElementById('f4-projectCodeContainer');
         const projInput = document.getElementById('f4-projectCode');
         if (projContainer && projInput) {
-          // Luôn hiển thị và enable trường mã dự án, bắt buộc phải chọn
           projContainer.classList.remove('hidden');
           projInput.disabled = false;
           projInput.required = true;
@@ -13346,22 +13712,22 @@
         const personSel = document.querySelector('#f4-testRequestForm select[name="personReceived"]');
         if (personSel) {
           if (isSanPhamMoi) {
-            // Đánh giá sản phẩm mới -> auto chọn Nguyễn Văn Hiếu
             Array.from(personSel.options).forEach(opt => {
               if ((opt.text || opt.textContent || '').trim() === 'Nguyễn Văn Hiếu') {
                 personSel.value = opt.value || opt.text;
               }
             });
-          } else if (isSanPhamSOP) {
-            // Đánh giá sản phẩm SOP -> auto chọn Nguyễn Văn Linh
-            Array.from(personSel.options).forEach(opt => {
-              if ((opt.text || opt.textContent || '').trim() === 'Nguyễn Văn Linh') {
-                personSel.value = opt.value || opt.text;
-              }
-            });
           }
         }
+      }
+
+      // Backward compatibility: if something triggers change on hidden input
+      purposeSelect.addEventListener('change', (e) => {
+        setActivePurpose(e.target.value || "");
       });
+
+      // Init default
+      setActivePurpose(purposeSelect.value || 'Đánh giá SP mới');
     }
 
 
@@ -14509,6 +14875,7 @@
       "Nguyễn Hữu Thịnh",
       "Nguyễn Văn Hiếu",
       "Vũ Thị Hằng",
+      "Bùi Thị Linh",
       "Nguyễn Văn Linh",
       "Đào Hoàng Dương",
       "Bùi Đặng Quốc Huy",
@@ -22072,6 +22439,48 @@
     let FORM13_PAGE_SIZE = 20;
     const FORM13_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/bangdulieuodoo';
 
+    function parseForm13Items(itemListRaw) {
+      if (!itemListRaw) return [];
+      if (Array.isArray(itemListRaw)) return itemListRaw.filter(Boolean);
+      if (typeof itemListRaw === 'string') {
+        const s = itemListRaw.trim();
+        if (!s) return [];
+        try {
+          const parsed = JSON.parse(s);
+          return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+        } catch {
+          return [];
+        }
+      }
+      return [];
+    }
+
+    function normalizeForm13Row(row) {
+      const safeRow = row && typeof row === 'object' ? row : {};
+      const items = parseForm13Items(safeRow.item_list);
+      const first = items[0] || {};
+      const uid = safeRow.Id ?? safeRow.odoo_id ?? safeRow.ma_phe_duyet ?? '';
+      return {
+        ...safeRow,
+        __form13_uid: String(uid),
+        __items: items,
+        ten_san_pham: safeRow.ten_san_pham ?? first.ten_san_pham ?? '',
+        ma_san_pham: safeRow.ma_san_pham ?? first.ma_san_pham_clean ?? first.ma_san_pham ?? '',
+        loai_linh_kien: safeRow.loai_linh_kien ?? first.loai_linh_kien ?? '',
+        han_mong_muon: safeRow.han_mong_muon ?? first.han_mong_muon ?? ''
+      };
+    }
+
+    function parseForm13Date(dateString) {
+      if (!dateString) return null;
+      const s = String(dateString).trim();
+      if (!s) return null;
+      // Hỗ trợ dạng "YYYY-MM-DD HH:mm:ss"
+      const maybeIso = s.includes('T') ? s : s.replace(' ', 'T');
+      const d = new Date(maybeIso);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
     function getForm13StatusColor(status) {
       const colors = {
         'Submitted': 'bg-yellow-100 text-yellow-800',
@@ -22084,7 +22493,7 @@
     function formatForm13Date(dateString) {
       if (!dateString) return '';
       try {
-        const date = new Date(dateString);
+        const date = parseForm13Date(dateString) || new Date(dateString);
         return date.toLocaleDateString('vi-VN');
       } catch {
         return dateString;
@@ -22093,8 +22502,8 @@
 
     function sortForm13DataByDate(data) {
       return [...data].sort((a, b) => {
-        const dateA = a.request_date ? new Date(a.request_date) : new Date(0);
-        const dateB = b.request_date ? new Date(b.request_date) : new Date(0);
+        const dateA = parseForm13Date(a?.request_date) || new Date(0);
+        const dateB = parseForm13Date(b?.request_date) || new Date(0);
         // Sắp xếp từ mới đến cũ (descending)
         return dateB - dateA;
       });
@@ -22112,7 +22521,7 @@
       if (FORM13_FILTERED_DATA.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="11" class="px-4 py-8 text-center text-text-light-secondary">
+            <td colspan="12" class="px-4 py-8 text-center text-text-light-secondary">
               Không có dữ liệu (Tổng: ${FORM13_ALL_DATA.length} bản ghi)
             </td>
           </tr>
@@ -22127,24 +22536,43 @@
 
       tbody.innerHTML = pageData.map((row, index) => {
         const stt = start + index + 1;
+        const uid = row.__form13_uid || '';
+        const itemsArr = Array.isArray(row.__items) ? row.__items : [];
+        const itemCount = row.item_count ?? itemsArr.length;
+        const createdCount = itemsArr.reduce((acc, it) => {
+          const v = it?.da_tao_tac_vu ?? it?.da_tao_task ?? '';
+          const ok = (v === true) || (String(v).toLowerCase() === 'true');
+          return acc + (ok ? 1 : 0);
+        }, 0);
+        const totalCount = Math.max(Number(itemCount) || 0, itemsArr.length);
+        const hasCreatedItem = createdCount > 0;
         return `
           <tr class="border-b border-border-light hover:bg-sidebar transition-colors">
             <td class="px-4 py-3 text-sm">${stt}</td>
-            <td class="px-4 py-3 text-sm font-medium">${row.ma_phe_duyet || ''}</td>
-            <td class="px-4 py-3 text-sm">${row.ten_phe_duyet || ''}</td>
+            <td class="px-4 py-3 text-sm font-medium">${escapeHtml(row.ma_phe_duyet || '')}</td>
+            <td class="px-4 py-3 text-sm">${escapeHtml(row.ten_phe_duyet || '')}</td>
             <td class="px-4 py-3 text-sm">
               <span class="px-2 py-1 rounded-full text-xs font-medium ${getForm13StatusColor(row.trang_thai)}">
-                ${row.trang_thai || ''}
+                ${escapeHtml(row.trang_thai || '')}
               </span>
             </td>
-            <td class="px-4 py-3 text-sm">${row.requester_name || ''}</td>
+            <td class="px-4 py-3 text-sm">${escapeHtml(row.requester_name || '')}</td>
             <td class="px-4 py-3 text-sm">${formatForm13Date(row.request_date)}</td>
-            <td class="px-4 py-3 text-sm">${row.ten_san_pham || ''}</td>
-            <td class="px-4 py-3 text-sm">${row.ma_san_pham || ''}</td>
-            <td class="px-4 py-3 text-sm">${row.loai_linh_kien || ''}</td>
-            <td class="px-4 py-3 text-sm">${row.han_mong_muon || ''}</td>
+            <td class="px-4 py-3 text-sm">${escapeHtml(row.ten_san_pham || '')}</td>
+            <td class="px-4 py-3 text-sm">${escapeHtml(row.ma_san_pham || '')}</td>
+            <td class="px-4 py-3 text-sm">${escapeHtml(row.loai_linh_kien || '')}</td>
+            <td class="px-4 py-3 text-sm">${escapeHtml(row.han_mong_muon || '')}</td>
             <td class="px-4 py-3 text-sm">
-              ${row.link_koi ? `<a href="${row.link_koi}" target="_blank" class="text-primary-blue hover:underline">Xem</a>` : ''}
+              ${row.link_koi ? `<a href="${escapeHtml(row.link_koi)}" target="_blank" rel="noopener noreferrer" class="text-primary-blue hover:underline">Xem</a>` : ''}
+            </td>
+            <td class="px-4 py-3 text-sm">
+              <button type="button"
+                class="form13-items-btn inline-flex items-center gap-2 px-3 py-1 border border-border-light rounded-lg text-sm hover:bg-sidebar transition-colors ${hasCreatedItem ? 'bg-yellow-50 border-yellow-300' : ''}"
+                data-form13-uid="${escapeHtml(uid)}">
+                <span class="material-symbols-outlined text-base">list</span>
+                <span>${escapeHtml(itemCount)}</span>
+                ${hasCreatedItem ? `<span class="ml-1 text-[11px] font-semibold text-yellow-700">(đã tạo ${createdCount}/${totalCount})</span>` : ''}
+              </button>
             </td>
           </tr>
         `;
@@ -22198,7 +22626,7 @@
       if (tbody) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="11" class="px-4 py-8 text-center text-text-light-secondary">
+            <td colspan="12" class="px-4 py-8 text-center text-text-light-secondary">
               <div class="flex flex-col items-center gap-2">
                 <span class="spinner"></span>
                 <span>Đang tải dữ liệu...</span>
@@ -22311,6 +22739,9 @@
           FORM13_ALL_DATA = [];
         }
         
+        // Chuẩn hoá row: parse item_list + map field theo item đầu tiên để hiển thị list
+        FORM13_ALL_DATA = (FORM13_ALL_DATA || []).map(normalizeForm13Row);
+
         // Sắp xếp dữ liệu theo ngày yêu cầu từ mới đến cũ
         FORM13_ALL_DATA = sortForm13DataByDate(FORM13_ALL_DATA);
         FORM13_FILTERED_DATA = [...FORM13_ALL_DATA];
@@ -22323,7 +22754,7 @@
         if (tbody) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="11" class="px-4 py-8 text-center text-red-500">
+              <td colspan="12" class="px-4 py-8 text-center text-red-500">
                 Lỗi khi tải dữ liệu: ${error.message}
                 <br><small>Vui lòng mở Console (F12) để xem chi tiết</small>
               </td>
@@ -22332,6 +22763,314 @@
         }
         showToast('Lỗi khi tải dữ liệu', 'error');
       }
+    }
+
+    function openForm13ItemsModal(row) {
+      const modal = document.getElementById('modal-form13-items');
+      const overlay = document.getElementById('modal-form13-items-overlay');
+      const closeBtn = document.getElementById('modal-form13-items-close');
+      const closeBtn2 = document.getElementById('modal-form13-items-close-btn');
+      const subtitle = document.getElementById('modal-form13-items-subtitle');
+      const tbody = document.getElementById('modal-form13-items-tbody');
+
+      if (!modal || !overlay || !tbody) return;
+
+      const items = Array.isArray(row?.__items) ? row.__items : parseForm13Items(row?.item_list);
+      // Lưu context để nút "Tạo tác vụ" có thể dùng lại
+      window.__FORM13_ITEMS_MODAL_CTX = { parentRow: row || {}, items: items || [] };
+      const titleText = `${row?.ma_phe_duyet || ''} — ${row?.ten_phe_duyet || ''}`.trim();
+      if (subtitle) subtitle.textContent = titleText;
+
+      const parentUid = String(row?.__form13_uid || row?.Id || row?.odoo_id || row?.ma_phe_duyet || '');
+      const isCreated = (it) => String(it?.da_tao_tac_vu ?? it?.da_tao_task ?? '').toLowerCase() === 'true' || it?.da_tao_tac_vu === true || it?.da_tao_task === true;
+
+      const rowsHtml = (items || []).map((it, i) => `
+        <tr class="border-b border-gray-100 hover:bg-gray-50 ${isCreated(it) ? 'bg-yellow-50' : ''}">
+          <td class="px-3 py-2 text-sm">${i + 1}</td>
+          <td class="px-3 py-2 text-sm font-medium">${escapeHtml(it.task_name || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.ten_san_pham || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.ma_san_pham_clean ?? it.ma_san_pham ?? '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.loai_linh_kien || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.muc_dich_yeu_cau || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.nha_cung_cap || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.so_luong_mau || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.han_mong_muon || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.ghi_chu || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.thong_tin_thu_nghiem || '')}</td>
+          <td class="px-3 py-2 text-sm">${escapeHtml(it.yeu_cau_thu_nghiem_dac_biet || '')}</td>
+          <td class="px-3 py-2 text-sm">
+            <div class="flex flex-wrap gap-2">
+              <button type="button"
+                class="form13-create-task-btn inline-flex items-center gap-2 px-3 py-1 rounded-lg ${isCreated(it) ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-blue-600 text-white hover:bg-blue-700'} transition-colors"
+                data-form13-item-index="${i}"
+                data-form13-create-kind="spm">
+                <span class="material-symbols-outlined text-base">note_add</span>
+                <span>Sản phẩm mới</span>
+              </button>
+              <button type="button"
+                class="form13-create-task-btn inline-flex items-center gap-2 px-3 py-1 rounded-lg ${isCreated(it) ? 'bg-yellow-500 text-white hover:bg-yellow-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'} transition-colors"
+                data-form13-item-index="${i}"
+                data-form13-create-kind="sop">
+                <span class="material-symbols-outlined text-base">assignment</span>
+                <span>SOP</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      tbody.innerHTML = rowsHtml || `<tr><td colspan="13" class="px-3 py-6 text-center text-gray-500">Không có item</td></tr>`;
+
+      const close = () => {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      };
+
+      // (re)bind close handlers
+      overlay.onclick = close;
+      if (closeBtn) closeBtn.onclick = close;
+      if (closeBtn2) closeBtn2.onclick = close;
+
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+    }
+
+    const FORM13_MARK_CREATED_WEBHOOK = 'https://iatzhxxuk.tino.page/webhook/xacnhantaotacvu';
+
+    function form13BuildParentId(row) {
+      const r = row || {};
+      return String(r.Id ?? r.odoo_id ?? r.ma_phe_duyet ?? r.__form13_uid ?? '');
+    }
+
+    async function form13MarkItemCreatedAndSync(parentRow, itemIndex) {
+      const items = Array.isArray(parentRow?.__items) ? parentRow.__items : parseForm13Items(parentRow?.item_list);
+      if (!Array.isArray(items) || !items[itemIndex]) throw new Error('Item không hợp lệ');
+
+      const item = items[itemIndex];
+      const already = (String(item?.da_tao_tac_vu ?? item?.da_tao_task ?? '').toLowerCase() === 'true') || item?.da_tao_tac_vu === true || item?.da_tao_task === true;
+
+      // Cập nhật item_list
+      const nowIso = new Date().toISOString();
+      if (!already) {
+        // Lần đầu tạo
+        item.da_tao_tac_vu = true;
+        item.thoi_gian_tao_tac_vu = nowIso;
+      } else {
+        // Đã tạo rồi nhưng vẫn cho bấm lại để xác nhận lại
+        item.thoi_gian_xac_nhan_lai = nowIso;
+        const prev = Number(item.so_lan_xac_nhan || 0);
+        item.so_lan_xac_nhan = Number.isFinite(prev) ? prev + 1 : 1;
+      }
+
+      const updatedItemList = JSON.stringify(items);
+      const payload = {
+        parent_id: form13BuildParentId(parentRow),
+        ma_phe_duyet: parentRow?.ma_phe_duyet || '',
+        ten_phe_duyet: parentRow?.ten_phe_duyet || '',
+        item_index: itemIndex,
+        item_list: updatedItemList
+      };
+
+      const res = await fetch(FORM13_MARK_CREATED_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const txt = await res.text().catch(()=> '');
+        throw new Error(`Gửi webhook thất bại (${res.status}) ${txt ? '- ' + txt : ''}`);
+      }
+
+      // Đồng bộ lại object đang giữ trong UI
+      parentRow.item_list = updatedItemList;
+      parentRow.__items = items;
+      return { updatedItems: items, skipped: false };
+    }
+
+    function form13TryNavigateToForm(formId) {
+      const btn = document.querySelector(`.nav-btn[data-target="${formId}"]`);
+      if (btn) {
+        btn.click();
+        return true;
+      }
+      const el = document.getElementById(formId);
+      if (el) {
+        document.querySelectorAll('section[id^="form"]').forEach(s => s.classList.add('hidden'));
+        el.classList.remove('hidden');
+        if (formId === 'form4' && typeof initForm4 === 'function') {
+          try { initForm4(); } catch(_) {}
+        }
+        return true;
+      }
+      return false;
+    }
+
+    function form13ToYMD(input) {
+      const s = String(input || '').trim();
+      if (!s) return '';
+      // dd/mm/yyyy
+      const m1 = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m1) {
+        const dd = m1[1].padStart(2, '0');
+        const mm = m1[2].padStart(2, '0');
+        const yyyy = m1[3];
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      // yyyy-mm-dd (hoặc yyyy-mm-dd HH:mm:ss)
+      const m2 = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (m2) {
+        const yyyy = m2[1];
+        const mm = String(m2[2]).padStart(2, '0');
+        const dd = String(m2[3]).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      // fallback: Date parse
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      return '';
+    }
+
+    function form13PrefillForm4FromItem(parentRow, item) {
+      if (!form13TryNavigateToForm('form4')) {
+        showToast('Không chuyển được sang Form 4', 'error');
+        return;
+      }
+
+      const form = document.getElementById('f4-testRequestForm');
+      if (!form) return;
+
+      const setVal = (selector, value) => {
+        const el = form.querySelector(selector);
+        if (!el) return;
+        el.value = value ?? '';
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+
+      // Thông tin người gửi (nếu có từ Form 13)
+      setVal('#f4-senderName', parentRow?.requester_name || '');
+      setVal('input[name="senderEmail"]', parentRow?.requester_email || '');
+
+      // Thông tin sản phẩm/linh kiện
+      setVal('#f4-productName', item?.ten_san_pham || '');
+      setVal('input[name="productCode"]', item?.ma_san_pham_clean ?? item?.ma_san_pham ?? '');
+      setVal('input[name="supplier"]', item?.nha_cung_cap || '');
+
+      // Số lượng mẫu
+      const rawQty = String(item?.so_luong_mau ?? '').trim();
+      const qtyNum = rawQty ? parseInt(rawQty.replace(/[^\d]/g, ''), 10) : '';
+      setVal('input[name="numSamples"]', Number.isFinite(qtyNum) ? String(qtyNum) : rawQty);
+
+      // Hạn mong muốn (Form 4 dùng input type="date" khi focus)
+      const ymd = form13ToYMD(item?.han_mong_muon);
+      if (ymd) setVal('#f4-desiredCompletionDate', ymd);
+
+      // Link KOI
+      setVal('input[name="linkKOI"]', parentRow?.link_koi || '');
+
+      // Loại tác vụ
+      const hasLoaiLK = String(item?.loai_linh_kien || '').trim().length > 0;
+      setVal('#f4-loai', hasLoaiLK ? 'Linh kiện' : 'Sản phẩm');
+
+      // Mục đích yêu cầu: chỉ set nếu trùng option hiện có
+      const purposeSel = document.getElementById('f4-requestPurpose');
+      if (purposeSel && item?.muc_dich_yeu_cau) {
+        const val = String(item.muc_dich_yeu_cau).trim();
+        const opt = Array.from(purposeSel.options || []).find(o => (o.value || o.text || '').trim() === val);
+        if (opt) {
+          purposeSel.value = opt.value || opt.text;
+          purposeSel.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      // Notes: gộp các thông tin liên quan của item
+      const noteParts = [];
+      if (item?.task_name) noteParts.push(`Task: ${item.task_name}`);
+      if (item?.ghi_chu) noteParts.push(`Ghi chú: ${item.ghi_chu}`);
+      if (item?.thong_tin_thu_nghiem) noteParts.push(`TT thử nghiệm: ${item.thong_tin_thu_nghiem}`);
+      if (item?.yeu_cau_thu_nghiem_dac_biet) noteParts.push(`YC đặc biệt: ${item.yeu_cau_thu_nghiem_dac_biet}`);
+      setVal('textarea[name="notes"]', noteParts.filter(Boolean).join('\n'));
+
+      // Đưa viewport lên đầu form
+      try { document.getElementById('form4')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(_){}
+    }
+
+    function form13PrefillForm4SopFromItem(parentRow, item) {
+      // SOP form nằm trong tab SOP của Form 4 (vẫn ở trong DOM dù đang hidden)
+      const sopForm = document.getElementById('f4-sop-create-task-form');
+      if (!sopForm) return;
+
+      const setVal = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = value ?? '';
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+
+      // Prefill các field tương ứng với "Create Task" (copy từ Cổng 1.html)
+      setVal('f4-sop-create-rq-by', parentRow?.requester_name || '');
+      setVal('f4-sop-create-rq-by-email', parentRow?.requester_email || '');
+
+      // Task name (SOP): ưu tiên ten_san_pham, fallback sang ten_linh_kien/task_name
+      const taskName =
+        (item?.ten_san_pham && String(item.ten_san_pham).trim()) ||
+        (item?.ten_linh_kien && String(item.ten_linh_kien).trim()) ||
+        (item?.task_name && String(item.task_name).trim()) ||
+        `${parentRow?.ma_phe_duyet || ''} ${parentRow?.ten_phe_duyet || ''}`.trim();
+      setVal('f4-sop-create-task-name', taskName);
+
+      // Mã linh kiện: ưu tiên mã sản phẩm clean
+      setVal('f4-sop-create-component-code', item?.ma_san_pham_clean ?? item?.ma_san_pham ?? '');
+
+      // Deadline: dùng ymd từ dữ liệu item
+      const ymd = form13ToYMD(item?.han_mong_muon);
+      if (ymd) setVal('f4-sop-create-deadline', ymd);
+
+      // Link KOI
+      setVal('f4-sop-create-odoo-jira', parentRow?.link_koi || '');
+
+      // Vendor
+      setVal('f4-sop-create-vendor', item?.nha_cung_cap || '');
+
+      // Task type
+      const hasLoaiLK = String(item?.loai_linh_kien || '').trim().length > 0;
+      setVal('f4-sop-create-task-type', hasLoaiLK ? 'Linh kiện' : 'Sản phẩm');
+
+      // Purpose: SOP tab -> set mặc định "Đánh giá Sản phẩm SOP"
+      setVal('f4-sop-create-purpose', 'Đánh giá Sản phẩm SOP');
+
+      // Output: gộp info từ item
+      const outParts = [];
+      if (item?.muc_dich_yeu_cau) outParts.push(String(item.muc_dich_yeu_cau).trim());
+      if (item?.ghi_chu) outParts.push(`Ghi chú: ${String(item.ghi_chu).trim()}`);
+      if (item?.thong_tin_thu_nghiem) outParts.push(`TT thử nghiệm: ${String(item.thong_tin_thu_nghiem).trim()}`);
+      if (item?.yeu_cau_thu_nghiem_dac_biet) outParts.push(`YC đặc biệt: ${String(item.yeu_cau_thu_nghiem_dac_biet).trim()}`);
+      setVal('f4-sop-create-output', outParts.filter(Boolean).join('. '));
+
+      // Công chuẩn / Người được giao: để người dùng chọn (không có mapping chắc chắn từ Form 13)
+      // Cập nhật thời gian yêu cầu theo hệ thống
+      try {
+        const el = document.getElementById('f4-sop-create-rq-time');
+        if (el) el.value = f4SopFormatYyyyMmDdHHmm(new Date());
+      } catch(_){}
+    }
+
+    function form13PrefillForm4BothSides(parentRow, item) {
+      // lưu để khi user mở Form 4.1 vẫn có thể fill lại
+      try { window.__FORM13_LAST_PREFILL = { parentRow, item }; } catch(_){}
+      // SPM (Form 4 hiện tại)
+      form13PrefillForm4FromItem(parentRow, item);
+      // SOP (Form 4.1): có thể đang hidden nhưng vẫn có trong DOM để điền
+      try { form13PrefillForm4SopFromItem(parentRow, item); } catch(_){}
+      setTimeout(() => { try { form13PrefillForm4SopFromItem(parentRow, item); } catch(_){} }, 50);
+      setTimeout(() => { try { form13PrefillForm4SopFromItem(parentRow, item); } catch(_){} }, 250);
     }
 
     function exportForm13ToExcel() {
@@ -22398,6 +23137,59 @@
           FORM13_PAGE++;
           renderForm13Table();
         }
+      });
+
+      // Event delegation: mở modal item_list
+      const tbody = document.getElementById('form13-table-body');
+      tbody?.addEventListener('click', function(e) {
+        const btn = e.target?.closest?.('.form13-items-btn');
+        if (!btn) return;
+        const uid = btn.getAttribute('data-form13-uid') || '';
+        const row = FORM13_ALL_DATA.find(r => String(r.__form13_uid || '') === String(uid));
+        if (!row) {
+          showToast('Không tìm thấy dữ liệu item', 'warning');
+          return;
+        }
+        openForm13ItemsModal(row);
+      });
+
+      // Event delegation: nút "Tạo tác vụ" trong modal items
+      const modalTbody = document.getElementById('modal-form13-items-tbody');
+      modalTbody?.addEventListener('click', function(e) {
+        const btn = e.target?.closest?.('.form13-create-task-btn');
+        if (!btn) return;
+        const kind = (btn.getAttribute('data-form13-create-kind') || '').toLowerCase(); // 'spm' | 'sop'
+        const idx = parseInt(btn.getAttribute('data-form13-item-index') || '-1', 10);
+        const ctx = window.__FORM13_ITEMS_MODAL_CTX || {};
+        const items = Array.isArray(ctx.items) ? ctx.items : [];
+        const parentRow = ctx.parentRow || {};
+        const item = items[idx];
+        if (!item) {
+          showToast('Không tìm thấy item để tạo tác vụ', 'warning');
+          return;
+        }
+
+        // Đóng modal + prefill form ngay lập tức (không phụ thuộc webhook)
+        const modal = document.getElementById('modal-form13-items');
+        if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+
+        // Luôn điền dữ liệu cho cả 2 form để khỏi mất công
+        form13PrefillForm4BothSides(parentRow, item);
+
+        // Điều hướng theo nút bấm
+        if (kind === 'sop') form13TryNavigateToForm('form41');
+        else form13TryNavigateToForm('form4');
+
+        // Gửi webhook xác nhận ở nền; nếu lỗi vẫn không chặn việc điền form
+        (async () => {
+          try {
+            await form13MarkItemCreatedAndSync(parentRow, idx);
+            showToast('Đã cập nhật item_list và gửi xác nhận', 'success');
+          } catch (err) {
+            console.error('[Form13] Mark created error:', err);
+            showToast(err?.message || 'Lỗi khi xác nhận tạo tác vụ', 'error');
+          }
+        })();
       });
 
       // Load data on init
