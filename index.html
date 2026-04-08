@@ -444,6 +444,10 @@
               <span class="material-symbols-outlined text-lg text-gray-500">inventory_2</span>
               <p class="text-sm font-semibold">5 - Quản lý Tác vụ Sản phẩm Mới</p>
             </button>
+            <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form51">
+              <span class="material-symbols-outlined text-lg text-gray-500">view_kanban</span>
+              <p class="text-sm font-semibold">5.1 - Board Tác vụ (SPM)</p>
+            </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form6">
               <span class="material-symbols-outlined text-lg text-gray-500">analytics</span>
               <p class="text-sm font-semibold">6 - Dashboard Thống kê</p>
@@ -494,7 +498,7 @@
         <div class="flex flex-col gap-1 mt-2">
           <button class="group-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-group="koi-group">
             <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
-            <p class="text-sm font-semibold">Hệ thống KOI (đang xây dựng)</p>
+            <p class="text-sm font-semibold">Hệ thống KOI</p>
           </button>
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="koi-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form13">
@@ -1242,6 +1246,103 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- Form 5.1 - Board (Trello) giữ nguyên chức năng Form 5 -->
+    <section id="form51" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
+      <div class="mx-auto flex w-full flex-col gap-6">
+        <!-- Page Heading -->
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <p class="text-4xl font-black leading-tight tracking-tighter text-gray-900">Board Tác Vụ - Sản phẩm Mới</p>
+            <p class="text-base font-normal text-gray-600">Hiển thị kiểu Trello. Giữ nguyên dữ liệu & chức năng Form 5.</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button id="f51-back-to-form5-btn" class="flex items-center gap-2 px-4 py-2 bg-white border border-[#e5e7eb] rounded-full text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
+              <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+              <span>Về Form 5</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm border border-gray-200 sticky top-0 z-10">
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="relative w-64">
+              <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">search</span>
+              <input id="f51-searchInput" class="h-10 w-full rounded-full border-gray-300 bg-gray-50 pl-10 pr-4 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Tìm theo tên task/subtask..." type="text"/>
+            </div>
+            <select id="f51-filter-pic" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[220px]">
+              <option value="">Tất cả người nhận</option>
+            </select>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <select id="f51-filter-date-preset" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500 min-w-[180px]">
+                <option value="all">Tất cả thời gian</option>
+                <option value="today">Hôm nay</option>
+                <option value="this-week">Tuần này</option>
+                <option value="this-month" selected>Tháng này</option>
+                <option value="last-month">Tháng trước</option>
+                <option value="last-3-months">3 tháng gần nhất</option>
+                <option value="custom">Tùy chỉnh...</option>
+              </select>
+              <div id="f51-custom-date-range" class="hidden flex items-center gap-2">
+                <input type="date" id="f51-filter-date-from" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Từ ngày">
+                <span class="text-gray-500 text-sm">đến</span>
+                <input type="date" id="f51-filter-date-to" class="h-10 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Đến ngày">
+              </div>
+            </div>
+
+            <!-- Toggle A1/A2 -->
+            <div class="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-2 py-1 flex-wrap">
+              <span class="text-xs font-semibold text-gray-600 pl-2">Hiển thị</span>
+              <button id="f51-mode-global" type="button" class="h-8 rounded-full px-3 text-xs font-bold bg-white shadow-sm border border-gray-200 text-gray-900">Tất cả</button>
+              <button id="f51-mode-lane" type="button" class="h-8 rounded-full px-3 text-xs font-bold text-gray-700 hover:bg-white">Theo Project</button>
+              <button id="f51-mode-marked" type="button" class="h-8 rounded-full px-3 text-xs font-bold text-gray-700 hover:bg-white">Đã đánh dấu</button>
+            </div>
+
+            <button id="f51-searchBtn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
+              <span class="material-symbols-outlined text-lg">search</span>
+              Tra cứu
+            </button>
+            <button id="f51-resetBtn" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-800 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm">
+              <span class="material-symbols-outlined text-lg">restart_alt</span>
+              Đặt lại
+            </button>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <div id="f51-active-filters" class="flex flex-wrap items-center gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Board -->
+        <div class="relative rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <div id="f51-board" class="w-full overflow-x-auto overflow-y-auto" style="max-height: calc(100vh - 360px);">
+            <div class="p-6 text-center text-gray-500 text-base">Chưa có dữ liệu. Vui lòng nhấn nút "Tra cứu" để tải dữ liệu.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Panel -->
+      <div id="f51-detail-panel" class="hidden fixed inset-y-0 right-0 z-[9999] w-full sm:w-[520px] bg-white border-l border-gray-200 shadow-2xl">
+        <div class="flex items-start justify-between gap-4 p-4 border-b border-gray-200">
+          <div class="min-w-0">
+            <p id="f51-detail-title" class="text-lg font-bold text-gray-900 truncate">Chi tiết</p>
+            <p id="f51-detail-subtitle" class="text-xs text-gray-500 truncate"></p>
+          </div>
+          <button id="f51-detail-close" type="button" class="text-gray-500 hover:text-gray-700">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div id="f51-detail-body" class="p-4 overflow-y-auto" style="max-height: calc(100vh - 140px);">
+          <!-- Render by JS -->
+        </div>
+        <div class="p-4 border-t border-gray-200 flex items-center justify-end gap-2">
+          <button id="f51-detail-open-modal" type="button" class="h-10 rounded-lg border border-gray-300 bg-white px-4 text-sm font-bold text-gray-800 hover:bg-gray-50">Mở chi tiết</button>
+          <button id="f51-detail-declare-task" type="button" class="h-10 rounded-lg bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">Khai báo</button>
+        </div>
+      </div>
+      <div id="f51-detail-overlay" class="hidden fixed inset-0 z-[9998] bg-black/20"></div>
     </section>
 
     <!-- Form 6 - Dashboard Thống kê -->
@@ -3885,6 +3986,9 @@
             if (targetForm === 'form5' && typeof initForm5 === 'function') {
               initForm5();
             }
+            if (targetForm === 'form51' && typeof initForm51 === 'function') {
+              initForm51();
+            }
             if (targetForm === 'form6' && typeof initForm6 === 'function') {
               initForm6();
             }
@@ -3896,6 +4000,21 @@
             }
             if (targetForm === 'form12' && typeof initForm12 === 'function') {
               initForm12();
+            }
+            // Form 13: khi quay lại từ "Tạo tác vụ" thì tự refresh dữ liệu
+            if (targetForm === 'form13' && typeof fetchForm13Data === 'function') {
+              try {
+                const needRefresh = sessionStorage.getItem('form13_need_refresh') === '1';
+                // Refresh khi có cờ, hoặc khi chưa từng load lần nào
+                const neverLoaded = !Array.isArray(window.FORM13_ALL_DATA) || window.FORM13_ALL_DATA.length === 0;
+                if (needRefresh || neverLoaded) {
+                  sessionStorage.removeItem('form13_need_refresh');
+                  fetchForm13Data();
+                }
+              } catch (_) {
+                // fallback: cố gắng refresh an toàn
+                try { fetchForm13Data(); } catch (_) {}
+              }
             }
             if (targetForm === 'form14' && typeof initForm14 === 'function') {
               initForm14();
@@ -15839,6 +15958,8 @@
           renderF5TasksTable();
         });
       }
+
+      // Form 5.1 đã tách riêng, không mở từ Form 5
     }
     
     // Hàm tính toán khoảng thời gian từ preset
@@ -15951,6 +16072,762 @@
         dateFromInput.addEventListener('change', updateCustomRange);
         dateToInput.addEventListener('change', updateCustomRange);
       }
+    }
+
+    // ===== FORM 5.1 - BOARD (TRELLO) =====
+    let f51Initialized = false;
+    let F51_FILTER_PIC = '';
+    let F51_SEARCH_TEXT = '';
+    let F51_MODE = 'global'; // 'global' | 'lane' | 'marked'
+    let F51_FILTER_DATE_RANGE = {
+      preset: (F5_FILTER_DATE_RANGE && F5_FILTER_DATE_RANGE.preset) ? F5_FILTER_DATE_RANGE.preset : 'this-month',
+      from: (F5_FILTER_DATE_RANGE && F5_FILTER_DATE_RANGE.from) ? F5_FILTER_DATE_RANGE.from : null,
+      to: (F5_FILTER_DATE_RANGE && F5_FILTER_DATE_RANGE.to) ? F5_FILTER_DATE_RANGE.to : null
+    };
+    let F51_SELECTED_TASK_ID = null;
+
+    function f51Esc(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function f51ShowDetailPanel(show) {
+      const panel = document.getElementById('f51-detail-panel');
+      const overlay = document.getElementById('f51-detail-overlay');
+      if (!panel || !overlay) return;
+      if (show) {
+        panel.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    function f51GetTaskById(taskId) {
+      const res = findF5Task(taskId);
+      if (!res || !res.task) return null;
+      return { task: res.task, project: res.project };
+    }
+
+    function f51GetTaskSearchBlob(task, project) {
+      const parts = [];
+      parts.push(task.taskName, task.taskCode, task.requester, task.pic, task.status);
+      parts.push(project && project.projectName, project && project.projectCode);
+      parts.push(task.TaskLinkKOI, task.resultLink);
+      const subtasks = task.subtasks || [];
+      subtasks.forEach(st => {
+        parts.push(st.name, st.taskCode, st.subtaskCode, st.pic, st.status, st.declarationMode);
+      });
+      return parts.filter(Boolean).join(' ').toLowerCase();
+    }
+
+    function f51TaskPassesFilters(task, project) {
+      if (F51_FILTER_PIC) {
+        const pic = String(task.pic || '').trim();
+        if (pic !== F51_FILTER_PIC) return false;
+      }
+
+      if (F51_FILTER_DATE_RANGE && F51_FILTER_DATE_RANGE.preset !== 'all') {
+        const createdAt = task.createdAt;
+        if (!createdAt) return false;
+        const createdAtDate = new Date(createdAt);
+        if (isNaN(createdAtDate.getTime())) return false;
+        const taskDateStr = createdAtDate.toISOString().split('T')[0];
+        const filterFrom = F51_FILTER_DATE_RANGE.from;
+        const filterTo = F51_FILTER_DATE_RANGE.to;
+        if (filterFrom && taskDateStr < filterFrom) return false;
+        if (filterTo && taskDateStr > filterTo) return false;
+      }
+
+      if (F51_SEARCH_TEXT) {
+        const blob = f51GetTaskSearchBlob(task, project);
+        if (!blob.includes(F51_SEARCH_TEXT.toLowerCase())) return false;
+      }
+
+      return true;
+    }
+
+    function f51GetAllFilteredTasks() {
+      const out = [];
+      (F5_PROJECTS || []).forEach(project => {
+        const tasks = project.tasks || [];
+        tasks.forEach(task => {
+          if (!f51TaskPassesFilters(task, project)) return;
+          out.push({ task, project });
+        });
+      });
+      return out;
+    }
+
+    function f51GetStatusOrder(statuses) {
+      const prefer = ['pending', 'in_progress', 'done', 'cancel', 'canceled', 'doing', 'to_do', 'todo'];
+      const uniq = Array.from(new Set(statuses.map(s => String(s || '').trim()).filter(Boolean)));
+      uniq.sort((a, b) => {
+        const ia = prefer.indexOf(a);
+        const ib = prefer.indexOf(b);
+        if (ia === -1 && ib === -1) return a.localeCompare(b);
+        if (ia === -1) return 1;
+        if (ib === -1) return -1;
+        return ia - ib;
+      });
+      return uniq;
+    }
+
+    function f51RenderActiveFilters() {
+      const wrap = document.getElementById('f51-active-filters');
+      if (!wrap) return;
+      const chips = [];
+      if (F51_FILTER_PIC) chips.push(`PIC: ${f51Esc(F51_FILTER_PIC)}`);
+      if (F51_FILTER_DATE_RANGE && F51_FILTER_DATE_RANGE.preset && F51_FILTER_DATE_RANGE.preset !== 'all') {
+        const from = F51_FILTER_DATE_RANGE.from || '';
+        const to = F51_FILTER_DATE_RANGE.to || '';
+        chips.push(`Date: ${f51Esc(F51_FILTER_DATE_RANGE.preset)}${from || to ? ` (${f51Esc(from)} → ${f51Esc(to)})` : ''}`);
+      }
+      if (F51_SEARCH_TEXT) chips.push(`Search: ${f51Esc(F51_SEARCH_TEXT)}`);
+      wrap.innerHTML = chips.map(t => `<span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 border border-blue-200">${t}</span>`).join('');
+    }
+
+    function f51RenderBoard() {
+      const board = document.getElementById('f51-board');
+      if (!board) return;
+
+      function f51NormalizeStageStatusLabel(raw) {
+        const s = String(raw || '').trim();
+        const lower = s.toLowerCase();
+        if (!s) return 'Chưa triển khai';
+        if (lower === 'done' || lower === 'hoàn thành' || lower === 'đã hoàn thành') return 'Hoàn thành';
+        if (lower === 'in_progress' || lower === 'doing' || lower === 'đang triển khai' || lower === 'đang xử lý') return 'Đang triển khai';
+        if (lower === 'pending' || lower === 'to_do' || lower === 'todo' || lower === 'chưa triển khai' || lower === 'chờ xử lý') return 'Chưa triển khai';
+        return s;
+      }
+
+      function f51FindStageSubtask(task, stageLetter) {
+        const subtasks = task && task.subtasks ? task.subtasks : [];
+        const want = String(stageLetter || '').toUpperCase();
+        if (!want) return null;
+        const byType = subtasks.find(st => {
+          const t = String(st && st.type ? st.type : '').toLowerCase();
+          return (want === 'A' && t.includes('_a')) || (want === 'B' && t.includes('_b')) || (want === 'C' && t.includes('_c'));
+        });
+        if (byType) return byType;
+        const byWaitingFor = subtasks.find(st => String(st && st.waitingFor ? st.waitingFor : '').toUpperCase() === want);
+        if (byWaitingFor) return byWaitingFor;
+        const byNo = subtasks.find(st => Number(st && (st.subtaskNo ?? st.Subtaskno)) === (want === 'A' ? 1 : want === 'B' ? 2 : 3));
+        return byNo || null;
+      }
+
+      function f51GetABCStageSummary(task) {
+        const a = f51FindStageSubtask(task, 'A');
+        const b = f51FindStageSubtask(task, 'B');
+        const c = f51FindStageSubtask(task, 'C');
+        return {
+          A: f51NormalizeStageStatusLabel(a ? a.status : ''),
+          B: f51NormalizeStageStatusLabel(b ? b.status : ''),
+          C: f51NormalizeStageStatusLabel(c ? c.status : '')
+        };
+      }
+
+      function f51StagePill(letter, statusLabel) {
+        const s = String(statusLabel || '').trim();
+        const lower = s.toLowerCase();
+        let cls = 'bg-gray-50 text-gray-700 border-gray-200';
+        if (lower === 'rework') {
+          cls = 'bg-orange-50 text-orange-700 border-orange-200';
+        } else if (lower === 'leader review' || lower === 'leader-review' || lower === 'leader_review') {
+          cls = 'bg-purple-50 text-purple-700 border-purple-200';
+        } else if (lower === 'chờ phê duyệt' || lower === 'cho phe duyet' || lower === 'pending approval' || lower === 'awaiting approval') {
+          cls = 'bg-green-50 text-green-700 border-green-200';
+        } else if (lower === 'hoàn thành' || lower === 'đã hoàn thành' || lower === 'done') {
+          cls = 'bg-green-50 text-green-700 border-green-200';
+        } else if (lower === 'đang triển khai' || lower === 'đang xử lý' || lower === 'in_progress' || lower === 'doing') {
+          cls = 'bg-blue-50 text-blue-700 border-blue-200';
+        } else if (lower === 'chưa triển khai' || lower === 'chờ xử lý' || lower === 'pending' || lower === 'to_do' || lower === 'todo') {
+          cls = 'bg-gray-50 text-gray-700 border-gray-200';
+        }
+        return `<span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold ${cls}"><span class="opacity-80">${f51Esc(letter)}:</span><span>${f51Esc(s || 'Chưa triển khai')}</span></span>`;
+      }
+
+      async function f51SendMarkToWebhook(task, project, markValue) {
+        const url = 'https://iatzhxxuk.tino.page/webhook/danhdautacvu';
+        const payload = {
+          source: 'form51',
+          mark: markValue === 'no' ? 'no' : 'yes',
+          markedAt: new Date().toISOString(),
+          taskId: task && task.id ? task.id : null,
+          taskCode: task && task.taskCode ? task.taskCode : null,
+          taskName: task && task.taskName ? task.taskName : null,
+          taskStatus: task && task.status ? task.status : null,
+          taskPIC: task && task.pic ? task.pic : null,
+          taskCreatedAt: task && task.createdAt ? task.createdAt : null,
+          taskDueDate: task && task.dueDate ? task.dueDate : null,
+          projectId: project && project.id ? project.id : null,
+          projectCode: project && project.projectCode ? project.projectCode : null,
+          projectName: project && project.projectName ? project.projectName : null
+        };
+
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          throw new Error(`HTTP ${res.status}${text ? `: ${text}` : ''}`);
+        }
+        return true;
+      }
+
+      function f51MarkStoreKey() { return 'f51_marked_tasks_v1'; }
+
+      function f51ReadMarkStore() {
+        try {
+          const raw = localStorage.getItem(f51MarkStoreKey());
+          if (!raw) return {};
+          const obj = JSON.parse(raw);
+          return obj && typeof obj === 'object' ? obj : {};
+        } catch (_) {
+          return {};
+        }
+      }
+
+      function f51WriteMarkStore(obj) {
+        try { localStorage.setItem(f51MarkStoreKey(), JSON.stringify(obj || {})); } catch (_) {}
+      }
+
+      function f51GetTaskMarkKey(task) {
+        // Ưu tiên task.id, fallback taskCode
+        const id = task && task.id ? String(task.id).trim() : '';
+        if (id) return `id:${id}`;
+        const code = task && task.taskCode ? String(task.taskCode).trim() : '';
+        return code ? `code:${code}` : '';
+      }
+
+      function f51IsMarked(task) {
+        const key = f51GetTaskMarkKey(task);
+        if (!key) return false;
+        const store = f51ReadMarkStore();
+        return store[key] === true;
+      }
+
+      function f51SetMarked(task, marked) {
+        const key = f51GetTaskMarkKey(task);
+        if (!key) return;
+        const store = f51ReadMarkStore();
+        store[key] = marked === true;
+        f51WriteMarkStore(store);
+      }
+
+      let data = f51GetAllFilteredTasks();
+      if (F51_MODE === 'marked') {
+        data = data.filter(x => f51IsMarked(x.task));
+      }
+      if (!data.length) {
+        board.innerHTML = `<div class="p-6 text-center text-gray-500 text-base">Không có kết quả phù hợp bộ lọc hiện tại.</div>`;
+        f51RenderActiveFilters();
+        return;
+      }
+
+      const statuses = f51GetStatusOrder(data.map(x => x.task.status));
+      const colMinW = 320;
+
+      const renderCard = ({ task, project }) => {
+        const title = f51Esc(task.taskName || '-');
+        const proj = project ? `${f51Esc(project.projectCode || '')} ${f51Esc(project.projectName || '')}`.trim() : '';
+        const code = f51Esc(task.taskCode || '');
+        const pic = f51Esc(task.pic || '-');
+        const due = f51Esc(formatF5Date(task.dueDate) || '');
+        const created = f51Esc(formatF5Date(task.createdAt) || '');
+        const subtasks = task.subtasks || [];
+        const doneCount = subtasks.filter(st => {
+          const normalized = f51NormalizeStageStatusLabel(st && st.status != null ? st.status : '');
+          return normalized === 'Hoàn thành';
+        }).length;
+        const prog = subtasks.length ? `${doneCount}/${subtasks.length}` : '';
+        const abc = f51GetABCStageSummary(task);
+        const marked = f51IsMarked(task);
+
+        return `
+          <div class="rounded-xl border p-3 shadow-sm hover:shadow-md transition cursor-pointer ${marked ? 'border-yellow-300 bg-yellow-50/40' : 'border-gray-200 bg-white'}"
+               data-f51-task-id="${f51Esc(task.id)}">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="text-sm font-bold text-gray-900 line-clamp-2">${title}</div>
+                ${(F51_MODE === 'global' || F51_MODE === 'marked') && proj ? `<div class="mt-1 text-[11px] text-gray-500 line-clamp-1">${proj}</div>` : ``}
+              </div>
+            </div>
+            <div class="mt-2 flex flex-wrap items-center gap-2">
+              <span class="inline-flex items-center rounded-full bg-gray-50 px-2 py-0.5 text-[11px] font-semibold text-gray-700 border border-gray-200">${pic}</span>
+              ${due ? `<span class="inline-flex items-center rounded-full bg-gray-50 px-2 py-0.5 text-[11px] font-semibold text-gray-700 border border-gray-200">due: ${due}</span>` : ``}
+              ${created ? `<span class="inline-flex items-center rounded-full bg-gray-50 px-2 py-0.5 text-[11px] font-semibold text-gray-700 border border-gray-200">sent: ${created}</span>` : ``}
+            </div>
+            <div class="mt-2 flex flex-wrap items-center gap-2">
+              ${f51StagePill('A', abc.A)}
+              ${f51StagePill('B', abc.B)}
+              ${f51StagePill('C', abc.C)}
+            </div>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <div class="text-[11px] text-gray-500 truncate">${code ? `#${code}` : ''}</div>
+              ${prog ? `<div class="text-[11px] font-semibold text-gray-700">${prog}</div>` : ``}
+            </div>
+            <div class="mt-2 flex items-center justify-end gap-2">
+              <button type="button" class="f51-card-action text-xs font-bold text-blue-600 hover:text-blue-800" data-action="view">Chi tiết</button>
+              ${marked
+                ? `<button type="button" class="f51-card-action text-xs font-bold text-gray-700 hover:text-gray-900" data-action="unmark">Bỏ đánh dấu</button>`
+                : `<button type="button" class="f51-card-action text-xs font-bold text-gray-700 hover:text-gray-900" data-action="mark">Đánh dấu</button>`
+              }
+            </div>
+          </div>
+        `;
+      };
+
+      const renderColumns = (items) => {
+        const byStatus = new Map();
+        statuses.forEach(s => byStatus.set(s, []));
+        items.forEach(x => {
+          const s = String(x.task.status || '').trim();
+          if (!byStatus.has(s)) byStatus.set(s, []);
+          byStatus.get(s).push(x);
+        });
+
+        return `
+          <div class="min-w-max grid gap-4 p-4" style="grid-auto-flow: column; grid-auto-columns: minmax(${colMinW}px, 1fr);">
+            ${statuses.map(statusKey => {
+              const list = byStatus.get(statusKey) || [];
+              return `
+                <div class="rounded-xl bg-gray-50 border border-gray-200 overflow-hidden">
+                  <div class="sticky top-0 z-10 bg-gray-50/95 backdrop-blur border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+                    <div class="text-xs font-black text-gray-800">${String(statusKey || '').trim() === 'pending' ? '' : f51Esc(statusKey || '-')}</div>
+                    <div class="text-xs font-bold text-gray-500">${list.length}</div>
+                  </div>
+                  <div class="p-3 space-y-3">
+                    ${list.map(renderCard).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      };
+
+      if (F51_MODE === 'lane') {
+        const byProject = new Map();
+        data.forEach(x => {
+          const pid = x.project ? x.project.id : '__no_project__';
+          if (!byProject.has(pid)) byProject.set(pid, { project: x.project, items: [] });
+          byProject.get(pid).items.push(x);
+        });
+
+        const lanes = Array.from(byProject.values());
+        board.innerHTML = `
+          <div class="space-y-6 p-4">
+            ${lanes.map(lane => {
+              const p = lane.project || {};
+              const header = `${f51Esc(p.projectCode || '')} ${f51Esc(p.projectName || 'Không rõ Project')}`.trim();
+              return `
+                <div class="rounded-xl border border-gray-200 overflow-hidden">
+                  <div class="px-4 py-3 bg-white border-b border-gray-200 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                      <div class="text-sm font-black text-gray-900 truncate">${header || 'Project'}</div>
+                      <div class="text-[11px] text-gray-500">Tasks: ${lane.items.length}</div>
+                    </div>
+                    <button type="button" class="text-xs font-bold text-blue-600 hover:text-blue-800" ${p.id ? `onclick="openF5ViewProjectDetail('${f51Esc(p.id)}')"` : ''}>Xem dự án</button>
+                  </div>
+                  <div class="bg-white">${renderColumns(lane.items)}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } else {
+        board.innerHTML = renderColumns(data);
+      }
+
+      f51RenderActiveFilters();
+
+      // Event delegation for cards + actions
+      board.onclick = (e) => {
+        const t = e.target;
+        const actionBtn = t && t.closest ? t.closest('.f51-card-action') : null;
+        const card = t && t.closest ? t.closest('[data-f51-task-id]') : null;
+        const taskId = card ? card.getAttribute('data-f51-task-id') : null;
+        if (!taskId) return;
+
+        if (actionBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const action = actionBtn.getAttribute('data-action');
+          if (action === 'view') {
+            openF5ViewTaskDetail(taskId);
+            return;
+          }
+          if (action === 'mark') {
+            // chống double-click khi đang gửi
+            if (actionBtn.dataset && actionBtn.dataset.sending === '1') return;
+            const ok = window.confirm('Bạn có chắc muốn đánh dấu tác vụ này không?');
+            if (!ok) return;
+
+            const info = f51GetTaskById(taskId);
+            if (!info || !info.task) {
+              try { showToast('Không tìm thấy tác vụ để đánh dấu', 'error'); } catch(_) {}
+              return;
+            }
+
+            actionBtn.dataset.sending = '1';
+            const prevText = actionBtn.textContent;
+            actionBtn.textContent = 'Đang gửi...';
+            actionBtn.classList.add('opacity-60');
+            try {
+              f51SendMarkToWebhook(info.task, info.project, 'yes')
+                .then(() => {
+                  f51SetMarked(info.task, true);
+                  try { showToast('Đã đánh dấu tác vụ', 'success'); } catch(_) {}
+                  // Re-render để đổi nút sang "Bỏ đánh dấu"
+                  f51RenderBoard();
+                })
+                .catch((err) => {
+                  console.error('[Form 5.1] Mark webhook error:', err);
+                  try { showToast('Gửi đánh dấu thất bại. Vui lòng thử lại.', 'error'); } catch(_) {}
+                })
+                .finally(() => {
+                  actionBtn.dataset.sending = '0';
+                  actionBtn.textContent = prevText;
+                  actionBtn.classList.remove('opacity-60');
+                });
+            } catch (err) {
+              console.error('[Form 5.1] Mark webhook error (sync):', err);
+              actionBtn.dataset.sending = '0';
+              actionBtn.textContent = prevText;
+              actionBtn.classList.remove('opacity-60');
+              try { showToast('Gửi đánh dấu thất bại. Vui lòng thử lại.', 'error'); } catch(_) {}
+            }
+            return;
+          }
+          if (action === 'unmark') {
+            // chống double-click khi đang gửi
+            if (actionBtn.dataset && actionBtn.dataset.sending === '1') return;
+            const ok = window.confirm('Bạn có chắc muốn bỏ đánh dấu tác vụ này không?');
+            if (!ok) return;
+
+            const info = f51GetTaskById(taskId);
+            if (!info || !info.task) {
+              try { showToast('Không tìm thấy tác vụ để bỏ đánh dấu', 'error'); } catch(_) {}
+              return;
+            }
+
+            actionBtn.dataset.sending = '1';
+            const prevText = actionBtn.textContent;
+            actionBtn.textContent = 'Đang gửi...';
+            actionBtn.classList.add('opacity-60');
+            try {
+              f51SendMarkToWebhook(info.task, info.project, 'no')
+                .then(() => {
+                  f51SetMarked(info.task, false);
+                  try { showToast('Đã bỏ đánh dấu tác vụ', 'success'); } catch(_) {}
+                  // Re-render để đổi nút về "Đánh dấu"
+                  f51RenderBoard();
+                })
+                .catch((err) => {
+                  console.error('[Form 5.1] Unmark webhook error:', err);
+                  try { showToast('Gửi bỏ đánh dấu thất bại. Vui lòng thử lại.', 'error'); } catch(_) {}
+                })
+                .finally(() => {
+                  actionBtn.dataset.sending = '0';
+                  actionBtn.textContent = prevText;
+                  actionBtn.classList.remove('opacity-60');
+                });
+            } catch (err) {
+              console.error('[Form 5.1] Unmark webhook error (sync):', err);
+              actionBtn.dataset.sending = '0';
+              actionBtn.textContent = prevText;
+              actionBtn.classList.remove('opacity-60');
+              try { showToast('Gửi bỏ đánh dấu thất bại. Vui lòng thử lại.', 'error'); } catch(_) {}
+            }
+            return;
+          }
+        }
+
+        // Open side panel
+        F51_SELECTED_TASK_ID = taskId;
+        f51RenderDetailPanel();
+        f51ShowDetailPanel(true);
+      };
+    }
+
+    function f51RenderDetailPanel() {
+      const titleEl = document.getElementById('f51-detail-title');
+      const subtitleEl = document.getElementById('f51-detail-subtitle');
+      const bodyEl = document.getElementById('f51-detail-body');
+      if (!titleEl || !subtitleEl || !bodyEl) return;
+
+      const info = F51_SELECTED_TASK_ID ? f51GetTaskById(F51_SELECTED_TASK_ID) : null;
+      if (!info) {
+        titleEl.textContent = 'Chi tiết';
+        subtitleEl.textContent = '';
+        bodyEl.innerHTML = `<div class="text-sm text-gray-500">Chưa chọn tác vụ.</div>`;
+        return;
+      }
+
+      const { task, project } = info;
+      titleEl.textContent = task.taskName || 'Tác vụ';
+      subtitleEl.textContent = `${project && project.projectCode ? project.projectCode : ''}${task.taskCode ? ` • ${task.taskCode}` : ''}`.trim();
+
+      const badge = (typeof getF5StatusBadge === 'function') ? getF5StatusBadge(task.status) : `<span class="text-xs text-gray-600">${f51Esc(task.status || '')}</span>`;
+      const subtasks = task.subtasks || [];
+
+      bodyEl.innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center justify-between gap-3">
+            <div class="text-xs font-semibold text-gray-500 uppercase">Status</div>
+            <div>${badge}</div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <div class="text-[11px] font-semibold text-gray-500 uppercase">PIC</div>
+              <div class="mt-1 text-sm font-bold text-gray-900">${f51Esc(task.pic || '-')}</div>
+            </div>
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <div class="text-[11px] font-semibold text-gray-500 uppercase">Requester</div>
+              <div class="mt-1 text-sm font-bold text-gray-900">${f51Esc(task.requester || '-')}</div>
+            </div>
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <div class="text-[11px] font-semibold text-gray-500 uppercase">Created</div>
+              <div class="mt-1 text-sm font-bold text-gray-900">${f51Esc(formatF5Date(task.createdAt) || '-')}</div>
+            </div>
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <div class="text-[11px] font-semibold text-gray-500 uppercase">Due</div>
+              <div class="mt-1 text-sm font-bold text-gray-900">${f51Esc(formatF5Date(task.dueDate) || '-')}</div>
+            </div>
+          </div>
+
+          ${project ? `
+            <div class="rounded-lg border border-gray-200 bg-white p-3">
+              <div class="text-[11px] font-semibold text-gray-500 uppercase">Project</div>
+              <div class="mt-1 text-sm font-bold text-gray-900">${f51Esc(project.projectName || '-')}</div>
+              <div class="mt-0.5 text-xs text-gray-500">${f51Esc(project.projectCode || '')}</div>
+            </div>
+          ` : ``}
+
+          <div class="rounded-lg border border-gray-200 bg-white p-3">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] font-semibold text-gray-500 uppercase">Subtasks</div>
+              <div class="text-xs font-bold text-gray-500">${subtasks.length}</div>
+            </div>
+            ${subtasks.length ? `
+              <div class="mt-2 space-y-2">
+                ${subtasks.slice(0, 6).map(st => `
+                  <div class="rounded-lg bg-gray-50 border border-gray-200 p-2">
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="min-w-0">
+                        <div class="text-sm font-semibold text-gray-900 line-clamp-1">${f51Esc(st.name || '-')}</div>
+                        <div class="mt-0.5 text-[11px] text-gray-500 flex flex-wrap gap-2">
+                          <span>${f51Esc(st.taskCode || st.subtaskCode || '')}</span>
+                          <span>•</span>
+                          <span>${f51Esc(st.pic || '-')}</span>
+                          <span>•</span>
+                          <span>${f51Esc(st.status || '-')}</span>
+                        </div>
+                      </div>
+                      <button type="button"
+                        class="shrink-0 text-xs font-bold text-blue-600 hover:text-blue-800"
+                        onclick="openF5SelectDeclarationModal('${f51Esc(task.id)}','${f51Esc(st.id)}','subtask');">
+                        Khai báo
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+                ${subtasks.length > 6 ? `<div class="text-xs text-gray-500">+ ${subtasks.length - 6} subtask khác…</div>` : ``}
+              </div>
+            ` : `<div class="mt-2 text-sm text-gray-500">Chưa có subtask.</div>`}
+          </div>
+        </div>
+      `;
+    }
+
+    function initForm51() {
+      const boardEl = document.getElementById('f51-board');
+      if (!boardEl) return;
+
+      if (!f51Initialized) {
+        f51Initialized = true;
+
+        // Populate PIC list
+        const picFilter = document.getElementById('f51-filter-pic');
+        if (picFilter) {
+          picFilter.innerHTML = '<option value="">Tất cả người nhận</option>';
+          (F5_PIC_LIST || []).forEach(pic => {
+            const opt = document.createElement('option');
+            opt.value = pic;
+            opt.textContent = pic;
+            picFilter.appendChild(opt);
+          });
+        }
+
+        // Mode toggle
+        const btnGlobal = document.getElementById('f51-mode-global');
+        const btnLane = document.getElementById('f51-mode-lane');
+        const btnMarked = document.getElementById('f51-mode-marked');
+        const modeBtnInactive = 'h-8 rounded-full px-3 text-xs font-bold text-gray-700 hover:bg-white';
+        const modeBtnActive = 'h-8 rounded-full px-3 text-xs font-bold bg-white shadow-sm border border-gray-200 text-gray-900';
+        const setModeUI = () => {
+          if (!btnGlobal || !btnLane) return;
+          btnGlobal.className = F51_MODE === 'global' ? modeBtnActive : modeBtnInactive;
+          btnLane.className = F51_MODE === 'lane' ? modeBtnActive : modeBtnInactive;
+          if (btnMarked) btnMarked.className = F51_MODE === 'marked' ? modeBtnActive : modeBtnInactive;
+        };
+        if (btnGlobal) btnGlobal.addEventListener('click', () => { F51_MODE = 'global'; setModeUI(); f51RenderBoard(); });
+        if (btnLane) btnLane.addEventListener('click', () => { F51_MODE = 'lane'; setModeUI(); f51RenderBoard(); });
+        if (btnMarked) btnMarked.addEventListener('click', () => { F51_MODE = 'marked'; setModeUI(); f51RenderBoard(); });
+        setModeUI();
+
+        // Date preset + custom range
+        const presetSelect = document.getElementById('f51-filter-date-preset');
+        const customRangeDiv = document.getElementById('f51-custom-date-range');
+        const dateFromInput = document.getElementById('f51-filter-date-from');
+        const dateToInput = document.getElementById('f51-filter-date-to');
+
+        const toggleCustomRange = () => {
+          if (!presetSelect || !customRangeDiv) return;
+          if (presetSelect.value === 'custom') {
+            customRangeDiv.classList.remove('hidden');
+            if (dateFromInput && dateToInput) {
+              dateFromInput.value = F51_FILTER_DATE_RANGE.from || '';
+              dateToInput.value = F51_FILTER_DATE_RANGE.to || '';
+            }
+          } else {
+            customRangeDiv.classList.add('hidden');
+          }
+        };
+
+        if (presetSelect) {
+          presetSelect.value = F51_FILTER_DATE_RANGE.preset || 'this-month';
+          toggleCustomRange();
+          presetSelect.addEventListener('change', () => {
+            const preset = presetSelect.value;
+            if (preset === 'custom') {
+              F51_FILTER_DATE_RANGE = { preset: 'custom', from: dateFromInput ? (dateFromInput.value || null) : null, to: dateToInput ? (dateToInput.value || null) : null };
+            } else {
+              const range = calculateDateRangeFromPreset(preset);
+              if (range) {
+                F51_FILTER_DATE_RANGE = { preset, from: range.from, to: range.to };
+              } else {
+                F51_FILTER_DATE_RANGE = { preset, from: null, to: null };
+              }
+            }
+            toggleCustomRange();
+            f51RenderBoard();
+          });
+        }
+        const updateCustomRange = () => {
+          if (presetSelect && presetSelect.value === 'custom') {
+            F51_FILTER_DATE_RANGE = { preset: 'custom', from: dateFromInput ? (dateFromInput.value || null) : null, to: dateToInput ? (dateToInput.value || null) : null };
+            f51RenderBoard();
+          }
+        };
+        if (dateFromInput) dateFromInput.addEventListener('change', updateCustomRange);
+        if (dateToInput) dateToInput.addEventListener('change', updateCustomRange);
+
+        // PIC filter
+        if (picFilter) {
+          picFilter.addEventListener('change', (e) => {
+            F51_FILTER_PIC = (e && e.target && e.target.value != null ? e.target.value : '').trim();
+            f51RenderBoard();
+          });
+        }
+
+        // Search
+        const searchInput = document.getElementById('f51-searchInput');
+        if (searchInput) {
+          searchInput.addEventListener('input', (e) => {
+            F51_SEARCH_TEXT = (e && e.target && e.target.value != null ? e.target.value : '').trim();
+            f51RenderBoard();
+          });
+        }
+
+        // Buttons
+        const searchBtn = document.getElementById('f51-searchBtn');
+        if (searchBtn) {
+          const original = searchBtn.innerHTML;
+          searchBtn.addEventListener('click', async () => {
+            searchBtn.disabled = true;
+            searchBtn.innerHTML = '<span class="spinner"></span><span style="margin-left:8px">Đang tải...</span>';
+            try {
+              F5_PROJECTS = await loadF5Projects(F51_FILTER_PIC);
+              f51RenderBoard();
+            } catch (e) {
+              console.error('[Form 5.1] load error:', e);
+              const board = document.getElementById('f51-board');
+              if (board) board.innerHTML = `<div class="p-6 text-center text-red-500 text-base">Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại.</div>`;
+            } finally {
+              searchBtn.disabled = false;
+              searchBtn.innerHTML = original;
+            }
+          });
+        }
+
+        const resetBtn = document.getElementById('f51-resetBtn');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            F51_FILTER_PIC = '';
+            F51_SEARCH_TEXT = '';
+            const pic = document.getElementById('f51-filter-pic');
+            if (pic) pic.value = '';
+            const si = document.getElementById('f51-searchInput');
+            if (si) si.value = '';
+
+            const preset = document.getElementById('f51-filter-date-preset');
+            if (preset) preset.value = 'this-month';
+            const range = calculateDateRangeFromPreset('this-month');
+            F51_FILTER_DATE_RANGE = { preset: 'this-month', from: range ? range.from : null, to: range ? range.to : null };
+            const cr = document.getElementById('f51-custom-date-range');
+            if (cr) cr.classList.add('hidden');
+            f51RenderBoard();
+          });
+        }
+
+        // Back button
+        const backBtn = document.getElementById('f51-back-to-form5-btn');
+        if (backBtn) {
+          backBtn.addEventListener('click', () => {
+            document.querySelectorAll('section[id^="form"]').forEach(s => s.classList.add('hidden'));
+            const el = document.getElementById('form5');
+            if (el) el.classList.remove('hidden');
+            try { initForm5(); } catch(_) {}
+          });
+        }
+
+        // Detail panel interactions
+        const detailClose = document.getElementById('f51-detail-close');
+        const detailOverlay = document.getElementById('f51-detail-overlay');
+        if (detailClose) detailClose.addEventListener('click', () => f51ShowDetailPanel(false));
+        if (detailOverlay) detailOverlay.addEventListener('click', () => f51ShowDetailPanel(false));
+        document.addEventListener('keydown', (e) => {
+          if (e && e.key === 'Escape') f51ShowDetailPanel(false);
+        });
+
+        const openModalBtn = document.getElementById('f51-detail-open-modal');
+        if (openModalBtn) {
+          openModalBtn.addEventListener('click', () => {
+            if (!F51_SELECTED_TASK_ID) return;
+            openF5ViewTaskDetail(F51_SELECTED_TASK_ID);
+          });
+        }
+        const declareTaskBtn = document.getElementById('f51-detail-declare-task');
+        if (declareTaskBtn) {
+          declareTaskBtn.addEventListener('click', () => {
+            if (!F51_SELECTED_TASK_ID) return;
+            // Giữ nguyên cơ chế khai báo của Form 5
+            openF5SelectDeclarationModal(F51_SELECTED_TASK_ID, null, 'parent');
+          });
+        }
+      }
+
+      // Initial render (empty or from existing loaded data)
+      f51RenderBoard();
     }
 
     function setupF5PICFilter() {
@@ -19160,7 +20037,9 @@
 
     // Hàm mở modal thêm subtask - Sử dụng hệ thống modal tập trung
     function openF5AddSubtaskModal(taskId) {
-      console.log('[Form 5] openF5AddSubtaskModal called with taskId:', taskId);
+      // ĐÃ VÔ HIỆU HÓA: theo yêu cầu bỏ tính năng thêm tác vụ con
+      try { showToast('Tính năng "Thêm tác vụ con" đã được tắt.', 'warning'); } catch(_) {}
+      return;
       
       // Sử dụng hệ thống modal tập trung với callback để setup form
       const success = openModal('f5-add-subtask', (modal, config) => {
@@ -21378,17 +22257,7 @@
         console.log('[Form 5] Complete submit listener attached');
       }
       
-      // Test: Thêm hàm global để test modal
-      window.testF5Modal = function() {
-        console.log('[Form 5] Test function called');
-        const firstTask = F5_PROJECTS[0]?.tasks?.[0];
-        if (firstTask) {
-          openF5AddSubtaskModal(firstTask.id);
-        } else {
-          openF5AddSubtaskModal('TASK-001');
-        }
-      };
-      console.log('[Form 5] Test function available: window.testF5Modal()');
+      // window.testF5Modal đã bị vô hiệu hóa do tắt tính năng thêm tác vụ con
     });
 
     // Các hàm cũ đã được thay thế bằng hàm mới ở trên
@@ -23175,6 +24044,9 @@
 
         // Luôn điền dữ liệu cho cả 2 form để khỏi mất công
         form13PrefillForm4BothSides(parentRow, item);
+
+        // Đặt cờ để khi quay lại Form 13 sẽ tự refresh dữ liệu
+        try { sessionStorage.setItem('form13_need_refresh', '1'); } catch (_) {}
 
         // Điều hướng theo nút bấm
         if (kind === 'sop') form13TryNavigateToForm('form41');
