@@ -483,15 +483,15 @@
           <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="jira-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form10">
               <span class="material-symbols-outlined text-lg text-gray-500">folder_special</span>
-              <p class="text-sm font-semibold">10 - Dashboard SPM 2026</p>
+              <p class="text-sm font-semibold">10 - Dashboard tổng quan SPM 2026</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form11">
               <span class="material-symbols-outlined text-lg text-gray-500">dashboard</span>
-              <p class="text-sm font-semibold">11 - Dashboard Dữ liệu Excel</p>
+              <p class="text-sm font-semibold">11 - Danh sách dự án SPM 2026</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form12">
               <span class="material-symbols-outlined text-lg text-gray-500">calendar_month</span>
-              <p class="text-sm font-semibold">12 - Calendar View</p>
+              <p class="text-sm font-semibold">12 - Dashboard tiến độ DQA theo tháng</p>
             </button>
           </div>
         </div>
@@ -2444,82 +2444,107 @@
       </div>
     </section>
 
-    <!-- Form 12 - Calendar View (Jira) -->
-    <section id="form12" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
-      <div class="mx-auto flex w-full flex-col gap-6">
-        <!-- Page Heading -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-gray-900">Form 12 - Calendar View</h2>
-            <p class="text-sm text-gray-600">Xem công việc theo lịch tháng/tuần</p>
-          </div>
-          <button id="f12-refresh-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
-            <span class="material-symbols-outlined text-lg">refresh</span>
-            <span>Tải lại</span>
-          </button>
-        </div>
-
-        <!-- Search and Filters -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
-          <div class="relative w-full md:max-w-md">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">search</span>
-            <input id="f12-search" class="w-full form-input rounded-full border border-gray-300 bg-white h-12 pl-12 pr-4 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Tìm công việc..." type="text"/>
-          </div>
-          <div class="flex items-center gap-2">
-            <button id="f12-filter-assignee" class="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 h-10 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-100">
-              <span class="material-symbols-outlined text-lg">filter_list</span>
-              <span>Người phụ trách</span>
-              <span class="material-symbols-outlined text-lg">expand_more</span>
-            </button>
-            <button id="f12-filter-status" class="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 h-10 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-100">
-              <span>Trạng thái</span>
-              <span class="material-symbols-outlined text-lg">expand_more</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Calendar Controls -->
-        <div class="flex flex-wrap items-center justify-between gap-4 pb-6">
-          <div class="flex items-center gap-4">
-            <h1 id="f12-month-title" class="text-gray-900 text-3xl font-bold">Tháng 9 2024</h1>
-            <div class="flex items-center gap-1">
-              <button id="f12-prev-month" class="p-2 text-gray-500 rounded-full hover:bg-gray-200">
-                <span class="material-symbols-outlined">chevron_left</span>
+    <!-- Form 12 - Dashboard DQA theo dõi tiến độ cá nhân -->
+    <section id="form12" class="w-full rounded-lg bg-gradient-to-br from-slate-50 via-white to-violet-50/40 p-6 shadow-md lg:p-10 hidden">
+      <div class="mx-auto flex w-full flex-col gap-5">
+        <div class="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-5 py-4 text-white shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">DQA Performance</p>
+              <p class="mt-1 text-2xl font-black tracking-tight">12 - Dashboard theo dõi tiến độ cá nhân</p>
+              <p class="mt-1 text-sm text-slate-300">KPI hoàn thành dựa trên trạng thái công việc: <span class="font-semibold text-emerald-300">Done / Tổng công việc</span>.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="f12-export-btn" class="inline-flex items-center gap-2 rounded-lg bg-emerald-500/90 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
+                <span class="material-symbols-outlined text-lg">download</span>
+                <span>Xuất XLSX</span>
               </button>
-              <button id="f12-next-month" class="p-2 text-gray-500 rounded-full hover:bg-gray-200">
-                <span class="material-symbols-outlined">chevron_right</span>
+              <button id="f12-refresh-btn" class="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20">
+                <span class="material-symbols-outlined text-lg">refresh</span>
+                <span>Tải lại</span>
               </button>
             </div>
           </div>
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-1 rounded-full bg-gray-200 p-1 text-sm font-semibold">
-              <button id="f12-view-month" class="px-3 py-1 rounded-full bg-white text-primary shadow-sm">Tháng</button>
-              <button id="f12-view-week" class="px-3 py-1 rounded-full text-gray-600">Tuần</button>
-            </div>
-            <button id="f12-today" class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-white text-gray-900 gap-2 text-sm font-bold px-4 border border-gray-300 shadow-sm">
-              Hôm nay
-            </button>
-            <button id="f12-new-task" class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-primary text-white gap-2 text-sm font-bold px-4 shadow-sm">
-              <span class="material-symbols-outlined text-lg">add</span>
-              Công việc mới
-            </button>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <div class="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Tổng công việc DQA</p>
+            <p id="f12-kpi-total" class="mt-2 text-3xl font-black text-slate-900">0</p>
+          </div>
+          <div class="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-emerald-100/70 p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Done</p>
+            <p id="f12-kpi-done" class="mt-2 text-3xl font-black text-emerald-700">0</p>
+          </div>
+          <div class="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100/70 p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">Đang xử lý (To Do + In Progress)</p>
+            <p id="f12-kpi-open" class="mt-2 text-3xl font-black text-blue-700">0</p>
+          </div>
+          <div class="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-100/60 p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wide text-violet-700">Tỷ lệ hoàn thành KPI</p>
+            <p id="f12-kpi-rate" class="mt-2 text-3xl font-black text-violet-700">0%</p>
           </div>
         </div>
 
-        <!-- Calendar Container -->
-        <div class="flex flex-1 flex-col overflow-auto bg-white rounded-lg border border-gray-200 shadow-sm">
-          <div id="f12-calendar-header" class="grid grid-cols-7 text-center">
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">CN</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T2</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T3</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T4</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T5</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T6</p>
-            <p class="text-gray-500 text-xs font-bold py-4 border-b border-gray-200">T7</p>
+        <div class="rounded-xl border border-violet-100 bg-gradient-to-r from-violet-50/70 via-white to-sky-50/60 p-4 shadow-sm">
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="f12-filter-month" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+              <option value="">Tháng dueDate: Tất cả</option>
+            </select>
+            <select id="f12-filter-pic" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+              <option value="">PIC DQA: Tất cả</option>
+            </select>
+            <select id="f12-filter-status" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+              <option value="all">Status: Tất cả</option>
+              <option value="done">Done</option>
+              <option value="in_progress">In Progress</option>
+              <option value="to_do">To Do</option>
+              <option value="other">Khác</option>
+            </select>
+            <input id="f12-search" type="text" placeholder="Tìm theo Mã dự án / Tên dự án / PM..." class="min-w-[220px] flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+            <button id="f12-clear-filters" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Xóa lọc</button>
+            <span id="f12-filter-result-count" class="ml-auto text-sm font-semibold text-slate-500">0 kết quả</span>
           </div>
-          <div id="f12-calendar-body" class="grid grid-cols-7 grid-rows-5 flex-1">
-            <!-- Calendar cells will be rendered here -->
-            <div class="text-center py-8 text-gray-500">Đang tải dữ liệu...</div>
+        </div>
+
+        <div class="rounded-xl border border-violet-100 bg-white shadow-sm">
+          <div class="border-b border-violet-100 bg-gradient-to-r from-violet-50/80 to-white px-4 py-3">
+            <p class="text-base font-bold text-slate-900">Theo dõi tiến độ cá nhân (PIC DQA)</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gradient-to-r from-violet-50/80 to-slate-50">
+                <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  <th class="px-3 py-2">PIC DQA</th>
+                  <th class="px-3 py-2">Done/Tổng</th>
+                  <th class="px-3 py-2">To Do</th>
+                  <th class="px-3 py-2">In Progress</th>
+                  <th class="px-3 py-2">KPI</th>
+                </tr>
+              </thead>
+              <tbody id="f12-person-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-sky-100 bg-white shadow-sm">
+          <div class="border-b border-sky-100 bg-gradient-to-r from-sky-50/80 to-white px-4 py-3">
+            <p class="text-base font-bold text-slate-900">Danh sách công việc DQA</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gradient-to-r from-sky-50/80 to-slate-50">
+                <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  <th class="px-3 py-2">Mã dự án</th>
+                  <th class="px-3 py-2">Tên dự án</th>
+                  <th class="px-3 py-2">PM</th>
+                  <th class="px-3 py-2">PIC DQA</th>
+                  <th class="px-3 py-2">Due Date</th>
+                  <th class="px-3 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody id="f12-task-body"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -11913,153 +11938,371 @@
       loadF11Dashboard();
     }
 
-    // ===== FORM 12 - CALENDAR VIEW (JIRA) =====
-    
-    // Biến lưu trữ
+    // ===== FORM 12 - DASHBOARD DQA THEO DÕI TIẾN ĐỘ CÁ NHÂN =====
     let F12_ALL_DATA = [];
-    let F12_CURRENT_MONTH = new Date().getMonth();
-    let F12_CURRENT_YEAR = new Date().getFullYear();
-    let F12_VIEW_MODE = 'month'; // 'month' or 'week'
-    
-    // Webhook URL - Mockup (sẽ được cung cấp sau)
-    const F12_WEBHOOK_URL = 'https://mockup-webhook-url.com/webhook/form12calendarjira';
-    
-    // Hàm filter dữ liệu (simplified)
-    function filterF12Data(data) {
-      return data;
-    }
-    
-    // Hàm render calendar (simplified)
-    function renderF12Calendar() {
-      const calendarBody = document.getElementById('f12-calendar-body');
-      const monthTitle = document.getElementById('f12-month-title');
-      
-      if (monthTitle) {
-        const monthNames = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 
-                           'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
-        monthTitle.textContent = `${monthNames[F12_CURRENT_MONTH]} ${F12_CURRENT_YEAR}`;
+    let F12_FILTERED_ROWS = [];
+    let F12_BOUND = false;
+    const F12_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/laydulieujirachospm';
+
+    function f12Pick(row, ...keys) {
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        if (row && k in row && row[k] != null && row[k] !== '') return row[k];
       }
-      
-      if (calendarBody) {
-        calendarBody.innerHTML = '<div class="text-center py-8 text-gray-500 col-span-7">Chưa có dữ liệu. Webhook đang được cấu hình.</div>';
+      return '';
+    }
+
+    function f12IsMarkOn(v) {
+      if (v === true || v === 1) return true;
+      const s = String(v == null ? '' : v).trim().toLowerCase();
+      return s === 'x' || s === '1' || s === 'yes' || s === 'có';
+    }
+
+    function f12NormalizeStatus(raw, statusCategory) {
+      const v = String(raw || '').trim().toLowerCase();
+      const c = String(statusCategory || '').trim().toLowerCase();
+      if (c === 'done') return 'done';
+      if (!v) return 'other';
+      if (v === 'done' || v === 'closed' || v === 'resolved' || v === 'completed') return 'done';
+      if (v === 'in progress' || v === 'in_progress' || v === 'in review' || v === 'review' || v === 'doing') return 'in_progress';
+      if (v === 'to do' || v === 'todo' || v === 'to_do' || v === 'open' || v === 'backlog') return 'to_do';
+      return 'other';
+    }
+
+    function f12StatusLabel(normalized) {
+      if (normalized === 'done') return 'Done';
+      if (normalized === 'in_progress') return 'In Progress';
+      if (normalized === 'to_do') return 'To Do';
+      return 'Khác';
+    }
+
+    function f12StatusBadge(status) {
+      const s = f12NormalizeStatus(status);
+      if (s === 'done') {
+        return '<span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700 shadow-sm">Done</span>';
+      }
+      if (s === 'in_progress') {
+        return '<span class="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700 shadow-sm">In Progress</span>';
+      }
+      if (s === 'to_do') {
+        return '<span class="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-700 shadow-sm">To Do</span>';
+      }
+      return '<span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700 shadow-sm">Khác</span>';
+    }
+
+    function f12Text(v) {
+      return String(v == null || v === '' ? '—' : v).replace(/"/g, '&quot;');
+    }
+
+    function f12SafeUrl(raw) {
+      const t = String(raw == null ? '' : raw).trim();
+      if (!t) return '';
+      if (/^https?:\/\//i.test(t)) return t;
+      return '';
+    }
+
+    function f12ToNumber(v) {
+      const n = Number(String(v == null ? '' : v).trim().replace(',', '.'));
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function f12Rate(done, total) {
+      if (!total) return 0;
+      return Number(((done / total) * 100).toFixed(1));
+    }
+
+    function f12NormalizeDueDate(raw) {
+      const t = String(raw == null ? '' : raw).trim();
+      if (!t) return '';
+      const m = t.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+      const d = new Date(t);
+      if (Number.isNaN(d.getTime())) return '';
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function f12MonthFromDate(dateStr) {
+      if (!dateStr || dateStr.length < 7) return '';
+      return dateStr.slice(0, 7);
+    }
+
+    function f12CurrentMonth() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      return `${yyyy}-${mm}`;
+    }
+
+    function f12MapRow(row) {
+      const statusRaw = String(f12Pick(row, 'Tình trạng dự án', 'status') || '').trim();
+      const statusCategory = String(f12Pick(row, 'statusCategory') || '').trim();
+      const pic = String(f12Pick(row, 'PIC DQA', 'assigneeName', 'reporterName') || '').trim();
+      const projectName = String(f12Pick(row, 'projectName') || '').trim();
+      const dueDate = f12NormalizeDueDate(f12Pick(row, 'dueDate', 'Due Date', 'Due date (Kế hoạch)'));
+      const issueUrl = f12SafeUrl(f12Pick(row, 'url', 'Link Jira'));
+      const issueTypeRaw = String(f12Pick(row, 'issueType') || '').trim();
+      const levelRaw = String(f12Pick(row, 'level') || '').trim();
+      const issueTypeNorm = issueTypeRaw.toLowerCase();
+      const levelNorm = levelRaw.toLowerCase();
+      const isSubtask = issueTypeNorm === 'sub-task' || issueTypeNorm === 'subtask' || levelNorm === 'subtask';
+      const dqaMark = f12IsMarkOn(f12Pick(row, 'DQA đang triển khai'));
+      const dqa = dqaMark || /dqa/i.test(projectName);
+      return {
+        ma: String(f12Pick(row, 'Mã dự án', 'issueKey', 'workKey', 'issueId', 'Id') || '').trim(),
+        ten: String(f12Pick(row, 'Tên dự án', 'summary', 'workSummary') || '').trim(),
+        pm: String(f12Pick(row, 'PM', 'reporterName', 'assigneeName') || '').trim(),
+        pic,
+        dqa,
+        statusRaw,
+        status: f12NormalizeStatus(statusRaw, statusCategory),
+        statusCategory,
+        dueDate,
+        dueMonth: f12MonthFromDate(dueDate),
+        url: issueUrl,
+        issueType: issueTypeRaw,
+        level: levelRaw,
+        isSubtask,
+        ok: String(f12Pick(row, 'KQ ĐG OK') || '').trim(),
+        ng: String(f12Pick(row, 'KQ ĐG NG') || '').trim(),
+        doing: String(f12Pick(row, 'Đang đánh giá') || '').trim(),
+      };
+    }
+
+    function f12GetDqaRows(rows) {
+      return rows.filter((r) => r.ma && r.isSubtask && (r.dqa || r.pic) && r.dueMonth);
+    }
+
+    function f12SetText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = String(value);
+    }
+
+    function f12PopulatePicFilter(rows) {
+      const sel = document.getElementById('f12-filter-pic');
+      if (!sel) return;
+      const seen = new Set();
+      const pics = [];
+      rows.forEach((r) => {
+        if (!r.pic || seen.has(r.pic)) return;
+        seen.add(r.pic);
+        pics.push(r.pic);
+      });
+      pics.sort((a, b) => a.localeCompare(b, 'vi'));
+      const current = sel.value;
+      sel.innerHTML = '<option value="">PIC DQA: Tất cả</option>' + pics.map((p) => `<option value="${p.replace(/"/g, '&quot;')}">${p}</option>`).join('');
+      if (current && pics.includes(current)) sel.value = current;
+    }
+
+    function f12PopulateMonthFilter(rows) {
+      const sel = document.getElementById('f12-filter-month');
+      if (!sel) return;
+      const months = Array.from(new Set(rows.map((r) => r.dueMonth).filter(Boolean))).sort((a, b) => b.localeCompare(a));
+      const current = sel.value;
+      sel.innerHTML = '<option value="">Tháng dueDate: Tất cả</option>' +
+        months.map((m) => `<option value="${m}">${m.slice(5, 7)}/${m.slice(0, 4)}</option>`).join('');
+      if (current && months.includes(current)) {
+        sel.value = current;
+        return;
+      }
+      const nowMonth = f12CurrentMonth();
+      if (months.includes(nowMonth)) {
+        sel.value = nowMonth;
+        return;
+      }
+      if (months.length) sel.value = months[0];
+    }
+
+    function f12RenderPersonalProgress(rows) {
+      const body = document.getElementById('f12-person-body');
+      if (!body) return;
+      const byPic = new Map();
+      rows.forEach((r) => {
+        const key = r.pic || 'Chưa gán PIC';
+        if (!byPic.has(key)) {
+          byPic.set(key, { pic: key, total: 0, done: 0, toDo: 0, inProgress: 0, other: 0 });
+        }
+        const bucket = byPic.get(key);
+        bucket.total += 1;
+        if (r.status === 'done') bucket.done += 1;
+        else if (r.status === 'to_do') bucket.toDo += 1;
+        else if (r.status === 'in_progress') bucket.inProgress += 1;
+        else bucket.other += 1;
+      });
+
+      const agg = Array.from(byPic.values()).sort((a, b) => b.total - a.total || a.pic.localeCompare(b.pic, 'vi'));
+      if (!agg.length) {
+        body.innerHTML = '<tr><td colspan="5" class="px-3 py-8 text-center text-slate-500">Chưa có dữ liệu DQA.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = agg.map((r) => {
+        const rate = f12Rate(r.done, r.total);
+        const rowTone = rate >= 80 ? 'bg-emerald-50/50' : (rate >= 50 ? 'bg-amber-50/50' : 'bg-rose-50/40');
+        const barTone = rate >= 80 ? 'bg-emerald-500' : (rate >= 50 ? 'bg-amber-500' : 'bg-rose-500');
+        return `<tr class="border-t border-slate-100 ${rowTone}">
+          <td class="px-3 py-2 font-semibold text-slate-800">${f12Text(r.pic)}</td>
+          <td class="px-3 py-2 text-slate-700"><span class="font-semibold text-violet-700">${r.done}</span>/${r.total}</td>
+          <td class="px-3 py-2 text-slate-700">${r.toDo}</td>
+          <td class="px-3 py-2 text-slate-700">${r.inProgress}</td>
+          <td class="px-3 py-2">
+            <div class="flex items-center gap-2">
+              <div class="h-2.5 w-28 overflow-hidden rounded-full bg-slate-200">
+                <div class="h-full ${barTone}" style="width:${Math.max(0, Math.min(100, rate))}%"></div>
+              </div>
+              <span class="rounded-full bg-white/80 px-2 py-0.5 text-xs font-semibold text-violet-700">${rate}%</span>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function f12RenderTaskTable(rows) {
+      const body = document.getElementById('f12-task-body');
+      if (!body) return;
+      if (!rows.length) {
+        body.innerHTML = '<tr><td colspan="6" class="px-3 py-8 text-center text-slate-500">Không có công việc phù hợp bộ lọc.</td></tr>';
+        return;
+      }
+      body.innerHTML = rows.map((r, idx) => `<tr class="border-t border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'} hover:bg-violet-50/60">
+        <td class="px-3 py-2 font-mono text-[11px] text-slate-600">${r.url ? `<a href="${f12Text(r.url)}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700 hover:underline">${f12Text(r.ma)}</a>` : f12Text(r.ma)}</td>
+        <td class="px-3 py-2 font-semibold text-slate-800">${f12Text(r.ten)}</td>
+        <td class="px-3 py-2 text-slate-700">${f12Text(r.pm)}</td>
+        <td class="px-3 py-2 text-slate-700"><span class="inline-flex items-center rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-semibold text-sky-700">${f12Text(r.pic)}</span></td>
+        <td class="px-3 py-2 text-slate-700"><span class="inline-flex items-center rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-semibold text-violet-700">${f12Text(r.dueDate)}</span></td>
+        <td class="px-3 py-2">${f12StatusBadge(r.statusRaw || f12StatusLabel(r.status))}</td>
+      </tr>`).join('');
+    }
+
+    function f12UpdateKpi(rows) {
+      const total = rows.length;
+      const done = rows.filter((r) => r.status === 'done').length;
+      const open = rows.filter((r) => r.status === 'to_do' || r.status === 'in_progress').length;
+      const rate = f12Rate(done, total);
+      f12SetText('f12-kpi-total', total);
+      f12SetText('f12-kpi-done', done);
+      f12SetText('f12-kpi-open', open);
+      f12SetText('f12-kpi-rate', `${rate}%`);
+    }
+
+    function f12ExportCurrentXlsx() {
+      try {
+        if (typeof XLSX === 'undefined') {
+          if (typeof showToast === 'function') showToast('Thiếu thư viện XLSX để xuất file.', 'error');
+          return;
+        }
+        const rows = Array.isArray(F12_FILTERED_ROWS) ? F12_FILTERED_ROWS : [];
+        if (!rows.length) {
+          if (typeof showToast === 'function') showToast('Không có dữ liệu để xuất.', 'warning');
+          return;
+        }
+
+        const headers = ['Mã dự án', 'Tên dự án', 'PM', 'PIC DQA', 'Due Date', 'Tháng', 'Status', 'URL'];
+        const data = rows.map((r) => [
+          r.ma || '',
+          r.ten || '',
+          r.pm || '',
+          r.pic || '',
+          r.dueDate || '',
+          r.dueMonth || '',
+          f12StatusLabel(r.status),
+          r.url || '',
+        ]);
+
+        const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Dashboard DQA');
+
+        const selectedMonth = (document.getElementById('f12-filter-month')?.value || '').trim();
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, '0');
+        const d = String(today.getDate()).padStart(2, '0');
+        const suffix = selectedMonth || 'all-months';
+        const fileName = `Form12_DashboardDQA_${suffix}_${y}${m}${d}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+        if (typeof showToast === 'function') showToast(`Đã xuất ${rows.length} dòng ra file XLSX.`, 'success');
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Xuất XLSX thất bại: ' + (err?.message || err), 'error');
       }
     }
-    
-    // Hàm load calendar Form 12
-    async function loadF12Calendar() {
+
+    function f12ApplyFiltersAndRender() {
+      const month = (document.getElementById('f12-filter-month')?.value || '').trim();
+      const pic = (document.getElementById('f12-filter-pic')?.value || '').trim();
+      const statusFilter = document.getElementById('f12-filter-status')?.value || 'all';
+      const q = (document.getElementById('f12-search')?.value || '').trim().toLowerCase();
+
+      const dqaRows = f12GetDqaRows(F12_ALL_DATA);
+      const filtered = dqaRows.filter((r) => {
+        if (month && r.dueMonth !== month) return false;
+        if (pic && r.pic !== pic) return false;
+        if (statusFilter !== 'all' && r.status !== statusFilter) return false;
+        if (q) {
+          const blob = `${r.ma} ${r.ten} ${r.pm} ${r.pic}`.toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+        return true;
+      });
+
+      F12_FILTERED_ROWS = filtered;
+      f12UpdateKpi(filtered);
+      f12RenderPersonalProgress(filtered);
+      f12RenderTaskTable(filtered);
+      f12SetText('f12-filter-result-count', `${filtered.length} kết quả`);
+    }
+
+    async function loadF12Dashboard() {
       const refreshBtn = document.getElementById('f12-refresh-btn');
-      
       try {
         if (refreshBtn) refreshBtn.disabled = true;
-        
-        // Mockup: Trả về dữ liệu rỗng
-        F12_ALL_DATA = [];
-        
-        renderF12Calendar();
-        showToast('Form 12: Webhook đang được cấu hình', 'info');
+        const resp = await fetch(F12_WEBHOOK_URL, { method: 'GET', headers: { Accept: 'application/json' } });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const body = await resp.json();
+        const rows = Array.isArray(body) ? body : (Array.isArray(body?.data) ? body.data : []);
+        F12_ALL_DATA = rows.map(f12MapRow).filter((r) => r.ma);
+        const dqaRows = f12GetDqaRows(F12_ALL_DATA);
+        f12PopulateMonthFilter(dqaRows);
+        f12PopulatePicFilter(dqaRows);
+        f12ApplyFiltersAndRender();
       } catch (error) {
-        console.error('[Form 12] Error loading calendar:', error);
-        showToast('Lỗi khi tải lịch: ' + error.message, 'error');
+        console.error('[Form 12] Error loading dashboard:', error);
+        if (typeof showToast === 'function') showToast('Lỗi khi tải Form 12: ' + error.message, 'error');
       } finally {
         if (refreshBtn) refreshBtn.disabled = false;
       }
     }
-    
-    // Khởi tạo Form 12
+
     function initForm12() {
       const refreshBtn = document.getElementById('f12-refresh-btn');
-      const prevBtn = document.getElementById('f12-prev-month');
-      const nextBtn = document.getElementById('f12-next-month');
-      const todayBtn = document.getElementById('f12-today');
-      const viewMonthBtn = document.getElementById('f12-view-month');
-      const viewWeekBtn = document.getElementById('f12-view-week');
-      
-      if (refreshBtn) {
-        refreshBtn.addEventListener('click', loadF12Calendar);
-      }
-      
-      if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-          F12_CURRENT_MONTH--;
-          if (F12_CURRENT_MONTH < 0) {
-            F12_CURRENT_MONTH = 11;
-            F12_CURRENT_YEAR--;
-          }
-          renderF12Calendar();
-        });
-      }
-      
-      if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-          F12_CURRENT_MONTH++;
-          if (F12_CURRENT_MONTH > 11) {
-            F12_CURRENT_MONTH = 0;
-            F12_CURRENT_YEAR++;
-          }
-          renderF12Calendar();
-        });
-      }
-      
-      if (todayBtn) {
-        todayBtn.addEventListener('click', () => {
-          const now = new Date();
-          F12_CURRENT_MONTH = now.getMonth();
-          F12_CURRENT_YEAR = now.getFullYear();
-          renderF12Calendar();
-        });
-      }
-      
-      if (viewMonthBtn) {
-        viewMonthBtn.addEventListener('click', () => {
-          F12_VIEW_MODE = 'month';
-          viewMonthBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
-          viewMonthBtn.classList.remove('text-gray-600');
-          viewWeekBtn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
-          viewWeekBtn.classList.add('text-gray-600');
-          renderF12Calendar();
-        });
-      }
-      
-      if (viewWeekBtn) {
-        viewWeekBtn.addEventListener('click', () => {
-          F12_VIEW_MODE = 'week';
-          viewWeekBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
-          viewWeekBtn.classList.remove('text-gray-600');
-          viewMonthBtn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
-          viewMonthBtn.classList.add('text-gray-600');
-          renderF12Calendar();
-        });
-      }
-      
-      // Tự động load khi form được hiển thị
-      const form12Section = document.getElementById('form12');
-      if (form12Section) {
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-              if (!form12Section.classList.contains('hidden')) {
-                if (F12_ALL_DATA.length === 0) {
-                  loadF12Calendar();
-                }
-              }
-            }
+      const exportBtn = document.getElementById('f12-export-btn');
+      const monthFilter = document.getElementById('f12-filter-month');
+      const picFilter = document.getElementById('f12-filter-pic');
+      const statusFilter = document.getElementById('f12-filter-status');
+      const searchInput = document.getElementById('f12-search');
+      const clearBtn = document.getElementById('f12-clear-filters');
+      if (!F12_BOUND) {
+        F12_BOUND = true;
+        if (refreshBtn) refreshBtn.addEventListener('click', loadF12Dashboard);
+        if (exportBtn) exportBtn.addEventListener('click', f12ExportCurrentXlsx);
+        if (monthFilter) monthFilter.addEventListener('change', f12ApplyFiltersAndRender);
+        if (picFilter) picFilter.addEventListener('change', f12ApplyFiltersAndRender);
+        if (statusFilter) statusFilter.addEventListener('change', f12ApplyFiltersAndRender);
+        if (searchInput) searchInput.addEventListener('input', f12ApplyFiltersAndRender);
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            if (monthFilter) monthFilter.value = '';
+            if (picFilter) picFilter.value = '';
+            if (statusFilter) statusFilter.value = 'all';
+            if (searchInput) searchInput.value = '';
+            f12ApplyFiltersAndRender();
           });
-        });
-        observer.observe(form12Section, { attributes: true });
+        }
       }
+      loadF12Dashboard();
     }
-    
-    // Khởi tạo Form 12 khi DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
-      const navButtons = document.querySelectorAll('.nav-btn[data-target="form12"]');
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          setTimeout(() => {
-            initForm12();
-          }, 100);
-        });
-      });
-    });
 
     // ===== FORM 14 - HIỂN THỊ DỮ LIỆU BÁO CÁO (4M) =====
     let F14_ALL_DATA = [];
