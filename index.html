@@ -85,6 +85,7 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="form10-spm-dashboard.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,10 +480,10 @@
             <span class="material-symbols-outlined text-lg text-gray-500 group-expand-icon">expand_more</span>
             <p class="text-sm font-semibold">Hệ thống jira (đang xây dựng)</p>
           </button>
-          <div class="group-items flex flex-col gap-1 ml-4 mt-1 collapsed" data-group="jira-group">
+          <div class="group-items flex flex-col gap-1 ml-4 mt-1" data-group="jira-group">
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form10">
               <span class="material-symbols-outlined text-lg text-gray-500">folder_special</span>
-              <p class="text-sm font-semibold">10 - Quản lý dự án</p>
+              <p class="text-sm font-semibold">10 - Dashboard SPM 2026</p>
             </button>
             <button class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm" data-target="form11">
               <span class="material-symbols-outlined text-lg text-gray-500">dashboard</span>
@@ -1725,297 +1726,719 @@
       </div>
     </section>
 
-    <!-- Form 10 - Quản lý dự án (Jira) -->
-    <section id="form10" class="w-full bg-white/50 p-6 lg:p-10 rounded-lg shadow-md hidden flex flex-col" style="min-height: calc(100vh - 120px);">
-      <div class="mx-auto flex w-full flex-col gap-6 flex-1">
-        <!-- Page Heading -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-bold text-[#131118]">Quản lý dự án</h2>
-            <p class="text-[#6b6189] text-sm mt-1">Theo dõi tiến độ và phân cấp công việc Epic → Story → Subtask</p>
+    <!-- Form 10 — Dashboard SPM 2026 (KRD & DQA), tông màu đồng bộ Cổng DQA -->
+    <section id="form10" class="w-full bg-white p-4 lg:p-6 rounded-lg shadow-md hidden flex flex-col border border-border-light" style="min-height: calc(100vh - 120px);">
+      <style>
+        #form10 .f10-spm-root, #form10 .f10-spm-root * { box-sizing: border-box; }
+        #form10 .f10-spm-root {
+          --bg: #f7f8fc;
+          --bg2: #ffffff;
+          --bg3: #f3f4f6;
+          --card: #ffffff;
+          --border: #e5e7eb;
+          --border2: #d1d5db;
+          --text: #111827;
+          --text2: #6b7280;
+          --text3: #9ca3af;
+          --on: #16a34a;
+          --on-bg: rgba(22,163,74,.1);
+          --late: #ef4444;
+          --late-bg: rgba(239,68,68,.08);
+          --near: #f59e0b;
+          --near-bg: rgba(245,158,11,.12);
+          --blue: #3b82f6;
+          --blue-bg: rgba(59,130,246,.12);
+          --purple: #7c3aed;
+          --purple-bg: rgba(124,58,237,.1);
+          --red: #ef4444;
+          --red-bg: rgba(239,68,68,.1);
+          --green: #22c55e;
+          --green-bg: rgba(34,197,94,.1);
+          --font: Inter, system-ui, sans-serif;
+          --mono: ui-monospace, monospace;
+          font-family: var(--font);
+          font-size: 14px;
+          color: var(--text);
+          line-height: 1.55;
+          background: var(--bg);
+          border-radius: 0.75rem;
+          overflow: hidden;
+          border: 1px solid var(--border);
+        }
+        #form10 .f10-spm-root .hdr {
+          background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+          border-bottom: 1px solid rgba(255,255,255,.2);
+          padding: 0 20px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        #form10 .f10-spm-root .hdr-l { display: flex; align-items: center; gap: 12px; }
+        #form10 .f10-spm-root .logo { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #fff; }
+        #form10 .f10-spm-root .logo em { color: #e0f2fe; font-style: normal; font-weight: 800; }
+        #form10 .f10-spm-root .sep { width: 1px; height: 18px; background: rgba(255,255,255,.35); }
+        #form10 .f10-spm-root .hdr-sub { font-size: 12px; color: rgba(255,255,255,.9); }
+        #form10 .f10-spm-root .hdr-r { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+        #form10 .f10-spm-root .tag {
+          font-size: 11px;
+          font-family: var(--mono);
+          padding: 3px 9px;
+          background: rgba(255,255,255,.2);
+          border: 1px solid rgba(255,255,255,.35);
+          border-radius: 9999px;
+          color: #fff;
+        }
+        #form10 .f10-spm-root #f10-spm-refresh-btn:hover { background: rgba(255,255,255,.35); }
+        #form10 .f10-spm-root .main { max-width: 1400px; margin: 0 auto; padding: 20px 20px 24px; }
+        #form10 .f10-spm-root .tabs {
+          display: flex;
+          gap: 4px;
+          padding: 4px;
+          background: var(--bg3);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          width: fit-content;
+          margin-bottom: 18px;
+        }
+        #form10 .f10-spm-root .tab {
+          padding: 8px 18px;
+          font-size: 12.5px;
+          font-weight: 500;
+          color: var(--text2);
+          cursor: pointer;
+          border-radius: 8px;
+          transition: all .15s;
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          user-select: none;
+        }
+        #form10 .f10-spm-root .tab:hover { color: var(--text); background: var(--bg2); }
+        #form10 .f10-spm-root .tab.on { background: var(--card); color: var(--text); box-shadow: 0 1px 6px rgba(15,23,42,.08); border: 1px solid var(--border); }
+        #form10 .f10-spm-root .tc {
+          font-size: 10px;
+          font-family: var(--mono);
+          padding: 1px 6px;
+          border-radius: 9999px;
+          background: var(--bg3);
+          color: var(--text2);
+        }
+        #form10 .f10-spm-root .tab.on .tc { background: rgba(59,130,246,.12); color: #1d4ed8; }
+        #form10 .f10-spm-root .panel { display: none; animation: f10spm_fi .18s ease; }
+        #form10 .f10-spm-root .panel.on { display: block; }
+        @keyframes f10spm_fi { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+        #form10 .f10-spm-root .kg { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 18px; }
+        @media (max-width: 1100px) { #form10 .f10-spm-root .kg { grid-template-columns: repeat(3, 1fr); } }
+        #form10 .f10-spm-root .kc {
+          background: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          padding: 14px 16px;
+          position: relative;
+          overflow: hidden;
+          transition: border-color .15s;
+        }
+        #form10 .f10-spm-root .kc:hover { border-color: #bfdbfe; }
+        #form10 .f10-spm-root .kc::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 3px;
+          background: var(--ac, transparent);
+          border-radius: 10px 10px 0 0;
+        }
+        #form10 .f10-spm-root .kc.ac-b { --ac: var(--blue); }
+        #form10 .f10-spm-root .kc.ac-g { --ac: var(--green); }
+        #form10 .f10-spm-root .kc.ac-r { --ac: var(--late); }
+        #form10 .f10-spm-root .kc.ac-y { --ac: var(--near); }
+        #form10 .f10-spm-root .kc.ac-p { --ac: var(--purple); }
+        #form10 .f10-spm-root .kl { font-size: 10.5px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 7px; }
+        #form10 .f10-spm-root .kv { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+        #form10 .f10-spm-root .ks { font-size: 11px; color: var(--text2); }
+        #form10 .f10-spm-root .kb { height: 3px; border-radius: 2px; background: #e5e7eb; margin-top: 9px; overflow: hidden; }
+        #form10 .f10-spm-root .kf { height: 100%; border-radius: 2px; transition: width .6s ease; }
+        #form10 .f10-spm-root .cg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+        @media (max-width: 800px) { #form10 .f10-spm-root .cg { grid-template-columns: 1fr; } }
+        #form10 .f10-spm-root .cc { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+        #form10 .f10-spm-root .ct { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text2); margin-bottom: 12px; }
+        #form10 .f10-spm-root .lg { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 10px; }
+        #form10 .f10-spm-root .li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+        #form10 .f10-spm-root .ld { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+        #form10 .f10-spm-root .tb { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        #form10 .f10-spm-root .fg { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+        #form10 .f10-spm-root .fl { font-size: 10.5px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+        #form10 .f10-spm-root select {
+          font-family: var(--font);
+          font-size: 12px;
+          padding: 6px 28px 6px 10px;
+          background: var(--bg2);
+          border: 1px solid var(--border2);
+          border-radius: 8px;
+          color: var(--text);
+          cursor: pointer;
+          outline: none;
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath stroke='%236b7280' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 8px center;
+        }
+        #form10 .f10-spm-root select:hover, #form10 .f10-spm-root select:focus { border-color: var(--blue); }
+        #form10 .f10-spm-root .ci { font-size: 11px; font-family: var(--mono); color: var(--text3); }
+        #form10 .f10-spm-root .tw { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+        #form10 .f10-spm-root .ts { overflow-x: auto; max-height: 420px; }
+        #form10 .f10-spm-root table { width: 100%; border-collapse: collapse; }
+        #form10 .f10-spm-root thead th {
+          background: #f9fafb;
+          font-size: 10px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          color: var(--text3);
+          padding: 9px 12px;
+          text-align: left;
+          border-bottom: 1px solid var(--border);
+          position: sticky;
+          top: 0;
+          z-index: 2;
+          white-space: nowrap;
+        }
+        #form10 .f10-spm-root tbody td {
+          padding: 8px 12px;
+          border-bottom: 1px solid var(--border);
+          font-size: 12px;
+          color: var(--text);
+          vertical-align: middle;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #form10 .f10-spm-root tbody tr:last-child td { border-bottom: none; }
+        #form10 .f10-spm-root tbody tr:hover td { background: #f9fafb; }
+        #form10 .f10-spm-root .mc { font-family: var(--mono); font-size: 10.5px; color: var(--text3); }
+        #form10 .f10-spm-root .bd { display: inline-flex; align-items: center; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 6px; white-space: nowrap; }
+        #form10 .f10-spm-root .b-ip { background: var(--blue-bg); color: #1d4ed8; }
+        #form10 .f10-spm-root .b-done { background: var(--green-bg); color: #15803d; }
+        #form10 .f10-spm-root .b-todo { background: #f3f4f6; color: var(--text3); }
+        #form10 .f10-spm-root .b-cancel { background: #f3f4f6; color: var(--text3); opacity: .75; }
+        #form10 .f10-spm-root .b-pend { background: var(--near-bg); color: #b45309; }
+        #form10 .f10-spm-root .b-ng { background: var(--red-bg); color: #b91c1c; font-weight: 700; }
+        #form10 .f10-spm-root .b-ok { background: var(--green-bg); color: #15803d; font-weight: 700; }
+        #form10 .f10-spm-root .b-doing { background: var(--purple-bg); color: #5b21b6; }
+        #form10 .f10-spm-root .b-lv { background: #eff6ff; color: #1e40af; font-family: var(--mono); }
+        #form10 .f10-spm-root .b-ph { background: var(--purple-bg); color: #5b21b6; font-family: var(--mono); font-weight: 700; }
+        #form10 .f10-spm-root .b-krd { background: var(--blue-bg); color: #1d4ed8; font-size: 9px; }
+        #form10 .f10-spm-root .b-dqa { background: var(--purple-bg); color: #5b21b6; font-size: 9px; }
+        #form10 .f10-spm-root .pic { font-size: 11px; font-weight: 600; color: #0369a1; }
+        #form10 .f10-spm-root .jira-link { color: var(--text3); font-size: 10px; text-decoration: none; }
+        #form10 .f10-spm-root .jira-link:hover { color: var(--blue); text-decoration: underline; }
+        #form10 .f10-spm-root .fmea-val { font-family: var(--mono); font-size: 10.5px; color: #b45309; }
+        #form10 .f10-spm-root .stl {
+          font-size: 12px;
+          font-weight: 600;
+          color: var(--text2);
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          margin-bottom: 14px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        #form10 .f10-spm-root .stl::before { content: ''; display: block; width: 3px; height: 14px; border-radius: 2px; background: var(--blue); }
+        #form10 .f10-spm-root #f10-spm-panel-dqa .stl::before { background: var(--purple); }
+        /* Tách Dashboard vs Danh sách đầy đủ */
+        #form10 .f10-spm-root .f10-spm-section {
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 18px 18px 20px;
+          margin-bottom: 20px;
+          background: var(--card);
+        }
+        #form10 .f10-spm-root .f10-spm-section:last-child { margin-bottom: 0; }
+        #form10 .f10-spm-root .f10-spm-section--dashboard {
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+        }
+        #form10 .f10-spm-root .f10-spm-section--list {
+          background: #f9fafb;
+          border-color: #e5e7eb;
+        }
+        #form10 .f10-spm-root .f10-spm-section-head {
+          margin-bottom: 16px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid var(--border);
+        }
+        #form10 .f10-spm-root .f10-spm-section-head h3 {
+          margin: 0;
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--text);
+          letter-spacing: -0.02em;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        #form10 .f10-spm-root .f10-spm-section-head h3::before {
+          content: '';
+          width: 4px;
+          height: 18px;
+          border-radius: 3px;
+          background: var(--blue);
+          flex-shrink: 0;
+        }
+        #form10 .f10-spm-root #f10-spm-panel-dqa .f10-spm-section-head h3::before { background: var(--purple); }
+        #form10 .f10-spm-root .f10-spm-section-desc {
+          margin: 6px 0 0;
+          font-size: 12px;
+          color: var(--text2);
+          font-weight: 400;
+        }
+        #form10 .f10-spm-root .f10-spm-section--dashboard .kg { margin-bottom: 14px; }
+        #form10 .f10-spm-root #f10-spm-panel-krd .kg { grid-template-columns: repeat(4, 1fr); }
+        #form10 .f10-spm-root #f10-spm-panel-dqa .kg-dqa-top {
+          display: grid;
+          grid-template-columns: 1.2fr repeat(3, 1fr);
+          gap: 10px;
+          margin-bottom: 10px;
+        }
+        #form10 .f10-spm-root #f10-spm-panel-dqa .kg-dqa-sub {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+        #form10 .f10-spm-root #f10-spm-panel-dqa .kc-total .ks2 {
+          font-size: 10px;
+          color: var(--text3);
+          margin-top: 2px;
+          font-family: var(--mono);
+          letter-spacing: .02em;
+        }
+        #form10 .f10-spm-root #f10-spm-panel-krd .kg-level {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+          margin-bottom: 16px;
+          padding: 10px;
+          border: 1px dashed var(--border2);
+          border-radius: 10px;
+          background: #fafafa;
+        }
+        @media (max-width: 1100px) {
+          #form10 .f10-spm-root #f10-spm-panel-krd .kg { grid-template-columns: repeat(2, 1fr); }
+          #form10 .f10-spm-root #f10-spm-panel-krd .kg-level { grid-template-columns: repeat(2, 1fr); }
+          #form10 .f10-spm-root #f10-spm-panel-dqa .kg-dqa-top { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 700px) {
+          #form10 .f10-spm-root #f10-spm-panel-krd .kg { grid-template-columns: 1fr; }
+          #form10 .f10-spm-root #f10-spm-panel-krd .kg-level { grid-template-columns: 1fr; }
+          #form10 .f10-spm-root #f10-spm-panel-dqa .kg-dqa-top,
+          #form10 .f10-spm-root #f10-spm-panel-dqa .kg-dqa-sub { grid-template-columns: 1fr; }
+        }
+        #form10 .f10-spm-root .f10-spm-section--dashboard .cg { margin-bottom: 0; }
+        #form10 .f10-spm-root .f10-spm-section--list .tb { margin-bottom: 12px; }
+        #form10 .f10-spm-root .f10-spm-section--list .ts { max-height: min(55vh, 520px); }
+        #form10 .f10-spm-root .proj-link { color: #1d4ed8; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+        #form10 .f10-spm-root .proj-link:hover { color: #1e40af; }
+        #form10 .f10-spm-root .f10-spm-detail-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 9999; }
+        #form10 .f10-spm-root .f10-spm-detail-modal.open { display: flex; }
+        #form10 .f10-spm-root .f10-spm-detail-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.45); }
+        #form10 .f10-spm-root .f10-spm-detail-card {
+          position: relative;
+          width: min(900px, calc(100vw - 32px));
+          max-height: calc(100vh - 48px);
+          overflow: auto;
+          background: #fff;
+          border: 1px solid #e5e7eb;
+          border-radius: 12px;
+          box-shadow: 0 20px 40px rgba(2, 6, 23, 0.2);
+        }
+        #form10 .f10-spm-root .f10-spm-detail-head { display: flex; justify-content: space-between; gap: 8px; padding: 14px 16px; border-bottom: 1px solid #e5e7eb; }
+        #form10 .f10-spm-root .f10-spm-detail-title { font-size: 16px; font-weight: 700; color: #111827; margin: 0; }
+        #form10 .f10-spm-root .f10-spm-detail-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+        #form10 .f10-spm-root .f10-spm-detail-close { border: 1px solid #d1d5db; background: #f9fafb; border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+        #form10 .f10-spm-root .f10-spm-detail-close:hover { background: #f3f4f6; }
+        #form10 .f10-spm-root .f10-spm-detail-body { padding: 14px 16px 16px; display: grid; gap: 12px; background: #f8fafc; }
+        #form10 .f10-spm-root .f10-spm-detail-sec { border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: 10px; }
+        #form10 .f10-spm-root .f10-spm-detail-sec-title { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; font-weight: 700; margin-bottom: 8px; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-overview { border-color: #dbeafe; background: #eff6ff; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-overview .f10-spm-detail-sec-title { color: #1d4ed8; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-quality { border-color: #fde68a; background: #fffbeb; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-quality .f10-spm-detail-sec-title { color: #b45309; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-improve { border-color: #fecdd3; background: #fff1f2; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-improve .f10-spm-detail-sec-title { color: #be123c; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-fmea { border-color: #ddd6fe; background: #f5f3ff; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-fmea .f10-spm-detail-sec-title { color: #6d28d9; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-links { border-color: #d1fae5; background: #ecfdf5; }
+        #form10 .f10-spm-root .f10-spm-detail-sec.sec-links .f10-spm-detail-sec-title { color: #047857; }
+        #form10 .f10-spm-root .f10-spm-detail-subgroup { border: 1px dashed #d1d5db; border-radius: 10px; padding: 8px; margin-bottom: 8px; background: rgba(255,255,255,0.8); }
+        #form10 .f10-spm-root .f10-spm-detail-subgroup:last-child { margin-bottom: 0; }
+        #form10 .f10-spm-root .f10-spm-detail-subtitle { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; margin-bottom: 8px; }
+        #form10 .f10-spm-root .sec-quality .f10-spm-detail-subgroup { border-color: #fcd34d; }
+        #form10 .f10-spm-root .sec-quality .f10-spm-detail-subtitle { color: #a16207; }
+        #form10 .f10-spm-root .sec-improve .f10-spm-detail-subgroup { border-color: #fda4af; }
+        #form10 .f10-spm-root .sec-improve .f10-spm-detail-subtitle { color: #be123c; }
+        #form10 .f10-spm-root .sec-fmea .f10-spm-detail-subgroup { border-color: #c4b5fd; }
+        #form10 .f10-spm-root .sec-fmea .f10-spm-detail-subtitle { color: #6d28d9; }
+        #form10 .f10-spm-root .sec-links .f10-spm-detail-subgroup { border-color: #86efac; }
+        #form10 .f10-spm-root .sec-links .f10-spm-detail-subtitle { color: #047857; }
+        #form10 .f10-spm-root .f10-spm-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        #form10 .f10-spm-root .f10-spm-detail-item { border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px; background: #fff; }
+        #form10 .f10-spm-root .f10-spm-detail-item .lb { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; font-weight: 700; margin-bottom: 5px; }
+        #form10 .f10-spm-root .f10-spm-detail-item .val { font-size: 13px; color: #111827; word-break: break-word; }
+        @media (max-width: 760px) { #form10 .f10-spm-root .f10-spm-detail-grid { grid-template-columns: 1fr; } }
+      </style>
+      <div class="f10-spm-root">
+        <header class="hdr">
+          <div class="hdr-l">
+            <div class="logo">Karofi <em>R&amp;D</em></div>
+            <div class="sep"></div>
+            <div class="hdr-sub">Dashboard SPM 2026 — KRD &amp; DQA</div>
           </div>
-          <div class="flex flex-wrap gap-2">
-            <button id="f10-load-data-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e5e7eb] rounded-full text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
-              <span class="material-symbols-outlined text-[18px]">refresh</span>
-              <span>Tải dữ liệu</span>
-            </button>
-            <button id="f10-export-btn" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e5e7eb] rounded-full text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
-              <span class="material-symbols-outlined text-[18px]">table_view</span>
-              <span>Xuất Excel</span>
-            </button>
+          <div class="hdr-r">
+            <button type="button" class="tag" id="f10-spm-refresh-btn" title="Tải lại dữ liệu" style="cursor:pointer;border:none;font:inherit">↻ Tải lại</button>
+            <div class="tag" id="f10-spm-hdr-month">—</div>
           </div>
-      </div>
+        </header>
+        <div class="main">
+          <div class="tabs">
+            <div class="tab on" data-tab="krd">
+              KRD — Đang triển khai <span class="tc">0</span>
+            </div>
+            <div class="tab" data-tab="dqa">
+              DQA — Đánh giá chất lượng <span class="tc">0</span>
+            </div>
+          </div>
 
-        <!-- Upload Section -->
-        <div class="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 p-6 shadow-sm hidden">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-800">Upload File Excel</h3>
-            <span class="text-xs text-gray-500">Hỗ trợ .xlsx, .xls</span>
-          </div>
-          
-          <div id="f10-drop-zone" class="relative border-2 border-dashed border-blue-300 rounded-lg p-8 text-center bg-white hover:border-blue-500 transition-colors cursor-pointer">
-            <input type="file" id="f10-excel-file" accept=".xlsx,.xls" class="hidden">
-            <div id="f10-drop-content" class="flex flex-col items-center gap-3">
-              <span class="material-symbols-outlined text-5xl text-blue-500">cloud_upload</span>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Kéo thả file Excel vào đây</p>
-                <p class="text-xs text-gray-500 mt-1">hoặc click để chọn file</p>
+          <div class="panel on" id="f10-spm-panel-krd">
+            <div class="f10-spm-section f10-spm-section--dashboard">
+              <div class="f10-spm-section-head">
+                <h3>Dashboard</h3>
+                <p class="f10-spm-section-desc">Chỉ số và biểu đồ tổng quan KRD</p>
+              </div>
+            <div class="kg">
+              <div class="kc ac-b"><div class="kl">Tổng KRD</div><div class="kv" id="f10-spm-kpi-krd-total" style="color:var(--blue)">0</div><div class="ks">dự án đang chạy</div><div class="kb"><div class="kf" id="f10-spm-bar-krd-total"></div></div></div>
+              <div class="kc ac-b"><div class="kl">In Progress</div><div class="kv" id="f10-spm-kpi-krd-ip">0</div><div class="ks">đang thực hiện</div><div class="kb"><div class="kf" id="f10-spm-bar-krd-ip"></div></div></div>
+              <div class="kc ac-g"><div class="kl">Hoàn thành</div><div class="kv" id="f10-spm-kpi-krd-done" style="color:var(--green)">0</div><div class="ks" id="f10-spm-kpi-krd-done-hint">—</div></div>
+              <div class="kc ac-p"><div class="kl">DQA tham gia</div><div class="kv" id="f10-spm-kpi-krd-dqa-join" style="color:var(--purple)">0</div><div class="ks">dự án KRD có DQA</div></div>
             </div>
-          </div>
-            <div id="f10-file-info" class="hidden flex items-center justify-between gap-3 mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
-              <div class="flex items-center gap-3 flex-1">
-                <span class="material-symbols-outlined text-green-600">description</span>
-                <div class="flex-1 text-left">
-                  <p id="f10-file-name" class="text-sm font-medium text-gray-900"></p>
-                  <p id="f10-file-size" class="text-xs text-gray-500"></p>
-        </div>
-      </div>
-              <button id="f10-file-remove" class="text-red-500 hover:text-red-700 transition">
-                <span class="material-symbols-outlined">close</span>
-        </button>
+            <div class="stl">Nhóm cấp độ KRD</div>
+            <div class="kg-level">
+              <div class="kc"><div class="kl">Cấp L1</div><div class="kv" id="f10-spm-kpi-krd-l1">0</div><div class="ks">SPM Core</div><div class="kb"><div class="kf" id="f10-spm-bar-krd-l1"></div></div></div>
+              <div class="kc"><div class="kl">Cấp L2</div><div class="kv" id="f10-spm-kpi-krd-l2">0</div><div class="ks">TUCP / SPM</div><div class="kb"><div class="kf" id="f10-spm-bar-krd-l2"></div></div></div>
+              <div class="kc"><div class="kl">Cấp L3</div><div class="kv" id="f10-spm-kpi-krd-l3">0</div><div class="ks">LK / TUCP nhỏ</div><div class="kb"><div class="kf" id="f10-spm-bar-krd-l3"></div></div></div>
             </div>
-      </div>
 
-          <div class="flex items-center justify-center gap-3 mt-4">
-            <button id="f10-submit-btn" class="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-              <span class="material-symbols-outlined">upload</span>
-              <span>Tải lên server</span>
-            </button>
-            </div>
-          </div>
-
-        <!-- Search and Filter -->
-        <div class="flex flex-col lg:flex-row gap-3 pt-2">
-          <!-- Search Input -->
-          <div class="relative w-full lg:max-w-md">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span class="material-symbols-outlined text-[#6b6189]">search</span>
-            </div>
-            <input id="f10-search-input" type="text" placeholder="Tìm theo tên, Jira Key, Assignee..." class="block w-full pl-10 pr-3 py-2.5 border-none rounded-full leading-5 bg-white text-[#131118] placeholder-[#9ca3af] focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary/20 shadow-sm ring-1 ring-[#e5e7eb]">
-          </div>
-          <!-- Filters -->
-          <div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
-            <select id="f10-filter-status" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
-              <option value="">Tất cả trạng thái</option>
-              <option value="done">Done</option>
-              <option value="in review">In Review</option>
-              <option value="in progress">In Progress</option>
-              <option value="to do">To Do</option>
-            </select>
-            <select id="f10-filter-assignee" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
-              <option value="">Tất cả thành viên</option>
-              <!-- Options sẽ được populate bằng JavaScript -->
-            </select>
-            <select id="f10-filter-level" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none">
-              <option value="all">Tất cả cấp</option>
-              <option value="story">Story và Subtask</option>
-              <option value="subtask">Chỉ Subtask</option>
-            </select>
-            
-            <!-- Bộ lọc thời gian cải tiến -->
-            <select id="f10-filter-date-preset" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer appearance-none min-w-[180px]">
-              <option value="all">Tất cả thời gian</option>
-              <option value="today">Hôm nay</option>
-              <option value="this-week">Tuần này</option>
-              <option value="this-month" selected>Tháng này</option>
-              <option value="last-month">Tháng trước</option>
-              <option value="last-3-months">3 tháng gần nhất</option>
-              <option value="custom">Tùy chỉnh...</option>
-            </select>
-            
-            <!-- Khoảng thời gian tùy chỉnh (ẩn mặc định) -->
-            <div id="f10-custom-date-range" class="hidden flex items-center gap-2">
-              <input type="date" id="f10-filter-date-from" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Từ ngày">
-              <span class="text-[#6b6189] text-sm">đến</span>
-              <input type="date" id="f10-filter-date-to" class="pl-3 pr-8 py-2.5 bg-white border-none ring-1 ring-[#e5e7eb] rounded-full text-sm font-medium text-[#131118] focus:ring-2 focus:ring-primary/20 shadow-sm" placeholder="Đến ngày">
-            </div>
-          </div>
-        </div>
-
-        <!-- Hierarchical Data Table -->
-        <div class="overflow-hidden rounded-lg bg-white shadow-sm border border-[#f1f0f4] flex-1 flex flex-col">
-          <div class="overflow-x-auto overflow-y-auto flex-1" style="min-height: 0;">
-            <!-- Table Header -->
-            <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-[#fafafa] border-b border-[#f1f0f4] text-xs font-semibold text-[#6b6189] uppercase tracking-wider sticky top-0 z-10">
-              <div class="col-span-3 flex items-center">Tên công việc</div>
-              <div class="col-span-1 flex items-center">Thay đổi</div>
-              <div class="col-span-2 flex items-center">Người thực hiện</div>
-              <div class="col-span-1 flex items-center">Trạng thái</div>
-              <div class="col-span-1 flex items-center">Ngày bắt đầu</div>
-              <div class="col-span-1 flex items-center">Hạn HT</div>
-              <div class="col-span-1 flex items-center">Ngày hoàn thành</div>
-              <div class="col-span-1 flex items-center">Mã Jira</div>
-              <div class="col-span-1 flex items-center">Ghi chú</div>
-            </div>
-            <!-- Table Body (Scrollable) -->
-            <div class="custom-scrollbar-f10">
-              <div id="f10-table-body" class="divide-y divide-[#f1f0f4]">
-                <div class="px-6 py-8 text-center text-[#6b6189]">
-                  <div class="flex flex-col items-center gap-2">
-                    <span class="material-symbols-outlined text-4xl text-gray-300">table_chart</span>
-                    <p>Chưa có dữ liệu. Vui lòng tải dữ liệu hoặc upload file Excel.</p>
-                  </div>
-                </div>
+            <div class="cg">
+              <div class="cc">
+                <div class="ct">Phân bổ tình trạng KRD</div>
+                <div class="lg" id="f10-spm-leg-krd-status"></div>
+                <div style="position:relative;width:100%;height:160px"><canvas id="f10-spm-ck1"></canvas></div>
+              </div>
+              <div class="cc">
+                <div class="ct">Phân bổ cấp độ KRD</div>
+                <div class="lg" id="f10-spm-leg-krd-level"></div>
+                <div style="position:relative;width:100%;height:160px"><canvas id="f10-spm-ck2"></canvas></div>
               </div>
             </div>
+            </div>
+
+            <div class="f10-spm-section f10-spm-section--list">
+              <div class="f10-spm-section-head">
+                <h3>Danh sách đầy đủ</h3>
+                <p class="f10-spm-section-desc">Bảng chi tiết dự án KRD — lọc và tìm kiếm</p>
+              </div>
+            <div class="tb">
+              <div class="fg">
+                <span class="fl">Lọc:</span>
+                <select id="f10-spm-fkT">
+                  <option value="">Tất cả tình trạng</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Done">Done</option>
+                  <option value="To Do">To Do</option>
+                  <option value="Canceled">Canceled</option>
+                  <option value="PENDING">Pending</option>
+                </select>
+                <select id="f10-spm-fkC">
+                  <option value="">Tất cả cấp</option>
+                  <option value="L1">L1</option>
+                  <option value="L2">L2</option>
+                  <option value="L3">L3</option>
+                </select>
+                <select id="f10-spm-fkD">
+                  <option value="">KRD + DQA</option>
+                  <option value="krd_only">KRD không DQA</option>
+                  <option value="both">KRD có DQA</option>
+                </select>
+                <input id="f10-spm-fkQ" type="text" placeholder="Tìm tên / mã..." style="font-family:var(--font);font-size:12px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--text);outline:none;width:180px">
+              </div>
+              <span class="ci" id="f10-spm-cnt-k"></span>
+            </div>
+            <div class="tw"><div class="ts">
+              <table>
+                <colgroup>
+                  <col style="width:70px"><col style="width:110px"><col style="width:260px"><col style="width:100px">
+                  <col style="width:60px"><col style="width:90px"><col style="width:55px"><col style="width:55px">
+                  <col style="width:80px"><col style="width:60px"><col style="width:70px"><col style="width:90px">
+                  <col style="width:110px"><col style="width:80px"><col style="width:110px"><col style="width:110px">
+                  <col style="width:100px"><col style="width:60px"><col style="width:160px"><col style="width:170px">
+                </colgroup>
+                <thead><tr>
+                  <th>Id</th><th>Mã dự án</th><th>Tên dự án</th><th>PM</th>
+                  <th>Cấp</th><th>Tình trạng</th><th>KRD</th><th>DQA</th>
+                  <th>Giai đoạn</th><th>KQ ĐG</th><th>Đang ĐG</th><th>PIC DQA</th>
+                  <th>SL cải tiến lỗi</th><th>Tổng lỗi</th><th>Tỷ lệ cải tiến lỗi</th><th>HM FMEA BS</th>
+                  <th>Tổng HM FMEA</th><th>Tỉ lệ FMEA</th><th>Jira</th><th>Ghi chú</th>
+                </tr></thead>
+                <tbody id="f10-spm-tb-k"></tbody>
+              </table>
+            </div></div>
+            </div>
+          </div>
+
+          <div class="panel" id="f10-spm-panel-dqa">
+            <div class="f10-spm-section f10-spm-section--dashboard">
+              <div class="f10-spm-section-head">
+                <h3>Dashboard</h3>
+                <p class="f10-spm-section-desc">Chỉ số và biểu đồ tổng quan DQA</p>
+              </div>
+            <div class="kg-dqa-top">
+              <div class="kc ac-p kc-total">
+                <div class="kl">Tổng DQA</div>
+                <div class="kv" id="f10-spm-kpi-dqa-total" style="color:var(--purple)">0</div>
+                <div class="ks">dự án tham gia</div>
+                <div class="ks2">= Đang đánh giá + NG + OK</div>
+                <div class="kb"><div class="kf" id="f10-spm-bar-dqa-total"></div></div>
+              </div>
+              <div class="kc ac-g"><div class="kl">Đang đánh giá</div><div class="kv" id="f10-spm-kpi-dqa-doing" style="color:var(--green)">0</div><div class="ks">thuộc tổng DQA</div><div class="kb"><div class="kf" id="f10-spm-bar-dqa-doing"></div></div></div>
+              <div class="kc ac-r"><div class="kl">Kết quả NG</div><div class="kv" id="f10-spm-kpi-dqa-ng" style="color:var(--late)">0</div><div class="ks">thuộc tổng DQA</div><div class="kb"><div class="kf" id="f10-spm-bar-dqa-ng"></div></div></div>
+              <div class="kc ac-g"><div class="kl">Kết quả OK</div><div class="kv" id="f10-spm-kpi-dqa-ok" style="color:var(--green)">0</div><div class="ks">thuộc tổng DQA</div></div>
+            </div>
+            <div class="kg-dqa-sub">
+              <div class="kc"><div class="kl">Tỉ lệ NG</div><div class="kv" id="f10-spm-kpi-dqa-ng-rate" style="color:var(--late)">0%</div><div class="ks">trong tổng DA DQA</div></div>
+              <div class="kc ac-p"><div class="kl">FMEA ghi nhận</div><div class="kv" id="f10-spm-kpi-dqa-fmea" style="color:var(--purple)">0</div><div class="ks">DA có tỉ lệ FMEA</div></div>
+            </div>
+
+            <div class="cg">
+              <div class="cc">
+                <div class="ct">Giai đoạn nhận mẫu</div>
+                <div class="lg" id="f10-spm-leg-dqa-phase"></div>
+                <div style="position:relative;width:100%;height:160px"><canvas id="f10-spm-cd1"></canvas></div>
+              </div>
+              <div class="cc">
+                <div class="ct">Phân bổ workload PIC DQA</div>
+                <div class="lg" id="f10-spm-leg-dqa-pic"></div>
+                <div style="position:relative;width:100%;height:160px"><canvas id="f10-spm-cd2"></canvas></div>
+              </div>
+            </div>
+            </div>
+
+            <div class="f10-spm-section f10-spm-section--list">
+              <div class="f10-spm-section-head">
+                <h3>Danh sách đầy đủ</h3>
+                <p class="f10-spm-section-desc">Bảng chi tiết dự án DQA — lọc và tìm kiếm</p>
+              </div>
+            <div class="tb">
+              <div class="fg">
+                <span class="fl">Lọc:</span>
+                <select id="f10-spm-fdP">
+                  <option value="">Tất cả giai đoạn</option>
+                  <option value="S0">S0</option>
+                  <option value="S3">S3</option>
+                  <option value="T0">T0</option>
+                </select>
+                <select id="f10-spm-fdK">
+                  <option value="">Tất cả KQ</option>
+                  <option value="NG">Kết quả NG</option>
+                  <option value="OK">Kết quả OK</option>
+                  <option value="doing">Đang đánh giá</option>
+                </select>
+                <select id="f10-spm-fdPic">
+                  <option value="">Tất cả PIC</option>
+                  <option value="Hằng">Hằng</option>
+                  <option value="Kỳ">Kỳ</option>
+                  <option value="Thịnh">Thịnh</option>
+                  <option value="Nghĩa">Nghĩa</option>
+                  <option value="Huy">Huy</option>
+                  <option value="Hiền">Hiền</option>
+                  <option value="Kiên">Kiên</option>
+                  <option value="Sơn">Sơn</option>
+                </select>
+                <select id="f10-spm-fdC">
+                  <option value="">Tất cả cấp</option>
+                  <option value="L1">L1</option>
+                  <option value="L2">L2</option>
+                  <option value="L3">L3</option>
+                </select>
+                <input id="f10-spm-fdQ" type="text" placeholder="Tìm tên / mã..." style="font-family:var(--font);font-size:12px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--text);outline:none;width:180px">
+              </div>
+              <span class="ci" id="f10-spm-cnt-d"></span>
+            </div>
+            <div class="tw"><div class="ts">
+              <table>
+                <colgroup>
+                  <col style="width:70px"><col style="width:110px"><col style="width:240px"><col style="width:100px">
+                  <col style="width:60px"><col style="width:90px"><col style="width:55px"><col style="width:55px">
+                  <col style="width:80px"><col style="width:60px"><col style="width:70px"><col style="width:90px">
+                  <col style="width:110px"><col style="width:80px"><col style="width:110px"><col style="width:110px">
+                  <col style="width:100px"><col style="width:60px"><col style="width:160px"><col style="width:170px">
+                </colgroup>
+                <thead><tr>
+                  <th>Id</th><th>Mã dự án</th><th>Tên dự án</th><th>PM</th>
+                  <th>Cấp</th><th>Tình trạng</th><th>KRD</th><th>DQA</th>
+                  <th>Giai đoạn</th><th>KQ ĐG</th><th>Đang ĐG</th><th>PIC DQA</th>
+                  <th>SL cải tiến lỗi</th><th>Tổng lỗi</th><th>Tỷ lệ cải tiến lỗi</th><th>HM FMEA BS</th>
+                  <th>Tổng HM FMEA</th><th>Tỉ lệ FMEA</th><th>Jira</th><th>Ghi chú</th>
+                </tr></thead>
+                <tbody id="f10-spm-tb-d"></tbody>
+              </table>
+            </div></div>
+            </div>
           </div>
         </div>
-
-        <!-- Loading Indicator -->
-        <div id="f10-loading" class="hidden flex items-center justify-center gap-2 text-primary py-4">
-          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span>Đang tải...</span>
+        <div class="f10-spm-detail-modal" id="f10-spm-detail-modal" aria-hidden="true">
+          <div class="f10-spm-detail-overlay" id="f10-spm-detail-overlay"></div>
+          <div class="f10-spm-detail-card" role="dialog" aria-modal="true" aria-labelledby="f10-spm-detail-title">
+            <div class="f10-spm-detail-head">
+              <div>
+                <h4 class="f10-spm-detail-title" id="f10-spm-detail-title">Chi tiết dự án</h4>
+                <div class="f10-spm-detail-sub" id="f10-spm-detail-sub">—</div>
+              </div>
+              <button type="button" class="f10-spm-detail-close" id="f10-spm-detail-close">Đóng</button>
+            </div>
+            <div class="f10-spm-detail-body" id="f10-spm-detail-body"></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Form 11 - Dashboard Dữ liệu Excel (Jira) -->
-    <section id="form11" class="w-full bg-white p-6 lg:p-10 rounded-lg shadow-md hidden">
-      <div class="mx-auto flex w-full flex-col gap-6">
-        <!-- Page Heading -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex flex-col gap-1">
-            <p class="text-4xl font-black leading-tight tracking-tighter text-gray-900">Dashboard Dữ liệu Excel</p>
-            <p class="text-base font-normal text-gray-600">Thống kê và phân tích dữ liệu từ Excel.</p>
+    <!-- Form 11 - Danh sách đầy đủ SPM 2026 -->
+    <section id="form11" class="w-full bg-slate-50 p-6 lg:p-8 rounded-lg shadow-md hidden">
+      <div class="mx-auto flex w-full flex-col gap-4">
+        <div class="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-5 py-4 text-white shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">Project Tracker</p>
+              <p class="mt-1 text-2xl font-black tracking-tight">11 - Danh sách dự án SPM 2026</p>
+              <p class="mt-1 text-sm text-slate-300">Giao diện quản lý công việc tập trung: lọc nhanh, theo dõi trạng thái và truy cập Jira.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="f11-add-project-btn" class="inline-flex items-center gap-2 rounded-lg bg-emerald-500/90 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
+                <span class="material-symbols-outlined text-lg">add</span>
+                <span>Bổ sung dự án</span>
+              </button>
+              <button id="f11-refresh-btn" class="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20">
+                <span class="material-symbols-outlined text-lg">refresh</span>
+                <span>Tải lại</span>
+              </button>
+            </div>
           </div>
-          <button id="f11-refresh-btn" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
-            <span class="material-symbols-outlined text-lg">refresh</span>
-            <span>Tải lại</span>
-          </button>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm">
-            <div class="flex items-center justify-between">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+          <div class="rounded-xl border border-blue-200 bg-blue-50 p-3 shadow-sm"><p class="text-[11px] uppercase tracking-wide text-blue-600">KRD</p><p id="f11-stat-krd" class="mt-1 text-2xl font-black text-blue-700">0</p></div>
+          <div class="rounded-xl border border-violet-200 bg-violet-50 p-3 shadow-sm"><p class="text-[11px] uppercase tracking-wide text-violet-600">DQA</p><p id="f11-stat-dqa" class="mt-1 text-2xl font-black text-violet-700">0</p></div>
+          <div class="rounded-xl border border-rose-200 bg-rose-50 p-3 shadow-sm"><p class="text-[11px] uppercase tracking-wide text-rose-600">KQ NG</p><p id="f11-stat-ng" class="mt-1 text-2xl font-black text-rose-700">0</p></div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 px-4 py-3">
+            <select id="f11-filter-role" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700">
+              <option value="all">Tất cả vai trò</option>
+              <option value="krd">KRD</option>
+              <option value="dqa">DQA</option>
+            </select>
+            <select id="f11-filter-pic" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700">
+              <option value="">PIC DQA: Tất cả</option>
+            </select>
+            <input id="f11-search" type="text" placeholder="Tìm theo mã, tên dự án, PM..." class="min-w-[240px] flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 outline-none focus:border-blue-400">
+            <button id="f11-clear-filters" class="rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">Xóa lọc</button>
+            <span id="f11-filter-result-count" class="ml-auto text-xs font-semibold text-slate-500">0 kết quả</span>
+          </div>
+
+          <div class="overflow-auto">
+            <table class="min-w-full text-xs">
+              <thead class="sticky top-0 z-10 bg-slate-100 text-slate-700">
+                <tr>
+                  <th class="px-3 py-2 text-left">ID</th><th class="px-3 py-2 text-left">Mã dự án</th><th class="px-3 py-2 text-left">Tên dự án</th>
+                  <th class="px-3 py-2 text-left">PM</th><th class="px-3 py-2 text-left">Cấp</th><th class="px-3 py-2 text-left">Tình trạng</th>
+                  <th class="px-3 py-2 text-left">Vai trò</th><th class="px-3 py-2 text-left">Giai đoạn</th><th class="px-3 py-2 text-left">Trạng thái ĐG</th>
+                  <th class="px-3 py-2 text-left">PIC DQA</th>
+                  <th class="px-3 py-2 text-left">Lỗi đã cải tiến</th>
+                  <th class="px-3 py-2 text-left">Tỷ lệ bổ sung FMEA</th><th class="px-3 py-2 text-left">Jira</th><th class="px-3 py-2 text-left">Ghi chú</th><th class="px-3 py-2 text-left">Cập nhật</th>
+                </tr>
+              </thead>
+              <tbody id="f11-tb-all" class="divide-y divide-slate-100 bg-white"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="f11-edit-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center p-4">
+          <div id="f11-edit-overlay" class="absolute inset-0 bg-slate-900/55"></div>
+          <div class="relative z-10 w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-3">
               <div>
-                <p class="text-blue-600 text-sm font-medium mb-1">Tổng Epic</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f11-stat-epics">0</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Form 11</p>
+                <p class="text-lg font-bold text-slate-900">Cập nhật dữ liệu dự án</p>
               </div>
-              <div class="p-3 bg-blue-200 rounded-lg">
-                <span class="material-symbols-outlined text-blue-700 text-2xl">folder</span>
-              </div>
+              <button id="f11-edit-close" type="button" class="rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100">Đóng</button>
             </div>
-          </div>
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-purple-600 text-sm font-medium mb-1">Tổng Story</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f11-stat-stories">0</p>
-              </div>
-              <div class="p-3 bg-purple-200 rounded-lg">
-                <span class="material-symbols-outlined text-purple-700 text-2xl">description</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-green-50 to-green-100 border border-green-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-green-600 text-sm font-medium mb-1">Tổng Subtask</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f11-stat-subtasks">0</p>
-              </div>
-              <div class="p-3 bg-green-200 rounded-lg">
-                <span class="material-symbols-outlined text-green-700 text-2xl">task</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 rounded-xl p-5 bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-orange-600 text-sm font-medium mb-1">Tỷ lệ Hoàn thành</p>
-                <p class="text-gray-900 text-3xl font-bold" id="f11-stat-completion">0%</p>
-              </div>
-              <div class="p-3 bg-orange-200 rounded-lg">
-                <span class="material-symbols-outlined text-orange-700 text-2xl">trending_up</span>
-              </div>
-            </div>
-          </div>
-        </div>
+            <div class="max-h-[75vh] overflow-auto bg-slate-50 p-5">
+              <div class="space-y-4">
+                <div class="rounded-xl border border-slate-200 bg-white p-4">
+                  <p class="mb-3 text-[11px] font-semibold uppercase tracking-wide text-slate-500">Thông tin chung</p>
+                  <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Mã dự án</label><input id="f11-edit-ma" class="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-700" readonly></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Tên dự án</label><input id="f11-edit-ten" class="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-700" readonly></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Cấp độ</label><input id="f11-edit-cap" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700" placeholder="VD: L1/L2/L3"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">PM</label><input id="f11-edit-pm" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">PIC DQA</label><input id="f11-edit-pic" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Tình trạng dự án</label><input id="f11-edit-tt" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Giai đoạn</label><input id="f11-edit-ph" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                  </div>
+                </div>
 
-        <!-- ASSIGNEE FOCUS SECTION -->
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-3xl text-blue-600">people</span>
-            <h2 class="text-2xl font-bold text-gray-900">Dashboard Phân tích theo Người thực hiện</h2>
-          </div>
-        </div>
+                <div class="rounded-xl border border-amber-200 bg-amber-50/50 p-4">
+                  <p class="mb-3 text-[11px] font-semibold uppercase tracking-wide text-amber-700">Đánh giá chất lượng</p>
+                  <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Đang đánh giá</label><input id="f11-edit-dd" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">KQ ĐG OK</label><input id="f11-edit-ok" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">KQ ĐG NG</label><input id="f11-edit-ng" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                  </div>
+                </div>
 
-        <!-- Main Content Row: Assignee Progress + Status Table -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-          <!-- Assignee Progress Overview - Biểu đồ cột (2/3 width) -->
-          <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-blue-600">trending_up</span>
-              <h3 class="text-lg font-semibold text-gray-900">Tiến độ hoàn thành theo Người thực hiện</h3>
-            </div>
-            <div id="f11-assignee-progress" class="w-full">
-              <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
-            </div>
-          </div>
+                <div class="rounded-xl border border-rose-200 bg-rose-50/50 p-4">
+                  <p class="mb-3 text-[11px] font-semibold uppercase tracking-wide text-rose-700">Cải tiến lỗi</p>
+                  <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">SL cải tiến lỗi</label><input id="f11-edit-sl" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Tổng lỗi</label><input id="f11-edit-tong" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Tỷ lệ cải tiến lỗi (tự tính)</label><input id="f11-edit-tyle" class="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-700" readonly></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Link kết quả cải tiến lỗi</label><input id="f11-edit-link-caitien" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                  </div>
+                </div>
 
-          <!-- Status Breakdown Table - Gọn lại (1/3 width) -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
-            <div class="p-3 border-b border-gray-200 flex-shrink-0">
-              <h3 class="text-sm font-semibold text-gray-900">Chi tiết theo Trạng thái</h3>
-            </div>
-            <div class="overflow-x-auto overflow-y-auto flex-1" style="max-height: calc(200px + 3rem);">
-              <table class="w-full text-xs">
-                <thead class="bg-gray-50 sticky top-0">
-                  <tr>
-                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">Trạng thái</th>
-                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">SL</th>
-                    <th class="px-2 py-1.5 text-left text-xs font-semibold text-gray-700 uppercase">%</th>
-                  </tr>
-                </thead>
-                <tbody id="f11-status-table-body" class="divide-y divide-gray-200">
-                  <tr>
-                    <td colspan="3" class="px-2 py-3 text-center text-gray-500 text-xs">Chưa có dữ liệu</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+                <div class="rounded-xl border border-violet-200 bg-violet-50/50 p-4">
+                  <p class="mb-3 text-[11px] font-semibold uppercase tracking-wide text-violet-700">FMEA</p>
+                  <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Hạng mục FMEA rà soát bổ sung</label><input id="f11-edit-hm-fmea" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Tổng hạng mục rà soát FMEA</label><input id="f11-edit-tong-hm-fmea" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Tỉ lệ FMEA (tự tính)</label><input id="f11-edit-fmea" class="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-700" readonly></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Link kết quả FMEA</label><input id="f11-edit-link-fmea" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                  </div>
+                </div>
 
-        <!-- Phân bổ Task và Task đến hạn - Grid 2 cột -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <!-- Phân bổ Task - Biểu đồ tròn (1/2 width) -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-indigo-600">pie_chart</span>
-              <h3 class="text-lg font-semibold text-gray-900">Phân bổ Task theo Người thực hiện</h3>
+                <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                  <p class="mb-3 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Liên kết &amp; ghi chú</p>
+                  <div class="grid grid-cols-1 gap-3">
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Link Jira</label><input id="f11-edit-jira" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></div>
+                    <div><label class="mb-1 block text-xs font-semibold text-slate-600">Ghi chú</label><textarea id="f11-edit-note" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"></textarea></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div id="f11-chart-assignee" class="min-h-[300px] flex items-center justify-center">
-              <p class="text-gray-500 text-center">Chưa có dữ liệu</p>
+            <div class="flex items-center justify-end gap-2 border-t border-slate-200 px-5 py-3">
+              <button id="f11-edit-cancel" type="button" class="rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">Hủy</button>
+              <button id="f11-edit-save" type="button" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Lưu cập nhật</button>
             </div>
-          </div>
-
-          <!-- Task đến hạn (1/2 width) -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-red-600">schedule</span>
-              <h3 class="text-lg font-semibold text-gray-900">Các Task đến hạn</h3>
-            </div>
-            <div id="f11-due-tasks" class="min-h-[300px]">
-              <p class="text-gray-500 text-center py-8">Chưa có dữ liệu</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Assignee Details -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="material-symbols-outlined text-green-600">person</span>
-            <h3 class="text-lg font-semibold text-gray-900">Chi tiết theo từng Người thực hiện</h3>
-          </div>
-          <div id="f11-assignee-tags" class="flex flex-wrap gap-2 mb-4">
-            <!-- Tags sẽ được render ở đây -->
-          </div>
-          <div id="f11-assignee-details" class="min-h-[200px]">
-            <p class="text-gray-500 text-center py-8">Vui lòng chọn người thực hiện để xem chi tiết</p>
           </div>
         </div>
       </div>
@@ -3989,8 +4412,14 @@
             if (targetForm === 'form51' && typeof initForm51 === 'function') {
               initForm51();
             }
+            if (targetForm === 'form3' && typeof loadF3ThongKeData === 'function') {
+              loadF3ThongKeData();
+            }
             if (targetForm === 'form6' && typeof initForm6 === 'function') {
               initForm6();
+              if (typeof loadF6Dashboard === 'function') {
+                loadF6Dashboard();
+              }
             }
             if (targetForm === 'form10' && typeof initForm10 === 'function') {
               initForm10();
@@ -9415,1534 +9844,12 @@
       }
     });
 
-    // ===== FORM 10 - QUẢN LÝ DỰ ÁN (JIRA) =====
-    
-    // Biến lưu trữ
-    let F10_EXCEL_FILE = null;
-    let F10_ALL_DATA = []; // Lưu dữ liệu hierarchical đã transform (Epic -> Story -> Subtask)
-    let F10_FILTERED_DATA = []; // Lưu dữ liệu sau khi filter/search
-    
-    // Bộ lọc thời gian Form 10
-    const nowF10 = new Date();
-    const startOfMonthF10 = new Date(nowF10.getFullYear(), nowF10.getMonth(), 1);
-    const endOfMonthF10 = new Date(nowF10.getFullYear(), nowF10.getMonth() + 1, 0);
-    let F10_FILTER_DATE_RANGE = {
-      preset: 'this-month',
-      from: startOfMonthF10.toISOString().split('T')[0],
-      to: endOfMonthF10.toISOString().split('T')[0]
-    };
-    
-    // Webhook URL
-    const F10_WEBHOOK_URL_LOAD = 'https://iatzhxxuk.tino.page/webhook/quanlyjira';
-    const F10_WEBHOOK_URL_ADD_TASK = 'https://iatzhxxuk.tino.page/webhook/Themtacvujira';
-    const F10_WEBHOOK_URL_UPLOAD = 'https://mockup-webhook-url.com/webhook/form10uploadduanjira';
-    const F10_WEBHOOK_URL_DECLARATION = 'https://mockup-webhook-url.com/webhook/form10khaibaoduanjira';
-    
-    // Hàm format ngày (copy từ Form 3)
-    function formatF10Date(dateString) {
-      if (!dateString || dateString === '' || dateString === 'Invalid Date' || dateString.trim() === '') return '-';
-      const cleaned = String(dateString).trim();
-      try {
-        let date;
-        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?/.test(cleaned)) {
-          date = new Date(cleaned.replace(' ', 'T'));
-        } else if (/^\d{4}-\d{2}-\d{2}$/.test(cleaned)) {
-          date = new Date(cleaned + 'T00:00:00');
-        } else {
-          date = new Date(cleaned);
-        }
-        if (isNaN(date.getTime())) {
-          return '-';
-        }
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-      } catch (error) {
-        return '-';
-      }
-    }
-    
-    // Hàm normalize key (copy từ Form 3)
-    function normalizeF10Key(text) {
-      if (!text) return '';
-      return String(text)
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]/g, '');
-    }
-    
-    /**
-     * Transform dữ liệu từ Jira format (flat) sang hierarchical format (Epic > Story > Subtask)
-     * Dữ liệu Jira có:
-     * - Epic: issueType="Epic", parentKey=null
-     * - Story: issueType="Story", parentKey=null (có thể có workKey trỏ đến Epic)
-     * - Subtask: issueType="Sub-task", có parentKey và parentSummary
-     */
-    function transformF10FlatToHierarchical(flatData) {
-      if (!Array.isArray(flatData) || flatData.length === 0) {
-        return [];
-      }
-      
-      // Tạo map để tra cứu nhanh
-      const epicMap = new Map(); // key: issueKey, value: epic object
-      const storyMap = new Map(); // key: issueKey, value: story object
-      const subtaskList = []; // Danh sách subtask
-      
-      // Bước 1: Tạo Epic và Story từ dữ liệu flat
-      flatData.forEach(record => {
-        // Bỏ qua các trường không cần thiết: CreatedAt, UpdatedAt, created, updated, labels
-        const { CreatedAt, UpdatedAt, created, updated, labels, ...cleanRecord } = record;
-        
-        // Nhận diện Epic: recordType === 'epic' HOẶC issueType === 'Epic'
-        const recordTypeLower = record.recordType ? record.recordType.toLowerCase() : '';
-        const isEpic = recordTypeLower === 'epic' || record.issueType === 'Epic';
-        
-        if (isEpic) {
-          const epic = {
-            epic: record.summary || '',
-            epicKey: record.issueKey || '',
-            assignee: record.assignee || null,
-            reporter: record.reporter || null,
-            status: record.status || '',
-            statusCategory: record.statusCategory || '',
-            priority: record.priority || '',
-            startDate: record.startDate || null,
-            dueDate: record.endDate || null,
-            finishDate: record.finishDate || null,
-            jiraKey: record.issueKey || '',
-            jiraLink: record.url || '',
-            note: record.descriptionPreview || '',
-            projectKey: record.projectKey || '',
-            projectName: record.projectName || record.projectKey || '',
-            totalSubtasks: parseInt(record.totalSubtasks) || 0,
-            doneSubtasks: parseInt(record.doneSubtasks) || 0,
-            percentDone: parseInt(record.percentDone) || 0,
-            expanded: true,
-            stories: []
-          };
-          epicMap.set(record.issueKey, epic);
-        } else if (recordTypeLower === 'story' || record.issueType === 'Story') {
-          // Nhận diện Story: recordType === 'story' HOẶC issueType === 'Story'
-          const story = {
-            story: record.summary || '',
-            storyKey: record.issueKey || '',
-            assignee: record.assignee || null,
-            reporter: record.reporter || null,
-            status: record.status || '',
-            statusCategory: record.statusCategory || '',
-            priority: record.priority || '',
-            startDate: record.startDate || null,
-            dueDate: record.endDate || null,
-            finishDate: record.finishDate || null,
-            jiraKey: record.issueKey || '',
-            jiraLink: record.url || '',
-            note: record.descriptionPreview || '',
-            workKey: record.workKey || null,
-            parentKey: record.parentKey || null,
-            totalSubtasks: parseInt(record.totalSubtasks) || 0,
-            doneSubtasks: parseInt(record.doneSubtasks) || 0,
-            percentDone: parseInt(record.percentDone) || 0,
-            expanded: true,
-            subtasks: []
-          };
-          storyMap.set(record.issueKey, story);
-        } else if (recordTypeLower === 'subtask' || recordTypeLower === 'sub-task' || record.issueType === 'Sub-task') {
-          // Nhận diện Sub-task: recordType === 'subtask' HOẶC 'sub-task' HOẶC issueType === 'Sub-task'
-          subtaskList.push({
-            subtask: record.summary || '',
-            subtaskKey: record.issueKey || '',
-            assignee: record.assignee || null,
-            reporter: record.reporter || null,
-            status: record.status || '',
-            statusCategory: record.statusCategory || '',
-            priority: record.priority || '',
-            startDate: record.startDate || null,
-            dueDate: record.endDate || null,
-            finishDate: record.finishDate || null,
-            jiraKey: record.issueKey || '',
-            jiraLink: record.url || '',
-            note: record.descriptionPreview || '',
-            parentKey: record.parentKey || null,
-            parentSummary: record.parentSummary || null,
-            workKey: record.workKey || null
-          });
-        }
-      });
-      
-      // Bước 2: Gắn Story vào Epic (qua workKey hoặc parentKey)
-      storyMap.forEach((story, storyKey) => {
-        // Tìm Epic cha qua workKey hoặc parentKey
-        let parentEpic = null;
-        
-        // Ưu tiên tìm theo workKey trước
-        if (story.workKey && epicMap.has(story.workKey)) {
-          parentEpic = epicMap.get(story.workKey);
-        } 
-        // Sau đó tìm theo parentKey
-        else if (story.parentKey && epicMap.has(story.parentKey)) {
-          parentEpic = epicMap.get(story.parentKey);
-        }
-        
-        if (parentEpic) {
-          parentEpic.stories.push(story);
-        } else {
-          // Nếu Story không có Epic cha, tạo Epic ảo
-          const orphanEpic = {
-            epic: 'Không có Epic',
-            epicKey: `orphan-epic-${storyKey}`,
-            assignee: null,
-            status: '',
-            startDate: null,
-            dueDate: null,
-            finishDate: null,
-            jiraKey: '',
-            jiraLink: '',
-            note: '',
-            projectKey: '',
-            projectName: '',
-            expanded: true,
-            stories: [story]
-          };
-          epicMap.set(orphanEpic.epicKey, orphanEpic);
-        }
-      });
-      
-      // Bước 3: Gắn Subtask vào Story (qua parentKey)
-      subtaskList.forEach(subtask => {
-        if (subtask.parentKey && storyMap.has(subtask.parentKey)) {
-          const parentStory = storyMap.get(subtask.parentKey);
-          parentStory.subtasks.push(subtask);
-        } else {
-          // Nếu Subtask không có Story cha, tìm Epic và tạo Story ảo
-          let parentEpic = null;
-          if (subtask.workKey && epicMap.has(subtask.workKey)) {
-            parentEpic = epicMap.get(subtask.workKey);
-          } else if (subtask.parentKey && epicMap.has(subtask.parentKey)) {
-            parentEpic = epicMap.get(subtask.parentKey);
-          }
-          
-          if (parentEpic) {
-            // Tìm Story "Không có Story" hoặc tạo mới
-            let orphanStory = parentEpic.stories.find(s => s.story === 'Không có Story');
-            if (!orphanStory) {
-              orphanStory = {
-                story: 'Không có Story',
-                storyKey: `orphan-story-${subtask.subtaskKey}`,
-                assignee: null,
-                status: '',
-                startDate: null,
-                dueDate: null,
-                finishDate: null,
-                jiraKey: '',
-                jiraLink: '',
-                note: '',
-                expanded: true,
-                subtasks: []
-              };
-              parentEpic.stories.push(orphanStory);
-            }
-            orphanStory.subtasks.push(subtask);
-          } else {
-            // Tạo Epic và Story ảo cho Subtask orphan
-            const orphanEpic = {
-              epic: 'Không có Epic',
-              epicKey: `orphan-epic-${subtask.subtaskKey}`,
-              assignee: null,
-              status: '',
-              startDate: null,
-              dueDate: null,
-              finishDate: null,
-              jiraKey: '',
-              jiraLink: '',
-              note: '',
-              expanded: true,
-              stories: [{
-                story: 'Không có Story',
-                storyKey: `orphan-story-${subtask.subtaskKey}`,
-                assignee: null,
-                status: '',
-                startDate: null,
-                dueDate: null,
-                finishDate: null,
-                jiraKey: '',
-                jiraLink: '',
-                note: '',
-                expanded: true,
-                subtasks: [subtask]
-              }]
-            };
-            epicMap.set(orphanEpic.epicKey, orphanEpic);
-          }
-        }
-      });
-      
-      // Bước 4: Sắp xếp và trả về kết quả
-      const epics = Array.from(epicMap.values());
-      epics.forEach(epic => {
-        epic.stories.sort((a, b) => (a.storyKey || '').localeCompare(b.storyKey || ''));
-        epic.stories.forEach(story => {
-          story.subtasks.sort((a, b) => (a.subtaskKey || '').localeCompare(b.subtaskKey || ''));
-        });
-      });
-      epics.sort((a, b) => (a.epicKey || '').localeCompare(b.epicKey || ''));
-      
-      return [{ epics }];
-    }
-    
-    // Hàm lấy badge trạng thái cho Jira
-    function getF10StatusBadge(status, statusCategory) {
-      if (!status) return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">-</span>';
-      const statusStr = String(status).trim();
-      const statusLower = statusStr.toLowerCase();
-      const categoryLower = (statusCategory || '').toLowerCase();
-      
-      // Dựa vào statusCategory và status
-      if (categoryLower === 'done' || statusLower === 'done' || statusLower.includes('done')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Done</span>';
-      } else if (statusLower.includes('in review') || statusLower.includes('inreview')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">In Review</span>';
-      } else if (categoryLower === 'indeterminate' || statusLower.includes('in progress') || statusLower.includes('inprogress')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">In Progress</span>';
-      } else if (categoryLower === 'new' || statusLower === 'to do' || statusLower.includes('todo')) {
-        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">To Do</span>';
-      }
-      
-      // Fallback: hiển thị giá trị gốc
-      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">${escapeHtml(statusStr)}</span>`;
-    }
-    
-    // Hàm load dữ liệu Form 10
-    async function loadF10Data() {
-      const loadingDiv = document.getElementById('f10-loading');
-      const loadBtn = document.getElementById('f10-load-data-btn');
-      const tbody = document.getElementById('f10-table-body');
-      
-      // Lưu trạng thái filter hiện tại
-      const searchInput = document.getElementById('f10-search-input');
-      const statusFilter = document.getElementById('f10-filter-status');
-      const assigneeFilter = document.getElementById('f10-filter-assignee');
-      const levelFilter = document.getElementById('f10-filter-level');
-      const monthFilter = document.getElementById('f10-filter-month');
-      
-      const savedSearch = searchInput ? searchInput.value : '';
-      const savedStatus = statusFilter ? statusFilter.value : '';
-      const savedAssignee = assigneeFilter ? assigneeFilter.value : '';
-      const savedLevel = levelFilter ? levelFilter.value : '';
-      const savedMonth = monthFilter ? monthFilter.value : '';
-      
-      try {
-        if (loadingDiv) loadingDiv.classList.remove('hidden');
-        if (loadBtn) loadBtn.disabled = true;
-        
-        const response = await fetch(F10_WEBHOOK_URL_LOAD, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const responseText = await response.text();
-        let data = JSON.parse(responseText);
-        
-        // Xử lý nhiều format response
-        let flatData = [];
-        if (Array.isArray(data)) {
-          flatData = data;
-        } else if (data && Array.isArray(data.data)) {
-          flatData = data.data;
-        } else if (data && Array.isArray(data.results)) {
-          flatData = data.results;
-        } else if (data && Array.isArray(data.items)) {
-          flatData = data.items;
-        } else if (data && typeof data === 'object') {
-          flatData = [data];
-        }
-        
-        // Transform từ flat array sang hierarchical structure
-        const hierarchicalData = transformF10FlatToHierarchical(flatData);
-        
-        F10_ALL_DATA = hierarchicalData;
-        F10_FILTERED_DATA = hierarchicalData;
-        
-        // Khôi phục filter
-        if (searchInput) searchInput.value = savedSearch;
-        if (statusFilter) statusFilter.value = savedStatus;
-        if (assigneeFilter) assigneeFilter.value = savedAssignee;
-        if (levelFilter) levelFilter.value = savedLevel;
-        if (monthFilter) monthFilter.value = savedMonth;
-        
-        // Populate assignee filter
-        populateF10AssigneeFilter();
-        
-        // Render bảng
-        renderF10Table(F10_FILTERED_DATA.length > 0 ? F10_FILTERED_DATA : F10_ALL_DATA);
-        
-        showToast(`Đã tải ${flatData.length} bản ghi từ Jira thành công`, 'success');
-      } catch (error) {
-        console.error('[Form 10] Error loading data:', error);
-        showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
-        
-        if (tbody) {
-          tbody.innerHTML = `
-            <div class="px-6 py-8 text-center text-[#6b6189]">
-              <div class="flex flex-col items-center gap-2">
-                <span class="material-symbols-outlined text-4xl text-gray-300">error</span>
-                <p>Lỗi khi tải dữ liệu: ${escapeHtml(error.message)}</p>
-              </div>
-            </div>
-          `;
-        }
-      } finally {
-        if (loadingDiv) loadingDiv.classList.add('hidden');
-        if (loadBtn) loadBtn.disabled = false;
-      }
-    }
-    
-    // Hàm populate assignee filter
-    function populateF10AssigneeFilter() {
-      const assigneeFilter = document.getElementById('f10-filter-assignee');
-      if (!assigneeFilter) return;
-      
-      const assignees = new Set();
-      F10_ALL_DATA.forEach(item => {
-        if (item.epics) {
-          item.epics.forEach(epic => {
-            if (epic.assignee) assignees.add(epic.assignee);
-            if (epic.stories) {
-              epic.stories.forEach(story => {
-                if (story.assignee) assignees.add(story.assignee);
-                if (story.subtasks) {
-                  story.subtasks.forEach(subtask => {
-                    if (subtask.assignee) assignees.add(subtask.assignee);
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-      
-      const currentValue = assigneeFilter.value;
-      assigneeFilter.innerHTML = '<option value="">Tất cả thành viên</option>';
-      Array.from(assignees).sort().forEach(assignee => {
-        const option = document.createElement('option');
-        option.value = assignee;
-        option.textContent = assignee;
-        assigneeFilter.appendChild(option);
-      });
-      assigneeFilter.value = currentValue;
-    }
-    
-    // Hàm render bảng dữ liệu hierarchical (Epic > Story > Subtask)
-    function renderF10Table(data) {
-      const tbody = document.getElementById('f10-table-body');
-      if (!tbody) return;
-      
-      if (!data || !Array.isArray(data) || data.length === 0) {
-        tbody.innerHTML = `
-          <div class="px-6 py-8 text-center text-[#6b6189]">
-            <div class="flex flex-col items-center gap-2">
-              <span class="material-symbols-outlined text-4xl text-gray-300">table_chart</span>
-              <p>Không có dữ liệu</p>
-            </div>
-          </div>
-        `;
-        return;
-      }
-      
-      let html = '';
-      let epicIndex = 0;
-      
-      data.forEach((item) => {
-        if (!item.epics || !Array.isArray(item.epics)) return;
-        
-        item.epics.forEach((epic) => {
-          const epicId = `f10-epic-${epicIndex}`;
-          const isExpanded = epic.expanded !== false;
-          
-          // Epic row
-          html += `
-            <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-blue-50 font-semibold hover:bg-opacity-80 transition-colors border-b border-[#f1f0f4] f10-epic-row" data-epic-id="${epicId}" data-level="epic">
-              <div class="col-span-3 flex items-center gap-2">
-                <button class="p-1 hover:bg-blue-100 rounded transition-colors f10-epic-expand" data-epic-id="${epicId}">
-                  <span class="material-icons text-sm text-gray-600 cursor-pointer ${isExpanded ? '' : 'rotate-[-90deg]'}">expand_more</span>
-                </button>
-                <span class="text-blue-700 text-sm f10-epic-name break-words">${escapeHtml(epic.epic || '-')}</span>
-              </div>
-              <div class="col-span-1 flex items-center">
-                <button type="button" class="f10-add-story-btn px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" title="Thêm Story">Thêm Story</button>
-              </div>
-              <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(epic.assignee || '-')}</div>
-              <div class="col-span-1 flex items-center">${getF10StatusBadge(epic.status, epic.statusCategory)}</div>
-              <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(epic.startDate)}</div>
-              <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(epic.dueDate)}</div>
-              <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(epic.finishDate)}</div>
-              <div class="col-span-1 flex items-center text-sm text-gray-700">
-                ${epic.jiraKey ? (epic.jiraLink ? `<a href="${escapeHtml(epic.jiraLink)}" target="_blank" class="text-xs font-medium text-primary-blue hover:underline">${escapeHtml(epic.jiraKey)}</a>` : `<span class="text-xs font-medium text-gray-700">${escapeHtml(epic.jiraKey)}</span>`) : '-'}
-              </div>
-              <div class="col-span-1 flex items-center text-sm text-gray-600">${escapeHtml((epic.note || '').substring(0, 30))}${(epic.note || '').length > 30 ? '...' : ''}</div>
-            </div>
-          `;
-          
-          // Story rows
-          if (isExpanded && epic.stories && Array.isArray(epic.stories)) {
-            epic.stories.forEach((story, storyIdx) => {
-              const storyId = `${epicId}-story-${story.storyKey || storyIdx}`;
-              const storyExpanded = story.expanded !== false;
-              
-              html += `
-                <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-purple-50 hover:bg-opacity-80 transition-colors border-b border-[#f1f0f4] f10-story-row" data-epic-id="${epicId}" data-story-id="${storyId}" data-level="story">
-                  <div class="col-span-3 flex items-center gap-2" style="padding-left: 24px;">
-                    <button class="p-1 hover:bg-purple-100 rounded transition-colors f10-story-expand" data-story-id="${storyId}">
-                      <span class="material-icons text-sm text-gray-600 cursor-pointer ${storyExpanded ? '' : 'rotate-[-90deg]'}">expand_more</span>
-                    </button>
-                    <span class="text-purple-700 text-sm f10-story-name break-words">${escapeHtml(story.story || '-')}</span>
-                  </div>
-                  <div class="col-span-1 flex items-center">
-                    <button type="button" class="f10-add-subtask-btn px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors" data-epic-name="${escapeHtml(epic.epic || '')}" data-story-name="${escapeHtml(story.story || '')}" title="Thêm Sub-task">Thêm Subtask</button>
-                  </div>
-                  <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(story.assignee || '-')}</div>
-                  <div class="col-span-1 flex items-center">${getF10StatusBadge(story.status, story.statusCategory)}</div>
-                  <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(story.startDate)}</div>
-                  <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(story.dueDate)}</div>
-                  <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(story.finishDate)}</div>
-                  <div class="col-span-1 flex items-center text-sm text-gray-700">
-                    ${story.jiraKey ? (story.jiraLink ? `<a href="${escapeHtml(story.jiraLink)}" target="_blank" class="text-xs font-medium text-primary-blue hover:underline">${escapeHtml(story.jiraKey)}</a>` : `<span class="text-xs font-medium text-gray-700">${escapeHtml(story.jiraKey)}</span>`) : '-'}
-                  </div>
-                  <div class="col-span-1 flex items-center text-sm text-gray-600">${escapeHtml((story.note || '').substring(0, 30))}${(story.note || '').length > 30 ? '...' : ''}</div>
-                </div>
-              `;
-              
-              // Subtask rows
-              if (storyExpanded && story.subtasks && Array.isArray(story.subtasks)) {
-                story.subtasks.forEach((subtask) => {
-                  html += `
-                    <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-white hover:bg-opacity-80 transition-colors border-b border-[#f1f0f4] f10-subtask-row" data-epic-id="${epicId}" data-story-id="${storyId}" data-level="subtask">
-                      <div class="col-span-3 flex items-center gap-2" style="padding-left: 48px;">
-                        <span class="text-gray-900 text-sm break-words">${escapeHtml(subtask.subtask || '-')}</span>
-                      </div>
-                      <div class="col-span-1 flex items-center"></div>
-                      <div class="col-span-2 flex items-center text-sm text-gray-700">${escapeHtml(subtask.assignee || '-')}</div>
-                      <div class="col-span-1 flex items-center">${getF10StatusBadge(subtask.status, subtask.statusCategory)}</div>
-                      <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(subtask.startDate)}</div>
-                      <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(subtask.dueDate)}</div>
-                      <div class="col-span-1 flex items-center text-sm text-gray-600">${formatF10Date(subtask.finishDate)}</div>
-                      <div class="col-span-1 flex items-center text-sm text-gray-700">
-                        ${subtask.jiraKey ? (subtask.jiraLink ? `<a href="${escapeHtml(subtask.jiraLink)}" target="_blank" class="text-xs font-medium text-primary-blue hover:underline">${escapeHtml(subtask.jiraKey)}</a>` : `<span class="text-xs font-medium text-gray-700">${escapeHtml(subtask.jiraKey)}</span>`) : '-'}
-                      </div>
-                      <div class="col-span-1 flex items-center text-sm text-gray-600">${escapeHtml((subtask.note || '').substring(0, 30))}${(subtask.note || '').length > 30 ? '...' : ''}</div>
-                    </div>
-                  `;
-                });
-              }
-            });
-          }
-          
-          epicIndex++;
-        });
-      });
-      
-      tbody.innerHTML = html;
-      
-      // Gắn event listeners cho expand/collapse
-      setupF10ExpandListeners();
-      
-      // Áp dụng filter cấp hiển thị
-      applyF10LevelFilter();
-    }
-    
-    // Hàm setup expand/collapse listeners
-    function setupF10ExpandListeners() {
-      const tbody = document.getElementById('f10-table-body');
-      if (!tbody) return;
-      
-      // Epic expand/collapse
-      tbody.querySelectorAll('.f10-epic-expand').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const epicId = this.getAttribute('data-epic-id');
-          const epicRow = tbody.querySelector(`.f10-epic-row[data-epic-id="${epicId}"]`);
-          if (!epicRow) return;
-          
-          const icon = this.querySelector('.material-icons');
-          const isExpanded = !icon.classList.contains('rotate-[-90deg]');
-          
-          // Toggle icon
-          if (isExpanded) {
-            icon.classList.add('rotate-[-90deg]');
-          } else {
-            icon.classList.remove('rotate-[-90deg]');
-          }
-          
-          // Toggle story rows
-          tbody.querySelectorAll(`.f10-story-row[data-epic-id="${epicId}"]`).forEach(storyRow => {
-            if (isExpanded) {
-              storyRow.classList.add('hidden');
-            } else {
-              storyRow.classList.remove('hidden');
-            }
-          });
-        });
-      });
-      
-      // Story expand/collapse
-      tbody.querySelectorAll('.f10-story-expand').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const storyId = this.getAttribute('data-story-id');
-          const storyRow = tbody.querySelector(`.f10-story-row[data-story-id="${storyId}"]`);
-          if (!storyRow) return;
-          
-          const icon = this.querySelector('.material-icons');
-          const isExpanded = !icon.classList.contains('rotate-[-90deg]');
-          
-          // Toggle icon
-          if (isExpanded) {
-            icon.classList.add('rotate-[-90deg]');
-          } else {
-            icon.classList.remove('rotate-[-90deg]');
-          }
-          
-          // Toggle subtask rows
-          tbody.querySelectorAll(`.f10-subtask-row[data-story-id="${storyId}"]`).forEach(subtaskRow => {
-            if (isExpanded) {
-              subtaskRow.classList.add('hidden');
-            } else {
-              subtaskRow.classList.remove('hidden');
-            }
-          });
-        });
-      });
-      
-      // Add Story button
-      tbody.querySelectorAll('.f10-add-story-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const epicName = btn.getAttribute('data-epic-name');
-          openF10AddStoryModal(epicName);
-        });
-      });
-      
-      // Add Sub-task button
-      tbody.querySelectorAll('.f10-add-subtask-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const epicName = btn.getAttribute('data-epic-name');
-          const storyName = btn.getAttribute('data-story-name');
-          openF10AddSubtaskModal(epicName, storyName);
-        });
-      });
-    }
-    
-    // Hàm mở modal thêm Story Form 10
-    function openF10AddStoryModal(epicName) {
-      const epicNameEl = document.getElementById('modal-f10-add-story-epic-name');
-      const epicIdEl = document.getElementById('modal-f10-add-story-epic-id');
-      const statusEl = document.getElementById('modal-f10-add-story-status');
-      const epicJiraKeyEl = document.getElementById('modal-f10-add-story-epic-jira-key');
-      const epicJiraLinkEl = document.getElementById('modal-f10-add-story-epic-jira-link');
-      
-      if (epicNameEl) epicNameEl.textContent = epicName || '';
-      if (epicIdEl) epicIdEl.value = epicName || '';
-      
-      // Reset form
-      document.getElementById('modal-f10-add-story-form').reset();
-      
-      // Tìm Epic và lấy thông tin Jira
-      let epicJiraKey = '';
-      let epicJiraLink = '';
-      if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
-        const dataItem = F10_ALL_DATA[0];
-        if (dataItem.epics && Array.isArray(dataItem.epics)) {
-          const epic = dataItem.epics.find(e => normalizeF10Key(e.epic) === normalizeF10Key(epicName));
-          if (epic) {
-            epicJiraKey = epic.jiraKey || epic.epicKey || '';
-            epicJiraLink = epic.jiraLink || epic.url || '';
-          }
-        }
-      }
-      
-      // Điền thông tin Jira của Epic vào các trường readonly
-      if (epicJiraKeyEl) epicJiraKeyEl.value = epicJiraKey;
-      if (epicJiraLinkEl) epicJiraLinkEl.value = epicJiraLink;
-      
-      // Set mặc định trạng thái là "To Do"
-      if (statusEl) {
-        statusEl.value = 'To Do';
-      }
-      
-      const success = openModal('f10-add-story');
-      if (!success) {
-        console.error('[Form 10] Failed to open add story modal');
-        showToast('Không thể mở modal thêm Story', 'error');
-      }
-    }
-    
-    // Hàm tự động sinh Story Code cho Form 10
-    function generateF10StoryCode() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const timestamp = Date.now();
-      return `STORY-${year}${month}${day}-${hours}${minutes}${seconds}-${timestamp.toString().slice(-4)}`;
-    }
-    
-    // Hàm tự động sinh Task Code cho Form 10
-    function generateF10TaskCode() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const timestamp = Date.now();
-      return `TASK-${year}${month}${day}-${hours}${minutes}${seconds}-${timestamp.toString().slice(-4)}`;
-    }
-    
-    // Hàm mở modal thêm Sub-task Form 10
-    function openF10AddSubtaskModal(epicName, storyName) {
-      const storyNameEl = document.getElementById('modal-f10-add-subtask-story-name');
-      const epicNameEl = document.getElementById('modal-f10-add-subtask-epic-name');
-      const epicIdEl = document.getElementById('modal-f10-add-subtask-epic-id');
-      const storyIdEl = document.getElementById('modal-f10-add-subtask-story-id');
-      const statusEl = document.getElementById('modal-f10-add-subtask-status');
-      const storyJiraKeyEl = document.getElementById('modal-f10-add-subtask-story-jira-key');
-      const storyJiraLinkEl = document.getElementById('modal-f10-add-subtask-story-jira-link');
-      
-      if (storyNameEl) storyNameEl.textContent = storyName || '';
-      if (epicNameEl) epicNameEl.textContent = epicName || '';
-      if (epicIdEl) epicIdEl.value = epicName || '';
-      if (storyIdEl) storyIdEl.value = storyName || '';
-      
-      // Reset form
-      document.getElementById('modal-f10-add-subtask-form').reset();
-      
-      // Tìm Story và lấy thông tin Jira
-      let storyJiraKey = '';
-      let storyJiraLink = '';
-      if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
-        const dataItem = F10_ALL_DATA[0];
-        if (dataItem.epics && Array.isArray(dataItem.epics)) {
-          // Tìm Epic
-          const epic = dataItem.epics.find(e => normalizeF10Key(e.epic) === normalizeF10Key(epicName));
-          if (epic && epic.stories && Array.isArray(epic.stories)) {
-            // Tìm Story trong Epic
-            const story = epic.stories.find(s => normalizeF10Key(s.story) === normalizeF10Key(storyName));
-            if (story) {
-              storyJiraKey = story.jiraKey || story.storyKey || '';
-              storyJiraLink = story.jiraLink || story.url || '';
-            }
-          }
-        }
-      }
-      
-      // Điền thông tin Jira của Story vào các trường readonly
-      if (storyJiraKeyEl) storyJiraKeyEl.value = storyJiraKey;
-      if (storyJiraLinkEl) storyJiraLinkEl.value = storyJiraLink;
-      
-      // Set mặc định trạng thái là "To Do"
-      if (statusEl) {
-        statusEl.value = 'To Do';
-      }
-      
-      const success = openModal('f10-add-subtask');
-      if (!success) {
-        console.error('[Form 10] Failed to open add subtask modal');
-        showToast('Không thể mở modal thêm Sub-task', 'error');
-      }
-    }
-    
-    // Hàm xử lý submit thêm Story Form 10
-    async function handleF10AddStorySubmit() {
-      const form = document.getElementById('modal-f10-add-story-form');
-      if (!form) return;
-
-      // Tránh gửi nhiều lần
-      if (form._isSubmitting) {
-        return;
-      }
-      form._isSubmitting = true;
-
-      const epicNameFromModal = document.getElementById('modal-f10-add-story-epic-id')?.value || '';
-      const storyName = document.getElementById('modal-f10-add-story-name')?.value.trim() || '';
-      
-      // Validation các trường bắt buộc
-      const assignee = document.getElementById('modal-f10-add-story-assignee')?.value.trim() || '';
-      const startDate = document.getElementById('modal-f10-add-story-start-date')?.value || '';
-      const dueDate = document.getElementById('modal-f10-add-story-due-date')?.value || '';
-      
-      if (!storyName) {
-        form._isSubmitting = false;
-        showToast('Vui lòng nhập tên Story', 'error');
-        return;
-      }
-      if (!assignee) {
-        form._isSubmitting = false;
-        showToast('Vui lòng chọn người thực hiện', 'error');
-        return;
-      }
-      if (!startDate) {
-        form._isSubmitting = false;
-        showToast('Vui lòng chọn ngày bắt đầu', 'error');
-        return;
-      }
-      if (!dueDate) {
-        form._isSubmitting = false;
-        showToast('Vui lòng chọn hạn hoàn thành', 'error');
-        return;
-      }
-
-      // Tìm Epic bằng name trong F10_ALL_DATA và lấy thông tin Jira
-      let epicName = epicNameFromModal;
-      let epicKey = '';
-      let epicJiraKey = '';
-      let epicJiraLink = '';
-      if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
-        const dataItem = F10_ALL_DATA[0];
-        if (dataItem.epics && Array.isArray(dataItem.epics)) {
-          const epic = dataItem.epics.find(e => normalizeF10Key(e.epic) === normalizeF10Key(epicNameFromModal));
-          if (epic) {
-            epicName = epic.epic || epicNameFromModal;
-            epicKey = epic.epicKey || epic.epic || '';
-            epicJiraKey = epic.jiraKey || epic.epicKey || '';
-            epicJiraLink = epic.jiraLink || epic.url || '';
-          }
-        }
-      }
-
-      // Lấy dữ liệu từ form - sử dụng Jira của Epic
-      const status = 'To Do'; // Mặc định To Do
-      
-      const storyData = {
-        issueType: 'Story',
-        summary: storyName,
-        issueKey: epicJiraKey, // Lấy từ Epic
-        url: epicJiraLink || '', // Lấy từ Epic
-        assignee: assignee,
-        status: status,
-        statusCategory: 'new',
-        startDate: startDate,
-        endDate: dueDate,
-        descriptionPreview: document.getElementById('modal-f10-add-story-note')?.value.trim() || '',
-        workKey: epicKey || epicName,
-        parentKey: epicKey || epicName
-      };
-
-      // Disable submit button
-      const submitBtn = document.getElementById('modal-f10-add-story-submit');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Đang gửi...';
-      }
-
-      try {
-        // Gửi lên server
-        await submitF10StoryToServer(storyData);
-        
-        showToast('Đã thêm Story thành công!', 'success');
-        closeModal('f10-add-story');
-        
-        // Tự động tải lại dữ liệu sau khi thêm thành công
-        setTimeout(() => {
-          loadF10Data();
-        }, 500);
-        
-      } catch (error) {
-        console.error('[Form 10] Error submitting story to server:', error);
-        showToast('Lỗi khi thêm Story: ' + (error.message || 'Vui lòng thử lại'), 'error');
-      } finally {
-        form._isSubmitting = false;
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Thêm Story';
-        }
-      }
-    }
-    
-    // Hàm xử lý submit thêm Sub-task Form 10
-    async function handleF10AddSubtaskSubmit() {
-      const form = document.getElementById('modal-f10-add-subtask-form');
-      if (!form) return;
-
-      // Tránh gửi nhiều lần
-      if (form._isSubmitting) {
-        return;
-      }
-      form._isSubmitting = true;
-
-      const epicNameFromModal = document.getElementById('modal-f10-add-subtask-epic-id')?.value || '';
-      const storyNameFromModal = document.getElementById('modal-f10-add-subtask-story-id')?.value || '';
-      const subtaskName = document.getElementById('modal-f10-add-subtask-name')?.value.trim() || '';
-      
-      if (!subtaskName) {
-        form._isSubmitting = false;
-        showToast('Vui lòng nhập tên Sub-task', 'error');
-        return;
-      }
-
-      if (!epicNameFromModal || !storyNameFromModal) {
-        showToast('Không tìm thấy Epic hoặc Story', 'error');
-        return;
-      }
-
-      // Tìm Epic và Story bằng name trong F10_ALL_DATA
-      let epicData = null;
-      let storyData = null;
-      let epicName = epicNameFromModal;
-      let epicKey = '';
-      let storyName = storyNameFromModal;
-      let storyKey = '';
-      
-      if (F10_ALL_DATA && F10_ALL_DATA.length > 0) {
-        const dataItem = F10_ALL_DATA[0];
-        if (dataItem.epics && Array.isArray(dataItem.epics)) {
-          // Tìm Epic bằng name
-          epicData = dataItem.epics.find(e => normalizeF10Key(e.epic) === normalizeF10Key(epicNameFromModal));
-          if (epicData) {
-            epicName = epicData.epic || epicNameFromModal;
-            epicKey = epicData.epicKey || epicData.epic || '';
-            
-            // Tìm Story bằng name trong Epic đã tìm được
-            if (epicData.stories && Array.isArray(epicData.stories)) {
-              storyData = epicData.stories.find(s => normalizeF10Key(s.story) === normalizeF10Key(storyNameFromModal));
-              if (storyData) {
-                storyName = storyData.story || storyNameFromModal;
-                storyKey = storyData.storyKey || storyData.story || '';
-              }
-            }
-          }
-        }
-      }
-
-      // Validation các trường bắt buộc
-      const assignee = document.getElementById('modal-f10-add-subtask-assignee')?.value.trim() || '';
-      const status = document.getElementById('modal-f10-add-subtask-status')?.value || '';
-      const startDateInput = document.getElementById('modal-f10-add-subtask-start-date')?.value || '';
-      const dueDateInput = document.getElementById('modal-f10-add-subtask-due-date')?.value || '';
-      
-      if (!assignee) {
-        form._isSubmitting = false;
-        showToast('Vui lòng chọn người thực hiện', 'error');
-        return;
-      }
-      if (!startDateInput) {
-        form._isSubmitting = false;
-        showToast('Vui lòng chọn ngày bắt đầu', 'error');
-        return;
-      }
-      if (!dueDateInput) {
-        form._isSubmitting = false;
-        showToast('Vui lòng chọn hạn hoàn thành', 'error');
-        return;
-      }
-
-      // Lấy thông tin Jira từ Epic
-      let epicJiraKey = '';
-      let epicJiraLink = '';
-      if (epicData) {
-        epicJiraKey = epicData.jiraKey || epicData.epicKey || '';
-        epicJiraLink = epicData.jiraLink || epicData.url || '';
-      }
-
-      // Lấy thông tin Jira từ Story
-      let storyJiraKey = '';
-      let storyJiraLink = '';
-      if (storyData) {
-        storyJiraKey = storyData.jiraKey || storyData.storyKey || '';
-        storyJiraLink = storyData.jiraLink || storyData.url || '';
-      }
-
-      const subtaskData = {
-        issueType: 'Sub-task',
-        recordType: 'subtask',
-        level: '1',
-        summary: subtaskName,
-        // Thông tin Sub-task
-        issueKey: '', // Mã Jira của Sub-task (có thể để trống nếu chưa có)
-        url: '', // Link Jira của Sub-task (có thể để trống nếu chưa có)
-        // Thông tin Epic cha
-        epicJiraKey: epicJiraKey, // Mã Jira của Epic cha
-        epicJiraLink: epicJiraLink || '', // Link Jira của Epic cha
-        epicName: epicName, // Tên Epic cha
-        epicKey: epicKey || epicName, // Key của Epic cha
-        // Thông tin Story cha
-        storyJiraKey: storyJiraKey, // Mã Jira của Story cha
-        storyJiraLink: storyJiraLink || '', // Link Jira của Story cha
-        storyName: storyName, // Tên Story cha
-        storyKey: storyKey || storyName, // Key của Story cha
-        // Thông tin khác
-        assignee: assignee,
-        status: status,
-        statusCategory: 'new',
-        startDate: startDateInput,
-        endDate: dueDateInput,
-        descriptionPreview: document.getElementById('modal-f10-add-subtask-note')?.value.trim() || '',
-        parentKey: storyKey || storyName,
-        parentSummary: storyName
-      };
-
-      // Disable submit button
-      const submitBtn = document.getElementById('modal-f10-add-subtask-submit');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Đang gửi...';
-      }
-
-      try {
-        // Gửi lên server
-        await submitF10SubtaskToServer(subtaskData);
-        
-        showToast('Đã thêm Sub-task thành công!', 'success');
-        closeModal('f10-add-subtask');
-        
-        // Tự động tải lại dữ liệu sau khi thêm thành công
-        setTimeout(() => {
-          loadF10Data();
-        }, 500);
-        
-      } catch (error) {
-        console.error('[Form 10] Error submitting subtask to server:', error);
-        showToast('Lỗi khi thêm Sub-task: ' + (error.message || 'Vui lòng thử lại'), 'error');
-      } finally {
-        form._isSubmitting = false;
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Thêm Sub-task';
-        }
-      }
-    }
-    
-    // Hàm gửi Story lên server Form 10
-    async function submitF10StoryToServer(storyData) {
-      const WEBHOOK_URL = F10_WEBHOOK_URL_ADD_TASK;
-      
-      console.log('[Form 10] Sending story to:', WEBHOOK_URL);
-      console.log('[Form 10] Story data:', storyData);
-      
-      const response = await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(storyData)
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log('[Form 10] Story submitted:', result);
-      return result;
-    }
-    
-    // Hàm gửi Sub-task lên server Form 10
-    async function submitF10SubtaskToServer(subtaskData) {
-      const WEBHOOK_URL = F10_WEBHOOK_URL_ADD_TASK;
-      
-      console.log('[Form 10] Sending subtask to:', WEBHOOK_URL);
-      console.log('[Form 10] Subtask data:', subtaskData);
-      
-      const response = await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(subtaskData)
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log('[Form 10] Subtask submitted:', result);
-      return result;
-    }
-    
-    // Hàm áp dụng filter cấp hiển thị
-    function applyF10LevelFilter() {
-      const levelFilter = document.getElementById('f10-filter-level');
-      if (!levelFilter) return;
-      
-      const levelValue = levelFilter.value;
-      const tbody = document.getElementById('f10-table-body');
-      if (!tbody) return;
-      
-      const epicRows = tbody.querySelectorAll('.f10-epic-row');
-      const storyRows = tbody.querySelectorAll('.f10-story-row');
-      const subtaskRows = tbody.querySelectorAll('.f10-subtask-row');
-      
-      if (levelValue === 'story') {
-        epicRows.forEach(epicRow => {
-          epicRow.classList.add('hidden');
-          const epicId = epicRow.getAttribute('data-epic-id');
-          const expandBtn = epicRow.querySelector('.f10-epic-expand');
-          if (expandBtn) {
-            const icon = expandBtn.querySelector('.material-icons');
-            if (icon) icon.classList.remove('rotate-[-90deg]');
-          }
-          tbody.querySelectorAll(`div[data-epic-id="${epicId}"].f10-story-row`).forEach(storyRow => {
-            storyRow.classList.remove('hidden');
-            const storyId = storyRow.getAttribute('data-story-id');
-            const storyExpandBtn = storyRow.querySelector('.f10-story-expand');
-            if (storyExpandBtn) {
-              const icon = storyExpandBtn.querySelector('.material-icons');
-              if (icon) icon.classList.remove('rotate-[-90deg]');
-            }
-            tbody.querySelectorAll(`div[data-story-id="${storyId}"].f10-subtask-row`).forEach(subtaskRow => {
-              subtaskRow.classList.remove('hidden');
-            });
-          });
-        });
-      } else if (levelValue === 'subtask') {
-        epicRows.forEach(epicRow => epicRow.classList.add('hidden'));
-        storyRows.forEach(storyRow => storyRow.classList.add('hidden'));
-        subtaskRows.forEach(subtaskRow => subtaskRow.classList.remove('hidden'));
-      } else {
-        epicRows.forEach(epicRow => epicRow.classList.remove('hidden'));
-        storyRows.forEach(storyRow => storyRow.classList.remove('hidden'));
-        subtaskRows.forEach(subtaskRow => subtaskRow.classList.remove('hidden'));
-      }
-    }
-    
-    // Hàm filter dữ liệu
-    // Hàm tính toán khoảng thời gian từ preset cho Form 10
-    function calculateF10DateRangeFromPreset(preset) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      let from, to;
-      
-      switch(preset) {
-        case 'today':
-          from = new Date(today);
-          to = new Date(today);
-          break;
-        case 'this-week':
-          const dayOfWeek = today.getDay();
-          const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-          from = new Date(today.getFullYear(), today.getMonth(), diff);
-          to = new Date(from);
-          to.setDate(to.getDate() + 6);
-          break;
-        case 'this-month':
-          from = new Date(today.getFullYear(), today.getMonth(), 1);
-          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-          break;
-        case 'last-month':
-          from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-          to = new Date(today.getFullYear(), today.getMonth(), 0);
-          break;
-        case 'last-3-months':
-          from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-          break;
-        case 'all':
-          from = null;
-          to = null;
-          break;
-        default:
-          return null;
-      }
-      
-      if (from && to) {
-        return {
-          from: from.toISOString().split('T')[0],
-          to: to.toISOString().split('T')[0]
-        };
-      }
-      return { from: null, to: null };
-    }
-    
-    function setupF10DateFilter() {
-      const presetSelect = document.getElementById('f10-filter-date-preset');
-      const customRangeDiv = document.getElementById('f10-custom-date-range');
-      const dateFromInput = document.getElementById('f10-filter-date-from');
-      const dateToInput = document.getElementById('f10-filter-date-to');
-      
-      if (!presetSelect) return;
-      
-      presetSelect.value = F10_FILTER_DATE_RANGE.preset || 'this-month';
-      
-      function toggleCustomRange() {
-        if (presetSelect.value === 'custom') {
-          customRangeDiv.classList.remove('hidden');
-          if (dateFromInput && dateToInput) {
-            dateFromInput.value = F10_FILTER_DATE_RANGE.from || '';
-            dateToInput.value = F10_FILTER_DATE_RANGE.to || '';
-          }
-        } else {
-          customRangeDiv.classList.add('hidden');
-        }
-      }
-      
-      toggleCustomRange();
-      
-      presetSelect.addEventListener('change', (e) => {
-        const preset = e.target.value;
-        
-        if (preset === 'custom') {
-          toggleCustomRange();
-        } else {
-          const range = calculateF10DateRangeFromPreset(preset);
-          if (range) {
-            F10_FILTER_DATE_RANGE = {
-              preset: preset,
-              from: range.from,
-              to: range.to
-            };
-          }
-          toggleCustomRange();
-          filterF10Data();
-        }
-      });
-      
-      if (dateFromInput && dateToInput) {
-        const updateCustomRange = () => {
-          if (presetSelect.value === 'custom') {
-            F10_FILTER_DATE_RANGE = {
-              preset: 'custom',
-              from: dateFromInput.value || null,
-              to: dateToInput.value || null
-            };
-            filterF10Data();
-          }
-        };
-        
-        dateFromInput.addEventListener('change', updateCustomRange);
-        dateToInput.addEventListener('change', updateCustomRange);
-      }
-    }
-    
-    function filterF10Data() {
-      const searchInput = document.getElementById('f10-search-input');
-      const statusFilter = document.getElementById('f10-filter-status');
-      const assigneeFilter = document.getElementById('f10-filter-assignee');
-      
-      const searchText = (searchInput ? searchInput.value : '').toLowerCase().trim();
-      const statusValue = statusFilter ? statusFilter.value : '';
-      const assigneeValue = assigneeFilter ? assigneeFilter.value : '';
-      
-      if (!searchText && !statusValue && !assigneeValue && (F10_FILTER_DATE_RANGE.preset === 'all' || !F10_FILTER_DATE_RANGE)) {
-        F10_FILTERED_DATA = F10_ALL_DATA.map(item => ({ ...item }));
-        renderF10Table(F10_FILTERED_DATA);
-        return;
-      }
-      
-      // Deep filter trong hierarchical structure
-      const filtered = F10_ALL_DATA.map(item => {
-        const filteredEpics = item.epics.map(epic => {
-          const filteredStories = epic.stories.map(story => {
-            const filteredSubtasks = story.subtasks.filter(subtask => {
-              const matchesSearch = !searchText || 
-                (subtask.subtask && subtask.subtask.toLowerCase().includes(searchText)) ||
-                (subtask.jiraKey && subtask.jiraKey.toLowerCase().includes(searchText)) ||
-                (subtask.assignee && subtask.assignee.toLowerCase().includes(searchText)) ||
-                (subtask.note && subtask.note.toLowerCase().includes(searchText));
-              
-              const matchesStatus = !statusValue || 
-                (subtask.status && subtask.status.toLowerCase().includes(statusValue.toLowerCase()));
-              
-              const matchesAssignee = !assigneeValue || 
-                (subtask.assignee && subtask.assignee === assigneeValue);
-              
-              const matchesDateRange = matchesDateRangeFilter(subtask.startDate, F10_FILTER_DATE_RANGE) ||
-                matchesDateRangeFilter(subtask.dueDate, F10_FILTER_DATE_RANGE);
-              
-              return matchesSearch && matchesStatus && matchesAssignee && matchesDateRange;
-            });
-            
-            // Story được hiển thị nếu:
-            // 1. Story khớp tất cả điều kiện filter (kể cả Story không có subtasks)
-            // 2. HOẶC Story có subtasks khớp filter
-            const storyMatchesSearch = !searchText || 
-              (story.story && story.story.toLowerCase().includes(searchText)) ||
-              (story.jiraKey && story.jiraKey.toLowerCase().includes(searchText)) ||
-              (story.assignee && story.assignee.toLowerCase().includes(searchText)) ||
-              (story.note && story.note.toLowerCase().includes(searchText)) ||
-              filteredSubtasks.length > 0;
-            
-            const storyMatchesStatus = !statusValue || 
-              (story.status && story.status.toLowerCase().includes(statusValue.toLowerCase())) ||
-              filteredSubtasks.length > 0;
-            
-            const storyMatchesAssignee = !assigneeValue || 
-              (story.assignee && story.assignee === assigneeValue) ||
-              filteredSubtasks.length > 0;
-            
-            const storyMatchesDateRange = matchesDateRangeFilter(story.startDate, F10_FILTER_DATE_RANGE) ||
-              matchesDateRangeFilter(story.dueDate, F10_FILTER_DATE_RANGE) ||
-              filteredSubtasks.length > 0;
-            
-            if (storyMatchesSearch && storyMatchesStatus && storyMatchesAssignee && storyMatchesDateRange) {
-              return { ...story, subtasks: filteredSubtasks };
-            }
-            return null;
-          }).filter(s => s !== null);
-          
-          // Epic được hiển thị nếu:
-          // 1. Epic khớp tất cả điều kiện filter (kể cả Epic không có stories)
-          // 2. HOẶC Epic có stories khớp filter
-          const epicMatchesSearch = !searchText || 
-            (epic.epic && epic.epic.toLowerCase().includes(searchText)) ||
-            (epic.jiraKey && epic.jiraKey.toLowerCase().includes(searchText)) ||
-            (epic.assignee && epic.assignee.toLowerCase().includes(searchText)) ||
-            (epic.note && epic.note.toLowerCase().includes(searchText)) ||
-            (epic.projectName && epic.projectName.toLowerCase().includes(searchText)) ||
-            filteredStories.length > 0;
-          
-          const epicMatchesStatus = !statusValue || 
-            (epic.status && epic.status.toLowerCase().includes(statusValue.toLowerCase())) ||
-            filteredStories.length > 0;
-          
-          const epicMatchesAssignee = !assigneeValue || 
-            (epic.assignee && epic.assignee === assigneeValue) ||
-            filteredStories.length > 0;
-          
-          const epicMatchesDateRange = matchesDateRangeFilter(epic.startDate, F10_FILTER_DATE_RANGE) ||
-            matchesDateRangeFilter(epic.dueDate, F10_FILTER_DATE_RANGE) ||
-            filteredStories.length > 0;
-          
-          if (epicMatchesSearch && epicMatchesStatus && epicMatchesAssignee && epicMatchesDateRange) {
-            return { ...epic, stories: filteredStories };
-          }
-          return null;
-        }).filter(e => e !== null);
-        
-        return { epics: filteredEpics };
-      });
-      
-      F10_FILTERED_DATA = filtered;
-      renderF10Table(F10_FILTERED_DATA);
-    }
-    
-    // Hàm export Excel Form 10
-    function exportF10ToExcel() {
-      const dataToExport = F10_FILTERED_DATA.length > 0 ? F10_FILTERED_DATA : F10_ALL_DATA;
-      
-      if (!dataToExport || !Array.isArray(dataToExport) || dataToExport.length === 0) {
-        showToast('Không có dữ liệu để xuất', 'warning');
-        return;
-      }
-
-      // Headers cho Excel
-      const headers = [
-        'Cấp',
-        'Tên công việc',
-        'Người thực hiện',
-        'Trạng thái',
-        'Ngày bắt đầu',
-        'Hạn hoàn thành',
-        'Ngày hoàn thành',
-        'Mã Jira',
-        'Link Jira',
-        'Ghi chú'
-      ];
-
-      // Flatten hierarchical data thành mảng phẳng
-      const rows = [];
-      
-      dataToExport.forEach((item) => {
-        if (!item.epics || !Array.isArray(item.epics)) return;
-        
-        item.epics.forEach((epic) => {
-          // Epic row
-          rows.push([
-            'Epic',
-            epic.epic || '-',
-            epic.assignee || '-',
-            epic.status || '-',
-            formatF10Date(epic.startDate),
-            formatF10Date(epic.dueDate),
-            formatF10Date(epic.finishDate),
-            epic.jiraKey || '-',
-            epic.jiraLink || '-',
-            epic.note || '-'
-          ]);
-          
-          // Story rows
-          if (epic.stories && Array.isArray(epic.stories)) {
-            epic.stories.forEach((story) => {
-              rows.push([
-                'Story',
-                story.story || '-',
-                story.assignee || '-',
-                story.status || '-',
-                formatF10Date(story.startDate),
-                formatF10Date(story.dueDate),
-                formatF10Date(story.finishDate),
-                story.jiraKey || '-',
-                story.jiraLink || '-',
-                story.note || '-'
-              ]);
-              
-              // Subtask rows
-              if (story.subtasks && Array.isArray(story.subtasks)) {
-                story.subtasks.forEach((subtask) => {
-                  rows.push([
-                    'Subtask',
-                    subtask.subtask || '-',
-                    subtask.assignee || '-',
-                    subtask.status || '-',
-                    formatF10Date(subtask.startDate),
-                    formatF10Date(subtask.dueDate),
-                    formatF10Date(subtask.finishDate),
-                    subtask.jiraKey || '-',
-                    subtask.jiraLink || '-',
-                    subtask.note || '-'
-                  ]);
-                });
-              }
-            });
-          }
-        });
-      });
-
-      if (rows.length === 0) {
-        showToast('Không có dữ liệu để xuất', 'warning');
-        return;
-      }
-
-      // Tạo worksheet
-      const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Quản lý dự án');
-      
-      // Điều chỉnh độ rộng cột
-      const colWidths = [
-        { wch: 10 },  // Cấp
-        { wch: 40 },  // Tên công việc
-        { wch: 20 },  // Người thực hiện
-        { wch: 15 },  // Trạng thái
-        { wch: 15 },  // Ngày bắt đầu
-        { wch: 15 },  // Hạn hoàn thành
-        { wch: 15 },  // Ngày hoàn thành
-        { wch: 15 },  // Mã Jira
-        { wch: 30 },  // Link Jira
-        { wch: 40 }   // Ghi chú
-      ];
-      ws['!cols'] = colWidths;
-      
-      // Xuất file
-      const fileName = `QuanLyDuAn_${new Date().toISOString().split('T')[0]}.xlsx`;
-      XLSX.writeFile(wb, fileName);
-      showToast(`Đã xuất ${rows.length} dòng dữ liệu ra file Excel`, 'success');
-    }
-    
-    // Khởi tạo Form 10
+    // ===== FORM 10 — Dashboard SPM 2026 (KRD & DQA) =====
     function initForm10() {
-      const loadBtn = document.getElementById('f10-load-data-btn');
-      const exportBtn = document.getElementById('f10-export-btn');
-      const searchInput = document.getElementById('f10-search-input');
-      const statusFilter = document.getElementById('f10-filter-status');
-      const assigneeFilter = document.getElementById('f10-filter-assignee');
-      const levelFilter = document.getElementById('f10-filter-level');
-      const monthFilter = document.getElementById('f10-filter-month');
-      
-      if (loadBtn) {
-        loadBtn.addEventListener('click', loadF10Data);
-      }
-      
-      if (exportBtn) {
-        exportBtn.addEventListener('click', exportF10ToExcel);
-      }
-      
-      if (searchInput) {
-        searchInput.addEventListener('input', filterF10Data);
-      }
-      
-      if (statusFilter) {
-        statusFilter.addEventListener('change', filterF10Data);
-      }
-      
-      if (assigneeFilter) {
-        assigneeFilter.addEventListener('change', filterF10Data);
-      }
-      
-      if (levelFilter) {
-        levelFilter.addEventListener('change', () => {
-          renderF10Table(F10_FILTERED_DATA.length > 0 ? F10_FILTERED_DATA : F10_ALL_DATA);
-        });
-      }
-      
-      // Setup date filter (thay thế month filter)
-      setupF10DateFilter();
-      
-      // Khởi tạo modal listeners
-      initModalListeners('f10-add-story');
-      initModalListeners('f10-add-subtask');
-      
-      // Event listener cho form submit thêm Story (tránh gửi 2 lần)
-      const f10AddStoryForm = document.getElementById('modal-f10-add-story-form');
-      if (f10AddStoryForm && !f10AddStoryForm._submitListenerAttached) {
-        f10AddStoryForm._submitListenerAttached = true;
-        f10AddStoryForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          handleF10AddStorySubmit();
-        });
-      }
-      
-      // Event listener cho nút submit thêm Story (backup)
-      const f10AddStorySubmitBtn = document.getElementById('modal-f10-add-story-submit');
-      if (f10AddStorySubmitBtn && !f10AddStorySubmitBtn._clickListenerAttached) {
-        f10AddStorySubmitBtn._clickListenerAttached = true;
-        f10AddStorySubmitBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          handleF10AddStorySubmit();
-        });
-      }
-      
-      // Event listener cho form submit thêm Sub-task (tránh gửi 2 lần)
-      const f10AddSubtaskForm = document.getElementById('modal-f10-add-subtask-form');
-      if (f10AddSubtaskForm && !f10AddSubtaskForm._submitListenerAttached) {
-        f10AddSubtaskForm._submitListenerAttached = true;
-        f10AddSubtaskForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          handleF10AddSubtaskSubmit();
-        });
-      }
-      
-      // Event listener cho nút submit thêm Sub-task (backup)
-      const f10AddSubtaskSubmitBtn = document.getElementById('modal-f10-add-subtask-submit');
-      if (f10AddSubtaskSubmitBtn && !f10AddSubtaskSubmitBtn._clickListenerAttached) {
-        f10AddSubtaskSubmitBtn._clickListenerAttached = true;
-        f10AddSubtaskSubmitBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          handleF10AddSubtaskSubmit();
-        });
+      if (typeof window.F10SpmDashboardInit === 'function') {
+        window.F10SpmDashboardInit();
       }
     }
-    
-    // Khởi tạo Form 10 khi DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
-      const navButtons = document.querySelectorAll('.nav-btn[data-target="form10"]');
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          setTimeout(() => {
-            initForm10();
-          }, 100);
-        });
-      });
-    });
-
     // ===== FORM 7 - DASHBOARD DỮ LIỆU EXCEL =====
     
     let F7_ALL_DATA = [];
@@ -12552,92 +11459,459 @@
       }
     });
 
-    // ===== FORM 11 - DASHBOARD DỮ LIỆU EXCEL (JIRA) =====
-    
-    // Biến lưu trữ
+    // ===== FORM 11 - DANH SÁCH ĐẦY ĐỦ SPM 2026 =====
     let F11_ALL_DATA = [];
-    
-    // Webhook URL - Mockup (sẽ được cung cấp sau)
-    const F11_WEBHOOK_URL = 'https://mockup-webhook-url.com/webhook/form11dashboardjira';
-    
-    // Hàm tính toán stats (simplified - sẽ bổ sung đầy đủ sau)
-    function calculateF11Stats(data) {
+    let f11Bound = false;
+    let F11_EDITING_MA = '';
+    let F11_EDIT_MODE = 'edit';
+    const F11_WEBHOOK_URL = 'https://iatzhxxuk.tino.page/webhook/cong2form10';
+
+    function f11Pick(row, ...keys) {
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        if (row && k in row && row[k] != null && row[k] !== '') return row[k];
+      }
+      return '';
+    }
+
+    function f11IsMarkOn(v) {
+      if (v === true || v === 1) return true;
+      const s = String(v == null ? '' : v).trim().toLowerCase();
+      return s === 'x' || s === '1' || s === 'yes' || s === 'có';
+    }
+
+    function f11ParseJiraUrl(raw) {
+      if (!raw || typeof raw !== 'string') return '';
+      const t = raw.trim();
+      const m = t.match(/\[[^\]|]*\|\s*(https?:\/\/[^\]]+)\]/i);
+      if (m) return m[1].trim();
+      if (/^https?:\/\//i.test(t)) return t;
+      return '';
+    }
+
+    function f11BuildFmeaDisplay(row) {
+      const pct = String(f11Pick(row, 'Tỉ lệ rà soát FMEA +bổ sung FMEA', 'Tỉ lệ rà soát FMEA + bổ sung FMEA') || '').trim();
+      if (pct) return pct;
+      const hm = String(f11Pick(row, 'Hạng mục FMEA rà soát bổ sung') || '').trim();
+      const tong = String(f11Pick(row, 'Tổng hạng mục rà soát FMEA') || '').trim();
+      if (hm || tong) {
+        const hmNum = Number(hm);
+        const tongNum = Number(tong);
+        if (Number.isFinite(hmNum) && Number.isFinite(tongNum) && tongNum > 0) {
+          const calcPct = ((hmNum / tongNum) * 100).toFixed(2).replace(/\.00$/, '');
+          return `${hm || '—'}/${tong || '—'} (${calcPct}%)`;
+        }
+        return `${hm || '—'}/${tong || '—'}`;
+      }
+      return '';
+    }
+
+    function f11MapRow(row) {
       return {
-        totalEpics: 0,
-        totalStories: 0,
-        totalSubtasks: 0,
-        completionRate: '0%'
+        id: String(f11Pick(row, 'Id') || '').trim(),
+        ma: String(f11Pick(row, 'Mã dự án') || '').trim(),
+        ten: String(f11Pick(row, 'Tên dự án') || '').trim(),
+        cap: String(f11Pick(row, 'Cấp độ') || '').trim(),
+        pm: String(f11Pick(row, 'PM') || '').trim(),
+        tt: String(f11Pick(row, 'Tình trạng dự án') || '').trim(),
+        pic: String(f11Pick(row, 'PIC DQA') || '').trim(),
+        krd: f11IsMarkOn(f11Pick(row, 'KRD đang triển khai')),
+        dqa: f11IsMarkOn(f11Pick(row, 'DQA đang triển khai')),
+        ph: String(f11Pick(row, 'Giai đoạn nhận mẫu') || '').trim(),
+        ok: String(f11Pick(row, 'KQ ĐG OK') || '').trim(),
+        ng: String(f11Pick(row, 'KQ ĐG NG') || '').trim(),
+        dd: String(f11Pick(row, 'Đang đánh giá') || '').trim(),
+        slCaiTien: String(f11Pick(row, 'Số lượng  cải tiến lỗi đánh giá LK + SP', 'Số lượng cải tiến lỗi đánh giá LK + SP') || '').trim(),
+        tongLoi: String(f11Pick(row, 'Tổng lỗi') || '').trim(),
+        tyLeCaiTien: String(f11Pick(row, 'Tỷ lệ đã cải tiến trên tổng lỗi') || '').trim(),
+        hmFmea: String(f11Pick(row, 'Hạng mục FMEA rà soát bổ sung') || '').trim(),
+        tongHmFmea: String(f11Pick(row, 'Tổng hạng mục rà soát FMEA') || '').trim(),
+        tyLeFmea: f11BuildFmeaDisplay(row),
+        jira: f11ParseJiraUrl(String(f11Pick(row, 'Link Jira') || '')),
+        linkFmea: f11ParseJiraUrl(String(f11Pick(row, 'Link kết quả FMEA') || '')),
+        linkCaiTien: f11ParseJiraUrl(String(f11Pick(row, 'Link kết quả cải tiến lỗi') || '')),
+        ghiChu: String(f11Pick(row, 'Ghi chú') || '').trim(),
+        createdAt: String(f11Pick(row, 'CreatedAt') || '').trim(),
+        updatedAt: String(f11Pick(row, 'UpdatedAt') || '').trim()
       };
     }
-    
-    // Hàm load dashboard Form 11
+
+    function f11Td(v) {
+      return String(v == null || v === '' ? '—' : v).replace(/"/g, '&quot;');
+    }
+
+    function f11JiraCell(url) {
+      if (!url) return '—';
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700">↗ Jira</a>`;
+    }
+
+    function f11KqCell(r) {
+      if (String(r.ng || '').toUpperCase() === 'NG') return 'NG';
+      if (String(r.ok || '').toUpperCase() === 'OK') return 'OK';
+      return '—';
+    }
+
+    function f11Badge(text, tone) {
+      const map = {
+        blue: 'bg-blue-50 text-blue-700 border-blue-200',
+        green: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        red: 'bg-rose-50 text-rose-700 border-rose-200',
+        purple: 'bg-violet-50 text-violet-700 border-violet-200',
+        gray: 'bg-slate-50 text-slate-700 border-slate-200',
+        amber: 'bg-amber-50 text-amber-700 border-amber-200'
+      };
+      const cls = map[tone] || map.gray;
+      return `<span class="inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold ${cls}">${f11Td(text)}</span>`;
+    }
+
+    function f11StatusCell(tt) {
+      const s = String(tt || '');
+      if (s === 'In Progress') return f11Badge('In Progress', 'blue');
+      if (s === 'Done') return f11Badge('Done', 'green');
+      if (s === 'To Do') return f11Badge('To Do', 'gray');
+      if (s === 'Canceled' || s === 'Cancelled') return f11Badge('Canceled', 'gray');
+      if (s === 'PENDING' || s === 'Pending') return f11Badge('Pending', 'amber');
+      return f11Td(tt);
+    }
+
+    function f11RoleCell(r) {
+      const parts = [];
+      if (r.krd) parts.push(f11Badge('KRD', 'blue'));
+      if (r.dqa) parts.push(f11Badge('DQA', 'purple'));
+      return parts.length ? parts.join(' ') : '—';
+    }
+
+    function f11PopulatePicFilter(rows) {
+      const sel = document.getElementById('f11-filter-pic');
+      if (!sel) return;
+      const seen = new Set();
+      const pics = [];
+      rows.forEach((r) => {
+        const p = String(r.pic || '').trim();
+        if (p && !seen.has(p)) {
+          seen.add(p);
+          pics.push(p);
+        }
+      });
+      pics.sort((a, b) => a.localeCompare(b, 'vi'));
+      const current = sel.value;
+      sel.innerHTML = '<option value="">PIC DQA: Tất cả</option>' + pics.map((p) => `<option value="${p.replace(/"/g, '&quot;')}">${p}</option>`).join('');
+      if (current && pics.includes(current)) sel.value = current;
+    }
+
+    function f11ApplyFiltersAndRender() {
+      const role = document.getElementById('f11-filter-role')?.value || 'all';
+      const pic = (document.getElementById('f11-filter-pic')?.value || '').trim();
+      const q = (document.getElementById('f11-search')?.value || '').trim().toLowerCase();
+      const filtered = F11_ALL_DATA.filter((r) => {
+        if (role === 'krd' && !r.krd) return false;
+        if (role === 'dqa' && !r.dqa) return false;
+        if (pic && String(r.pic || '').trim() !== pic) return false;
+        if (q) {
+          const blob = `${r.ma} ${r.ten} ${r.pm} ${r.pic}`.toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+        return true;
+      });
+      const rs = document.getElementById('f11-filter-result-count');
+      if (rs) rs.textContent = `${filtered.length} kết quả`;
+      f11RenderRows(filtered, 'f11-tb-all');
+    }
+
+    function f11SetValue(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.value = value == null ? '' : String(value);
+    }
+
+    function f11NormalizePercent(value) {
+      const raw = String(value == null ? '' : value).trim();
+      if (!raw) return '';
+      if (raw.includes('%')) return raw;
+      const num = Number(raw.replace(',', '.'));
+      if (Number.isFinite(num)) return `${raw}%`;
+      return raw;
+    }
+
+    function f11ComputePercent(numerator, denominator) {
+      const n = Number(String(numerator == null ? '' : numerator).trim().replace(',', '.'));
+      const d = Number(String(denominator == null ? '' : denominator).trim().replace(',', '.'));
+      if (!Number.isFinite(n) || !Number.isFinite(d) || d <= 0) return '';
+      const pct = ((n / d) * 100).toFixed(2).replace(/\.00$/, '');
+      return `${pct}%`;
+    }
+
+    function f11RefreshComputedFields() {
+      const get = (id) => (document.getElementById(id)?.value || '').trim();
+      f11SetValue('f11-edit-tyle', f11ComputePercent(get('f11-edit-sl'), get('f11-edit-tong')));
+      f11SetValue('f11-edit-fmea', f11ComputePercent(get('f11-edit-hm-fmea'), get('f11-edit-tong-hm-fmea')));
+    }
+
+    function f11OpenEditModal(ma) {
+      const row = F11_ALL_DATA.find((r) => r.ma === ma);
+      const modal = document.getElementById('f11-edit-modal');
+      if (!row || !modal) return;
+      F11_EDIT_MODE = 'edit';
+      F11_EDITING_MA = row.ma;
+      const maInput = document.getElementById('f11-edit-ma');
+      const tenInput = document.getElementById('f11-edit-ten');
+      if (maInput) {
+        maInput.readOnly = true;
+        maInput.classList.add('bg-slate-100');
+      }
+      if (tenInput) {
+        tenInput.readOnly = true;
+        tenInput.classList.add('bg-slate-100');
+      }
+      f11SetValue('f11-edit-ma', row.ma);
+      f11SetValue('f11-edit-ten', row.ten);
+      f11SetValue('f11-edit-cap', row.cap);
+      f11SetValue('f11-edit-pm', row.pm);
+      f11SetValue('f11-edit-pic', row.pic);
+      f11SetValue('f11-edit-tt', row.tt);
+      f11SetValue('f11-edit-ph', row.ph);
+      f11SetValue('f11-edit-dd', row.dd);
+      f11SetValue('f11-edit-ok', row.ok);
+      f11SetValue('f11-edit-ng', row.ng);
+      f11SetValue('f11-edit-sl', row.slCaiTien);
+      f11SetValue('f11-edit-tong', row.tongLoi);
+      f11SetValue('f11-edit-hm-fmea', row.hmFmea);
+      f11SetValue('f11-edit-tong-hm-fmea', row.tongHmFmea);
+      f11SetValue('f11-edit-tyle', f11NormalizePercent(row.tyLeCaiTien));
+      f11SetValue('f11-edit-fmea', f11NormalizePercent(row.tyLeFmea));
+      f11SetValue('f11-edit-link-fmea', row.linkFmea);
+      f11SetValue('f11-edit-link-caitien', row.linkCaiTien);
+      f11SetValue('f11-edit-jira', row.jira);
+      f11SetValue('f11-edit-note', row.ghiChu);
+      f11RefreshComputedFields();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function f11OpenAddModal() {
+      const modal = document.getElementById('f11-edit-modal');
+      if (!modal) return;
+      F11_EDIT_MODE = 'create';
+      F11_EDITING_MA = '';
+      const maInput = document.getElementById('f11-edit-ma');
+      const tenInput = document.getElementById('f11-edit-ten');
+      if (maInput) {
+        maInput.readOnly = false;
+        maInput.classList.remove('bg-slate-100');
+      }
+      if (tenInput) {
+        tenInput.readOnly = false;
+        tenInput.classList.remove('bg-slate-100');
+      }
+      ['f11-edit-ma','f11-edit-ten','f11-edit-cap','f11-edit-pm','f11-edit-pic','f11-edit-tt','f11-edit-ph','f11-edit-dd','f11-edit-ok','f11-edit-ng','f11-edit-sl','f11-edit-tong','f11-edit-tyle','f11-edit-hm-fmea','f11-edit-tong-hm-fmea','f11-edit-fmea','f11-edit-link-fmea','f11-edit-link-caitien','f11-edit-jira','f11-edit-note']
+        .forEach((id) => f11SetValue(id, ''));
+      f11RefreshComputedFields();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function f11CloseEditModal() {
+      const modal = document.getElementById('f11-edit-modal');
+      if (!modal) return;
+      F11_EDITING_MA = '';
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function f11SaveEditModal() {
+      const get = (id) => (document.getElementById(id)?.value || '').trim();
+      const ma = get('f11-edit-ma');
+      const ten = get('f11-edit-ten');
+      const cap = get('f11-edit-cap');
+      const editingRow = F11_EDITING_MA ? F11_ALL_DATA.find((r) => r.ma === F11_EDITING_MA) : null;
+      const payloadId = editingRow && editingRow.id ? editingRow.id : String(Date.now());
+      if (!ma || !ten) {
+        if (typeof showToast === 'function') showToast('Cần nhập Mã dự án và Tên dự án.', 'error');
+        return;
+      }
+      if (!cap) {
+        if (typeof showToast === 'function') showToast('Cần nhập Cấp độ.', 'error');
+        return;
+      }
+      if (F11_EDIT_MODE === 'create' && F11_ALL_DATA.some((r) => r.ma === ma)) {
+        if (typeof showToast === 'function') showToast('Mã dự án đã tồn tại.', 'error');
+        return;
+      }
+
+      const payload = {
+        action: F11_EDIT_MODE === 'create' ? 'create' : 'update',
+        mode: F11_EDIT_MODE,
+        originalMa: F11_EDITING_MA || ma,
+        data: {
+          Id: payloadId,
+          'Mã dự án': ma,
+          'Tên dự án': ten,
+          'Cấp độ': cap,
+          PM: get('f11-edit-pm'),
+          'PIC DQA': get('f11-edit-pic'),
+          'Tình trạng dự án': get('f11-edit-tt'),
+          'Giai đoạn nhận mẫu': get('f11-edit-ph'),
+          'Đang đánh giá': get('f11-edit-dd'),
+          'KQ ĐG OK': get('f11-edit-ok'),
+          'KQ ĐG NG': get('f11-edit-ng'),
+          'Số lượng  cải tiến lỗi đánh giá LK + SP': get('f11-edit-sl'),
+          'Tổng lỗi': get('f11-edit-tong'),
+          'Tỷ lệ đã cải tiến trên tổng lỗi': f11ComputePercent(get('f11-edit-sl'), get('f11-edit-tong')),
+          'Hạng mục FMEA rà soát bổ sung': get('f11-edit-hm-fmea'),
+          'Tổng hạng mục rà soát FMEA': get('f11-edit-tong-hm-fmea'),
+          'Tỉ lệ rà soát FMEA +bổ sung FMEA': f11ComputePercent(get('f11-edit-hm-fmea'), get('f11-edit-tong-hm-fmea')),
+          'Link kết quả FMEA': get('f11-edit-link-fmea'),
+          'Link kết quả cải tiến lỗi': get('f11-edit-link-caitien'),
+          'Link Jira': get('f11-edit-jira'),
+          'Ghi chú': get('f11-edit-note')
+        }
+      };
+
+      const saveBtn = document.getElementById('f11-edit-save');
+      try {
+        if (saveBtn) saveBtn.disabled = true;
+        const resp = await fetch(F11_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        f11CloseEditModal();
+        if (typeof showToast === 'function') showToast('Đã gửi dữ liệu, đang chờ đồng bộ...', 'info');
+        // Chờ dữ liệu backend cập nhật rồi làm mới bảng từ endpoint GET
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        await loadF11Dashboard();
+        if (typeof showToast === 'function') showToast(F11_EDIT_MODE === 'create' ? 'Đã bổ sung dự án mới.' : 'Đã cập nhật dữ liệu dự án.', 'success');
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Lưu thất bại: ' + (err.message || err), 'error');
+      } finally {
+        if (saveBtn) saveBtn.disabled = false;
+      }
+    }
+
+    function f11RenderRows(rows, bodyId) {
+      const body = document.getElementById(bodyId);
+      if (!body) return;
+      if (!rows.length) {
+        body.innerHTML = '<tr><td colspan="15" class="px-3 py-8 text-center text-slate-500">Không có dữ liệu phù hợp bộ lọc.</td></tr>';
+        return;
+      }
+      const evalStatusCell = (r) => {
+        if (String(r.dd || '').toLowerCase() === 'doing') return f11Badge('Doing', 'amber');
+        if (String(r.ng || '').toUpperCase() === 'NG') return f11Badge('NG', 'red');
+        if (String(r.ok || '').toUpperCase() === 'OK') return f11Badge('OK', 'green');
+        return '—';
+      };
+      const improveCell = (r) => {
+        const sl = String(r.slCaiTien || '').trim();
+        const tong = String(r.tongLoi || '').trim();
+        const tl = String(r.tyLeCaiTien || '').trim();
+        if (!sl && !tong && !tl) return '—';
+        const left = sl || tong ? `${sl || '—'}/${tong || '—'}` : '';
+        if (left && tl) return `${left} (${f11Td(tl)})`;
+        return f11Td(left || tl);
+      };
+      body.innerHTML = rows.map((r) => `<tr class="hover:bg-slate-50">
+        <td class="px-3 py-2 font-mono text-[10px] text-slate-500">${f11Td(r.id)}</td>
+        <td class="px-3 py-2 font-mono text-[10px] text-slate-600">${f11Td(r.ma)}</td>
+        <td class="px-3 py-2 font-semibold text-slate-800">${f11Td(r.ten)}</td>
+        <td class="px-3 py-2 text-slate-700">${f11Td(r.pm)}</td>
+        <td class="px-3 py-2">${f11Badge(r.cap || '—', 'gray')}</td>
+        <td class="px-3 py-2">${f11StatusCell(r.tt)}</td>
+        <td class="px-3 py-2">${f11RoleCell(r)}</td>
+        <td class="px-3 py-2">${r.ph ? f11Badge(r.ph, 'purple') : '—'}</td>
+        <td class="px-3 py-2">${evalStatusCell(r)}</td>
+        <td class="px-3 py-2">${r.pic ? f11Badge(r.pic, 'blue') : '—'}</td>
+        <td class="px-3 py-2 text-slate-700">${improveCell(r)}</td>
+        <td class="px-3 py-2 text-slate-700">${f11Td(r.tyLeFmea)}</td>
+        <td class="px-3 py-2">${f11JiraCell(r.jira)}</td>
+        <td class="px-3 py-2 text-slate-600">${f11Td(r.ghiChu)}</td>
+        <td class="px-3 py-2"><button type="button" class="f11-edit-btn rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700 hover:bg-blue-100" data-ma="${f11Td(r.ma)}">Cập nhật</button></td>
+      </tr>`).join('');
+    }
+
+    function f11UpdateStats(rows) {
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(val);
+      };
+      set('f11-stat-total', rows.length);
+      set('f11-stat-krd', rows.filter((r) => r.krd).length);
+      set('f11-stat-dqa', rows.filter((r) => r.dqa).length);
+      set('f11-stat-ng', rows.filter((r) => String(r.ng || '').toUpperCase() === 'NG').length);
+    }
+
     async function loadF11Dashboard() {
       const refreshBtn = document.getElementById('f11-refresh-btn');
-      
       try {
         if (refreshBtn) refreshBtn.disabled = true;
-        
-        // Mockup: Trả về dữ liệu rỗng
-        F11_ALL_DATA = [];
-        const stats = calculateF11Stats([]);
-        
-        // Update stats
-        const epicsEl = document.getElementById('f11-stat-epics');
-        const storiesEl = document.getElementById('f11-stat-stories');
-        const subtasksEl = document.getElementById('f11-stat-subtasks');
-        const completionEl = document.getElementById('f11-stat-completion');
-        
-        if (epicsEl) epicsEl.textContent = stats.totalEpics;
-        if (storiesEl) storiesEl.textContent = stats.totalStories;
-        if (subtasksEl) subtasksEl.textContent = stats.totalSubtasks;
-        if (completionEl) completionEl.textContent = stats.completionRate;
-        
-        showToast('Form 11: Webhook đang được cấu hình', 'info');
+        const resp = await fetch(F11_WEBHOOK_URL, { method: 'GET', headers: { Accept: 'application/json' } });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const body = await resp.json();
+        const rows = Array.isArray(body) ? body : (Array.isArray(body?.data) ? body.data : []);
+        F11_ALL_DATA = rows.map(f11MapRow).filter((r) => r.ma);
+        f11UpdateStats(F11_ALL_DATA);
+        f11PopulatePicFilter(F11_ALL_DATA);
+        f11ApplyFiltersAndRender();
       } catch (error) {
-        console.error('[Form 11] Error loading dashboard:', error);
-        showToast('Lỗi khi tải dashboard: ' + error.message, 'error');
+        console.error('[Form 11] Error loading list:', error);
+        if (typeof showToast === 'function') showToast('Lỗi khi tải Form 11: ' + error.message, 'error');
       } finally {
         if (refreshBtn) refreshBtn.disabled = false;
       }
     }
-    
-    // Khởi tạo Form 11
+
     function initForm11() {
       const refreshBtn = document.getElementById('f11-refresh-btn');
-      
-      if (refreshBtn) {
-        refreshBtn.addEventListener('click', loadF11Dashboard);
-      }
-      
-      // Tự động load khi form được hiển thị
-      const form11Section = document.getElementById('form11');
-      if (form11Section) {
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-              if (!form11Section.classList.contains('hidden')) {
-                if (F11_ALL_DATA.length === 0) {
-                  loadF11Dashboard();
-                }
-              }
-            }
+      const roleFilter = document.getElementById('f11-filter-role');
+      const picFilter = document.getElementById('f11-filter-pic');
+      const searchInput = document.getElementById('f11-search');
+      const clearBtn = document.getElementById('f11-clear-filters');
+      const addProjectBtn = document.getElementById('f11-add-project-btn');
+      const tableBody = document.getElementById('f11-tb-all');
+      const editClose = document.getElementById('f11-edit-close');
+      const editOverlay = document.getElementById('f11-edit-overlay');
+      const editCancel = document.getElementById('f11-edit-cancel');
+      const editSave = document.getElementById('f11-edit-save');
+      const editSl = document.getElementById('f11-edit-sl');
+      const editTong = document.getElementById('f11-edit-tong');
+      const editHmFmea = document.getElementById('f11-edit-hm-fmea');
+      const editTongHmFmea = document.getElementById('f11-edit-tong-hm-fmea');
+      if (!f11Bound) {
+        f11Bound = true;
+        if (refreshBtn) refreshBtn.addEventListener('click', loadF11Dashboard);
+        if (roleFilter) roleFilter.addEventListener('change', f11ApplyFiltersAndRender);
+        if (picFilter) picFilter.addEventListener('change', f11ApplyFiltersAndRender);
+        if (searchInput) searchInput.addEventListener('input', f11ApplyFiltersAndRender);
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            if (roleFilter) roleFilter.value = 'all';
+            if (picFilter) picFilter.value = '';
+            if (searchInput) searchInput.value = '';
+            f11ApplyFiltersAndRender();
           });
-        });
-        observer.observe(form11Section, { attributes: true });
+        }
+        if (addProjectBtn) addProjectBtn.addEventListener('click', f11OpenAddModal);
+        if (tableBody) {
+          tableBody.addEventListener('click', (ev) => {
+            const target = ev.target;
+            if (!(target instanceof HTMLElement)) return;
+            const btn = target.closest('.f11-edit-btn');
+            if (!btn) return;
+            const ma = btn.getAttribute('data-ma') || '';
+            if (ma) f11OpenEditModal(ma);
+          });
+        }
+        if (editClose) editClose.addEventListener('click', f11CloseEditModal);
+        if (editOverlay) editOverlay.addEventListener('click', f11CloseEditModal);
+        if (editCancel) editCancel.addEventListener('click', f11CloseEditModal);
+        if (editSave) editSave.addEventListener('click', f11SaveEditModal);
+        if (editSl) editSl.addEventListener('input', f11RefreshComputedFields);
+        if (editTong) editTong.addEventListener('input', f11RefreshComputedFields);
+        if (editHmFmea) editHmFmea.addEventListener('input', f11RefreshComputedFields);
+        if (editTongHmFmea) editTongHmFmea.addEventListener('input', f11RefreshComputedFields);
       }
+      loadF11Dashboard();
     }
-    
-    // Khởi tạo Form 11 khi DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
-      const navButtons = document.querySelectorAll('.nav-btn[data-target="form11"]');
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          setTimeout(() => {
-            initForm11();
-          }, 100);
-        });
-      });
-    });
 
     // ===== FORM 12 - CALENDAR VIEW (JIRA) =====
     
@@ -16880,6 +16154,7 @@
     // ===== FORM 6 - DASHBOARD TỔNG QUAN =====
     
     let F6_ALL_DATA = [];
+    let f6Initialized = false;
     let F6_SEARCH_TEXT = '';
     let F6_SEARCH_TASK_CODE = '';
 
@@ -17494,6 +16769,9 @@
 
     // Khởi tạo Form 6
     function initForm6() {
+      if (f6Initialized) return;
+      f6Initialized = true;
+
       const refreshBtn = document.getElementById('f6-refresh-btn');
       const searchInput = document.getElementById('f6-search-input');
       const searchTaskCodeInput = document.getElementById('f6-search-task-code-input');
@@ -17522,34 +16800,7 @@
           f6ReapplyProjectTableFilter();
         });
       }
-
-      // Tự động load khi form được hiển thị
-      const form6Section = document.getElementById('form6');
-      if (form6Section) {
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-              if (!form6Section.classList.contains('hidden')) {
-                loadF6Dashboard();
-              }
-            }
-          });
-        });
-        observer.observe(form6Section, { attributes: true });
-      }
     }
-
-    // Khởi tạo Form 6 khi DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
-      const navButtons = document.querySelectorAll('.nav-btn[data-target="form6"]');
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          setTimeout(() => {
-            initForm6();
-          }, 100);
-        });
-      });
-    });
 
     // ===== FORM 6 - MODAL CHI TIẾT CÁ NHÂN =====
     
